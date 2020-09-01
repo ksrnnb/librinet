@@ -17,9 +17,18 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+
+            //  emailをverifyした日が入るので必要。
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            //  VARCHAR(100)でNULL値可能なremember_tokenを追加する。
+            //  ログイン情報を記憶するのに必要。
             $table->rememberToken();
+
+            $table->string('avatar_img');
+            $table->string('bg_img');
+
             $table->timestamps();
         });
     }

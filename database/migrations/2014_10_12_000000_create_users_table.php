@@ -26,8 +26,8 @@ class CreateUsersTable extends Migration
             //  ログイン情報を記憶するのに必要。
             $table->rememberToken();
 
-            $table->string('avatar_img');
-            $table->string('bg_img');
+            $table->string('avatar_img')->nullable();
+            $table->string('bg_img')->nullable();
 
             $table->timestamps();
         });

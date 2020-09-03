@@ -17,7 +17,10 @@ class CreateBooksTable extends Migration
             $table->id();
             $table->string('isbn');
             $table->integer('user_id');
-            $table->integer('state');
+            $table->integer('genre_id');
+            $table->boolean('isRead');
+            $table->boolean('isWanted');
+            $table->boolean('isRecommended');
             $table->timestamps();
         });
     }

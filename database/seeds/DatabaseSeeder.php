@@ -12,7 +12,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UserSeeder::class);
+        $this->call([
+            GenreSeeder::class,     //  Genre
+            UserSeeder::class,      //  User, Book, Post
+            FollowerSeeder::class,  //  Follower
+            CommentSeeder::class,   //  Comment
+            LikeSeeder::class,      //  Like
+        ]);
         
     }
 }

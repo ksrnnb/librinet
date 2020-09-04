@@ -15,8 +15,12 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('str_id')->unique();
             $table->string('name');
-            $table->string('email')->unique();
+
+            //  emailもUNIQUE制約かけたいけど複数カラムでUNIQUE制約にすると
+            //  2つの組み合わせに対してUNIQUEかどうかになってしまうので、emailはuniqueにしてない。
+            $table->string('email');
 
             //  emailをverifyした日が入るので必要。
             $table->timestamp('email_verified_at')->nullable();

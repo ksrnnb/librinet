@@ -1,10 +1,15 @@
-<!-- str_id : e4nPYgrf -->
+<!-- $user: Eloquent collection (root parameter is str_id: BILVll6j) -->
+
 @extends('layouts.layout')
 
 @section('content')
-<div>
+<div id="user-react"></div>
 
-  <p>{{$str_id}}</p>
-</div>
+
+<script>
+  window.user = @json($user);
+  window.books = @json($books);
+</script>
+<script src="{{asset('js/app.js')}}"></script>
 
 @endsection

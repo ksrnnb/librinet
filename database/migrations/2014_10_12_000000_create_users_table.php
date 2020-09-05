@@ -19,7 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
 
             //  emailもUNIQUE制約かけたいけど複数カラムでUNIQUE制約にすると
-            //  2つの組み合わせに対してUNIQUEかどうかになってしまうので、emailはuniqueにしてない。
+            //  2つの組み合わせに対してUNIQUEかどうかになってしまうので、
+            //  emailはuniqueにしてない。
             $table->string('email');
 
             //  emailをverifyした日が入るので必要。
@@ -30,8 +31,7 @@ class CreateUsersTable extends Migration
             //  ログイン情報を記憶するのに必要。
             $table->rememberToken();
 
-            $table->string('avatar_img')->nullable();
-            $table->string('bg_img')->nullable();
+            $table->string('image')->nullable();
 
             $table->timestamps();
         });

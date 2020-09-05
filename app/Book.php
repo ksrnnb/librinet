@@ -24,4 +24,16 @@ class Book extends Model
             'user_id' => $this->user_id,
         ]);
     }
+
+    /*
+        fetch book object from openBD
+        main property: 'isbn', 'title', 'cover', 'author'
+    */
+    public static function fetch_book($isbn) {
+        $ch = curl_init('https://api.openbd.jp/v1/get?isbn=' . $isbn);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);       
+        $book = json_decode(curl_exec($ch))[0]->summary;
+
+        return $book;
+    }
 }

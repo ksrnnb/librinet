@@ -8,6 +8,7 @@ class User extends React.Component {
     const genres = window.genres;
     return (
         <div className="container">
+
           <Avator image={user.image} />
           <p>Id: {user.str_id}</p>
           <p>Name: {user.name}</p>
@@ -42,8 +43,6 @@ class BookShelf extends React.Component {
 
     console.log(books);
     console.log(genres);
-
-    console.log(Object.values(genres));
 
     const genre_id = 1;
 

@@ -15,6 +15,9 @@ class UserController extends Controller
 
         $genres = Book::extract_genres($books);
 
+        //  test
+        $genres[] = ['id' => 2, 'name' => 'test'];
+
         // TODO: 不要なカラムは除きたい。
         //       user_idが欲しいからonlyメソッド使うなら後がいい。
         // $user = $user->only('str_id', 'name', 'email', 'image');

@@ -67,4 +67,5 @@ class Book extends Model
 
         return $genres;
     }
+
 }

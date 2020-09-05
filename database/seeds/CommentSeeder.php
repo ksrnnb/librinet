@@ -11,6 +11,7 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
+        //  2人からコメント、1人は本も推める。
         $post = App\Post::find(1);
         $post->comments()->create([
             'message' => '私も読みました！',

@@ -15,9 +15,12 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('isbn');
             $table->integer('user_id');
             $table->integer('genre_id');
+            $table->string('isbn');
+            $table->string('title');
+            $table->string('author');
+            $table->string('cover')->nullable();
             $table->boolean('isRead');
             $table->boolean('isWanted');
             $table->boolean('isRecommended');

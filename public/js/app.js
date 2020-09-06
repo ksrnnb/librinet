@@ -65941,31 +65941,81 @@ var BookShelf = /*#__PURE__*/function (_React$Component3) {
   var _super3 = _createSuper(BookShelf);
 
   function BookShelf(props) {
+    var _this;
+
     _classCallCheck(this, BookShelf);
 
-    return _super3.call(this, props);
+    _this = _super3.call(this, props);
+    _this.makeOneBookComponent = _this.makeOneBookComponent.bind(_assertThisInitialized(_this));
+    _this.makeGenreBookMap = _this.makeGenreBookMap.bind(_assertThisInitialized(_this));
+    _this.makeAllBooksComponents = _this.makeAllBooksComponents.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(BookShelf, [{
+    key: "makeOneBookComponent",
+    value: function makeOneBookComponent(book) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
+        key: book.id
+      }, book.cover ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: book.cover,
+        alt: "bookcover"
+      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "no cover"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, book.author));
+    }
+    /*
+      ジャンルIDと、そのジャンルに属する本のコンポーネントから成るMapを返す。
+      {genre_id => そのジャンルに属する本, ...}
+    */
+
+  }, {
+    key: "makeGenreBookMap",
+    value: function makeGenreBookMap(genres, books) {
+      var _this2 = this;
+
+      var genreIds = Object.keys(genres);
+      return new Map(genreIds.map(function (genre_id) {
+        var bookElements = books.map(function (book) {
+          if (book.genre_id == genre_id) {
+            return _this2.makeOneBookComponent(book);
+          } else {
+            return null;
+          }
+        });
+        return [genre_id, bookElements];
+      }));
+    }
+    /*
+        ユーザーが登録した本をジャンルごとに分けて、すべて表示する。
+        genreBookMap
+        Map(n) {'genre_id' => ['bookのcomponentが入った配列'], ...}
+    */
+
+  }, {
+    key: "makeAllBooksComponents",
+    value: function makeAllBooksComponents(genreBookMap) {
+      var components = [];
+      genreBookMap.forEach(function (booksComponents, id) {
+        components.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
+          key: 'genre' + id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+          className: "h2"
+        }, genres[id]), booksComponents));
+      });
+      return components;
+    }
+  }, {
     key: "render",
     value: function render() {
       var books = this.props.books;
       var genres = this.props.genres;
-      console.log(books);
-      console.log(genres);
-      console.log(Object.values(genres));
-      var genre_id = 1;
-      var book_elements = books.map(function (book) {
-        if (book.genre_id == genre_id) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
-            key: book.id
-          }, book.cover ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-            src: book.cover,
-            alt: "bookcover"
-          }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "no cover"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, book.author));
-        }
-      });
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Bookshelf"), book_elements);
+      /*
+        genreBookMap
+        Map(n) {'genre_id' => ['bookのcomponentが入った配列'], ...}
+      */
+
+      var genreBookMap = this.makeGenreBookMap(genres, books);
+      var allBooksComponents = this.makeAllBooksComponents(genreBookMap);
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Bookshelf"), allBooksComponents);
     }
   }]);
 

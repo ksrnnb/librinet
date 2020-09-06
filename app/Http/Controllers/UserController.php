@@ -13,10 +13,12 @@ class UserController extends Controller
         $user = User::where('str_id', $str_id)->first();
         $books = $user->books;
 
+        //  TODO: id => nameの配列に修正する。
         $genres = Book::extract_genres($books);
 
-        //  test
-        $genres[] = ['id' => 2, 'name' => 'test'];
+        //  test　書き方変えた方がいいかも？
+        $genres[2] = 'TEST_GENRE'; 
+
 
         // TODO: 不要なカラムは除きたい。
         //       user_idが欲しいからonlyメソッド使うなら後がいい。

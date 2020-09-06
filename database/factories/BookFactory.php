@@ -5,6 +5,8 @@
 use App\Book;
 use Faker\Generator as Faker;
 
+//  TODO: リファクタリングする。DRY原則。。。
+
 //  GitHub実践入門
 $factory->define(Book::class, function (Faker $faker) {
  
@@ -22,6 +24,18 @@ $factory->define(Book::class, function (Faker $faker) {
     ];
 });
 
+//  リーダブルコード
+$factory->state(Book::class, 'readouble', function($faker) {
+    $book = Book::fetch_book('9784873115658');
+    return [
+        'isbn' => $book->isbn,
+        'title' => $book->title,
+        'author' => $book->author,
+        'cover' => $book->cover,
+    ];
+});
+
+
 //  はじめてのPHP
 $factory->state(Book::class, 'php', function($faker) {
     $book = Book::fetch_book('9784873117935');
@@ -33,13 +47,26 @@ $factory->state(Book::class, 'php', function($faker) {
     ];
 });
 
-//  リーダブルコード
-$factory->state(Book::class, 'readouble', function($faker) {
-    $book = Book::fetch_book('9784873115658');
+//  電気羊
+$factory->state(Book::class, 'Dick', function($faker) {
+    $book = Book::fetch_book('9784150102296');
     return [
         'isbn' => $book->isbn,
         'title' => $book->title,
         'author' => $book->author,
         'cover' => $book->cover,
+        'genre_id' => 2,                //  2: SF (GenreSeederで作成する)
+    ];
+});
+
+//  1984
+$factory->state(Book::class, '1984', function($faker) {
+    $book = Book::fetch_book('978-4151200533');
+    return [
+        'isbn' => $book->isbn,
+        'title' => $book->title,
+        'author' => $book->author,
+        'cover' => $book->cover,
+        'genre_id' => 2,                //  2: SF (GenreSeederで作成する)
     ];
 });

@@ -1,4 +1,4 @@
-<!-- $user: Eloquent collection (root parameter is str_id: BILVll6j) -->
+<!-- $user: Eloquent collection (root parameter is str_id: yLhfXC) -->
 
 @extends('layouts.layout')
 
@@ -9,6 +9,7 @@
 <script>
   window.user = @json($user);
   window.books = @json($books);
+  window.genres = @json($genres);
 </script>
 <script src="{{asset('js/app.js')}}"></script>
 

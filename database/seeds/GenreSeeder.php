@@ -12,5 +12,6 @@ class GenreSeeder extends Seeder
     public function run()
     {
         App\Genre::create(['name' => 'IT']);
+        App\Genre::create(['name' => 'SF']);
     }
 }

@@ -16,10 +16,6 @@ class UserController extends Controller
         //  TODO: id => nameの配列に修正する。
         $genres = Book::extract_genres($books);
 
-        //  test　書き方変えた方がいいかも？
-        $genres[2] = 'TEST_GENRE'; 
-
-
         // TODO: 不要なカラムは除きたい。
         //       user_idが欲しいからonlyメソッド使うなら後がいい。
         // $user = $user->only('str_id', 'name', 'email', 'image');

@@ -1,4 +1,4 @@
-<!-- $user: Eloquent collection (root parameter is str_id: BILVll6j) -->
+<!-- $user: Eloquent collection (root parameter is str_id: yLhfXC) -->
 
 @extends('layouts.layout')
 

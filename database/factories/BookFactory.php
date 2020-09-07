@@ -36,9 +36,9 @@ $factory->state(Book::class, 'readouble', function($faker) {
 });
 
 
-//  はじめてのPHP
-$factory->state(Book::class, 'php', function($faker) {
-    $book = Book::fetchBook('9784873117935');
+//  Linux
+$factory->state(Book::class, 'Linux', function($faker) {
+    $book = Book::fetchBook('9784797397642');
     return [
         'isbn' => $book->isbn,
         'title' => $book->title,

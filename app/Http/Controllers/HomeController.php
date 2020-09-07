@@ -40,6 +40,7 @@ class HomeController extends Controller
 
         $allPostsIds = collect($followIds)->push($userId);
 
+        // book, commentsも取得したいけど。。。
         $users = User::with(['posts' => function($query) use ($allPostsIds) {
             $query->whereIn('user_id', $allPostsIds);
         }])->get();

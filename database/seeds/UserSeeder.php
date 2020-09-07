@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             $user->books()->save(factory(App\Book::class)->make())
                     ->registerPost('勉強になりました！');
 
-            $user->books()->save(factory(App\Book::class)->states('php')->make())
+            $user->books()->save(factory(App\Book::class)->states('Linux')->make())
                     ->registerPost('これは良書です！');
 
             $user->books()->save(factory(App\Book::class)->states('readouble')->make())

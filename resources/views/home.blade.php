@@ -4,10 +4,26 @@
 @section('content')
 <!-- <div id="post-react"></div> -->
 
+<!-- TODO: Eager修正する。 -->
 <div class="container">
     @foreach($posts as $post)
+    <div class="post" style="border: solid 1px blue">
+        <img src="{{$post->book->cover}}" alt="book_image">
         <p>{{$post->user->name}}</p>
         <p>{{$post->message}}</p>
+    </div>
+        @isset($post->comments)
+            @foreach($post->comments as $comment)
+                <div class="comment" style="border: solid 1px black">
+                    <h2>これはコメント</h2>
+                    @isset($comment->book)
+                        <img src="{{$comment->book->cover}}" alt="book_image">
+                    @endisset
+                    <p>{{$comment->user->name}}</p>
+                    <p>{{$comment->message}}</p>
+                </div>
+            @endforeach
+        @endisset
     @endforeach
 
 </div>

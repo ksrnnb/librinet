@@ -18,7 +18,7 @@ class CommentSeeder extends Seeder
             'user_id' => 3,
         ]);
         $post->comments()->create([
-            'message' => 'この本もおすすめです！',
+            'message' => 'いいですね！',
             'user_id' => 4,
         ]);
     }

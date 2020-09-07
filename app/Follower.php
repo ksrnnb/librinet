@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Follower extends Model
 {
-    //TODO  規約通りでないので引数の修正。
+    // NOTICE: 使用時は$follower->follow_userのように()は不要なので注意！
     public function follow_user() {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User', 'follow_id');
     }
 
-    //TODO  規約通りでないので引数の修正。
+    // NOTICE: 使用時は$follower->follow_userのように()は不要なので注意！
     public function follower_user() {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User', 'follower_id');
     }
 }

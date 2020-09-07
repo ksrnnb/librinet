@@ -1,4 +1,21 @@
-@extends('layouts.app')
+
+@extends('layouts.layout')
+
+@section('content')
+<!-- <div id="post-react"></div> -->
+
+<div class="container">
+    @foreach($posts as $post)
+        <p>{{$post->user->name}}</p>
+        <p>{{$post->message}}</p>
+    @endforeach
+
+</div>
+<!-- <script src="{{asset('js/app.js')}}"></script> -->
+@endsection('content')
+
+
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -21,3 +38,5 @@
     </div>
 </div>
 @endsection
+
+--}}

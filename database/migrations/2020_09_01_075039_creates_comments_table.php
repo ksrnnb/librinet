@@ -18,7 +18,7 @@ class CreatesCommentsTable extends Migration
             $table->text('message');
             $table->integer('user_id');
             $table->integer('post_id');
-            $table->string('isbn')->nullable();
+            $table->integer('book_id')->nullable();
             $table->timestamps();
         });
     }

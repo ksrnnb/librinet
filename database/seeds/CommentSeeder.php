@@ -20,7 +20,6 @@ class CommentSeeder extends Seeder
         $post->comments()->create([
             'message' => 'この本もおすすめです！',
             'user_id' => 4,
-            'isbn' => '9784873117836',  //  初めてのJavaScript
         ]);
     }
 }

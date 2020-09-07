@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     public function book() {
-        return $this->hasOne('App\Book');
+        return $this->hasOne('App\Book', 'id', 'book_id');
+    }
+
+    public function user() {
+        return $this->belongsTo('App\User');
     }
 
     public function comments() {

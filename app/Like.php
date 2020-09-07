@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Like extends Model
 {
     public function comment() {
-        return $this->hasOne('App\Comment');
+        return $this->belongsTo('App\Comment');
     }
 
     public function post() {
-        return $this->hasOne('App\Post');
+        return $this->belongsTo('App\Post');
     }
 }

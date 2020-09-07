@@ -22,7 +22,7 @@ class Book extends Model
         return $this->belongsTo('App\Genre');
     }
 
-    public function register_post($message = '') {
+    public function registerPost($message = '') {
         $this->post()->create([
             'message' => $message,
             'user_id' => $this->user_id,
@@ -33,7 +33,7 @@ class Book extends Model
         fetch book object from openBD
         main property: 'isbn', 'title', 'cover', 'author'
     */
-    public static function fetch_book($isbn) {
+    public static function fetchBook($isbn) {
         $ch = curl_init('https://api.openbd.jp/v1/get?isbn=' . $isbn);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);       
         $book = json_decode(curl_exec($ch))[0]->summary;
@@ -43,11 +43,12 @@ class Book extends Model
 
     /*
         booksが属するgenresのgenre_idとnameの配列を返す
-        return [['id' => 'name'], ['id' => 'name], ...]
+        return ['id' => 'name', 'id' => 'name, ...]
     */
 
+    //  TODO: groupByで簡潔にならないか？
     //  TODO: 一冊のときでも大丈夫かどうか気になる。確認する。
-    public static function extract_genres($books) {
+    public static function extractGenres($books) {
 
         $genres = [];
         

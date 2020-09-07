@@ -13,3 +13,4 @@ require('./bootstrap');
  */
 
 require('./components/User');
+require('./components/Post');

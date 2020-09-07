@@ -6,6 +6,8 @@
 <div id="user-react"></div>
 
 
+
+<!-- TODO: わざわざReactで書かずにBladeで処理するように変えたい。。。 -->
 <script>
   window.user = @json($user);
   window.books = @json($books);

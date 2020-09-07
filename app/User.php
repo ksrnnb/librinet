@@ -41,8 +41,19 @@ class User extends Authenticatable
         return $this->hasMany('App\Book');
     }
 
-    //TODO  idが規約通りでないので、引数を修正する必要あり。
+    public function posts() {
+        return $this->hasMany('App\Post');
+    }
+
+    public function comments() {
+        return $this->hasMany('App\Comment');
+    }
+
     public function followers() {
-        return $this->hasMany('App\Follower');
+        return $this->hasMany('App\Follower', 'follow_id', 'id');
+    }
+
+    public function following() {
+        return $this->hasMany('App\Follower', 'follower_id', 'id');
     }
 }

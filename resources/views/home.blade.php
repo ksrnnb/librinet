@@ -7,11 +7,16 @@
 <!-- TODO: Eager修正する。 -->
 <div class="container">
     @foreach($posts as $post)
-    <div class="post" style="border: solid 1px blue">
-        <img src="{{$post->book->cover}}" alt="book_image">
-        <p>{{$post->user->name}}</p>
-        <p>{{$post->message}}</p>
-    </div>
+        <!-- 全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにする -->
+        @isset($post->user)
+            <div class="post" style="border: solid 1px blue">
+                <img src="{{$post->book->cover}}" alt="book_image">
+                <h2>{{$post->user->id}}</h2>
+                <p>{{$post->user->name}}</p>
+                <p>{{$post->message}}</p>
+            </div>
+        @endisset
+
         @isset($post->comments)
             @foreach($post->comments as $comment)
                 <div class="comment" style="border: solid 1px black">
@@ -20,7 +25,7 @@
                         <img src="{{$comment->book->cover}}" alt="book_image">
                     @endisset
                     <p>{{$comment->user->name}}</p>
-                    <p>{{$comment->message}}</p>
+                    <p class="h4">{{$comment->message}}</p>
                 </div>
             @endforeach
         @endisset

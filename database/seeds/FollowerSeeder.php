@@ -14,8 +14,9 @@ class FollowerSeeder extends Seeder
         //  リフレッシュしてからシーディングする前提で、作成したusersのレコード数を取得。
         $count = App\User::count();
         
-        //  全員相互フォローにしておく。
-        for ($follow_id = 1; $follow_id <= $count; $follow_id++) {
+        //  相互フォローにしておく。
+        //  一人だけフォローから外しとく
+        for ($follow_id = 1; $follow_id <= $count - 1; $follow_id++) {
             for ($follower_id = 1; $follower_id <= $count; $follower_id++) {
                 if ($follow_id != $follower_id) {
                     App\Follower::create([

@@ -38,24 +38,31 @@ class HomeController extends Controller
             return $follower->follow_id;           
         });
 
+        //  自身のPostも追加
         $allPostsIds = collect($followIds)->push($userId);
 
-        // book, commentsも取得したいけど。。。
-        $users = User::with(['posts' => function($query) use ($allPostsIds) {
-            $query->whereIn('user_id', $allPostsIds);
+        //  疑問点: Eagerローディング / load多すぎないか？　DB設計がこれでいいのかどうか...
+        $posts = Post::with(['user' => function($query) use ($allPostsIds) {
+            $query->whereIn('id', $allPostsIds);
         }])->get();
 
-        // TODO @user_nameのPostもとってくるようにする。
+        $posts->load('book', 'likes', 'comments.likes', 'comments.user', 'comments.book');
 
         /*
-            allPosts: [[Post], [Post], ...]
+            posts: [[Post], [Post], ...]
         */
-        $allPosts = $users->map(function($user) {    
-            return $user->posts->map(function($post) {
-                return $post;
-            });
-        });
 
-        return view('home', ['posts' => $allPosts->flatten()]);
+        // 新しい投稿が上に表示されるように、降順でソート
+        $posts = $posts->sortByDesc(function ($product, $key) {
+            return $product->updated_at;
+        })->values();
+
+        // 最後の行に[]と出力されるだけならEagerローディングできている。
+        // 必要に応じて使用する。
+        // Post::checkHomeSqlLog($posts);
+        
+        return view('home', ['posts' => $posts]);
+
+
     }
 }

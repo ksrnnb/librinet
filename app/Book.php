@@ -6,12 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+
     public function user() {
         return $this->hasOne('App\User');
-    }
-
-    public function book() {
-        return $this->hasOne('App\Book');
     }
 
     public function post() {

@@ -2,18 +2,40 @@
 @extends('layouts.layout')
 
 @section('content')
-<!-- <div id="post-react"></div> -->
+{{-- <div id="post-react"></div> --}}
 
-<!-- TODO: Eager修正する。 -->
 <div class="container">
     @foreach($posts as $post)
-        <!-- 全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにする -->
+        {{--  全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにする --}}
         @isset($post->user)
-            <div class="post" style="border: solid 1px blue">
-                <img src="{{$post->book->cover}}" alt="book_image">
-                <h2>{{$post->user->id}}</h2>
-                <p>{{$post->user->name}}</p>
-                <p>{{$post->message}}</p>
+            <div class="row">
+                <div class="post col-12" style="border: solid 1px blue">
+                    <div class="row pt-2">
+                        <figure class="col-2 mb-0">
+                            <img class="img-fluid" src="{{$post->book->cover}}" alt="book_image">
+                        </figure>
+                        <div class="user col-10">
+                            <div class="row">
+                                <div class="avator col-2">
+                                    @if(isset($post->user->image))
+                                        {{-- TODO: ユーザー画像登録したら本当に表示されるか、確認する --}}
+                                        <img class="img-fluid" src="{{$post->user->image}}" alt="user-icon">
+                                    @else
+                                        <a href="{{'/user/' . $post->user->str_id}}"><img class="img-fluid" src="{{asset('img/icon.svg')}}" alt="user-icon"></a>
+                                    @endif
+                                </div>
+                                <div class="col-10">
+                                    <p class="h4 d-inline mr-1">{{$post->user->name}}</p>
+                                    <p class="d-inline">{{' @' . $post->user->str_id}}</p>
+                                    <p>{{$post->message}}</p>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <p class="book-title my-2">{{$post->book->title}} （ {{$post->book->author}} ）</p>
+
+                </div>
             </div>
         @endisset
 
@@ -32,7 +54,8 @@
     @endforeach
 
 </div>
-<!-- <script src="{{asset('js/app.js')}}"></script> -->
+{{-- <script src="{{asset('js/app.js')}}"></script> --}}
+
 @endsection('content')
 
 

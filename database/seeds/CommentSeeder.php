@@ -54,7 +54,7 @@ class CommentSeeder extends Seeder
             'author' => $book->author,
             'cover' => $book->cover,
             'user_id' => 4,                 //  とりあえず4
-            'genre_id' => 0,                //  1: IT (GenreSeederで作成する)
+            'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
             'isRead' => 0,                  //  
             'isWanted' => 0,                //  
             'isRecommended' => 0,           //  

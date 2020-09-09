@@ -24,24 +24,25 @@ class CommentSeeder extends Seeder
         ]);
 
         //  TODO: Eager最適化したら、あとで消す
+        $post = App\Post::find(10);
         $post->comments()->create([
-            'message' => '私も読みました！',
+            'message' => '1: 私も読みました！',
             'user_id' => 5,
         ]);
         $post->comments()->create([
-            'message' => '私も読みました！',
+            'message' => '2: 私も読みました！',
             'user_id' => 5,
         ]);
         $post->comments()->create([
-            'message' => '私も読みました！',
+            'message' => '3: 私も読みました！',
             'user_id' => 5,
         ]);
         $post->comments()->create([
-            'message' => '私も読みました！',
+            'message' => '4: 私も読みました！',
             'user_id' => 5,
         ]);
         $post->comments()->create([
-            'message' => '私も読みました！',
+            'message' => '5: 私も読みました！',
             'user_id' => 5,
         ]);
         

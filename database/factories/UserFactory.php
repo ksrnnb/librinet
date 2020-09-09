@@ -23,6 +23,7 @@ $factory->define(User::class, function (Faker $faker) {
         'str_id' => $faker->unique()->regexify('[a-zA-Z0-9]{6,10}'),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
+        // 'image' => asset('img/icon.svg'),    <- このやり方だと、localhost/img/icon.svgになってしまう
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'remember_token' => Str::random(10),
     ];

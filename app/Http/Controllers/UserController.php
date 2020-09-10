@@ -17,6 +17,10 @@ class UserController extends Controller
         $books = $user->books;
         $genres = Book::extractGenres($books);
         $genres_books_collection = $books->groupBy('genre_id');
+        /*
+            genres:                  [genre_id => genre_name, ...]
+            genres_books_collection: [[genre_id => [book, book, ...]], ...]
+        */
 
         // dd(\DB::getQueryLog());
             

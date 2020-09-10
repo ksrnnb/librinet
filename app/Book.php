@@ -8,7 +8,7 @@ class Book extends Model
 {
 
     public function user() {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function post() {
@@ -39,33 +39,26 @@ class Book extends Model
     }
 
     /*
+        @param $books: 
         booksが属するgenresのgenre_idとnameの配列を返す
         return ['id' => 'name', 'id' => 'name, ...]
     */
 
-    //  TODO: groupByで簡潔にならないか？
     //  TODO: 一冊のときでも大丈夫かどうか気になる。確認する。
     public static function extractGenres($books) {
-
         $genres = [];
         
         foreach($books as $book) {
-            
-            $new_genre = $book->genre()->first();
+            $genre = $book->genre;
             $is_not_exist = true;
-            
-            foreach ($genres as $genre => $index) {
-                if ($index == $new_genre->id) {
-                    $is_not_exist = false;
-                }
-            }
-            if ($is_not_exist) {
-                $genres[$new_genre->id] = $new_genre->name;
-            }
 
-        };
+            if (array_key_exists($genre->id, $genres)) {
+            
+            } else {
+                $genres[$genre->id] = $genre->name;
+            }
+        }
 
         return $genres;
     }
-
 }

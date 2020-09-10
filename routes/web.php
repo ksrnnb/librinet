@@ -19,3 +19,6 @@ Route::get('/user/{str_id}', 'UserController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/book/{isbn?}', 'BookController@index')->name('book');
+
+Route::post('/book', 'BookController@search');

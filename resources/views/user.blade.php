@@ -8,7 +8,7 @@
 <div class="container">
     <div class="row">
         <div class="col-2">
-            @if(isset($user->image))
+            @if($user->image)
                 <img class="img-fluid" src="{{$user->image}}" alt="user-image">
             @else
                 <img class="img-fluid" src="{{asset('img/icon.svg')}}" alt="user-image">
@@ -28,13 +28,15 @@
                     @foreach($books->chunk(4) as $chunk)
                         <div class="row mt-3">
                             @foreach($chunk as $book)
+                                <?php $book_url = '/book/' . $book->isbn ?>
                                 <div class="col-3">
-                                    <img class="img-fluid w-100" src="{{$book->cover}}" alt="book-cover">
+                                    <a href="{{$book_url}}">
+                                        <img class="img-fluid w-100" src="{{$book->cover}}" alt="book-cover">
+                                    </a>
                                 </div>
                             @endforeach
                         </div>
                         <div class="row mt-2">
-                            <!-- ウィンドウ幅多い聞いときにタイトルがはみ出る。。。 -->
                             @foreach($chunk as $book)
                             <div class="col-3">
                                 <p>{{$book->title}}</p>

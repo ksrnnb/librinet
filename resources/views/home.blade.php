@@ -13,12 +13,16 @@
                     <div class="row pt-2">
                         <div class="col-2 px-0">
                             @if(isset($post->book))
+                                <?php $book_url = '/book/' . $post->book->isbn ?>
                                 <figure class="mx-2 px-0 mb-0 book">
-                                    {{--TODO: 本の画像を押したら、本の詳細を表示して本棚に入れるかどうかのページへ--}}
-                                    @if(isset($post->book->cover))
-                                        <img class="img-fluid" src="{{$post->book->cover}}" alt="book_image">
+                                    @if($post->book->cover)
+                                        <a href="{{$book_url}}">
+                                            <img class="img-fluid" src="{{$post->book->cover}}" alt="book_image">
+                                        </a>
                                     @else
-                                        <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
+                                        <a href="{{$book_url}}">
+                                            <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
+                                        </a>
                                     @endif
                                 </figure>
                             @else
@@ -28,7 +32,7 @@
                         <div class="user col-10">
                             <div class="row">
                                 <div class="avator col-2">
-                                    @if(isset($post->user->image))
+                                    @if($post->user->image)
                                         {{-- TODO: ユーザー画像登録したら本当に表示されるか、確認する --}}
                                         <img class="img-fluid" src="{{$post->user->image}}" alt="user-icon">
                                     @else
@@ -63,7 +67,7 @@
                             @if(isset($comment->book))
                                 <figure class="mx-2 px-0 mb-0 book">
                                     {{--TODO: 本の画像を押したら、本の詳細を表示するページへ--}}
-                                    @if(isset($comment->book->cover))
+                                    @if($comment->book->cover)
                                         <img class="img-fluid" src="{{$comment->book->cover}}" alt="book_image">
                                     @else
                                         <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
@@ -76,7 +80,7 @@
                         <div class="user col-10">
                             <div class="row">
                                 <div class="avator col-2">
-                                    @if(isset($comment->user->image))
+                                    @if($comment->user->image)
                                         {{-- TODO: ユーザー画像登録したら本当に表示されるか、確認する --}}
                                         <img class="img-fluid" src="{{$comment->user->image}}" alt="user-icon">
                                     @else

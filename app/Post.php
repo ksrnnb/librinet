@@ -7,27 +7,49 @@ use App\DB;
 
 class Post extends Model
 {
-    public function book() {
+    public function book()
+    {
         return $this->belongsTo('App\Book', 'book_id', 'id');
-        // return $this->hasOne('App\Book', 'id', 'book_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\User');
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany('App\Comment');
     }
 
-    public function likes() {
+    public function likes()
+    {
         return $this->hasMany('App\Like');
     }
 
-    public static function checkHomeSqlLog($posts) {
+    public function createComment ($user_id, $message, $book_id = null)
+    {
+        if ($book_id) {
+            $this->comments()
+                ->create([
+                    'user_id' => $user_id,
+                    'message' => $message,
+                    'book_id' => $book_id,
+                ]);
+        } else {
+            $this->comments()
+                ->create([
+                    'user_id' => $user_id,
+                    'message' => $message,
+                ]);
+        }
+    }
+
+    public static function checkHomeSqlLog($posts)
+    {
         \DB::enableQueryLog();
         foreach($posts as $post) {
-            //  全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにする
+            //  全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにしている
             if (isset($post->user)) {
                 echo '<p>' . $post->user->id . '</p>';
                 echo '<p>' . $post->user->name . '</p>';

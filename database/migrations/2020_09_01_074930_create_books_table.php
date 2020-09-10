@@ -21,9 +21,7 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('author');
             $table->string('cover')->nullable();
-            $table->boolean('isRead');
-            $table->boolean('isWanted');
-            $table->boolean('isRecommended');
+            $table->boolean('isInBookshelf');
             $table->timestamps();
         });
     }

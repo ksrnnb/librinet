@@ -5,6 +5,7 @@ use App\Book;
 
 class CommentSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -12,41 +13,29 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        //  2人からコメント、1人は本も推める。
+        //  2人からコメント        
         $post = App\Post::find(1);
-        $post->comments()->create([
-            'message' => '私も読みました！',
-            'user_id' => 2,
-        ]);
-        $post->comments()->create([
-            'message' => 'いいね！',
-            'user_id' => 3,
-        ]);
+        $messages = [
+            2 => '私も読みました！',
+            3 => 'いいね！',
+        ];
+        foreach ($messages as $id => $message) {
+            $post->createComment($user_id = $id, $message = $message);
+        }
 
-        //  TODO: Eager最適化したら、あとで消す
-        $post = App\Post::find(10);
-        $post->comments()->create([
-            'message' => '1: 私も読みました！',
-            'user_id' => 5,
-        ]);
-        $post->comments()->create([
-            'message' => '2: 私も読みました！',
-            'user_id' => 5,
-        ]);
-        $post->comments()->create([
-            'message' => '3: 私も読みました！',
-            'user_id' => 5,
-        ]);
-        $post->comments()->create([
-            'message' => '4: 私も読みました！',
-            'user_id' => 5,
-        ]);
-        $post->comments()->create([
-            'message' => '5: 私も読みました！',
-            'user_id' => 5,
-        ]);
+        //  違う投稿に3人からコメント
+        $post = App\Post::find(8);
+        $messages = [
+            ['id' => 1, 'message' => '私も読みました！'],
+            ['id' => 3, 'message' => 'いいね！'],
+            ['id' => 5, 'message' => '最高！'],
+        ];
+
+        foreach ($messages as $item) {
+            $post->createComment($user_id = $item['id'], $message = $item['message']);
+        }
         
-        // TODO: ここ長すぎんか？
+        // 本をおすすめするコメント
         $book = Book::fetchBook('9784798052588');
 
         $phpBook = Book::create([
@@ -56,15 +45,11 @@ class CommentSeeder extends Seeder
             'cover' => $book->cover,
             'user_id' => 4,                 //  とりあえず4
             'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
-            'isRead' => 0,                  //  
-            'isWanted' => 0,                //  
-            'isRecommended' => 0,           //  
+            'isInBookshelf' => 0,
         ]);
 
-        $post->comments()->create([
-            'message' => 'この本はどうでしょうか？',
-            'user_id' => 4,                 //  phpBookのIDと合わせる
-            'book_id' => $phpBook->id,
-        ]);
+        $id = 4;
+        $message = 'この本はどうでしょうか？';
+        $post->createComment($user_id = $id, $message = $message, $book_id = $phpBook->id);
     }
 }

@@ -13,5 +13,6 @@ class GenreSeeder extends Seeder
     {
         App\Genre::create(['name' => 'IT']);
         App\Genre::create(['name' => 'SF']);
+        App\Genre::create(['name' => '自己啓発']);
     }
 }

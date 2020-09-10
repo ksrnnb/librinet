@@ -37,23 +37,41 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function books() {
+    public function books()
+    {
         return $this->hasMany('App\Book');
     }
 
-    public function posts() {
+    public function posts()
+    {
         return $this->hasMany('App\Post');
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany('App\Comment');
     }
 
-    public function followers() {
+    public function followers()
+    {
         return $this->hasMany('App\Follower', 'follow_id', 'id');
     }
 
-    public function following() {
+    public function following()
+    {
         return $this->hasMany('App\Follower', 'follower_id', 'id');
+    }
+
+    public function registerBookAndPost($state, $message)
+    {
+        if ($state) {
+            $this->books()
+                ->save(factory(Book::class)->states($state)->make())
+                ->registerPost($message);
+        } else {
+            $this->books()
+                ->save(factory(Book::class)->make())
+                ->registerPost($message);
+        }
     }
 }

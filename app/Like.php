@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
-    public function comment() {
+    public function comment()
+    {
         return $this->belongsTo('App\Comment');
     }
 
-    public function post() {
+    public function post()
+    {
         return $this->belongsTo('App\Post');
     }
 }

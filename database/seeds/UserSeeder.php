@@ -11,24 +11,33 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // TODO: リファクタリングが必要。DRY原則
+        
         //  Userを5人、BookとPostを5冊ずつ登録。
-        factory(App\User::class, 5)->create()->each(function($user) {
-            $user->books()->save(factory(App\Book::class)->make())
-                    ->registerPost('勉強になりました！');
+        factory(App\User::class, 5)
+            ->create()
+            ->each(function($user) {
+                $items = [
+                    ['state' => '', 'message' => '勉強になりました'],
+                    ['state' => 'Linux', 'message' => 'よかったです！'],
+                    ['state' => 'readouble', 'message' => '最高です！'],
+                    ['state' => 'Dick', 'message' => 'おもしろかった！'],
+                    ['state' => '1984', 'message' => '重い内容だった'],
+                ];
+                
+                foreach ($items as $item) {
+                    $user->registerBookAndPost($state = $item['state'], $message = $item['message']);
+                }
+            });
 
-            $user->books()->save(factory(App\Book::class)->states('Linux')->make())
-                    ->registerPost('よかったです！');
-
-            $user->books()->save(factory(App\Book::class)->states('readouble')->make())
-                    ->registerPost('最高です！');
-
-            $user->books()->save(factory(App\Book::class)->states('Dick')->make())
-                    ->registerPost('おもしろい！');
-
-            $user->books()->save(factory(App\Book::class)->states('1984')->make())
-                    ->registerPost('監視社会こわい');
-        });
+        // GUEST USER
+        App\User::create([
+            'str_id' => 'guest',
+            'name' => 'guest_user',
+            'email' => 'guest@guest.com',
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+        ]);
     }
 
 }

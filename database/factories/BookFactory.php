@@ -18,9 +18,7 @@ $factory->define(Book::class, function (Faker $faker) {
         'author' => $book->author,
         'cover' => $book->cover,
         'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
-        'isRead' => 1,                  //  読んだ
-        'isWanted' => 0,                //  欲しくない（既に読んだ）
-        'isRecommended' => 1,           //  おすすめしたい
+        'isInBookshelf' => true,        //  1: 自分の本棚
     ];
 });
 

@@ -8,7 +8,8 @@ use App\Book;
 
 class UserController extends Controller
 {
-    public function index(Request $request, $str_id) {
+    public function index(Request $request, $str_id)
+    {
 
         // \DB::enableQueryLog();
 

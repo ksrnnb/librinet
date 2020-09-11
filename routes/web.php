@@ -13,12 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
+Route::get('/', 'RootController@index')->name('root');
+Route::post('/', 'Auth\LoginController@guest');
 
 Route::get('/user/{str_id}', 'UserController@index');
 
-Auth::routes();
+Route::get('/home', 'HomeController@index')->middleware('auth');
 
-Route::get('/home', 'HomeController@index');
 Route::get('/book/{isbn?}', 'BookController@index')->name('book');
-
 Route::post('/book', 'BookController@search');
+
+Route::get('/logout', 'Auth\LoginController@logout');

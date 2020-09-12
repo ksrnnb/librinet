@@ -22,7 +22,12 @@ Route::get('/user/{str_id}', 'UserController@index');
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 
-Route::get('/book/{isbn?}', 'BookController@index')->name('book');
+Route::get('/book', 'BookController@index');
 Route::post('/book', 'BookController@search');
+Route::get('/book/{isbn}', 'BookController@show')->name('book');
+Route::post('/book/{isbn}', 'BookController@post');
+
+Route::get('/book/post/{isbn}', 'PostController@show')->name('post');
+Route::post('/book/post/{isbn}', 'PostController@post');
 
 Route::get('/logout', 'Auth\LoginController@logout');

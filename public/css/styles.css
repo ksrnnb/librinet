@@ -5,3 +5,10 @@
   font-size: 0.9em;
 }
 
+label, input[type='checkbox'] {
+  cursor: pointer;
+}
+
+label, input[type='radio'] {
+  cursor: pointer;
+}

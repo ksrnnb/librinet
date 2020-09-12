@@ -5,6 +5,9 @@
 {{-- <div id="post-react"></div> --}}
 
 <div class="container">
+    <div class="row">
+        <a href="/book" class="h3">本を検索する</a>
+    </div>
     @foreach($posts as $post)
         {{--  全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにしている --}}
         @isset($post->user)

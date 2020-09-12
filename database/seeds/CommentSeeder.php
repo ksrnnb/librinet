@@ -43,6 +43,8 @@ class CommentSeeder extends Seeder
             'title' => $book->title,
             'author' => $book->author,
             'cover' => $book->cover,
+            'publisher' => $book->publisher,
+            'pubdate' => $book->pubdate,
             'user_id' => 4,                 //  とりあえず4
             'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
             'isInBookshelf' => 0,

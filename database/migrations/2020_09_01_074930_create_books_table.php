@@ -20,6 +20,8 @@ class CreateBooksTable extends Migration
             $table->string('isbn');
             $table->string('title');
             $table->string('author');
+            $table->string('publisher');
+            $table->string('pubdate');
             $table->string('cover')->nullable();
             $table->boolean('isInBookshelf');
             $table->timestamps();

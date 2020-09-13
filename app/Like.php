@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
+    protected $guarded = ['id'];
+    
     public function comment()
     {
         return $this->belongsTo('App\Comment');

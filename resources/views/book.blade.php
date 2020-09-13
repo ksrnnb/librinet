@@ -21,16 +21,18 @@
                 <p>出版社：{{$book->publisher}}</p>
                 <?php $pub_year = substr($book->pubdate, 0, 4) . '年'?>
                 <p>出版年：{{$pub_year}}</p>
-                <div>
-                    <a href="/book">
+               {{--
+               <div>
+                    <a href="/book/add">
                         <button type="button" class="btn btn-outline-success">本棚に追加する</button>
                     </a>
                 </div>
-                <div>
-                    <a href="/book">
-                        <button type="button" class="btn btn-outline-success">本をおすすめする</button>
-                    </a>
-                </div>
+                --}}
+                <form action="{{request()->fullUrl()}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="isbn" value="{{$book->isbn}}">
+                    <input type="submit" class="btn btn-outline-success" value="本の投稿をする">
+                </form>
                 <div>
                     <a href="/book">
                         <button type="button" class="btn btn-outline-success">本の検索画面に戻る</button>
@@ -50,8 +52,8 @@
             <input type="submit" value="検索">
         </form>
         <p>test</p>
-        <p>9784297100339: Docker/Kubernetes実践コンテナ開発入門</p>
-        <p>9784839955557: ノンデザイナーズ・デザインブック</p>
+        <p>9784297100339 Docker/Kubernetes実践コンテナ開発入門</p>
+        <p>9784839955557 ノンデザイナーズ・デザインブック</p>
     @endif
 </div>
 

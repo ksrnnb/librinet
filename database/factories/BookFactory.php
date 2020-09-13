@@ -17,6 +17,8 @@ $factory->define(Book::class, function (Faker $faker) {
         'title' => $book->title,
         'author' => $book->author,
         'cover' => $book->cover,
+        'publisher' => $book->publisher,
+        'pubdate' => $book->pubdate,
         'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
         'isInBookshelf' => true,        //  1: 自分の本棚
     ];
@@ -30,6 +32,8 @@ $factory->state(Book::class, 'readouble', function($faker) {
         'title' => $book->title,
         'author' => $book->author,
         'cover' => $book->cover,
+        'publisher' => $book->publisher,
+        'pubdate' => $book->pubdate,
     ];
 });
 
@@ -42,6 +46,8 @@ $factory->state(Book::class, 'Linux', function($faker) {
         'title' => $book->title,
         'author' => $book->author,
         'cover' => $book->cover,
+        'publisher' => $book->publisher,
+        'pubdate' => $book->pubdate,
     ];
 });
 
@@ -53,6 +59,8 @@ $factory->state(Book::class, 'Dick', function($faker) {
         'title' => $book->title,
         'author' => $book->author,
         'cover' => $book->cover,
+        'publisher' => $book->publisher,
+        'pubdate' => $book->pubdate,
         'genre_id' => 2,                //  2: SF (GenreSeederで作成する)
     ];
 });
@@ -65,6 +73,8 @@ $factory->state(Book::class, '1984', function($faker) {
         'title' => $book->title,
         'author' => $book->author,
         'cover' => $book->cover,
+        'publisher' => $book->publisher,
+        'pubdate' => $book->pubdate,
         'genre_id' => 2,                //  2: SF (GenreSeederで作成する)
     ];
 });

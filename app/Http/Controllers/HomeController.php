@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Follower;
 use App\Post;
@@ -26,9 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // TODO: ユーザー認証機能を追加したときに修正する。
-        $userId = 1;
-        $user = User::find($userId);
+        $user = Auth::user();
 
         // TODO: モデル側に処理をもっていく。
         
@@ -39,7 +38,7 @@ class HomeController extends Controller
         });
 
         //  自身のPostも追加
-        $allPostsIds = collect($followIds)->push($userId);
+        $allPostsIds = collect($followIds)->push($user->id);
 
         //  疑問点: Eagerローディング / load多すぎないか？　DB設計がこれでいいのかどうか...
         $posts = Post::with(['user' => function($query) use ($allPostsIds) {

@@ -5,15 +5,13 @@
                  @if(isset($item->book))
                     <?php $book_url = '/book/' . $item->book->isbn ?>
                     <figure class="mx-2 px-0 mb-0 book">
+                        <a href="{{$book_url}}">
                         @if($item->book->cover)
-                            <a href="{{$book_url}}">
-                                <img class="img-fluid" src="{{$item->book->cover}}" alt="book_image">
-                            </a>
+                            <img class="img-fluid" src="{{$item->book->cover}}" alt="book_image">
                         @else
-                            <a href="{{$book_url}}">
-                                <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
-                            </a>
+                            <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
                         @endif
+                        </a>
                     </figure>
                 @else
                     <div class="mx-2"></div>

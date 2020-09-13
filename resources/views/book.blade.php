@@ -47,11 +47,27 @@
         <h2>本の検索</h2>
         <form action="/book" method="POST">
             @csrf
-            <label for="isbn">ISBN (13桁)</label>
-            <input type="text" id="isbn" name="isbn">
-            <input type="submit" value="検索">
+            <div>
+                <label for="isbn">
+                    <h3 class="mb-0">ISBN (13桁*)</h3>
+                </label>
+            </div>
+            <!-- validation -->
+            {{var_dump($errors)}}
+            @if ($errors->all())
+                @foreach ($errors->all() as $error)
+                    <p class='error mb-0'>{{$error}}</p>
+                @endforeach
+            @endif
+            <div>
+                <input type="text" id="isbn" name="isbn" required>
+                <input type="submit" value="検索">
+            </div>
+            <div>
+                <p>(* ハイフンは除かなくても検索可能)</p>
+            </div>
         </form>
-        <p>test</p>
+        <p>例</p>
         <p>9784297100339 Docker/Kubernetes実践コンテナ開発入門</p>
         <p>9784839955557 ノンデザイナーズ・デザインブック</p>
     @endif

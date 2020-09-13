@@ -47,34 +47,19 @@ class Post extends Model
         }
     }
 
-    public static function checkHomeSqlLog($posts)
-    {
-        \DB::enableQueryLog();
-        foreach($posts as $post) {
-            //  全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにしている
-            if (isset($post->user)) {
-                echo '<p>' . $post->user->id . '</p>';
-                echo '<p>' . $post->user->name . '</p>';
-                echo '<p>' . $post->book->cover . '</p>';
-                echo '<p>' . $post->message . '</p>';
-                echo '<h2>Likes:' . $post->likes->count() . '</h2>';
-            }
-            if (isset($post->comments)) {
-    
-                foreach($post->comments as $comment) {
-                    echo '<div style="border: 1px solid black">';
+    // 本の追加、ジャンルの追加、新しい投稿の作成
+    public static function createNewPost($form)
+    {        
+        
+        $book = Book::createNewBook($form);
 
-                    if (isset($comment->book)) {
-                        
-                        echo '<p>' . $comment->book->cover . '</p>';
-                    }
-                    echo '<p>' . $comment->user->name . '</p>';
-                    echo '<p>' . $comment->message . '</p>';
-                    echo '<h2>Likes:' . $comment->likes->count() . '</h2>';
-                    echo '</div>';
-                }   
-            }
-        }
-        dd(\DB::getQueryLog());
+        $post_data = [
+            'user_id' => $book->user_id,
+            'book_id' => $book->id,
+            'message' => $form->get('message'),
+        ];
+        
+        Post::create($post_data);
+
     }
 }

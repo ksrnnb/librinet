@@ -5,6 +5,19 @@
   font-size: 0.9em;
 }
 
+.invalid {
+  opacity: 0.5;
+}
+
+.error {
+  color: red;
+}
+
+/* TODO: あとでブラウザ依存確認しとく */
+.disable {
+  user-select: none;
+}
+
 label, input[type='checkbox'] {
   cursor: pointer;
 }

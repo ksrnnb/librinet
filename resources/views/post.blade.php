@@ -29,7 +29,8 @@
                 @endif
             </div>
         </div>
-        <div class="row">
+        
+        <div class="row ">
             <div class="col-12">
                 <!-- TODO: そもそも本棚に追加ボタンが有効でない場合は表示しない。 -->
                 <h4>ジャンルの選択</h4>
@@ -37,12 +38,13 @@
                     <div class="col-12">
                         <label for="new">
                             <!-- radio buttonでnameは共通に！ -->
-                            <input type="radio" name="genre" id="new">
+                            <input type="radio" name="genre" id="new" value="new" checked>
                             新しいジャンルを入力
                         </label>
                     </div>
                 </div>
                 <!-- TODO: 選択されてない時は灰色 or 透明色に -->
+                
                 <div class="row">
                     <div class="col-12">
                         <label for="new_genre">
@@ -50,10 +52,13 @@
                         </label>
                     </div>
                 </div>
+                @if(empty($genres))
+
+                @else
                 <div class="row">
                     <div class="col-12">
                         <label for="conventional">
-                            <input type="radio" name="genre" id="conventional">
+                            <input type="radio" name="genre" id="conventional" value="conventional">
                             既存のジャンルから選択
                         </label>
                     </div>
@@ -61,13 +66,14 @@
                 <!-- TODO: 選択されてない時は灰色 or 透明色に -->
                 <div class="row">
                     <div class="col-12">
-                        <select name="genre">
+                        <select name="genre_id">
                             @foreach($genres as $id => $genre)
                                 <option value="{{$id}}">{{$genre}}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
         <div class="row">

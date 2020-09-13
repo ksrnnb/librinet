@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Book;
+use App\Genre;
+use App\Post;
 
 
 class PostController extends Controller
@@ -38,13 +40,55 @@ class PostController extends Controller
         }
         $genres = Book::extractGenres($user->books);
         // TODO: SQLログ確認する。eagerローディング必要？
-
         return view('post', ['book' => $book, 'genres' => $genres]);
     }
 
     public function post(Request $request, $isbn)
     {
-        var_dump($isbn);
-        var_dump($request->except('_token'));
+        // TODO：validation
+        $user = Auth::user();
+        $form = collect($request->except('_token'));
+
+
+        // 新しく本棚に追加
+        if ($form->get('add')) {
+    
+            $book_data = $form->merge([
+                'user_id' => Auth::id(),
+                'isbn' => $isbn,
+                'isInBookshelf' => true,
+            ]);
+
+            // 新しいジャンルを作る場合
+            if ($form->get('genre') == 'new') {
+                $genre = Genre::create(['name' => $form->get('new_genre')]);
+    
+                $book_data = $book_data->merge(['genre_id' => $genre->id]);
+            } else {
+                // 既存のジャンルの場合は、既にジャンルIDが入っている
+            }
+
+        } else {
+            $book_data = $form->merge([
+                'user_id' => Auth::id(),
+                'isbn' => $isbn,
+                'isInBookshelf' => false,
+            ]);
+        }
+
+        $book_data = $book_data->except('add', 'genre', 'new_genre', 'message');
+
+        $book = Book::create($book_data->toArray());
+
+        $post_data = [
+            'user_id' => $book->user_id,
+            'book_id' => $book->id,
+            'message' => $form->get('message'),
+        ];
+        
+        Post::create($post_data);
+
+        return redirect('/');
+
     }
 }

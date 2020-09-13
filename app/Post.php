@@ -7,6 +7,8 @@ use App\DB;
 
 class Post extends Model
 {
+    protected $guarded = ['id'];
+
     public function book()
     {
         return $this->belongsTo('App\Book', 'book_id', 'id');

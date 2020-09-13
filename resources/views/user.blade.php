@@ -31,7 +31,11 @@
                                 <?php $book_url = '/book/' . $book->isbn ?>
                                 <div class="col-3">
                                     <a href="{{$book_url}}">
-                                        <img class="img-fluid w-100" src="{{$book->cover}}" alt="book-cover">
+                                        @if (isset($book->cover))
+                                            <img class="img-fluid w-100" src="{{$book->cover}}" alt="book-cover">
+                                        @else
+                                            <img class="img-fluid w-100" src="{{asset('img/book.svg')}}" alt="book-cover">
+                                        @endif
                                     </a>
                                 </div>
                             @endforeach

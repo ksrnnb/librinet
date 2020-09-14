@@ -53,7 +53,6 @@
                 </label>
             </div>
             <!-- validation -->
-            {{var_dump($errors)}}
             @if ($errors->all())
                 @foreach ($errors->all() as $error)
                     <p class='error mb-0'>{{$error}}</p>

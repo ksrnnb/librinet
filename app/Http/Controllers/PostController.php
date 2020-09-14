@@ -3,60 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Book;
-use App\Genre;
 use App\Post;
+use App\Comment;
 
 
 class PostController extends Controller
 {
-    public function show(Request $request, $isbn)
+    public function index (Request $request, $uuid)
     {
-        $isIsbn = Book::isIsbn($isbn);
-        if (! $isIsbn) {
+        $is_not_uuid = ! Str::isUuid($uuid);
+
+        // TODO: エラーページ？
+        if ($is_not_uuid) {
             return redirect('/');
         }
-        
-        $user = Auth::user();
 
-        // TODO: ここ修正する。同じ本を投稿した時、一意じゃない。
-        $book = Book::where('isbn', $isbn)
-                        ->where('user_id', $user->id)
-                        ->first();
-        
-        if (isset($book)) {
+        $posts = Post::with(['user', 'comments'])->get();
+        $post = $posts->where('uuid', $uuid)->first();
 
-        } else {
-            $book = Book::fetchBook($isbn);
-            $book->isInBookshelf = false;
-        }
-        $genres = Book::extractGenres($user->books);
-        // TODO: SQLログ確認する。eagerローディング必要？
-        return view('post', ['book' => $book, 'genres' => $genres]);
+        $books = Book::with('genre')->get();
+        $books = $books->where('user_id', Auth::id())
+                       ->where('isInBookshelf', true);
+        
+        $genres = Book::extractGenres($books);
+        $genres_books = $books->groupBy('genre_id');
+
+        return view('post', [
+            'post'          => $post,
+            'books'         => $books,
+            'genres'        => $genres,
+            'genres_books'  => $genres_books,
+        ]);
     }
 
-    public function post(PostRequest $request, $isbn)
-    {
-        $request->validated();
-        
-        $isIsbn = Book::isIsbn($isbn);
 
-        // TODO: エラーページに飛ばす？
-        if (! $isIsbn) {
-            return redirect('/');
+    /* comment (post method)
+        @param $request->input()
+        [
+            'post_id'   => integer,
+            'message'   => string,
+            'recommend' => "on" or no set
+            'book_id'   => integer
+        ]
+        @return redirect to home
+    */
+
+    public function comment (Request $request)
+    {
+        $form = request()->except('_token');
+
+        if (isset($form['recommend'])) {
+            Comment::create([
+                'message' => $form['message'],
+                'post_id' => $form['post_id'],
+                'user_id' => Auth::id(),
+                'book_id' => $form['book_id'],
+            ]);
+        } else {
+            Comment::create([
+                'message' => $form['message'],
+                'post_id' => $form['post_id'],
+                'user_id' => Auth::id(),
+            ]);
         }
 
-        $form = collect($request->except('_token'));
-        $form = $form->merge([
-            'isbn'      =>  $isbn,
-            'user_id'   =>  Auth::id(),
-        ]);
-
-        Post::createNewPost($form);
-
-        return redirect('/');
-
+        return redirect('/home');
+        
     }
 }

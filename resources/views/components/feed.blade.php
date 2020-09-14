@@ -35,9 +35,18 @@
                         <p class="h4 d-inline mr-1">{{$item->user->name}}</p>
                         <p class="d-inline">{{' @' . $item->user->str_id}}</p>
                         <p>{{$item->message}}</p>
+
+                        <!-- コメント、いいね機能とか -->
+                        <div>
+                            @if(isset($item->uuid))
+                                <?php $post_url = '/post/' . $item->uuid; ?>
+                                <!-- TODO: アイコンに変える -->
+                                <p><a href="{{$post_url}}">Comment</a></p>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>   
         </div>
         @if(isset($item->book))
             <p class="book-title my-2">{{$item->book->title}} （ {{$item->book->author}} ）</p>

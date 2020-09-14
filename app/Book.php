@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Book extends Model
 {
@@ -27,6 +28,7 @@ class Book extends Model
     {
         $this->post()->create([
             'message' => $message,
+            'uuid' => Str::uuid(),
             'user_id' => $this->user_id,
         ]);
     }
@@ -50,14 +52,13 @@ class Book extends Model
         return ['id' => 'name', 'id' => 'name, ...]
     */
 
-    //  TODO: 一冊のときでも大丈夫かどうか気になる。確認する。
     public static function extractGenres($books)
     {
         $genres = [];
         
+        //  一冊のときでも想定どおりに処理できている。
         foreach($books as $book) {
             $genre = $book->genre;
-            $is_not_exist = true;
 
             // genre_idがnullの場合もあるので確認している。
             if (isset($genre)) {

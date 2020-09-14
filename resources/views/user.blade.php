@@ -1,29 +1,63 @@
-<!-- $user: Eloquent collection (root parameter is str_id: yLhfXC) -->
 
 @extends('layouts.layout')
 
 @section('content')
-{{-- <div id="user-react"></div> --}}
+
+<?php $url = request()->fullUrl(); ?>
 
 <div class="container">
     <div class="row">
         <div class="col-2">
+
             @if($user->image)
                 <img class="img-fluid" src="{{$user->image}}" alt="user-image">
             @else
                 <img class="img-fluid" src="{{asset('img/icon.svg')}}" alt="user-image">
             @endif
+
         </div>
         <div class="col-10">
             <p class="h4">{{$user->name}}</p>
-            <p class="d-inline">{{'@' . $user->str_id}}</p>
+            <p class="h5">{{'@' . $user->str_id}}</p>
+
+            <!-- ユーザー自身だったら表示しない -->
+            <!-- test-user: yQYnvqxZCg -->
+            @if ($user->id != Auth::id())
+                <form action="{{$url}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="follow_id" value="{{$user->id}}">
+                    <input type="hidden" name="follower_id" value="{{Auth::id()}}">
+                    @if ($is_following)
+                        <button class="invalid" name="action" value="unfollow">フォローを外す</button>
+                    @else
+                        <button name="action" value="follow">フォローする</button>
+                    @endif
+
+                </form>
+            @endif
         </div>
     </div>
 
+    <div class="row follow">
+        <div class="col-12">
+            <a href="{{$url . '/follows'}}">
+                <p>フォロー: {{$follows}}</p>
+            </a>
+            <a href="{{$url . '/followers'}}">
+                <p>フォロワー: {{$followers}}</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2>マイ本棚</h2>
+        </div>
+    </div>
     <div class="row book-shelf">
         <div class="col-12">
-            @if(isset($genres_books_collection))
-                @foreach($genres_books_collection as $genre_id => $books)
+            @if(isset($genres_books))
+                @foreach($genres_books as $genre_id => $books)
                     <p class="h2 mt-2">{{$genres[$genre_id]}}</p>
                     @foreach($books->chunk(4) as $chunk)
                         <div class="row mt-3">
@@ -54,7 +88,4 @@
     </div>
 </div>
 
-{{--
-<script src="{{asset('js/app.js')}}"></script>
---}}
 @endsection

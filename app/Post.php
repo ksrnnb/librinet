@@ -50,16 +50,8 @@ class Post extends Model
     // 本の追加、ジャンルの追加、新しい投稿の作成
     public static function createNewPost($form)
     {        
-        
         $book = Book::createNewBook($form);
 
-        $post_data = [
-            'user_id' => $book->user_id,
-            'book_id' => $book->id,
-            'message' => $form->get('message'),
-        ];
-        
-        Post::create($post_data);
-
+        $book->registerPost($form->get('message'));
     }
 }

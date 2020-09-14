@@ -27,7 +27,10 @@ Route::post('/book', 'BookController@search');
 Route::get('/book/{isbn}', 'BookController@show')->name('book');
 Route::post('/book/{isbn}', 'BookController@post');
 
-Route::get('/book/post/{isbn}', 'PostController@show')->name('post');
-Route::post('/book/post/{isbn}', 'PostController@post');
+Route::get('/book/post/{isbn}', 'BookController@create')->name('book_post');
+Route::post('/book/post/{isbn}', 'BookController@add');
+
+Route::get('/post/{uuid}', 'PostController@index');
+Route::post('/post/{uuid}', 'PostController@comment');
 
 Route::get('/logout', 'Auth\LoginController@logout');

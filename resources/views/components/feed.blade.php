@@ -42,7 +42,7 @@
                             @if($item instanceof App\Post)
                                 <?php $post_url = '/post/' . $item->uuid; ?>
                                 <!-- TODO: アイコンに変える -->
-                                <p><a href="{{$post_url}}">Comment</a></p>
+                                <p><a href="{{$post_url}}" class="comment-link">Comment</a></p>
                             @endif
                             <!-- いいね -->
                             <?php $link = '/like/' . $item->uuid; ?>
@@ -51,9 +51,9 @@
                                 @if($item->likes->contains('user_id', Auth::id()))
                                     <button class="likes btn btn-info">いいね</button>
                                 @else
-                                    <button class="likes btn btn-outline-info">いいね</button>
+                                    <button class="likes btn btn-outline-info" data-isLiked=0>いいね</button>
                                 @endif
-                                {{$item->likes->count()}}
+                                <p class="d-inline count" data-count="{{$item->likes->count()}}">{{$item->likes->count()}}</p>
                             </form>
                         </div>
                     </div>

@@ -11,11 +11,10 @@ class FollowerSeeder extends Seeder
      */
     public function run()
     {
-        //  5人相互フォローにする
-        $count = 5;
+        //  全員相互フォローにする
+        $count = 6;
         
-        //  一人だけフォローから外しとく
-        for ($follow_id = 1; $follow_id <= $count - 1; $follow_id++) {
+        for ($follow_id = 1; $follow_id <= $count; $follow_id++) {
             for ($follower_id = 1; $follower_id <= $count; $follower_id++) {
                 if ($follow_id != $follower_id) {
                     App\Follower::create([
@@ -25,5 +24,6 @@ class FollowerSeeder extends Seeder
                 }
             }
         }
+        
     }
 }

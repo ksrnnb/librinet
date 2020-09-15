@@ -7,7 +7,7 @@
         <div class="row">
             <form action="/" method="POST">
                 @csrf
-                <button type="submit" class="btn">
+                <button type="submit" id="guest" class="btn">
                     ゲストでログイン
                 </button>
             </form>

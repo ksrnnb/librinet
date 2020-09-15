@@ -88,6 +88,7 @@ class UserController extends Controller
             'people' => $follows,
         ]);
     }
+
     public function followers (Request $request, $id)
     {
         $user = User::where('str_id', $id)->first();
@@ -101,4 +102,22 @@ class UserController extends Controller
         ]);
 
     }
+
+    public function search (Request $request)
+    {
+        return view('user_search');
+    }
+
+    public function find (Request $request)
+    {
+        $user = $request->input('user');
+        $users = User::where('str_id', $user)->get();
+
+        if ($users->isEmpty()) {
+            $users = User::where('name', $user)->get();
+        }
+        
+        return view('user_search', ['users' => $users]);
+    }
+    
 }

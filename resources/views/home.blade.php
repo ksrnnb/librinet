@@ -6,7 +6,14 @@
 
 <div class="container">
     <div class="row">
-        <a href="/book" class="h3">本を検索する</a>
+        <div class="col-12">
+            <h3>
+                <a href="/book">本を検索する</a>
+            </h3>
+            <h3>
+                <a href="/user/search">ユーザーを検索する
+            </h3>
+        </div>
     </div>
     @foreach($posts as $post)
         {{--  全部のPostをとってきてるから、ユーザーが入ってないときは処理しないようにしている --}}

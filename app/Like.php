@@ -69,6 +69,7 @@ class Like extends Model
     {
         // みつからない場合の返り値はnull
         $post = Post::where('uuid', $uuid)->first();
+
         $user_id = Auth::id();
 
         // ポストの場合
@@ -84,12 +85,19 @@ class Like extends Model
         // コメントの場合
         } else {
             $comment = Comment::where('uuid', $uuid)->first();
-            $is_liked = $comment->likes->contains('user_id', Auth::id());
 
-            if ($is_liked) {
-                Like::unlike($user_id, $comment);
+            if (isset($comment)) {
+                $is_liked = $comment->likes->contains('user_id', Auth::id());
+    
+                if ($is_liked) {
+                    Like::unlike($user_id, $comment);
+                } else {
+                    Like::like($user_id, $comment);
+                }
+              
+            // TODO: どこに飛ばすか。　ポストもコメントも見つからなかった場合 
             } else {
-                Like::like($user_id, $comment);
+                return back();
             }
         }
 

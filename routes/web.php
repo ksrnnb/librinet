@@ -35,4 +35,6 @@ Route::post('/book/post/{isbn}', 'BookController@add');
 Route::get('/post/{uuid}', 'PostController@index');
 Route::post('/post/{uuid}', 'PostController@comment');
 
+Route::post('/like/{uuid}', 'LikeController@like');
+
 Route::get('/logout', 'Auth\LoginController@logout');

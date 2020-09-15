@@ -38,11 +38,23 @@
 
                         <!-- コメント、いいね機能とか -->
                         <div>
-                            @if(isset($item->uuid))
+                            <!-- コメント -->
+                            @if($item instanceof App\Post)
                                 <?php $post_url = '/post/' . $item->uuid; ?>
                                 <!-- TODO: アイコンに変える -->
                                 <p><a href="{{$post_url}}">Comment</a></p>
                             @endif
+                            <!-- いいね -->
+                            <?php $link = '/like/' . $item->uuid; ?>
+                            <form action="{{$link}}" method="POST">
+                                @csrf
+                                @if($item->likes->contains('user_id', Auth::id()))
+                                    <button class="likes btn btn-info">いいね</button>
+                                @else
+                                    <button class="likes btn btn-outline-info">いいね</button>
+                                @endif
+                                {{$item->likes->count()}}
+                            </form>
                         </div>
                     </div>
                 </div>

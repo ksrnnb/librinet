@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use App\DB;
 
 class Post extends Model
@@ -34,6 +35,7 @@ class Post extends Model
         if ($book_id) {
             $this->comments()
                 ->create([
+                    'uuid' => Str::uuid(),
                     'user_id' => $user_id,
                     'message' => $message,
                     'book_id' => $book_id,
@@ -41,6 +43,7 @@ class Post extends Model
         } else {
             $this->comments()
                 ->create([
+                    'uuid' => Str::uuid(),
                     'user_id' => $user_id,
                     'message' => $message,
                 ]);

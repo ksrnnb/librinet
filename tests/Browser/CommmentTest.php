@@ -9,24 +9,44 @@ use Tests\DuskTestCase;
 class CommmentTest extends DuskTestCase
 {
     /**
-     * A Dusk test example.
+     * check comment 
      *
-     * @return void
+     * 
      */
-    public function testCommentWithoutBook()
+
+    public function testCommentWithoutBookAndWithoutInputComment()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                    ->click('#guest')
+                    ->click('#guest')                   // ゲストでログイン
                     ->click('.comment-link')
                     ->press('コメントする')
-                    ->assertPathIsNot('/home')     // 入力してないので送信できない
+                    ->assertPathIsNot('/home');         // 入力してないので送信できない
+        });
+    }
+
+    public function testCommentWithoutBook()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/home')
+                    ->click('.comment-link')
                     ->type('message', 'よかったです')
                     ->press('コメントする')
                     ->assertPathIs('/home');
         });
     }
 
+    public function testCommentWithBookAndWithoutInputComment()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/home')
+            ->click('.comment-link')
+            ->check('recommend')
+            ->press('コメントする')
+            ->assertPathIsNot('/home');          // 入力してないので送信できない
+        });
+    }
+    
     // TODO 本がない場合の処理を追加したら、ここも編集する
     public function testCommentWithBook()
     {
@@ -34,11 +54,9 @@ class CommmentTest extends DuskTestCase
             $browser->visit('/home')
                     ->click('.comment-link')
                     ->check('recommend')
-                    ->press('コメントする')
-                    ->assertPathIsNot('/home')     // 入力してないので送信できない
                     ->type('message', 'よかったです')
                     ->press('コメントする');
-                    // ->assertPathIs('/home');       // 本がない場合にエラーが出る。
+                    // ->assertPathIs('/home');         // 本がない場合にエラーが出る。
         });
     }
 }

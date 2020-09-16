@@ -9,15 +9,13 @@ use Tests\DuskTestCase;
 class LikeTest extends DuskTestCase
 {
     /**
-     * A Dusk test example.
-     *
-     * @return void
+     * check like funciton
      */
     public function testLike()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                    ->click('#guest');
+                    ->click('#guest');  // ゲストでログイン
 
             $ini = $browser->attribute('.count', 'data-count');
             

@@ -40,10 +40,10 @@ class CommmentTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/home')
-            ->click('.comment-link')
-            ->check('recommend')
-            ->press('コメントする')
-            ->assertPathIsNot('/home');          // 入力してないので送信できない
+                    ->click('.comment-link')
+                    ->check('recommend')
+                    ->press('コメントする')
+                    ->assertPathIsNot('/home');          // 入力してないので送信できない
         });
     }
     

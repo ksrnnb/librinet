@@ -14,6 +14,7 @@ class BookController extends Controller
 {
     public function index (Request $request)
     {
+        // TODO： なんでISBN?　確認する
         if (isset($isbn)) {
             $book = Book::fetchBook($isbn);
 
@@ -25,7 +26,7 @@ class BookController extends Controller
 
     public function search (BookRequest $request)
     {
-        var_dump($request->validated());
+        $request->validated();
 
         $isbn = $request->input('isbn');
 
@@ -34,14 +35,15 @@ class BookController extends Controller
 
     public function show (Request $request, $isbn)
     {
-        if (Book::isIsbn($isbn)) {
-            $book = Book::fetchBook($isbn);
+        // みつからない場合はnullが返る
+        $book = Book::fetchBook($isbn);
 
-            return view('book', ['book' => $book]);
+        if ($book == null) {
+            $message = '本がみつかりませんでした';
+            return view('book', ['cannot_fetch_message' => $message]);
         } else {
-            return redirect('/book');
+            return view('book', ['book' => $book]);
         }
-
     }
 
     public function post (Request $request)
@@ -58,16 +60,34 @@ class BookController extends Controller
         
         $user = Auth::user();
 
-        // TODO: ここ修正する。同じ本を投稿した時、一意じゃない。
-        $book = Book::where('isbn', $isbn)
-                        ->where('user_id', $user->id)
-                        ->first();
-        
-        if (isset($book)) {
+        if ($user == null) {
+            return redirect('/');
+        } 
 
+        // TODO: ここ修正する。同じ本を投稿した時、一意じゃない。
+        $books = Book::where('isbn', $isbn)
+                    ->where('user_id', $user->id)
+                    ->get();
+
+        $books_exist = $books->isNotEmpty();
+
+        if ($books_exist) {
+                        
+            $is_in_bookshelf = $books->contains('isInBookshelf', true);
+            
+            if ($is_in_bookshelf) {
+                $book = $books->where('isInBookshelf', true)->first();
+            } else {
+                $book = $books->first();
+            }
+                        
         } else {
             $book = Book::fetchBook($isbn);
-            $book->isInBookshelf = false;
+            
+            // 本がなかった場合はnullが返るようにしている。
+            if ($book != null) {
+                $book->isInBookshelf = false;
+            }
         }
         $genres = Book::extractGenres($user->books);
         // TODO: SQLログ確認する。eagerローディング必要？

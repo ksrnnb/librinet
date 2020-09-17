@@ -21,11 +21,13 @@ class LikeTest extends DuskTestCase
             
             $browser->press('いいね');
 
+            // 増えた or 減った
             $count = $browser->attribute('.count', 'data-count');
             $this->assertEquals($count, ($ini + 1) % 2);
 
             $browser->press('いいね');
 
+            // 減った or 増えた
             $count = $browser->attribute('.count', 'data-count');
             $this->assertEquals($count, $ini % 2);
         });

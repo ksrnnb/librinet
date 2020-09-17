@@ -38,27 +38,32 @@ class UserTest extends DuskTestCase
         });
     }
 
-    public function testUserSearchWhenUserMatchesById()
+    public function testUserSearchWhenUserMatchesByIdAndCanAccessUserPage()
     {
         $this->browse(function (Browser $browser) {
-            $id = User::find(1)->str_id;
-
-            $browser->visit('/user/search')
-                    ->type('user', $id)
-                    ->press('検索')
-                    ->assertSee('@' . $id);
+            $this->assertUsersExistAndCanAccessUserPage($browser, 'str_id');
         });
     }
 
-    public function testUserSearchWhenUsersMatchByName()
+    public function testUserSearchWhenUsersMatchByNameAndCanAccessUserPage()
     {
         $this->browse(function (Browser $browser) {
-            $name = User::find(1)->name;
+            $this->assertUsersExistAndCanAccessUserPage($browser, 'name');
+        });
+    }
+
+    public function assertUsersExistAndCanAccessUserPage($browser, $column)
+    {
+        $item = User::find(1)->$column;
 
             $browser->visit('/user/search')
-                    ->type('user', $name)
-                    ->press('検索')
-                    ->assertSee($name);
-        });
+                    ->type('user', $item)
+                    ->press('検索');
+            
+            // 一番上のユーザーを選択
+            $str_id = $browser->attribute('.user-link', 'data-id');
+
+            $browser->click('.user-link')
+                    ->assertPathIs('/user/' . $str_id);     // ユーザーページへ遷移
     }
 }

@@ -3,11 +3,11 @@
         <!-- TODO:　あとでリンクの修正が必要 -->
         <?php $link = "/user/" . $user->str_id ?>
         @if($user->image)
-            <a href="{{$link}}">
+            <a class="user-link" href="{{$link}}" data-id="{{$user->str_id}}">
                 <img class="img-fluid"src="{{$user->image}}" alt="user-image">
             </a>
         @else
-            <a href="{{$link}}">
+            <a class="user-link" href="{{$link}}" data-id="{{$user->str_id}}">
                 <img class="img-fluid" href="{{$link}}" src="{{asset('img/icon.svg')}}" alt="user-image">
             </a>
         @endif

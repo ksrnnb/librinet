@@ -113,6 +113,8 @@ class UserController extends Controller
         $user = $request->input('user');
         $users = User::where('str_id', $user)->get();
 
+        // IDと名前が一致する場合を考慮してない
+        // また、部分一致の方がいいのでは？？
         if ($users->isEmpty()) {
             $users = User::where('name', $user)->get();
         }

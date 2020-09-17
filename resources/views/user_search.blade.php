@@ -37,9 +37,13 @@
             @else
 
                 <h2>検索結果</h2>
-                @foreach ($users as $user)
-                    @include('components.user', ['user' => $user])
-                @endforeach
+                @if ($users->count())
+                    @foreach ($users as $user)
+                        @include('components.user', ['user' => $user])
+                    @endforeach
+                @else
+                    <p class="text-danger">ユーザーが見つかりません</p>
+                @endif
 
             @endif
         </div>

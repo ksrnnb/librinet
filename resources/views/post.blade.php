@@ -30,6 +30,7 @@
             </div>
         </div>
         
+        <!-- TODO：本がない場合の処理が必要 -->
         <div class="row mt-5">
             <div class="col-12">
                 <label for="recommend">
@@ -59,7 +60,7 @@
 
         <div class="row mt-5">
             <div class="col-12">
-                <input type="submit" value="コメントする">
+                <input type="submit" id="submit" value="コメントする">
             </div>
         </div>
     </form>

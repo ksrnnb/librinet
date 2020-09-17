@@ -40,11 +40,11 @@
 
     <div class="row follow">
         <div class="col-12">
-            <a href="{{$url . '/follows'}}">
-                <p>フォロー: {{$follows}}</p>
+            <a id="follow-link" href="{{$url . '/follows'}}">
+                <p id="follow" data-count="{{$follows}}">フォロー: {{$follows}}</p>
             </a>
-            <a href="{{$url . '/followers'}}">
-                <p>フォロワー: {{$followers}}</p>
+            <a id="follower-link" href="{{$url . '/followers'}}">
+                <p id="follower" data-count="{{$followers}}">フォロワー: {{$followers}}</p>
             </a>
         </div>
     </div>

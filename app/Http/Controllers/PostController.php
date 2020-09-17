@@ -58,6 +58,7 @@ class PostController extends Controller
         if (isset($form['recommend'])) {
             Comment::create([
                 'message' => $form['message'],
+                'uuid'    => Str::uuid(),
                 'post_id' => $form['post_id'],
                 'user_id' => Auth::id(),
                 'book_id' => $form['book_id'],
@@ -65,6 +66,7 @@ class PostController extends Controller
         } else {
             Comment::create([
                 'message' => $form['message'],
+                'uuid'    => Str::uuid(),
                 'post_id' => $form['post_id'],
                 'user_id' => Auth::id(),
             ]);

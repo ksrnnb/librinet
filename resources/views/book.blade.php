@@ -58,6 +58,9 @@
                     <p class='error mb-0'>{{$error}}</p>
                 @endforeach
             @endif
+            @if (isset($cannot_fetch_message))
+                <p class='error mb-0'>{{$cannot_fetch_message}}</p>
+            @endif
             <div>
                 <input type="text" id="isbn" name="isbn" required>
                 <input type="submit" value="検索">

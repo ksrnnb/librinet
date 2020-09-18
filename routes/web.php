@@ -25,6 +25,7 @@ Route::post('/user/{str_id}', 'UserController@action');
 Route::get('/user/{str_id}/follows', 'UserController@follows');
 Route::get('/user/{str_id}/followers', 'UserController@followers');
 
+
 // TODO: あとで下の通りにURLを変更したい。現状、searchというuser_idで登録したら、アクセスできなくなる
 // 　　　　テスト機能追加後の方がやりやすいと思う。
 
@@ -41,6 +42,10 @@ Route::get('/book/post/{isbn}', 'BookController@create')->name('book_post');
 Route::post('/book/post/{isbn}', 'BookController@add');
 Route::get('/book/{isbn}', 'BookController@show')->name('book');
 Route::post('/book/{isbn}', 'BookController@post');
+Route::get('/user/{str_id}/book/edit', 'BookController@edit');
+Route::post('/user/{str_id}/book/edit', 'BookController@update');
+Route::get('/user/{str_id}/book/delete', 'BookController@delete');
+Route::post('/user/{str_id}/book/delete', 'BookController@remove');
 
 Route::get('/post/{uuid}', 'PostController@index');
 Route::post('/post/{uuid}', 'PostController@comment');

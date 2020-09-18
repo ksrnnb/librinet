@@ -62,6 +62,27 @@ class User extends Authenticatable
         return $this->hasMany('App\Follower', 'follower_id', 'id');
     }
 
+    public static function getArrayForUserPageView($str_id)
+    {
+        $users = User::with(['books.genre'])->get();
+        $user = $users->where('str_id', $str_id)->first();      // select user
+        $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
+        $genres = Book::extractGenres($books);
+        $genres_books = $books->groupBy('genre_id');
+        /*
+            genres:                  [genre_id => genre_name, ...]
+            genres_books: [[genre_id => [book, book, ...]], ...]
+        */
+        $params = [
+            'user' => $user,
+            'books' => $books,
+            'genres' => $genres,
+            'genres_books' => $genres_books,
+        ];
+
+        return $params;
+    }
+
     public function registerBookAndPost($state, $message)
     {
         if ($state) {
@@ -74,4 +95,5 @@ class User extends Authenticatable
                 ->registerPost($message);
         }
     }
+
 }

@@ -21,7 +21,6 @@
             <p class="h5">{{'@' . $user->str_id}}</p>
 
             <!-- ユーザー自身だったら表示しない -->
-            <!-- test-user: yQYnvqxZCg -->
             @if ($user->id != Auth::id())
                 <form action="{{$url}}" method="POST">
                     @csrf
@@ -50,13 +49,33 @@
     </div>
 
     <div class="row mt-5">
-        <div class="col-12">
+        <div class="col-6">
             <h2>マイ本棚</h2>
         </div>
+        
+        <!-- 編集機能 -->
+        @if($genres_books->isNotEmpty())
+            <div class="col-6">
+                <a href="{{$url . '/book/edit'}}">
+                    <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
+                </a>
+                <a href="{{$url . '/book/delete'}}">
+                    <button type="submit" class="btn btn-outline-danger">本を削除する</button>
+                </a>
+            </div>
+        @endif
     </div>
     <div class="row book-shelf">
         <div class="col-12">
-            @if(isset($genres_books))
+            @if($genres_books->isEmpty())
+                <p class="text-danger">本棚に本がありません</p>
+                <p>本棚に本を追加しましょう！</p>
+                <a href="/book">
+                    <button type="button" class="btn btn-outline-success">
+                        本を探す
+                    </button>
+                </a>
+            @else
                 @foreach($genres_books as $genre_id => $books)
                     <p class="h2 mt-2">{{$genres[$genre_id]}}</p>
                     @foreach($books->chunk(4) as $chunk)

@@ -12,42 +12,15 @@ class UserController extends Controller
 {
     public function index(Request $request, $str_id)
     {
+        $user_book_data = User::getArrayForUserPageView($str_id);
 
-        $users = User::with(['books.genre'])->get();
-        $user = $users->where('str_id', $str_id)->first();      // select user
-        $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
-        $genres = Book::extractGenres($books);
-        $genres_books = $books->groupBy('genre_id');
-        /*
-            genres:                  [genre_id => genre_name, ...]
-            genres_books: [[genre_id => [book, book, ...]], ...]
-        */
-
-        // TODO：整理。ここはフォローしているかどうかの判定
-        $is_following = false;
         $viewer_id = Auth::id();
-
-        $f_table = Follower::all();
-        $viewer_followings = $f_table->where('follower_id', $viewer_id);
+        $user = $user_book_data['user'];
+        $follow_data = Follower::getFollowDataForUserPageView($user, $viewer_id);
         
-        if ($viewer_followings->isNotEmpty()) {
-            $is_following = $viewer_followings->groupBy('follow_id')
-                                              ->has($user->id);
-        }
+        $params = array_merge($user_book_data, $follow_data);
 
-        // フォロー数、フォロワー数を取得
-        $follows = $f_table->where('follower_id', $user->id)->count();
-        $followers = $f_table->where('follow_id', $user->id)->count();
-        
-        return view('user', [
-            'user' => $user,
-            'books' => $books,
-            'genres' => $genres,
-            'genres_books' => $genres_books,
-            'is_following' => $is_following,
-            'follows' => $follows,
-            'followers' => $followers,
-        ]);
+        return view('user', $params);
         
     }
 

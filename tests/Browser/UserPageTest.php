@@ -14,6 +14,7 @@ class UserPageTest extends DuskTestCase
     public function testShowBooks()
     {
         $this->browse(function (Browser $browser) {
+            $id = 1;
             $users = User::with(['books' => function ($query) use ($id) {
                 $query->where('user_id', $id);
             }])->get();

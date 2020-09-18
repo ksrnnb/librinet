@@ -7,6 +7,8 @@ use App\Http\Requests\BookRequest;
 use App\Http\Requests\PostRequest;
 use App\Book;
 use App\Post;
+use App\User;
+use App\Genre;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -116,4 +118,94 @@ class BookController extends Controller
         return redirect('/');
 
     }
+
+    public function edit(Request $request, $str_id)
+    {
+        $user = Auth::user();
+
+        if ($user->str_id == $str_id) {
+            $params = User::getArrayForUserPageView($str_id);
+
+            return view('book_edit', $params);
+
+        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function update(Request $request, $str_id)
+    {
+        $user = Auth::user();
+
+        if ($user->str_id == $str_id) {
+            $genres = request()->except('_token');
+            $table = Genre::whereIn('id', array_keys($genres))->get();
+
+            foreach($table as $genre) {
+                $query = ['name' => $genres[$genre->id]];
+                $genre->fill($query)->save();
+            }
+            
+            return redirect('/user/' . $str_id);
+
+        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
+        } else {
+            return redirect('/');
+        }
+    }
+
+
+    public function delete(Request $request, $str_id)
+    {
+        $user = Auth::user();
+
+        if ($user->str_id == $str_id) {
+            $params = User::getArrayForUserPageView($str_id);
+
+            return view('book_edit', $params);
+
+        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
+        } else {
+            return redirect('/');
+        }
+    }
+
+
+
+    public function remove(Request $request, $str_id)
+    {
+        $user = Auth::user();
+
+        if ($user->str_id == $str_id) {
+            $books_id = array_keys(request()->except('_token'));
+
+            $books = Book::with(['post' => function($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }])->get();
+
+            // TODO: ジャンルに属する本がなくなったら、ジャンルも消したい。
+            foreach($books_id as $id) {
+                $book = $books->where('id', $id)->first();
+
+                // TODO:　本棚にあるけどPOSTに関連付けがない状態ができたら修正する
+                $doesRelatePost = true;
+                if ($doesRelatePost) {
+                    // POSTに関連づけがある場合は本棚からなくすだけ。
+                    $book->isInBookshelf = false;
+                    $book->save();
+                } else {
+                    // POSTに関連付けがなかったばあいは削除。現状は必ず結びついている
+                    $book->delete();
+                }
+
+            }
+
+            return redirect('/user/' . $str_id);
+        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
+        } else {
+            return redirect('/');
+        }
+    }
+
 }

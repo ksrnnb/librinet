@@ -48,9 +48,11 @@ Route::post('/user/{str_id}/book/delete', 'BookController@remove');
 
 Route::get('/post/{uuid}', 'PostController@index');
 Route::post('/post/{uuid}', 'PostController@comment');
+Route::post('/post/remove/{uuid}', 'PostController@remove');
 Route::get('/book/post/{isbn}', 'PostController@add');
 Route::post('/book/post/{isbn}', 'PostController@create');
 
+Route::post('/comment/remove/{uuid}', 'CommentController@remove');
 Route::post('/like/{uuid}', 'LikeController@like');
 
 Route::get('/logout', 'Auth\LoginController@logout');

@@ -83,16 +83,18 @@ class User extends Authenticatable
         return $params;
     }
 
-    public function registerBookAndPost($state, $message)
-    {
-        if ($state) {
-            $this->books()
-                ->save(factory(Book::class)->states($state)->make())
-                ->registerPost($message);
+    /*
+        return boolean (user has book or not)
+    */
+    public function hasBook($isbn) {
+        $books = Book::where('user_id', $this->id)
+                     ->where('isbn', $isbn)
+                     ->get();
+        
+        if ($books->isEmpty()) {
+            return false;
         } else {
-            $this->books()
-                ->save(factory(Book::class)->make())
-                ->registerPost($message);
+            return $books->contains('isInBookshelf', true);
         }
     }
 

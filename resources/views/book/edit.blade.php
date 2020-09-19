@@ -32,7 +32,7 @@
                 @csrf
                 @foreach($genres_books as $genre_id => $books)
                     <label for="{{$genre_id}}">
-                        <input class="h2 mt-2" name="{{$genre_id}}" value={{$genres[$genre_id]}}>
+                        <input class="h2 mt-2 genres" name="{{$genre_id}}" value={{$genres[$genre_id]}} required>
                     </label>
                     @foreach($books->chunk(4) as $chunk)
                         <div class="row mt-3">

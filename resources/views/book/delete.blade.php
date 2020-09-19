@@ -41,37 +41,40 @@
                 <p class="h2 mt-5">{{$genres[$genre_id]}}</p>
                 @foreach ($books as $book)
                     @if ($book->isInBookshelf)
-                        <div class="row mb-5">
-                            <div class="item col-12" style="border: solid 1px blue">
-                                <div class="row pt-2">
-                                    <div class="col-1">
-                                        <input type="checkbox" name="{{$book->id}}" class="books">
-                                    </div>
-                                    <div class="col-2 px-0">
-                                        <?php $book_url = '/book/' . $book->isbn ?>
-                                        <figure class="mx-2 px-0 mb-0 book">
-                                            <a href="{{$book_url}}">
-                                            @if($book->cover)
-                                                <img class="img-fluid" src="{{$book->cover}}" alt="book_image">
-                                            @else
-                                                <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
-                                            @endif
-                                            </a>
-                                        </figure>
+                        <?php $name = "book-" . $book->id; ?>
 
-                                        <div class="mx-2"></div>
-                                    </div>
+                        <label class="d-block" for="{{$name}}">
+                            <div class="row mb-5">
+                                <div class="item col-12" style="border: solid 1px blue">
+                                    <div class="row pt-2">
+                                        <div class="col-1">
+                                            <input type="checkbox" name="{{$name}}" id="{{$name}}" class="books">
+                                        </div>
+                                        <div class="col-2 px-0">
+                                            <?php $book_url = '/book/' . $book->isbn ?>
+                                            <figure class="mx-2 px-0 mb-0 book">
+                                                @if($book->cover)
+                                                    <img class="img-fluid" src="{{$book->cover}}" alt="book_image">
+                                                @else
+                                                    <img class="img-fluid" src="{{asset('img/book.svg')}}" alt="book_image">
+                                                @endif
+                                            </figure>
 
-                                    <div class="col-9">
-                                        <p class="h4">{{$book->title}}</p>
-                                        <p class="h4">{{$book->author}}</p>
-                                        <p class="h4">{{$book->publisher}}</p>
-                                        <p class="h4">{{$book->pubdate}}</p>
+                                            <div class="mx-2"></div>
+                                        </div>
+
+                                        <div class="col-9">
+                                            <p class="h4">{{$book->title}}</p>
+                                            <p class="h4">{{$book->author}}</p>
+                                            <p class="h4">{{$book->publisher}}</p>
+                                            <p class="h4">{{$book->pubdate}}</p>
+                                        </div>
+                                        
                                     </div>
-                                    
                                 </div>
                             </div>
-                        </div>
+                        </label>
+
                     @endif
                 @endforeach
             @endforeach

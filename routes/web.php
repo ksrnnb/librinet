@@ -38,10 +38,9 @@ Route::get('/home', 'HomeController@index')->middleware('auth');
 
 Route::get('/book', 'BookController@index');
 Route::post('/book', 'BookController@search');
-Route::get('/book/post/{isbn}', 'BookController@create')->name('book_post');
-Route::post('/book/post/{isbn}', 'BookController@add');
 Route::get('/book/{isbn}', 'BookController@show')->name('book');
-Route::post('/book/{isbn}', 'BookController@post');
+Route::get('/book/add/{isbn}', 'BookController@add');
+Route::post('/book/add/{isbn}', 'BookController@create');
 Route::get('/user/{str_id}/book/edit', 'BookController@edit');
 Route::post('/user/{str_id}/book/edit', 'BookController@update');
 Route::get('/user/{str_id}/book/delete', 'BookController@delete');
@@ -49,6 +48,8 @@ Route::post('/user/{str_id}/book/delete', 'BookController@remove');
 
 Route::get('/post/{uuid}', 'PostController@index');
 Route::post('/post/{uuid}', 'PostController@comment');
+Route::get('/book/post/{isbn}', 'PostController@add');
+Route::post('/book/post/{isbn}', 'PostController@create');
 
 Route::post('/like/{uuid}', 'LikeController@like');
 

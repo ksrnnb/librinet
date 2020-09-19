@@ -93,6 +93,22 @@ class Book extends Model
         return $isIsbn;
     }
 
+    /*
+        argument $form
+        [
+            'add-book'  =>  1 or nothing,
+            'genre'     =>  'new' or 'conventional' or nothing,
+            'new_genre' =>  'genre_name' or nothing,
+            'message'   =>  'message...',
+            'title'     =>  'title',
+            'author'    =>  'author',
+            'cover'     =>  'cover',
+            'publisher' =>  'publisher',
+            'pubdate'   =>  'pubdate',
+            'isbn'      =>  'isbn'
+            'user_id'   =>  ingeger
+        ]
+    */
     public static function createNewBook($form)
     {
         // 新しく本棚に追加

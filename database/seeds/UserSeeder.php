@@ -4,6 +4,20 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    
+    public function registerBookAndPost($user, $state, $message)
+    {
+        if ($state) {
+            $user->books()
+                ->save(factory(App\Book::class)->states($state)->make())
+                ->registerPost($message);
+        } else {
+            $user->books()
+                ->save(factory(App\Book::class)->make())
+                ->registerPost($message);
+        }
+    }
+
     /**
      * Run the database seeds.
      *
@@ -25,7 +39,7 @@ class UserSeeder extends Seeder
                 ];
                 
                 foreach ($items as $item) {
-                    $user->registerBookAndPost($state = $item['state'], $message = $item['message']);
+                    $this->registerBookAndPost($user, $state = $item['state'], $message = $item['message']);
                 }
             });
 

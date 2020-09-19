@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-
+<?php $url = request()->fullUrl(); ?>
 <div class="container">
     @if(isset($book))
         <p class="h2">本の情報</p>
@@ -21,18 +21,15 @@
                 <p>出版社：{{$book->publisher}}</p>
                 <?php $pub_year = substr($book->pubdate, 0, 4) . '年'?>
                 <p>出版年：{{$pub_year}}</p>
-               {{--
-               <div>
-                    <a href="/book/add">
+                <a href="{{'/book/post/' . $book->isbn}}">
+                    <button type="button" class="btn btn-outline-success">本の投稿をする</button>
+                </a>
+
+                @if ($isNotInBookshelf)
+                    <a href="{{'/book/add/' . $book->isbn}}">
                         <button type="button" class="btn btn-outline-success">本棚に追加する</button>
                     </a>
-                </div>
-                --}}
-                <form action="{{request()->fullUrl()}}" method="POST">
-                    @csrf
-                    <input type="hidden" name="isbn" value="{{$book->isbn}}">
-                    <input type="submit" class="btn btn-outline-success" value="本の投稿をする">
-                </form>
+                @endif
                 <div>
                     <a href="/book">
                         <button type="button" class="btn btn-outline-success">本の検索画面に戻る</button>

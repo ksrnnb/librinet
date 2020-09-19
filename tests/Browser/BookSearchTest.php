@@ -12,7 +12,9 @@ class BookSearchTest extends DuskTestCase
     public function testWithoutInputPressSearchButton()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/book')
+            $browser->visit('/')
+                    ->press('#guest')
+                    ->visit('/book')
                     ->press('検索')
                     ->assertSee('本の検索');
         });

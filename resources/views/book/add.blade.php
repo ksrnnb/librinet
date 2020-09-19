@@ -2,44 +2,18 @@
 
 @section('content')
 <div class="container">
-    @if($errors->all())
-        <h2 class="error">Error Message</h2>
-        @foreach($errors->all() as $error)
-            <h4 class="error">{{$error}}</h4>
-        @endforeach
-    @endif
     <form action="{{request()->fullUrl()}}" method="POST">
-        @csrf         
+        @csrf
         <!-- 本の情報 -->
         <input type="hidden" name="title" value="{{$book->title}}">
         <input type="hidden" name="author" value="{{$book->author}}">
         <input type="hidden" name="cover" value="{{$book->cover}}">
         <input type="hidden" name="publisher" value="{{$book->publisher}}">
-        <input type="hidden" name="pubdate" value="{{$book->pubdate}}">   
-        
+        <input type="hidden" name="pubdate" value="{{$book->pubdate}}">
+
         <div class="row">
             <div class="col-12">
-                <h2>投稿画面</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <h4>本棚</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                @if ($book->isInBookshelf)
-                    <label for="add-book" style="opacity:0.5">
-                        <input type="checkbox" name="add-book" id="add-book" value=0 disabled>
-                        本棚に追加
-                    </label>
-                @else
-                    <label for="add-book">
-                        <input type="checkbox" name="add-book" id="add-book" value=1 checked>
-                        本棚に追加
-                    </label>
-                @endif
+                <h2>本棚に追加する</h2>
             </div>
         </div>
         
@@ -61,7 +35,8 @@
             <div class="row">
                 <div class="col-12">
                     <label for="new_genre">
-                        <input type="text" name="new_genre" id="new-input">
+                    {{-- book_postのほうはrequiredになってない / JavaScriptで制御してる？ --}}
+                        <input type="text" name="new_genre" id="new-input" required>
                     </label>
                 </div>
             </div>
@@ -87,7 +62,7 @@
             </div>
             @endif
         </div>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-12">
                 <h4>本の情報</h4>
             </div>
@@ -109,25 +84,15 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-12">
-                <h4>投稿コメント</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <textarea name="message" id="" cols="30" rows="10" required></textarea>
-            </div>
-        </div>
 
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-12">
-                <input type="submit" value="投稿する" id="submit-button">
+                <input type="submit" class="btn btn-outline-success" value="本棚に追加する" id="submit-button">
             </div>
         </div>
     
     </form>
     
 </div>
-<script src="{{asset('js/book_post.js')}}"></script>
+<script src="{{asset('js/book/add.js')}}"></script>
 @endsection

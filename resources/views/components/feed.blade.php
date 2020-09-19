@@ -21,7 +21,6 @@
                 <div class="row">
                     <div class="avator col-2">
                         @if($item->user->image)
-                            {{-- TODO: ユーザー画像登録したら本当に表示されるか、確認する --}}
                             <a href="{{'/user/' . $item->user->str_id}}">
                                 <img class="img-fluid" src="{{$item->user->image}}" alt="user-icon">
                             </a>
@@ -45,8 +44,8 @@
                                 <p><a href="{{$post_url}}" class="comment-link">Comment</a></p>
                             @endif
                             <!-- いいね -->
-                            <?php $link = '/like/' . $item->uuid; ?>
-                            <form action="{{$link}}" method="POST">
+                            <?php $like_url = '/like/' . $item->uuid; ?>
+                            <form action="{{$like_url}}" method="POST">
                                 @csrf
                                 @if($item->likes->contains('user_id', Auth::id()))
                                     <button class="likes btn btn-info">いいね</button>
@@ -56,6 +55,32 @@
                                 <p class="d-inline count" data-count="{{$item->likes->count()}}">{{$item->likes->count()}}</p>
                             </form>
                         </div>
+                        <!-- 削除機能 自分の投稿のみ-->
+                        @if ($item->user_id == Auth::id())
+
+                            @if ($item instanceof App\Post)
+                                <div class="mt-5">
+                                    <?php $delete_url = '/post/remove/' . $item->uuid; ?>
+                                    <form action="{{$delete_url}}" method="POST">
+                                        @csrf
+                                        <!-- TODO: ドロップダウンにしたい -->
+                                        <button class="btn btn-outline-danger" id="{{'del-' . $item->uuid}}" name="delete">削除する</buddon>
+                                    </form>
+                                </div>
+                            {{--$itemがコメントの場合--}}
+                            @else
+                                <div class="mt-5">
+                                    <?php $delete_url = '/comment/remove/' . $item->uuid; ?>
+                                    <form action="{{$delete_url}}" method="POST">
+                                        @csrf
+                                        <!-- TODO: ドロップダウンにしたい -->
+                                        <!--  暫定で投稿と区別するようにしてるけど、あとで統一する -->
+                                        <button class="btn btn-danger" id="{{'del-' . $item->uuid}}" name="delete">削除する</buddon>
+                                    </form>
+                                </div>
+                            @endif
+
+                        @endif
                     </div>
                 </div>
             </div>   

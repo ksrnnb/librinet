@@ -4,6 +4,7 @@
 @section('content')
 
 <?php $url = request()->fullUrl(); ?>
+<?php $auth_id = Auth::id(); ?>
 
 <div class="container">
     <div class="row">
@@ -21,7 +22,7 @@
             <p class="h5">{{'@' . $user->str_id}}</p>
 
             <!-- ユーザー自身だったら表示しない -->
-            @if ($user->id != Auth::id())
+            @if ($user->id != $auth_id)
                 <form action="{{$url}}" method="POST">
                     @csrf
                     <input type="hidden" name="follow_id" value="{{$user->id}}">
@@ -50,19 +51,21 @@
 
     <div class="row mt-5">
         <div class="col-6">
-            <h2>マイ本棚</h2>
+            <h2>本棚</h2>
         </div>
         
         <!-- 編集機能 -->
-        @if($genres_books->isNotEmpty())
-            <div class="col-6">
-                <a href="{{$url . '/book/edit'}}">
-                    <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
-                </a>
-                <a href="{{$url . '/book/delete'}}">
-                    <button type="submit" class="btn btn-outline-danger">本を削除する</button>
-                </a>
-            </div>
+        @if ($user->id == $auth_id)
+            @if ($genres_books->isNotEmpty())
+                <div class="col-6">
+                    <a href="{{$url . '/book/edit'}}">
+                        <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
+                    </a>
+                    <a href="{{$url . '/book/delete'}}">
+                        <button type="submit" class="btn btn-outline-danger">本を削除する</button>
+                    </a>
+                </div>
+            @endif
         @endif
     </div>
     <div class="row book-shelf">

@@ -120,9 +120,7 @@ class PostController extends Controller
     }
 
     public function create (PostRequest $request, $isbn)
-    {
-        $request->validated();
-        
+    {        
         $isIsbn = Book::isIsbn($isbn);
 
         // TODO: エラーページに飛ばす？
@@ -145,25 +143,12 @@ class PostController extends Controller
     public function remove(Request $request, $uuid)
     {
         if (Str::isUuid($uuid)) {
-            $post = Post::with('comments.book')
-                        ->where('uuid', $uuid)
-                        ->first();
+
+            $post = Post::where('uuid', $uuid)->first();
 
             // 削除するポストのユーザーと、認証されているユーザーが一緒かどうか。
             if ($post->user_id == Auth::id()) {
 
-                // 投稿に関連づくコメントを削除
-                foreach ($post->comments as $comment) {
-                    if ($comment->book) {
-                        $comment->book->delete();
-                    }
-                    $comment->delete();
-                }
-                // 投稿と関連づく本を削除
-                Book::where('id', $post->book_id)
-                    ->first()
-                    ->delete();
-    
                 $post->delete();
 
             // TODO: error 

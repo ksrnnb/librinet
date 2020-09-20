@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\DB;
+use Exception;
 
 class Post extends Model
 {
@@ -28,6 +29,35 @@ class Post extends Model
     public function likes()
     {
         return $this->hasMany('App\Like');
+    }
+
+    // 削除時の動作をオーバーライド
+    public function delete()
+    {
+        $post = $this;
+
+        parent::delete();
+
+        // TODO: ほぼ同じ動作している、まとめられないか？
+
+        $comments = Comment::where('post_id', $post->id)->get();
+        
+        foreach ($comments as $comment) {
+            $comment->delete();
+        }
+
+        $likes = Like::where('post_id', $post->id)->get();
+        
+        foreach ($likes as $likes) {
+            $likes->delete();
+        }
+
+        $book = Book::find($post->book_id);
+        
+        if ($book) {
+            $book->delete();
+        }
+        
     }
 
     public function createComment ($user_id, $message, $book_id = null)

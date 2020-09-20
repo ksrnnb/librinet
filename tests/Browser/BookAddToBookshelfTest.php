@@ -41,7 +41,7 @@ class BookAddToBookshelfTest extends DuskTestCase
     public function testWithInputNewGenre()
     {
         $this->browse(function (Browser $browser) {
-            $isbn = '9784839955557';    // デザイン
+            $isbn = '9784839955557';                // デザイン
 
             $browser->visit('/book/' . $isbn)
                     ->press('本棚に追加する')

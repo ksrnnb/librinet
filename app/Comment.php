@@ -27,4 +27,26 @@ class Comment extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    // 削除時の動作をオーバーライド
+    public function delete()
+    {
+        $comment = $this;
+
+        parent::delete();
+
+        $book = Book::find($comment->book_id);
+        
+        if ($book) {
+            $book->delete();
+        }
+
+        $likes = Like::where('comment_id', $comment->id)->get();
+        
+        foreach ($likes as $likes) {
+            $likes->delete();
+        }
+
+
+    }
 }

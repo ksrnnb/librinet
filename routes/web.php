@@ -20,6 +20,9 @@ Route::post('/', 'Auth\LoginController@guest');
 
 Route::get('/user/search', 'UserController@search');
 Route::post('/user/search', 'UserController@find');
+Route::get('/user/edit/{str_id}', 'UserController@edit');
+Route::post('/user/edit/{str_id}', 'UserController@update');
+Route::post('/user/delete/{str_id}', 'UserController@remove');
 Route::get('/user/{str_id}', 'UserController@index');
 Route::post('/user/{str_id}', 'UserController@action');
 Route::get('/user/{str_id}/follows', 'UserController@follows');

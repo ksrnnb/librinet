@@ -21,12 +21,24 @@
             <p class="h4">{{$user->name}}</p>
             <p class="h5">{{'@' . $user->str_id}}</p>
 
-            <!-- ユーザー自身だったら表示しない -->
-            @if ($user->id != $auth_id)
+            @if ($user->id == $auth_id)
+            <!--  編集ボタン -->
+            @if ($user->str_id == 'guest')
+                <button type="button" class="btn btn-outline-success invalid">ユーザー情報を編集する</button>
+                <p class="text-danger">注意：ゲストユーザーは編集できません</p>
+            @else
+                <a href="{{'/user/edit/' . $user->str_id}}">
+                    <button type="button" class="btn btn-outline-success">ユーザー情報を編集する</button>
+                </a>
+            @endif
+
+            @else
+            <!-- フォロー表示 -->
                 <form action="{{$url}}" method="POST">
                     @csrf
                     <input type="hidden" name="follow_id" value="{{$user->id}}">
                     <input type="hidden" name="follower_id" value="{{Auth::id()}}">
+                    <!-- TODO: ここは認証済みの場合のみ -->
                     @if ($is_following)
                         <button class="invalid" name="action" value="unfollow">フォローを外す</button>
                     @else
@@ -71,6 +83,7 @@
     <div class="row book-shelf">
         <div class="col-12">
             @if($genres_books->isEmpty())
+            <!-- TODO: これは自分しか見えないように -->
                 <p class="text-danger">本棚に本がありません</p>
                 <p>本棚に本を追加しましょう！</p>
                 <a href="/book">

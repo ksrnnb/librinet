@@ -31,7 +31,7 @@ class Book extends Model
 
         parent::delete();
 
-        $doesnt_exist_genre_id = ! Book::where('genre_id', $genre_id)->get()->contains('genre_id', $genre_id);
+        $doesnt_exist_genre_id = Book::where('genre_id', $genre_id)->doesntExist();
 
         if ($doesnt_exist_genre_id) {
             // 削除した本のジャンルが、1冊もない場合
@@ -153,5 +153,38 @@ class Book extends Model
         $book = Book::create($book_data->toArray());
 
         return $book;
+    }
+
+    public static function deleteBooks($books_ids, $user)
+    {
+        // 選択した本のIDだけ取得
+        $ids = array_map('\App\Book::selectedIds', $books_ids);
+
+        $books = Book::with(['post' => function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        }])->get();
+
+        foreach($ids as $id) {
+            $book = $books->where('id', $id)->first();
+
+            $RelatesPost = $book->post instanceof Post;
+
+            if ($RelatesPost) {
+                // POSTに関連づけがある場合は本棚からなくすだけ。
+                $book->isInBookshelf = false;
+                $book->save();
+            } else {
+                // POSTに関連付けがなかったばあいは削除。
+                $book->delete();
+            }
+
+        }
+    }
+
+    public static function selectedIds($books_id)
+    {
+        $delimiter = '-';
+
+        return explode($delimiter, $books_id)[1];
     }
 }

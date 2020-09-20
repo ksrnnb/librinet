@@ -33,7 +33,7 @@
     </header>
 
     @auth
-        <?php $user_url = '/user/' . Auth::user()->str_id; ?>
+        <?php $user_url = '/user/show/' . Auth::user()->str_id; ?>
         <a href="{{$user_url}}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
             {{ Auth::user()->name }}
         </a>

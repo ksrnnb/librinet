@@ -47,11 +47,6 @@ class UserController extends Controller
 
         // guestは削除できない仕様
         if ($user->str_id == $str_id && $str_id != 'guest') {
-            
-            if ($user == null) {
-                // 削除してもどってここにきて更新すると$userはnull
-                return redirect('/');
-            }
     
             if ($user->str_id == $str_id) {
     
@@ -118,7 +113,7 @@ class UserController extends Controller
 
             $user->save();
 
-            return redirect('/user/' . $user->str_id);
+            return redirect('/user/show/' . $new_id);;
 
         } else {
             // TODO: Error 不正なアクセス

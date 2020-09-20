@@ -10,6 +10,7 @@
     <div class="row">
         <div class="col-2">
 
+            <!-- TODO: ユーザーの画像も編集できるようにしたい -->
             @if($user->image)
                 <img class="img-fluid" src="{{$user->image}}" alt="user-image">
             @else

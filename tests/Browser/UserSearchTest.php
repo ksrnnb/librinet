@@ -64,6 +64,6 @@ class UserTest extends DuskTestCase
             $str_id = $browser->attribute('.user-link', 'data-id');
 
             $browser->click('.user-link')
-                    ->assertPathIs('/user/' . $str_id);     // ユーザーページへ遷移
+                    ->assertPathIs('/user/show/' . $str_id);     // ユーザーページへ遷移
     }
 }

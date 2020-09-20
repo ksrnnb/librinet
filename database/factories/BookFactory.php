@@ -5,76 +5,39 @@
 use App\Book;
 use Faker\Generator as Faker;
 
-//  TODO: リファクタリングする。DRY原則。。。
+function getBookParams($isbn, $genre_id = 1)
+{
+
+    $book = Book::fetchBook($isbn);
+
+    $params = [
+        'isbn' => $isbn,          
+        'title' => $book->title,
+        'author' => $book->author,
+        'cover' => $book->cover,
+        'publisher' => $book->publisher,
+        'pubdate' => $book->pubdate,
+        'genre_id' => $genre_id,        //  1: IT (GenreSeederで作成する)
+        'isInBookshelf' => true,        //  1: 自分の本棚
+    ];
+
+    return $params;
+}
 
 //  GitHub実践入門
 $factory->define(Book::class, function (Faker $faker) {
- 
-    $book = Book::fetchBook('9784774163666');
-    
-    return [
-        'isbn' => $book->isbn,          //  GitHub実践入門
-        'title' => $book->title,
-        'author' => $book->author,
-        'cover' => $book->cover,
-        'publisher' => $book->publisher,
-        'pubdate' => $book->pubdate,
-        'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
-        'isInBookshelf' => true,        //  1: 自分の本棚
-    ];
+    return getBookParams('9784774163666');
 });
 
-//  リーダブルコード
-$factory->state(Book::class, 'readouble', function($faker) {
-    $book = Book::fetchBook('9784873115658');
-    return [
-        'isbn' => $book->isbn,
-        'title' => $book->title,
-        'author' => $book->author,
-        'cover' => $book->cover,
-        'publisher' => $book->publisher,
-        'pubdate' => $book->pubdate,
-    ];
-});
+$books = [
+    'readouble' => ['isbn' => '9784873115658', 'genre_id' => 1],
+    'Linux'     => ['isbn' => '9784797397642', 'genre_id' => 1],
+    'Dick'      => ['isbn' => '9784150102296', 'genre_id' => 2],
+    '1984'      => ['isbn' => '9784151200533', 'genre_id' => 2],
+];
 
-
-//  Linux
-$factory->state(Book::class, 'Linux', function($faker) {
-    $book = Book::fetchBook('9784797397642');
-    return [
-        'isbn' => $book->isbn,
-        'title' => $book->title,
-        'author' => $book->author,
-        'cover' => $book->cover,
-        'publisher' => $book->publisher,
-        'pubdate' => $book->pubdate,
-    ];
-});
-
-//  電気羊
-$factory->state(Book::class, 'Dick', function($faker) {
-    $book = Book::fetchBook('9784150102296');
-    return [
-        'isbn' => $book->isbn,
-        'title' => $book->title,
-        'author' => $book->author,
-        'cover' => $book->cover,
-        'publisher' => $book->publisher,
-        'pubdate' => $book->pubdate,
-        'genre_id' => 2,                //  2: SF (GenreSeederで作成する)
-    ];
-});
-
-//  1984
-$factory->state(Book::class, '1984', function($faker) {
-    $book = Book::fetchBook('978-4151200533');
-    return [
-        'isbn' => $book->isbn,
-        'title' => $book->title,
-        'author' => $book->author,
-        'cover' => $book->cover,
-        'publisher' => $book->publisher,
-        'pubdate' => $book->pubdate,
-        'genre_id' => 2,                //  2: SF (GenreSeederで作成する)
-    ];
-});
+foreach ($books as $name => $book) {
+    $factory->state(Book::class, $name, function($faker) use ($book) {
+        return getBookParams($book['isbn'], $book['genre_id']);
+    });
+}

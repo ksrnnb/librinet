@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -97,8 +99,24 @@ class User extends Authenticatable
             }
             
         });
-
     }
+
+    public static function returnParamsForGuestUser()
+    {
+        $params = [
+            'str_id' => 'guest',
+            'name' => 'ゲスト',
+            'email' => 'guest@guest.com',
+            'email_verified_at' => now(),
+            'image' => '/img/icon_green.svg',
+            'password' => Hash::make(env('GUEST_PASSWORD')),
+            'remember_token' => Str::random(10),
+        ];
+        
+        return $params;
+    }
+
+
 
     public static function getArrayForUserPageView($str_id)
     {

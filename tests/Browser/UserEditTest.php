@@ -8,16 +8,40 @@ use Tests\DuskTestCase;
 
 class UserEditTest extends DuskTestCase
 {
-
     public static $user;
     public static $user_url;
     public static $edit_url;
 
+    public function deleteTestUserIfExist()
+    {
+        $user = \App\User::where('str_id', 'TEST_USER_ID')->first();
+
+        if ($user) {
+            $user->delete();
+        }
+    }
+
+    public function createNewUserForTestAndReturnId()
+    {
+        $this->deleteTestUserIfExist();
+        
+        $params = \App\User::returnParamsForGuestUser();
+        $test_user_data = [
+            'str_id' => 'TEST_USER_ID',
+            'email'  => 'test@test.com',
+        ];
+
+        $params = array_merge($params, $test_user_data);
+
+        return \App\User::create($params)->id;
+    }
+
     public function testEditUserName()
     {
-        // user_id = 5のテストユーザー
-        self::$user = \App\User::with('books')->get()->where('id', 5)->first();
-        self::$user_url = '/user/' . self::$user->str_id;
+        $id = $this->createNewUserForTestAndReturnId();
+
+        self::$user = \App\User::with('books')->get()->where('id', $id)->first();
+        self::$user_url = '/user/show/' . self::$user->str_id;
         self::$edit_url = '/user/edit/' . self::$user->str_id;
 
         $this->browse(function (Browser $browser) {
@@ -69,12 +93,12 @@ class UserEditTest extends DuskTestCase
             $browser->visit(self::$edit_url);
 
             $ini = $browser->attribute('#str_id', 'value');
-            $aft = 'TEST_ID';
+            $aft = 'TEST_NEW_ID';
 
             // 変更可能かどうか
             $browser->type('str_id', $aft)
                     ->press('編集する')
-                    ->assertPathIs('/user/' . $aft)     // パスも新しくなる
+                    ->assertPathIs('/user/show/' . $aft)     // パスも新しくなる
                     ->assertSee($aft);
             
             // 元に戻す

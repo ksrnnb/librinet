@@ -17,7 +17,7 @@ class BookEditTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             // user_id = 5のテストユーザー
             self::$user = \App\User::with('books')->get()->where('id', 5)->first();
-            self::$user_url = '/user/' . self::$user->str_id;
+            self::$user_url = '/user/show/' . self::$user->str_id;
 
             $browser->loginAs(self::$user)
                     ->visit(self::$user_url)

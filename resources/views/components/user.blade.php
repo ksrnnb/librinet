@@ -1,7 +1,6 @@
 <div class="row mt-5">
     <div class="col-2">
-        <!-- TODO:　あとでリンクの修正が必要 -->
-        <?php $link = "/user/" . $user->str_id ?>
+        <?php $link = "/user/show/" . $user->str_id ?>
         @if($user->image)
             <a class="user-link" href="{{$link}}" data-id="{{$user->str_id}}">
                 <img class="img-fluid"src="{{$user->image}}" alt="user-image">

@@ -51,13 +51,13 @@ class FollowTest extends DuskTestCase
 
     public function getFollowNumber($browser, $id)
     {
-        return $browser->visit('/user/' . $id)
+        return $browser->visit('/user/show/' . $id)
                       ->attribute('#follow', 'data-count');
     }
 
     public function getFollowerNumber($browser, $id)
     {
-        return $browser->visit('/user/' . $id)
+        return $browser->visit('/user/show/' . $id)
                       ->attribute('#follower', 'data-count');
     }
 
@@ -67,7 +67,7 @@ class FollowTest extends DuskTestCase
         $ini_follow = $this->getFollowNumber($browser, $guest_id);
         $ini_target_follower = $this->getFollowerNumber($browser, $target_id);
 
-        $browser->visit('/user/' . $target_id)
+        $browser->visit('/user/show/' . $target_id)
                 ->press('action');
         
         // ボタン押下後のフォロー数、相手のフォロワー数取得
@@ -90,7 +90,7 @@ class FollowTest extends DuskTestCase
 
         $people = $table->where($column, $user->id);
 
-        $browser->visit('/user/' . $user->str_id)
+        $browser->visit('/user/show/' . $user->str_id)
                 ->click('#' . $name .'-link');
 
         foreach ($people as $person) {

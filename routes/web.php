@@ -23,31 +23,31 @@ Route::post('/user/search', 'UserController@find');
 Route::get('/user/edit/{str_id}', 'UserController@edit');
 Route::post('/user/edit/{str_id}', 'UserController@update');
 Route::post('/user/delete/{str_id}', 'UserController@remove');
-Route::get('/user/{str_id}', 'UserController@index');
-Route::post('/user/{str_id}', 'UserController@action');
-Route::get('/user/{str_id}/follows', 'UserController@follows');
-Route::get('/user/{str_id}/followers', 'UserController@followers');
+// Route::get('/user/{str_id}', 'UserController@index');
+// Route::post('/user/{str_id}', 'UserController@action');
+// Route::get('/user/{str_id}/follows', 'UserController@follows');
+// Route::get('/user/{str_id}/followers', 'UserController@followers');
 
 
 // TODO: あとで下の通りにURLを変更したい。現状、searchというuser_idで登録したら、アクセスできなくなる
 // 　　　　テスト機能追加後の方がやりやすいと思う。
 
-// Route::get('/user/show/{str_id}', 'UserController@index');
-// Route::post('/user/show/{str_id}', 'UserController@action');
-// Route::get('/user/follows/{str_id}', 'UserController@follows');
-// Route::get('/user/followers/{str_id}', 'UserController@followers');
+Route::get('/user/show/{str_id}', 'UserController@index');
+Route::post('/user/show/{str_id}', 'UserController@action');
+Route::get('/user/follows/{str_id}', 'UserController@follows');
+Route::get('/user/followers/{str_id}', 'UserController@followers');
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 
 Route::get('/book', 'BookController@index');
 Route::post('/book', 'BookController@search');
-Route::get('/book/{isbn}', 'BookController@show')->name('book');
+Route::get('/book/show/{isbn}', 'BookController@show')->name('book');
 Route::get('/book/add/{isbn}', 'BookController@add');
 Route::post('/book/add/{isbn}', 'BookController@create');
-Route::get('/user/{str_id}/book/edit', 'BookController@edit');
-Route::post('/user/{str_id}/book/edit', 'BookController@update');
-Route::get('/user/{str_id}/book/delete', 'BookController@delete');
-Route::post('/user/{str_id}/book/delete', 'BookController@remove');
+Route::get('/book/edit/{str_id}', 'BookController@edit');
+Route::post('/book/edit/{str_id}', 'BookController@update');
+Route::get('/book/delete/{str_id}', 'BookController@delete');
+Route::post('/book/delete/{str_id}', 'BookController@remove');
 
 Route::get('/post/{uuid}', 'PostController@index');
 Route::post('/post/{uuid}', 'PostController@comment');

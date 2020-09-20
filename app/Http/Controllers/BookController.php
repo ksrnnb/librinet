@@ -161,7 +161,7 @@ class BookController extends Controller
                 $genre->fill($query)->save();
             }
             
-            return redirect('/user/' . $str_id);
+            return redirect('/user/show/' . $str_id);
 
         // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
         } else {
@@ -194,42 +194,13 @@ class BookController extends Controller
             // 右辺: [book_id1 => , book_id2 => , ...]
             $books_ids = array_keys(request()->except('_token'));
 
-            // 選択した本のIDだけ取得
-            $ids = array_map([$this, 'selectedIds'], $books_ids);
+            Book::deleteBooks($books_ids, $user);
 
-            $books = Book::with(['post' => function($query) use ($user) {
-                $query->where('user_id', $user->id);
-            }])->get();
-
-            // TODO: ジャンルに属する本がなくなったら、ジャンルも消したい。
-            foreach($ids as $id) {
-                $book = $books->where('id', $id)->first();
-
-                // TODO:　本棚にあるけどPOSTに関連付けがない状態ができたら修正する
-                $doesRelatePost = true;
-                if ($doesRelatePost) {
-                    // POSTに関連づけがある場合は本棚からなくすだけ。
-                    $book->isInBookshelf = false;
-                    $book->save();
-                } else {
-                    // POSTに関連付けがなかったばあいは削除。現状は必ず結びついている
-                    $book->delete();
-                }
-
-            }
-
-            return redirect('/user/' . $str_id);
+            return redirect('/user/show/' . $str_id);
         // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
         } else {
             return redirect('/');
         }
-    }
-
-    public function selectedIds($books_id)
-    {
-        $delimiter = '-';
-
-        return explode($delimiter, $books_id)[1];
     }
 
 }

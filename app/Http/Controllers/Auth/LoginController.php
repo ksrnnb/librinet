@@ -58,7 +58,7 @@ class LoginController extends Controller
     public function guest(Request $request) {
         $credentials = [
             'str_id' => 'guest',
-            'password' => 'password',
+            'password' => env('GUEST_PASSWORD'),
         ];
 
         if (Auth::attempt($credentials)) {

@@ -56,7 +56,7 @@ class BookSearchTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $isbn = '9784297100339';
-            $browser->visit('/book/' . $isbn)
+            $browser->visit('/book/show/' . $isbn)
                     ->press('本の投稿をする')
                     ->back()
                     ->press('本の検索画面に戻る')

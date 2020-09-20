@@ -52,10 +52,13 @@
 
     <div class="row follow">
         <div class="col-12">
-            <a id="follow-link" href="{{$url . '/follows'}}">
+            <?php $follow_url   = '/user/follows/' . $user->str_id;
+                  $follower_url = '/user/followers/' . $user->str_id; ?>
+
+            <a id="follow-link" href="{{$follow_url}}">
                 <p id="follow" data-count="{{$follows}}">フォロー: {{$follows}}</p>
             </a>
-            <a id="follower-link" href="{{$url . '/followers'}}">
+            <a id="follower-link" href="{{$follower_url}}">
                 <p id="follower" data-count="{{$followers}}">フォロワー: {{$followers}}</p>
             </a>
         </div>
@@ -70,10 +73,11 @@
         @if ($user->id == $auth_id)
             @if ($genres_books->isNotEmpty())
                 <div class="col-6">
-                    <a href="{{$url . '/book/edit'}}">
+
+                    <a href="{{'/book/edit/' . $user->str_id}}">
                         <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
                     </a>
-                    <a href="{{$url . '/book/delete'}}">
+                    <a href="{{'/book/delete/' . $user->str_id}}">
                         <button type="submit" class="btn btn-outline-danger">本を削除する</button>
                     </a>
                 </div>
@@ -97,7 +101,7 @@
                     @foreach($books->chunk(4) as $chunk)
                         <div class="row mt-3">
                             @foreach($chunk as $book)
-                                <?php $book_url = '/book/' . $book->isbn ?>
+                                <?php $book_url = '/book/show/' . $book->isbn ?>
                                 <div class="col-3">
                                     <a href="{{$book_url}}">
                                         @if (isset($book->cover))

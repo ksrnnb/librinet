@@ -5,6 +5,7 @@
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         // 'image' => asset('img/icon.svg'),    <- このやり方だと、localhost/img/icon.svgになってしまう
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'password' => Hash::make(env('GUEST_PASSWORD')),
         'remember_token' => Str::random(10),
     ];
 });

@@ -21,7 +21,7 @@ class UserPageTest extends DuskTestCase
 
             $user = $users->where('id', $id)->first();
 
-            $browser->visit('/user/' . $user->str_id)
+            $browser->visit('/user/show/' . $user->str_id)
                     ->assertSee($user->str_id);
 
             // 本がない場合は処理しない

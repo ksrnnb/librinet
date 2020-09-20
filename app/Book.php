@@ -24,6 +24,21 @@ class Book extends Model
         return $this->belongsTo('App\Genre');
     }
 
+    // 削除時の動作をオーバーライド
+    public function delete()
+    {
+        $genre_id = $this->genre_id;
+
+        parent::delete();
+
+        $doesnt_exist_genre_id = ! Book::where('genre_id', $genre_id)->get()->contains('genre_id', $genre_id);
+
+        if ($doesnt_exist_genre_id) {
+            // 削除した本のジャンルが、1冊もない場合
+            Genre::find($genre_id)->delete();
+        }
+    }
+
     public function registerPost($message = '')
     {
         $this->post()->create([

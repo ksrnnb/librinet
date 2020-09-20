@@ -62,6 +62,44 @@ class User extends Authenticatable
         return $this->hasMany('App\Follower', 'follower_id', 'id');
     }
 
+    // 削除時の動作をオーバーライド
+    public function delete()
+    {
+        $user_id = $this->id;
+
+        \DB::transaction(function () use ($user_id) {
+
+            parent::delete();
+            
+            // もうちょいいいかんじに消したい
+            $posts = Post::where('user_id', $user_id)->get();
+            
+            foreach ($posts as $post) {
+                $post->delete();
+            }
+            
+            $comments = Comment::where('user_id', $user_id)->get();
+            
+            foreach ($comments as $comment) {
+                $comment->delete();
+            }
+
+            $followers = Follower::where('follow_id', $user_id)->get();
+
+            foreach ($followers as $follower) {
+                $follower->delete();
+            }
+
+            $follows = Follower::where('follower_id', $user_id)->get();
+
+            foreach ($follows as $follow) {
+                $follow->delete();
+            }
+            
+        });
+
+    }
+
     public static function getArrayForUserPageView($str_id)
     {
         $users = User::with(['books.genre'])->get();

@@ -15,12 +15,10 @@ class CommentController extends Controller
 
             if ($comment) {
                 $comment->delete();
-            // TODO: error
             } else {
-
+                abort('400');
             }
         }
-
         return back();
     }
 }

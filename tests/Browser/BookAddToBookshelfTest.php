@@ -22,6 +22,15 @@ class BookAddToBookshelfTest extends DuskTestCase
         }
     }
 
+    public function testWithoutLogin()
+    {
+        $this->browse(function (Browser $browser) {
+            $isbn = '9784297100339';                // docker
+            $browser->visit('/book/add/' . $isbn)
+                    ->assertPathIs('/');
+        });
+    }
+
     public function testWithoutInput()
     {
         $this->browse(function (Browser $browser) {

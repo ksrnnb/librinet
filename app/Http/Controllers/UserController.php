@@ -54,15 +54,14 @@ class UserController extends Controller
                 return view('user.edit', ['user' => $user]);
     
             } else {
-                // TODO: Error 不正なアクセス
-                // 編集して戻るボタン押した時もここになる
-                return redirect('/');
+                // Error 不正なアクセス
+                abort('400');
     
             }
 
         // guestが編集ページにやってきた場合
         } else {
-            return redirect('/');
+            abort('400');
         }
 
     }
@@ -116,8 +115,7 @@ class UserController extends Controller
             return redirect('/user/show/' . $new_id);;
 
         } else {
-            // TODO: Error 不正なアクセス
-
+            abort('400');
         }
     }
 
@@ -132,8 +130,7 @@ class UserController extends Controller
             return redirect('/');
 
         } else {
-            // TODO: Error 不正なアクセス
-            return back();
+            abort('400');
         }
     }
 

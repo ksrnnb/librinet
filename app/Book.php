@@ -187,4 +187,63 @@ class Book extends Model
 
         return explode($delimiter, $books_id)[1];
     }
+
+    public static function returnBookInfoOrRedirect($isbn, $user, $model)
+    {
+        $is_not_isbn = ! Book::isIsbn($isbn);
+
+        if ($is_not_isbn) {
+            // ISBN以外の値をURLに直接入力しない限り、ここにこない。
+            abort('404');
+        } 
+        
+        if ($user == null) {
+            // トップページへ飛ばす
+            return redirect('/');
+        } 
+
+        $books = Book::where('isbn', $isbn)
+                     ->where('user_id', $user->id)
+                     ->get();
+
+        $exists_books_in_db = $books->isNotEmpty();
+
+        if ($exists_books_in_db) {
+                    
+            $is_in_bookshelf = $books->contains('isInBookshelf', true);
+
+            if ($is_in_bookshelf) {
+
+                if ($model == 'book') {
+                    // 本棚に本があったら、このページには来れない。
+                    abort('400');
+
+                } elseif ($model == 'post') {
+                    // 本棚に本がある場合に、その本を投稿する
+                    $book = $books->where('isInBookshelf', true)->first();
+                }
+
+            } else {
+                // 本棚に本がない場合
+                $book = $books->first();
+            }
+        // データベースにない場合
+        } else {
+            
+            $book = Book::fetchBook($isbn);
+
+            if ($book != null) {
+                // 本がISBNでみつけられたら
+                $book->isInBookshelf = false;
+
+            } else {
+                // 追加ボタンからきているからISBNで必ずみつかるはず
+                abort('400');
+            }
+        }
+        $genres = Book::extractGenres($user->books);
+        $params = ['genres' => $genres, 'book' => $book];
+
+        return $params;
+    }
 }

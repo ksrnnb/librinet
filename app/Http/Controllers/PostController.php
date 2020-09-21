@@ -17,20 +17,22 @@ class PostController extends Controller
     {
         $is_not_uuid = ! Str::isUuid($uuid);
 
-        // TODO: エラーページ？
         if ($is_not_uuid) {
-            return redirect('/');
+            abort('404');
         }
 
-        $posts = Post::with(['user', 'comments'])->get();
-        $post = $posts->where('uuid', $uuid)->first();
+        $post = Post::with(['user', 'comments'])
+                    ->where('uuid', $uuid)
+                    ->first();
 
-        $books = Book::with('genre')->get();
-        $books = $books->where('user_id', Auth::id())
-                       ->where('isInBookshelf', true);
+        $books = Book::with('genre')
+                     ->where('user_id', Auth::id())
+                     ->where('isInBookshelf', true)
+                     ->get();
         
         $genres = Book::extractGenres($books);
         $genres_books = $books->groupBy('genre_id');
+
 
         return view('post', [
             'post'          => $post,
@@ -40,15 +42,15 @@ class PostController extends Controller
         ]);
     }
 
-    /* comment (post method)
-        @param $request->input()
-        [
-            'post_id'   => integer,
-            'message'   => string,
-            'recommend' => "on" or no set
-            'book_id'   => integer
-        ]
-        @return redirect to home
+    /*   comment (post method)
+    *    @param $request->input()
+    *    [
+    *        'post_id'   => integer,
+    *        'message'   => string,
+    *        'recommend' => "on" or no set
+    *        'book_id'   => integer
+    *    ]
+    *    @return redirect to home
     */
 
     public function comment (Request $request)
@@ -78,54 +80,25 @@ class PostController extends Controller
 
     public function add (Request $request, $isbn)
     {
-        $isIsbn = Book::isIsbn($isbn);
-        if (! $isIsbn) {
-            return redirect('/');
-        }
-        
         $user = Auth::user();
+        $params = Book::returnBookInfoOrRedirect($isbn, $user, 'post');
 
-        if ($user == null) {
-            return redirect('/');
-        } 
+        $is_redirect = ! is_array($params);
 
-        // TODO: ここ修正する。同じ本を投稿した時、一意じゃない。
-        $books = Book::where('isbn', $isbn)
-                    ->where('user_id', $user->id)
-                    ->get();
-
-        $books_exist = $books->isNotEmpty();
-
-        if ($books_exist) {
-                        
-            $is_in_bookshelf = $books->contains('isInBookshelf', true);
-            
-            if ($is_in_bookshelf) {
-                $book = $books->where('isInBookshelf', true)->first();
-            } else {
-                $book = $books->first();
-            }
-                        
+        if ($is_redirect) {
+            return $params;     // params is redirect
         } else {
-            $book = Book::fetchBook($isbn);
-            
-            // 本がなかった場合はnullが返るようにしている。
-            if ($book != null) {
-                $book->isInBookshelf = false;
-            }
+            return view('book_post', $params);
         }
-        $genres = Book::extractGenres($user->books);
-        // TODO: SQLログ確認する。eagerローディング必要？
-        return view('book_post', ['book' => $book, 'genres' => $genres]);
+
     }
 
     public function create (PostRequest $request, $isbn)
     {        
         $isIsbn = Book::isIsbn($isbn);
 
-        // TODO: エラーページに飛ばす？
         if (! $isIsbn) {
-            return redirect('/');
+            abort('400');
         }
 
         $form = collect($request->except('_token'));
@@ -133,11 +106,9 @@ class PostController extends Controller
             'isbn'      =>  $isbn,
             'user_id'   =>  Auth::id(),
         ]);
-
         Post::createNewPost($form);
 
-        return redirect('/');
-
+        return redirect('/home');
     }
 
     public function remove(Request $request, $uuid)
@@ -151,11 +122,12 @@ class PostController extends Controller
 
                 $post->delete();
 
-            // TODO: error 
             } else {
-
+                abort('400');
             }
 
+        } else {
+            abort('400');
         }
 
         return back();

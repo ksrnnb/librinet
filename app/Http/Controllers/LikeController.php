@@ -17,9 +17,9 @@ class LikeController extends Controller
             
             Like::handleLike($uuid);
 
-        // TODO：エラーにとばす？　（uuidが送られてない場合）
         } else {
-            return back();
+            // uuidが送られてない場合
+            abort('400');
         }
 
         return back();

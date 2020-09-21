@@ -49,13 +49,18 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            // TODO: あとで修正する
-            'str_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $rules = [
+            'str_id'    => ['unique:users', 'required'],
+            'name'      => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'  => ['required', 'string', 'min:8', 'confirmed'],
+        ];
+
+        $messages = [
+            'str_id.unique' => 'ユーザーIDが既に存在しています。',
+        ];
+        
+        return Validator::make($data, $rules, $messages);
     }
 
     /**

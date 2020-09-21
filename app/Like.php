@@ -65,41 +65,31 @@ class Like extends Model
             ->delete();
     }
 
+    public static function likeOrUnlike($item)
+    {
+        // postもcommentもない場合は不正なリクエスト
+        if ($item == null) {
+            abort('400');
+        }
+        
+        $user_id = Auth::id();
+        $is_liked = $item->likes->contains('user_id', $user_id);
+        
+        if ($is_liked) {
+            Like::unlike($user_id, $item);
+        } else {
+            Like::like($user_id, $item);
+        }
+    }
+
     public static function handleLike($uuid)
     {
         // みつからない場合の返り値はnull
         $post = Post::where('uuid', $uuid)->first();
+        $comment = Comment::where('uuid', $uuid)->first();
 
-        $user_id = Auth::id();
+        $item = $post ?? $comment;
 
-        // ポストの場合
-        if (isset($post)) {
-            $is_liked = $post->likes->contains('user_id', $user_id);
-
-            if ($is_liked) {
-                Like::unlike($user_id, $post);
-            } else {
-                Like::like($user_id, $post);
-            }
-
-        // コメントの場合
-        } else {
-            $comment = Comment::where('uuid', $uuid)->first();
-
-            if (isset($comment)) {
-                $is_liked = $comment->likes->contains('user_id', Auth::id());
-    
-                if ($is_liked) {
-                    Like::unlike($user_id, $comment);
-                } else {
-                    Like::like($user_id, $comment);
-                }
-              
-            // TODO: どこに飛ばすか。　ポストもコメントも見つからなかった場合 
-            } else {
-                return back();
-            }
-        }
-
+        Like::likeOrUnlike($item);
     }
 }

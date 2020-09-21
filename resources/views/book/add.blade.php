@@ -5,6 +5,7 @@
     <form action="{{request()->fullUrl()}}" method="POST">
         @csrf
         <!-- 本の情報 -->
+        <input type="hidden" name="title" value="{{$book->isbn}}">
         <input type="hidden" name="title" value="{{$book->title}}">
         <input type="hidden" name="author" value="{{$book->author}}">
         <input type="hidden" name="cover" value="{{$book->cover}}">
@@ -16,6 +17,12 @@
                 <h2>本棚に追加する</h2>
             </div>
         </div>
+
+        @if ($errors->all())
+            @foreach ($errors->all() as $error)
+                <p class="text-danger">{{$error}}</p>
+            @endforeach
+        @endif
         
         <div id="genre-container">
             <div class="row">

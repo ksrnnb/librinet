@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\BookCreateRequest;
 use App\Book;
 use App\Post;
 use App\User;
@@ -45,57 +46,42 @@ class BookController extends Controller
         }
     }
 
+    // 本棚に追加するボタンを押したときのアクション
     public function add (Request $request, $isbn)
     {
-        $isIsbn = Book::isIsbn($isbn);
         $user = Auth::user();
+        $params = Book::returnBookInfoOrRedirect($isbn, $user, 'book');
+        
+        $is_redirect = ! is_array($params);
 
-        if ($isIsbn) {
-            // TODO: ここ修正する。PostControllerのaddとほぼ同じ処理
-            $books = Book::where('isbn', $isbn)
-                         ->where('user_id', $user->id)
-                         ->get();
-
-            $do_books_exist = $books->isNotEmpty();
-
-            if ($do_books_exist) {
-                        
-                $is_in_bookshelf = $books->contains('isInBookshelf', true);
-
-                // Error 本棚に本があったら追加できない。
-                if ($is_in_bookshelf) {
-                    return back();
-                } else {
-                    $book = $books->first();
-                }
-
-            } else {
-                
-                $book = Book::fetchBook($isbn);
-
-                // 本がみつからなかった場合はnullが返るようにしている。
-                if ($book != null) {
-                    $book->isInBookshelf = false;
-                }
-            }
-
-            $genres = Book::extractGenres($user->books);
-
-            return view ('book.add', ['book' => $book, 'genres' => $genres]);
-        // TODO: error page
+        if ($is_redirect) {
+            return $params;     // params is redirect
         } else {
-            return back();
+            return view('book.add', $params);
         }
     }
 
-    public function create (Request $request, $isbn)
+    /*
+    *   @param $request->input(): 
+    *       _token    => string,
+    *       title     => string,
+    *       author    => string,
+    *       cover     => string(URL),
+    *       publisher => string,
+    *       pubdate   => string,
+    *       genre     => "new" or "conventional",
+    *       new_genre => "input genre name" (the case selecting new genre)
+    *       genre_id  => integer (the case selecting conventional genre)
+    *
+    *   @return view
+    */
+    public function create (BookCreateRequest $request, $isbn)
     {
-        // TODO: 整理する。ほぼPostControllerと一緒
+        
         $isIsbn = Book::isIsbn($isbn);
-
-        // TODO: エラーページに飛ばす？
         if (! $isIsbn) {
-            return redirect('/');
+            // 
+            return redirect('400');
         }
  
         // $form:   'genre' => 'new' or 'conventional'
@@ -142,9 +128,9 @@ class BookController extends Controller
 
             return view('book.edit', $params);
 
-        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
         } else {
-            return redirect('/');
+            // 認証されているIDと編集しようとしているIDが違う場合
+            abort('400');
         }
     }
 
@@ -163,9 +149,9 @@ class BookController extends Controller
             
             return redirect('/user/show/' . $str_id);
 
-        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
         } else {
-            return redirect('/');
+            // 認証されているIDと編集しようとしているIDが違う場合
+            abort('400');
         }
     }
 
@@ -179,9 +165,9 @@ class BookController extends Controller
 
             return view('book.delete', $params);
 
-        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
         } else {
-            return redirect('/');
+            // 認証されているIDと編集しようとしているIDが違う場合
+            abort('400');
         }
     }
 
@@ -197,9 +183,10 @@ class BookController extends Controller
             Book::deleteBooks($books_ids, $user);
 
             return redirect('/user/show/' . $str_id);
-        // TODO：認証されているIDと編集しようとしているIDが違う場合、どこに飛ばすか
+
         } else {
-            return redirect('/');
+            // 認証されているIDと編集しようとしているIDが違う場合
+            abort('400');
         }
     }
 

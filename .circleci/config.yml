@@ -12,6 +12,7 @@ jobs:
 
     working_directory: ~/test
 
+      # environmentはジョブに対する環境変数となる
     environment:
       - APP_DEBUG: true
       - APP_ENV: testing
@@ -21,19 +22,13 @@ jobs:
       # デフォルトのポートの設定はtests/DuskTestCase.phpに書いている。
       - DB_CONNECTION: circle_test
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
 
     steps:
       - checkout
 
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      # PHP CircleCI 2.0 Configuration File
+      # PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo apt update 
       - run: sudo docker-php-ext-install zip pdo_mysql
 
       # Download and cache dependencies
@@ -73,9 +68,7 @@ jobs:
       - run: 
           name: Make Env file
           command: |
-            cp .env.example .env
-            sed -i s/^APP_KEY=/APP_KEY=${KEY}/ .env
-            sed -i s/localhost/localhost:8000/ .env
+            cp .env.dusk.testing .env
 
       - run:
           name: Start Chrome Driver

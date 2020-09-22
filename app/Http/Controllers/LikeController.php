@@ -9,8 +9,10 @@ use App\Like;
 
 class LikeController extends Controller
 {
-    public function like (Request $request, $uuid)
+
+    public function like (Request $request)
     {
+        $uuid = $request->input('uuid');
         $is_uuid = Str::isUuid($uuid);
         
         if ($is_uuid) {

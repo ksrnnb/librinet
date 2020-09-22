@@ -28,8 +28,8 @@
             
         @endisset
     @endforeach
-
+<div id="like-react"></div>
 </div>
-{{-- <script src="{{asset('js/app.js')}}"></script> --}}
+<script src="{{asset('js/app.js')}}"></script>
 
 @endsection('content')

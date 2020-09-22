@@ -53,6 +53,6 @@ Route::get('/book/post/{isbn}', 'PostController@add');
 Route::post('/book/post/{isbn}', 'PostController@create');
 
 Route::post('/comment/remove/{uuid}', 'CommentController@remove');
-Route::post('/like/{uuid}', 'LikeController@like');
+Route::post('/like', 'LikeController@like');
 
 Route::get('/logout', 'Auth\LoginController@logout');

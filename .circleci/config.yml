@@ -14,14 +14,15 @@ jobs:
 
       # environmentはジョブに対する環境変数となる
     environment:
-      - APP_DEBUG: true
-      - APP_ENV: testing
-      - APP_KEY: ${KEY}
-      - APP_URL: http://localhost:8000
+      - MYSQL_ALLOW_EMPTY_PASSWORD: true
+      
+      # - APP_DEBUG: true
+      # - APP_ENV: testing
+      # - APP_KEY: ${KEY}
+      # - APP_URL: http://localhost:8000
       # サーバーをphp artisan serveで立ち上げてるので、ポート番号を指定しないとだめ。
       # デフォルトのポートの設定はtests/DuskTestCase.phpに書いている。
-      - DB_CONNECTION: circle_test
-      - MYSQL_ALLOW_EMPTY_PASSWORD: true
+      # - DB_CONNECTION: circle_test
 
     steps:
       - checkout

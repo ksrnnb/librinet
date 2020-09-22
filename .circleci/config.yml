@@ -18,7 +18,6 @@ jobs:
       
       # - APP_DEBUG: true
       # - APP_ENV: testing
-      # - APP_KEY: ${KEY}
       # - APP_URL: http://localhost:8000
       # サーバーをphp artisan serveで立ち上げてるので、ポート番号を指定しないとだめ。
       # デフォルトのポートの設定はtests/DuskTestCase.phpに書いている。
@@ -26,6 +25,10 @@ jobs:
 
     steps:
       - checkout
+
+      - run: 
+          name: Make Env file
+          command: cp .env.testing .env
 
       # PHP CircleCI 2.0 Configuration File
       # PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
@@ -65,11 +68,6 @@ jobs:
       # - run: ./vendor/bin/codecept run
 
       - run: php artisan dusk:chrome-driver
-
-      - run: 
-          name: Make Env file
-          command: |
-            cp .env.testing .env
 
       - run:
           name: Start Chrome Driver

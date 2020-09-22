@@ -44,16 +44,14 @@
                                 <p><a href="{{$post_url}}" class="comment-link">Comment</a></p>
                             @endif
                             <!-- いいね -->
-                            <?php $like_url = '/like/' . $item->uuid; ?>
-                            <form action="{{$like_url}}" method="POST">
-                                @csrf
+                            <div data-uuid="{{$item->uuid}}">
                                 @if($item->likes->contains('user_id', Auth::id()))
-                                    <button class="likes btn btn-info">いいね</button>
+                                    <button type="button" class="likes btn btn-info" data-isliked=1>いいね</button>
                                 @else
-                                    <button class="likes btn btn-outline-info" data-isLiked=0>いいね</button>
+                                    <button type="button" class="likes btn btn-outline-info" data-isliked=0>いいね</button>
                                 @endif
                                 <p class="d-inline count" data-count="{{$item->likes->count()}}">{{$item->likes->count()}}</p>
-                            </form>
+                            </div>
                         </div>
                         <!-- 削除機能 自分の投稿のみ-->
                         @if ($item->user_id == Auth::id())

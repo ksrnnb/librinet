@@ -68,7 +68,7 @@ jobs:
       - run: 
           name: Make Env file
           command: |
-            cp .env.dusk.testing .env
+            cp .env.testing .env
 
       - run:
           name: Start Chrome Driver

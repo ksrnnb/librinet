@@ -22,30 +22,34 @@
             <p class="h5">{{'@' . $user->str_id}}</p>
 
             @if ($user->id == $auth_id)
-            <!--  編集ボタン -->
-            @if ($user->str_id == 'guest')
-                <button type="button" class="btn btn-outline-success invalid">ユーザー情報を編集する</button>
-                <p class="text-danger">注意：ゲストユーザーは編集できません</p>
-            @else
-                <a href="{{'/user/edit/' . $user->str_id}}">
-                    <button type="button" class="btn btn-outline-success">ユーザー情報を編集する</button>
-                </a>
-            @endif
+                <!--  編集ボタン -->
+                @if ($user->str_id == 'guest')
+                    <button type="button" class="btn btn-outline-success invalid">ユーザー情報を編集する</button>
+                    <p class="text-danger">注意：ゲストユーザーは編集できません</p>
+                @else
+                    <a href="{{'/user/edit/' . $user->str_id}}">
+                        <button type="button" class="btn btn-outline-success">ユーザー情報を編集する</button>
+                    </a>
+                @endif
 
             @else
             <!-- フォロー表示 -->
-                <form action="{{$url}}" method="POST">
-                    @csrf
-                    <input type="hidden" name="follow_id" value="{{$user->id}}">
-                    <input type="hidden" name="follower_id" value="{{Auth::id()}}">
+                <div id="follower-react"></div>
+                <!-- <form action="/follow" method="POST"> -->
+                 {{--   @csrf   --}}
+                    <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
+                    <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
+                    <input type="hidden" id="is_following" value="{{$is_following}}">
                     <!-- TODO: ここは認証済みの場合のみ -->
+                    {{--
                     @if ($is_following)
-                        <button class="invalid" name="action" value="unfollow">フォローを外す</button>
+                        <button class="btn btn-info" name="action" value="unfollow">フォロー中</button>
                     @else
-                        <button name="action" value="follow">フォローする</button>
+                        <button class="btn btn-outline-info" name="action" value="follow">フォローする</button>
                     @endif
+                    --}}
 
-                </form>
+                <!-- </form> -->
             @endif
         </div>
     </div>
@@ -126,5 +130,6 @@
         </div>
     </div>
 </div>
+<script src="{{asset('js/app.js')}}"></script>
 
 @endsection

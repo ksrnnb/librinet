@@ -39,8 +39,6 @@ class PostDeleteTest extends DuskTestCase
             $comment = \App\Comment::where('user_id', self::$user->id)->first();
             $selector = '#del-' . $comment->uuid;
 
-            dd($comment);
-
             $browser->loginAs(self::$user)
                     ->visit('/home')
                     ->press($selector)

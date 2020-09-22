@@ -21,10 +21,8 @@ Route::post('/', 'Auth\LoginController@guest');
 Route::get('/user/search', 'UserController@search');
 Route::post('/user/search', 'UserController@find');
 Route::get('/user/show/{str_id}', 'UserController@index');
-Route::post('/user/show/{str_id}', 'UserController@action');
 Route::get('/user/follows/{str_id}', 'UserController@follows');
 Route::get('/user/followers/{str_id}', 'UserController@followers');
-
 
 Route::get('/user/edit/{str_id}', 'UserController@edit');
 Route::post('/user/edit/{str_id}', 'UserController@update');
@@ -54,5 +52,6 @@ Route::post('/book/post/{isbn}', 'PostController@create');
 
 Route::post('/comment/remove/{uuid}', 'CommentController@remove');
 Route::post('/like', 'LikeController@like');
+Route::post('/follow', 'FollowerController@follow');
 
 Route::get('/logout', 'Auth\LoginController@logout');

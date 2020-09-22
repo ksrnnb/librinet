@@ -134,31 +134,6 @@ class UserController extends Controller
         }
     }
 
-    public function action (Request $request)
-    {
-        $form = $request->except('_token');
-
-        $action       = $form['action'];
-        $follow_id    = $form['follow_id'];
-        $follower_id  = $form['follower_id'];
-
-        if ($action == 'follow') {
-            Follower::create([
-                'follow_id' => $follow_id,
-                'follower_id' => $follower_id,
-            ]);
-        } elseif ($action == 'unfollow') {
-            Follower::where('follower_id', $follower_id)
-                    ->where('follow_id', $follow_id)
-                    ->first()
-                    ->delete();
-        } else {
-            // error
-        }
-
-        return back();
-    }
-
     public function follows (Request $request, $id)
     {
         $user = User::where('str_id', $id)->first();

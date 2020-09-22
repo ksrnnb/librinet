@@ -68,7 +68,7 @@ jobs:
       # - run: ./vendor/bin/codecept build
       # - run: ./vendor/bin/codecept run
 
-      - run: php artisan dusk:chrome-driver 72
+      - run: php artisan dusk:chrome-driver
 
       - run: 
           name: Make Env file

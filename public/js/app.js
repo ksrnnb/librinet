@@ -65792,6 +65792,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
  */
 
 
+__webpack_require__(/*! ./components/Book */ "./resources/js/components/Book.js");
+
 __webpack_require__(/*! ./components/Follower */ "./resources/js/components/Follower.js");
 
 __webpack_require__(/*! ./components/Like */ "./resources/js/components/Like.js");
@@ -65844,6 +65846,272 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/Book.js":
+/*!*****************************************!*\
+  !*** ./resources/js/components/Book.js ***!
+  \*****************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+function Message() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "(* \u30CF\u30A4\u30D5\u30F3\u306F\u9664\u304B\u306A\u304F\u3066\u3082\u691C\u7D22\u53EF\u80FD)");
+} // 例を表示。もうすこしあったほうがいい？
+
+
+function Example() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "9784297100339 Docker/Kubernetes\u5B9F\u8DF5\u30B3\u30F3\u30C6\u30CA\u958B\u767A\u5165\u9580"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "9784839955557 \u30CE\u30F3\u30C7\u30B6\u30A4\u30CA\u30FC\u30BA\u30FB\u30C7\u30B6\u30A4\u30F3\u30D6\u30C3\u30AF"));
+}
+
+function UserInput(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    id: "isbn",
+    name: "isbn",
+    onChange: props.onChange,
+    required: true
+  });
+}
+
+function Button(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-outline-success",
+    onClick: props.onClick,
+    id: "search"
+  }, "\u691C\u7D22");
+}
+
+var Book = /*#__PURE__*/function (_React$Component) {
+  _inherits(Book, _React$Component);
+
+  var _super = _createSuper(Book);
+
+  function Book(props) {
+    var _this;
+
+    _classCallCheck(this, Book);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      input: null,
+      book: null,
+      errorMessage: null,
+      isNotInBookshelf: null
+    };
+    _this.bookImage = _this.bookImage.bind(_assertThisInitialized(_this));
+    _this.bookInfo = _this.bookInfo.bind(_assertThisInitialized(_this));
+    _this.onChangeInput = _this.onChangeInput.bind(_assertThisInitialized(_this));
+    _this.sendPost = _this.sendPost.bind(_assertThisInitialized(_this));
+    _this.setBook = _this.setBook.bind(_assertThisInitialized(_this));
+    _this.setError = _this.setError.bind(_assertThisInitialized(_this));
+    _this.validateInputAndReturnIsbn = _this.validateInputAndReturnIsbn.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Book, [{
+    key: "bookImage",
+    value: function bookImage() {
+      var book = this.state.book;
+      var image;
+
+      if (book.cover) {
+        image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          className: "img-fluid",
+          src: book.cover,
+          alt: "book_image"
+        });
+      } else {
+        image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          className: "img-fluid",
+          src: "../img/book.svg",
+          alt: "book_image"
+        });
+      }
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-3"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("figure", {
+        className: "mx-2 px-0 mb-0 book"
+      }, image));
+    }
+  }, {
+    key: "bookInfo",
+    value: function bookInfo() {
+      var book = this.state.book;
+      var pub_year = book.pubdate.slice(0, 4) + '年';
+      var isNotInBookshelf = this.state.isNotInBookshelf;
+      var addButton = null;
+
+      if (isNotInBookshelf) {
+        addButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: '/book/add/' + book.isbn
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "btn btn-outline-success"
+        }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B"));
+      }
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-9"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30BF\u30A4\u30C8\u30EB\uFF1A ", book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u8457\u8005\uFF1A", book.author), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u51FA\u7248\u793E\uFF1A", book.publisher), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u51FA\u7248\u5E74\uFF1A", pub_year), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: '/book/post/' + book.isbn
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-outline-success"
+      }, "\u672C\u306E\u6295\u7A3F\u3092\u3059\u308B")), addButton);
+    }
+  }, {
+    key: "onChangeInput",
+    value: function onChangeInput(e) {
+      this.setState({
+        input: e.target.value
+      });
+    } // TODO エンターを押しても送信できるようにしたい
+    // pressEnter(e) {
+    //     const keyCode = e.charCode;
+    //     console.log(e);
+    //     if (keyCode == 13) {
+    //         console.log('Enter!?');
+    //         this.sendPost();
+    //     }
+    // }
+
+  }, {
+    key: "setBook",
+    value: function setBook(params) {
+      this.setState({
+        book: params.book,
+        isNotInBookshelf: params.isNotInBookshelf,
+        errorMessage: null
+      });
+    }
+  }, {
+    key: "setError",
+    value: function setError(error) {
+      var errorMessage;
+
+      if (error == 'InputError') {
+        errorMessage = '正しいISBNが入力されていません';
+      } else if (error == 'NotFound') {
+        errorMessage = '本が見つかりませんでした';
+      } else {
+        errorMessage = '予期しないエラーが発生しました';
+      }
+
+      this.setState({
+        errorMessage: errorMessage
+      });
+    }
+  }, {
+    key: "sendPost",
+    value: function sendPost() {
+      var _this2 = this;
+
+      var input = this.state.input;
+      var isbn = this.validateInputAndReturnIsbn(input);
+
+      if (isbn) {
+        axios.post('/book', {
+          isbn: input
+        }).then(function (response) {
+          _this2.setBook(response.data.params);
+        })["catch"](function (error) {
+          // 本が見つからない場合は404に設定した (BookController)
+          if (error.response.status = 404) {
+            _this2.setError('NotFound');
+          } else {
+            // サーバー側のvalidationに引っ掛かった場合など。
+            // JavaScript側のvalidationで十分だと思うけど一応。
+            _this2.setError('UnknownError');
+          }
+        });
+      } else {
+        this.setError('InputError');
+      }
+    }
+  }, {
+    key: "validateInputAndReturnIsbn",
+    value: function validateInputAndReturnIsbn(input) {
+      if (input == null) return false;
+      var isbn = input.replace(/-/g, '');
+      isbn = isbn.match(/^9784[0-9]{9}$/);
+
+      if (isbn != null) {
+        return isbn;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var searchedBook = this.state.book != null;
+      var bookElement = null;
+
+      if (searchedBook) {
+        bookElement = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row mt-5 book"
+        }, this.bookImage(), this.bookInfo());
+      }
+
+      var errorMessage;
+      var error = this.state.errorMessage;
+
+      if (error) {
+        errorMessage = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+          className: "error text-danger"
+        }, error);
+      }
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, errorMessage, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserInput, {
+        onChange: this.onChangeInput
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        onClick: this.sendPost
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Message, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Example, null), bookElement);
+    }
+  }]);
+
+  return Book;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+if (document.getElementById('book-react')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Book, null), document.getElementById('book-react'));
+}
 
 /***/ }),
 

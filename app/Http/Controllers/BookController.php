@@ -21,11 +21,24 @@ class BookController extends Controller
 
     public function search (BookRequest $request)
     {
-        $request->validated();
-
+        // $request->validated();
+        // TODO: Validate独自に？
         $isbn = $request->input('isbn');
+        $book = Book::fetchBook($isbn);
 
-        return redirect()->route('book', ['isbn' => $isbn]);
+        if ($book == null) {
+            return response('Cannot Search', 404);
+        }
+
+        $user = Auth::user();
+        $isNotInBookshelf = $user->hasBook($isbn);
+
+        $params = [
+            'book'              => $book,
+            'isNotInBookshelf'  => ! $user->hasBook($isbn),
+        ];
+
+        return response()->json(['params' => $params]);
     }
 
     public function show (Request $request, $isbn)

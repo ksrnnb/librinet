@@ -42,8 +42,8 @@
         </div>
     @else
         <h2>本の検索</h2>
-        <form action="/book" method="POST">
-            @csrf
+        <!-- <form action="/book" method="POST"> -->
+            {{--@csrf--}}
             <div>
                 <label for="isbn">
                     <h3 class="mb-0">ISBN (13桁*)</h3>
@@ -58,17 +58,12 @@
             @if (isset($cannot_fetch_message))
                 <p class='error mb-0'>{{$cannot_fetch_message}}</p>
             @endif
-            <div>
-                <input type="text" id="isbn" name="isbn" required>
-                <input type="submit" value="検索">
+            <div id="book-react">
+                <!-- 検索フォーム -->
+
             </div>
-            <div>
-                <p>(* ハイフンは除かなくても検索可能)</p>
-            </div>
-        </form>
-        <p>例</p>
-        <p>9784297100339 Docker/Kubernetes実践コンテナ開発入門</p>
-        <p>9784839955557 ノンデザイナーズ・デザインブック</p>
+        <!-- </form> -->
+
     @endif
 </div>
 

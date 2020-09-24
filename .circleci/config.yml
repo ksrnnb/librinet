@@ -91,7 +91,7 @@ jobs:
           name: Install ssh
           command: apk add openssh
 
-      - checkout
+      # - checkout
       # CircleCIに追加したSSH鍵を使用
       - add_ssh_keys
 

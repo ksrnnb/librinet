@@ -7,91 +7,85 @@ orbs:
   slack: circleci/slack@3.4.2
 
 jobs:
-  build:
-    docker:
-      # Specify the version you desire here
-      - image: circleci/php:7.4-node-browsers
-      - image: circleci/mysql:8
+  # build:
+  #   docker:
+  #     # Specify the version you desire here
+  #     - image: circleci/php:7.4-node-browsers
+  #     - image: circleci/mysql:8
 
-    working_directory: ~/test
+  #   working_directory: ~/test
 
-      # environmentはジョブに対する環境変数となる
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD: true
+  #     # environmentはジョブに対する環境変数となる
+  #   environment:
+  #     - MYSQL_ALLOW_EMPTY_PASSWORD: true
 
-    steps:
-      - checkout
+  #   steps:
+  #     - checkout
 
-      - run: 
-          name: Make Env file
-          command: cp .env.testing .env
+  #     - run: 
+  #         name: Make Env file
+  #         command: cp .env.testing .env
 
-      # PHP CircleCI 2.0 Configuration File
-      # PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo apt update 
-      - run: sudo docker-php-ext-install zip pdo_mysql
+  #     # PHP CircleCI 2.0 Configuration File
+  #     # PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+  #     - run: sudo apt update 
+  #     - run: sudo docker-php-ext-install zip pdo_mysql
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            # "composer.lock" can be used if it is committed to the repo
-            - v1-dependencies-{{ checksum "composer.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+  #     # Download and cache dependencies
+  #     - restore_cache:
+  #         keys:
+  #           # "composer.lock" can be used if it is committed to the repo
+  #           - v1-dependencies-{{ checksum "composer.json" }}
+  #           # fallback to using the latest cache if no exact match is found
+  #           - v1-dependencies-
 
-      - run: composer install -n --prefer-dist
+  #     - run: composer install -n --prefer-dist
 
-      - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      - run: yarn install
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+  #     - save_cache:
+  #         key: v1-dependencies-{{ checksum "composer.json" }}
+  #         paths:
+  #           - ./vendor
+  #     - restore_cache:
+  #         keys:
+  #           - node-v1-{{ checksum "package.json" }}
+  #           - node-v1-
+  #     - run: yarn install
+  #     - save_cache:
+  #         key: node-v1-{{ checksum "package.json" }}
+  #         paths:
+  #           - node_modules
 
-      # prepare the database
-      - run: php artisan migrate --seed
+  #     # prepare the database
+  #     - run: php artisan migrate --seed
 
-      # # run tests with phpunit or codecept
-      # #- run: ./vendor/bin/phpunit
-      # - run: ./vendor/bin/codecept build
-      # - run: ./vendor/bin/codecept run
+  #     # # run tests with phpunit or codecept
+  #     # #- run: ./vendor/bin/phpunit
+  #     # - run: ./vendor/bin/codecept build
+  #     # - run: ./vendor/bin/codecept run
 
-      - run: php artisan dusk:chrome-driver
+  #     - run: php artisan dusk:chrome-driver
 
-      - run:
-          name: Start Chrome Driver
-          command: ./vendor/laravel/dusk/bin/chromedriver-linux
-          background: true
-      - run:
-          name: Run Laravel Server
-          command: php artisan serve
-          background: true
-      - run:
-          name: Run Laravel Dusk Tests
-          command: php artisan dusk
+  #     - run:
+  #         name: Start Chrome Driver
+  #         command: ./vendor/laravel/dusk/bin/chromedriver-linux
+  #         background: true
+  #     - run:
+  #         name: Run Laravel Server
+  #         command: php artisan serve
+  #         background: true
+  #     - run:
+  #         name: Run Laravel Dusk Tests
+  #         command: php artisan dusk
 
-      # ビルド結果を通知
-      - slack/status
+  #     # ビルド結果を通知
+  #     - slack/status
         
   # EC2にデプロイ
-  deploy:
+  build:
     docker:
-      - image: ubuntu
+      - image: circleci/php:7.4-node-browsers
 
     steps:
-      - run:
-          name: Install curl & ssh
-          command: |
-            apt-get update
-            apt-get install -y curl openssh-server
-
       # - checkout
       # CircleCIに追加したSSH鍵を使用
       - add_ssh_keys
@@ -109,14 +103,14 @@ jobs:
       # デプロイの結果を通知
       - slack/status
 
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+# workflows:
+#   version: 2
+#   build_and_deploy:
+#     jobs:
+#       - build
+#       - deploy:
+#           requires:
+#             - build
           # masterブランチにpushされた場合のみ
           # filters:
           #   branches:

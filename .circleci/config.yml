@@ -7,7 +7,7 @@ orbs:
   slack: circleci/slack@3.4.2
 
 jobs:
-  build:
+  test:
     docker:
       # Specify the version you desire here
       - image: circleci/php:7.4-node-browsers
@@ -78,8 +78,7 @@ jobs:
           command: php artisan dusk
 
       # ビルド結果を通知
-      - slack/status:
-          message: Dusk Test has succeeded for ${CIRCLE_PROJECT_REPONAME}.
+      - slack/status
         
   # EC2にデプロイ
   deploy:
@@ -107,8 +106,7 @@ jobs:
 
       # デプロイの結果を通知
       - run: apk add curl
-      - slack/status:
-          message: Deploy to EC2 has succeeded for ${CIRCLE_PROJECT_REPONAME}.
+      - slack/status
 
 workflows:
   version: 2

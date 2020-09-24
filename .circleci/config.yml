@@ -7,7 +7,7 @@ orbs:
   slack: circleci/slack@3.4.2
 
 jobs:
-  test:
+  build:
     docker:
       # Specify the version you desire here
       - image: circleci/php:7.4-node-browsers

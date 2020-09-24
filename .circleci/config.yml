@@ -78,6 +78,7 @@ jobs:
           command: php artisan dusk
 
       # ビルド結果を通知
+      - run: apk add curl
       - slack/status
         
   # EC2にデプロイ
@@ -86,13 +87,13 @@ jobs:
       - image: alpine:20200917
 
     steps:
-      - checkout
-      # CircleCIに追加したSSH鍵を使用
-      - add_ssh_keys
-
       - run:
           name: Install ssh
           command: apk add openssh
+
+      - checkout
+      # CircleCIに追加したSSH鍵を使用
+      - add_ssh_keys
 
       - run:
           name: Connect EC2
@@ -105,6 +106,7 @@ jobs:
             git pull
 
       # デプロイの結果を通知
+      - run: apk add curl
       - slack/status
 
 workflows:

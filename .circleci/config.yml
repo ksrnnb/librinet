@@ -81,12 +81,11 @@ jobs:
       - slack/status
         
   # EC2にデプロイ
-  build:
+  deploy:
     docker:
       - image: circleci/php:7.4-node-browsers
 
     steps:
-      - checkout
       # CircleCIに追加したSSH鍵を使用
       - add_ssh_keys
 

@@ -94,7 +94,7 @@ jobs:
 
       - run:
           name: Connect EC2
-          command: ssh -o StrictHostKeyChecking=no ${USER_NAME}@${HOST_NAME} 'cd ${EC2_PATH} && pwd && git pull'
+          command: ssh -o StrictHostKeyChecking=no ${USER_NAME}@${HOST_NAME} "cd ${EC2_PATH} && pwd && git pull"
 
       # - run:
       #     name: Synchronize

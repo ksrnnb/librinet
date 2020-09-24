@@ -109,11 +109,11 @@ jobs:
   #     - run: apk add curl
   #     - slack/status
 
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build
+# workflows:
+#   version: 2
+#   build_and_deploy:
+#     jobs:
+#       - build
       # - deploy:
       #     requires:
       #       - build

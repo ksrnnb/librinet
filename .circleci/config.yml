@@ -89,18 +89,18 @@ jobs:
       # - checkout
       # CircleCIに追加したSSH鍵を使用
       - add_ssh_keys:
-          fingerprints:
-            - "98:3c:2d:1b:0b:6b:33:54:05:2a:a2:e6:5b:cb:a7:8c"
+          # fingerprints:
+          #   - "98:3c:2d:1b:0b:6b:33:54:05:2a:a2:e6:5b:cb:a7:8c"
 
       - run:
           name: Connect EC2
-          command: ssh -o StrictHostKeyChecking=no ${USER_NAME}@${HOST_NAME}
+          command: ssh -o StrictHostKeyChecking=no ${USER_NAME}@${HOST_NAME} 'cd ${EC2_PATH} && git pull'
 
-      - run:
-          name: Synchronize
-          command: |
-            cd ${EC2_PATH}
-            git pull
+      # - run:
+      #     name: Synchronize
+      #     command: |
+      #       cd ${EC2_PATH}
+      #       git pull
 
       # デプロイの結果を通知
       - slack/status

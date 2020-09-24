@@ -78,7 +78,7 @@ jobs:
           command: php artisan dusk
 
       # ビルド結果を通知
-      # - slack/status
+      - slack/status
         
   # EC2にデプロイ
   deploy:
@@ -118,6 +118,6 @@ workflows:
           requires:
             - build
           # masterブランチにpushされた場合のみ
-          filters:
-            branches:
-              only: master
+          # filters:
+          #   branches:
+          #     only: master

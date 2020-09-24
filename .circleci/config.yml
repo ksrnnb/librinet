@@ -78,7 +78,7 @@ jobs:
           command: php artisan dusk
 
       # ビルド結果を通知
-      - slack/status
+      # - slack/status
         
   # EC2にデプロイ
   deploy:
@@ -87,8 +87,10 @@ jobs:
 
     steps:
       - run:
-          name: Install ssh
-          command: apk add openssh
+          name: Install curl & ssh
+          command: |
+            apt-get update
+            apt-get install -y curl openssh-server
 
       # - checkout
       # CircleCIに追加したSSH鍵を使用
@@ -105,7 +107,6 @@ jobs:
             git pull
 
       # デプロイの結果を通知
-      - run: apk add curl
       - slack/status
 
 workflows:

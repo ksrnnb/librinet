@@ -67,19 +67,19 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        $image = $request->file('image');
+        // $image = $request->file('image');
 
-        // うまくいかんかった
-        // $options = [
-        //     'visibility' => 'public',
-        //     'mimetype'   => 'image/jpeg',
-        // ];
+        // // うまくいかんかった
+        // // $options = [
+        // //     'visibility' => 'public',
+        // //     'mimetype'   => 'image/jpeg',
+        // // ];
 
 
-        // $path = Storage::disk('s3')->putFile('avatar', $image, $options);
-        $path = Storage::disk('s3')->putFile('avatar', $image, 'public');
+        // // $path = Storage::disk('s3')->putFile('avatar', $image, $options);
+        // $path = Storage::disk('s3')->putFile('avatar', $image, 'public');
 
-        $user->image = Storage::disk('s3')->url($path);
+        // $user->image = Storage::disk('s3')->url($path);
 
 
         if ($user->str_id == $str_id) {

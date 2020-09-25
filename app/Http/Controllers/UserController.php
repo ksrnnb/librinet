@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Book;
 use App\Follower;
@@ -30,10 +31,9 @@ class UserController extends Controller
         $params = array_merge($user_book_data, $follow_data);
 
         return view('user.index', $params);
-        
     }
 
-    public function edit (Request $request, $str_id)
+    public function edit(Request $request, $str_id)
     {
         
         $showing_user = User::where('str_id', $str_id)->get();
@@ -47,31 +47,42 @@ class UserController extends Controller
 
         // guestは削除できない仕様
         if ($user->str_id == $str_id && $str_id != 'guest') {
-    
             if ($user->str_id == $str_id) {
-    
-                
                 return view('user.edit', ['user' => $user]);
-    
             } else {
                 // Error 不正なアクセス
                 abort('400');
-    
             }
 
         // guestが編集ページにやってきた場合
         } else {
             abort('400');
         }
-
     }
 
-    public function update (Request $request, $str_id)
+    public function update(Request $request, $str_id)
     {
+
+        // TODO:: 画像のValidation
+
         $user = Auth::user();
 
-        if ($user->str_id == $str_id) {
+        $image = $request->file('image');
 
+        // うまくいかんかった
+        // $options = [
+        //     'visibility' => 'public',
+        //     'mimetype'   => 'image/jpeg',
+        // ];
+
+
+        // $path = Storage::disk('s3')->putFile('avatar', $image, $options);
+        $path = Storage::disk('s3')->putFile('avatar', $image, 'public');
+
+        $user->image = Storage::disk('s3')->url($path);
+
+
+        if ($user->str_id == $str_id) {
             $new_id = $request->input('str_id');
             $is_new_id = $new_id != $str_id;
 
@@ -85,7 +96,6 @@ class UserController extends Controller
             ];
 
             if ($is_new_id) {
-
                 $rules = array_merge($rules, [
                     'str_id' => 'required|max:16|unique:users',
                 ]);
@@ -95,7 +105,6 @@ class UserController extends Controller
                     'str_id.max'    => 'ユーザーIDが長すぎます。16文字以内で入力してください。',
                     'str_id.unique' => '入力されたユーザーIDは既に存在しています。',
                 ]);
-
             }
 
             $validator = Validator::make(request()->all(), $rules, $messages);
@@ -112,61 +121,58 @@ class UserController extends Controller
 
             $user->save();
 
-            return redirect('/user/show/' . $new_id);;
-
+            return redirect('/user/show/' . $new_id);
+            ;
         } else {
             abort('400');
         }
     }
 
-    public function remove (Request $request, $str_id)
+    public function remove(Request $request, $str_id)
     {
         $user = Auth::user();
 
         // guestは削除できない仕様
         if ($user->str_id == $str_id && $str_id != 'guest') {
-
             $user->delete();
             return redirect('/');
-
         } else {
             abort('400');
         }
     }
 
-    public function follows (Request $request, $id)
+    public function follows(Request $request, $id)
     {
         $user = User::where('str_id', $id)->first();
 
-        $follows = Follower::with('follow_user')->get();
+        $follows = Follower::with('followUser')->get();
         $follows = $follows->where('follower_id', $user->id);
 
-        return view ('follow', [
+        return view('follow', [
             'type'   => 'follow',
             'people' => $follows,
         ]);
     }
 
-    public function followers (Request $request, $id)
+    public function followers(Request $request, $id)
     {
         $user = User::where('str_id', $id)->first();
 
-        $followers = Follower::with('follower_user')->get();
+        $followers = Follower::with('followerUser')->get();
         $followers = $followers->where('follow_id', $user->id);
 
-        return view ('follow', [
+        return view('follow', [
             'type'   => 'follower',
             'people' => $followers,
         ]);
-
     }
 
-    public function search (Request $request)
+    public function search(Request $request)
     {
         return view('user.search');
     }
 
-    public function find (Request $request)
+    public function find(Request $request)
     {
         $user = $request->input('user');
         $users = User::where('str_id', $user)->get();
@@ -179,5 +185,4 @@ class UserController extends Controller
         
         return view('user.search', ['users' => $users]);
     }
-    
 }

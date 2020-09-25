@@ -62,7 +62,6 @@ class UserEditTest extends DuskTestCase
             $browser->press('ユーザー情報を編集する')
                     ->type('name', $ini)
                     ->press('編集する');
-
         });
     }
 
@@ -105,7 +104,6 @@ class UserEditTest extends DuskTestCase
             $browser->press('ユーザー情報を編集する')
                     ->type('str_id', $ini)
                     ->press('編集する');
-
         });
     }
 
@@ -134,7 +132,6 @@ class UserEditTest extends DuskTestCase
                     ->press('編集する')
                     ->assertSee('既に');
         });
-        
     }
 
     public function testDeleteUserAndCannotAccessUserPageAfterDelete()
@@ -149,8 +146,6 @@ class UserEditTest extends DuskTestCase
 
             $browser->visit(self::$user_url)
                     ->assertPathIs('/');
-            
         });
     }
-
 }

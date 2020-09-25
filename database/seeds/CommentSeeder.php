@@ -13,7 +13,7 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        //  2人からコメント        
+        //  2人からコメント
         $post = App\Post::find(1);
         $messages = [
             2 => '私も読みました！',

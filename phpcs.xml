@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ruleset name="PSR12/Laravel">
+    <description>PSR12 compliant rules and settings for Laravel</description>
+
+    <arg name="extensions" value="php" />
+
+    <!-- PSR12を適用 -->
+    <rule ref="PSR12">
+
+        <!-- 除外するルール -->
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
+
+    </rule>
+
+    <!-- 色をつけるオプション -->
+    <arg name="colors" />
+
+    <!-- Option, p: 進捗表示, s: エラー表示時にルールを表示する -->
+    <arg value="ps" />
+
+    <!-- 除外するディレクトリ -->
+    <exclude-pattern>./.circleci</exclude-pattern>
+    <exclude-pattern>./bootstrap/</exclude-pattern>
+    <exclude-pattern>./config/</exclude-pattern>
+    <exclude-pattern>./node_modules/</exclude-pattern>
+    <exclude-pattern>./public/</exclude-pattern>
+    <exclude-pattern>./resources/</exclude-pattern>
+    <exclude-pattern>./storage/</exclude-pattern>
+    <exclude-pattern>./vendor/</exclude-pattern>
+    <exclude-pattern>./server.php</exclude-pattern>
+    <exclude-pattern>./app/Console/Kernel.php</exclude-pattern>
+    <exclude-pattern>./tests/CreatesApplication.php</exclude-pattern>
+</ruleset>

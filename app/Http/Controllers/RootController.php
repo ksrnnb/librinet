@@ -16,7 +16,7 @@ class RootController extends Controller
         }
     }
 
-    public function guest (Request $requset)
+    public function guest(Request $requset)
     {
 
         return redirect('/home');

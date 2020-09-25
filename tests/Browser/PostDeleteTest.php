@@ -36,15 +36,15 @@ class PostDeleteTest extends DuskTestCase
     {
             $this->browse(function (Browser $browser) {
 
-            $comment = \App\Comment::where('user_id', self::$user->id)->first();
-            $selector = '#del-' . $comment->uuid;
+                $comment = \App\Comment::where('user_id', self::$user->id)->first();
+                $selector = '#del-' . $comment->uuid;
 
-            $browser->loginAs(self::$user)
+                $browser->loginAs(self::$user)
                     ->visit('/home')
                     ->press($selector)
                     ->assertMissing($selector);
  
             // TODO: 消した後につくるか、作ってから消す！！
-        });
+            });
     }
 }

@@ -10,10 +10,9 @@ use App\Book;
 use App\Post;
 use App\Comment;
 
-
 class PostController extends Controller
 {
-    public function index (Request $request, $uuid)
+    public function index(Request $request, $uuid)
     {
         $is_not_uuid = ! Str::isUuid($uuid);
 
@@ -53,7 +52,7 @@ class PostController extends Controller
     *    @return redirect to home
     */
 
-    public function comment (Request $request)
+    public function comment(Request $request)
     {
         $form = request()->except('_token');
 
@@ -75,10 +74,9 @@ class PostController extends Controller
         }
 
         return redirect('/home');
-        
     }
 
-    public function add (Request $request, $isbn)
+    public function add(Request $request, $isbn)
     {
         $user = Auth::user();
         $params = Book::returnBookInfoOrRedirect($isbn, $user, 'post');
@@ -90,11 +88,10 @@ class PostController extends Controller
         } else {
             return view('book_post', $params);
         }
-
     }
 
-    public function create (PostRequest $request, $isbn)
-    {        
+    public function create(PostRequest $request, $isbn)
+    {
         $isIsbn = Book::isIsbn($isbn);
 
         if (! $isIsbn) {
@@ -114,18 +111,14 @@ class PostController extends Controller
     public function remove(Request $request, $uuid)
     {
         if (Str::isUuid($uuid)) {
-
             $post = Post::where('uuid', $uuid)->first();
 
             // 削除するポストのユーザーと、認証されているユーザーが一緒かどうか。
             if ($post->user_id == Auth::id()) {
-
                 $post->delete();
-
             } else {
                 abort('400');
             }
-
         } else {
             abort('400');
         }

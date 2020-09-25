@@ -11,15 +11,14 @@ use App\User;
 use App\Genre;
 use Illuminate\Support\Facades\Auth;
 
-
 class BookController extends Controller
 {
-    public function index (Request $request)
+    public function index(Request $request)
     {
         return view('book.index');
     }
 
-    public function search (BookRequest $request)
+    public function search(BookRequest $request)
     {
         // $request->validated();
         // TODO: Validate独自に？
@@ -41,7 +40,7 @@ class BookController extends Controller
         return response()->json(['params' => $params]);
     }
 
-    public function show (Request $request, $isbn)
+    public function show(Request $request, $isbn)
     {
         // みつからない場合はnullが返る
         $book = Book::fetchBook($isbn);
@@ -60,7 +59,7 @@ class BookController extends Controller
     }
 
     // 本棚に追加するボタンを押したときのアクション
-    public function add (Request $request, $isbn)
+    public function add(Request $request, $isbn)
     {
         $user = Auth::user();
         $params = Book::returnBookInfoOrRedirect($isbn, $user, 'book');
@@ -75,7 +74,7 @@ class BookController extends Controller
     }
 
     /*
-    *   @param $request->input(): 
+    *   @param $request->input():
     *       _token    => string,
     *       title     => string,
     *       author    => string,
@@ -88,12 +87,12 @@ class BookController extends Controller
     *
     *   @return view
     */
-    public function create (BookCreateRequest $request, $isbn)
+    public function create(BookCreateRequest $request, $isbn)
     {
         
         $isIsbn = Book::isIsbn($isbn);
         if (! $isIsbn) {
-            // 
+            //
             return redirect('400');
         }
  
@@ -140,7 +139,6 @@ class BookController extends Controller
             $params = User::getArrayForUserPageView($str_id);
 
             return view('book.edit', $params);
-
         } else {
             // 認証されているIDと編集しようとしているIDが違う場合
             abort('400');
@@ -155,13 +153,12 @@ class BookController extends Controller
             $genres = request()->except('_token');
             $table = Genre::whereIn('id', array_keys($genres))->get();
 
-            foreach($table as $genre) {
+            foreach ($table as $genre) {
                 $query = ['name' => $genres[$genre->id]];
                 $genre->fill($query)->save();
             }
             
             return redirect('/user/show/' . $str_id);
-
         } else {
             // 認証されているIDと編集しようとしているIDが違う場合
             abort('400');
@@ -177,7 +174,6 @@ class BookController extends Controller
             $params = User::getArrayForUserPageView($str_id);
 
             return view('book.delete', $params);
-
         } else {
             // 認証されているIDと編集しようとしているIDが違う場合
             abort('400');
@@ -189,18 +185,15 @@ class BookController extends Controller
         $user = Auth::user();
 
         if ($user->str_id == $str_id) {
-            
             // 右辺: [book_id1 => , book_id2 => , ...]
             $books_ids = array_keys(request()->except('_token'));
 
             Book::deleteBooks($books_ids, $user);
 
             return redirect('/user/show/' . $str_id);
-
         } else {
             // 認証されているIDと編集しようとしているIDが違う場合
             abort('400');
         }
     }
-
 }

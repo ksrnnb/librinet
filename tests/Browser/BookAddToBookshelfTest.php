@@ -72,6 +72,4 @@ class BookAddToBookshelfTest extends DuskTestCase
                     ->assertPathIs('/book');        // OK
         });
     }
-
-    
 }

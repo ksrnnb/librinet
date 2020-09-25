@@ -35,21 +35,10 @@
             @else
             <!-- フォロー表示 -->
                 <div id="follower-react"></div>
-                <!-- <form action="/follow" method="POST"> -->
-                 {{--   @csrf   --}}
                     <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
                     <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
                     <input type="hidden" id="is_following" value="{{$is_following}}">
                     <!-- TODO: ここは認証済みの場合のみ -->
-                    {{--
-                    @if ($is_following)
-                        <button class="btn btn-info" name="action" value="unfollow">フォロー中</button>
-                    @else
-                        <button class="btn btn-outline-info" name="action" value="follow">フォローする</button>
-                    @endif
-                    --}}
-
-                <!-- </form> -->
             @endif
         </div>
     </div>

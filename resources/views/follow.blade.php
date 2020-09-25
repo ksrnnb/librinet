@@ -7,11 +7,11 @@
     <div class="row">
         <div class="col-12">
             @if ($type == 'follow')
-                <?php $user = 'follow_user';?>
+                <?php $user = 'followUser';?>
                 <h3>フォロー</h3>
                 
             @elseif ($type == 'follower')
-                <?php $user = 'follower_user';?>
+                <?php $user = 'followerUser';?>
                 <h3>フォロワー</h3>
             @endif
         </div>

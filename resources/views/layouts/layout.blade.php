@@ -34,7 +34,7 @@
 
     @auth
         <?php $user_url = '/user/show/' . Auth::user()->str_id; ?>
-        <a href="{{$user_url}}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+        <a href="{{$user_url}}" role="button">
             {{ Auth::user()->name }}
         </a>
 

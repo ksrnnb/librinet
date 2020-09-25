@@ -57,10 +57,9 @@ class Post extends Model
         if ($book) {
             $book->delete();
         }
-        
     }
 
-    public function createComment ($user_id, $message, $book_id = null)
+    public function createComment($user_id, $message, $book_id = null)
     {
         if ($book_id) {
             $this->comments()
@@ -82,7 +81,7 @@ class Post extends Model
 
     // 本の追加、ジャンルの追加、新しい投稿の作成
     public static function createNewPost($form)
-    {        
+    {
         $book = Book::createNewBook($form);
 
         $book->registerPost($form->get('message'));
@@ -92,15 +91,15 @@ class Post extends Model
     {
         $followers = $user->following;
 
-        $followIds = $followers->map(function($follower) {
-            return $follower->follow_id;           
+        $followIds = $followers->map(function ($follower) {
+            return $follower->follow_id;
         });
 
         //  自身のPostも追加
         $allPostsIds = collect($followIds)->push($user->id);
 
         //  疑問点: Eagerローディング / load多すぎないか？　DB設計がこれでいいのかどうか...
-        $posts = Post::with(['user' => function($query) use ($allPostsIds) {
+        $posts = Post::with(['user' => function ($query) use ($allPostsIds) {
             $query->whereIn('id', $allPostsIds);
         }])->get();
 

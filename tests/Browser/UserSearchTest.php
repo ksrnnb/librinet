@@ -11,9 +11,9 @@ class UserTest extends DuskTestCase
 {
 
     /**
-     * user search funciton 
+     * user search funciton
      *
-     * 
+     *
      */
 
     public function testUserSearchWhenNoInput()

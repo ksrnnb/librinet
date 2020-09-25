@@ -7,7 +7,7 @@ use App\Follower;
 
 class FollowerController extends Controller
 {
-    public function follow (Request $request)
+    public function follow(Request $request)
     {
         $form = $request->except('_token');
 

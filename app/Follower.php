@@ -8,14 +8,12 @@ class Follower extends Model
 {
     protected $guarded = ['id'];
 
-    // NOTICE: 使用時は$follower->follow_userのように()は不要なので注意！
-    public function follow_user()
+    public function followUser()
     {
         return $this->belongsTo('App\User', 'follow_id');
     }
 
-    // NOTICE: 使用時は$follower->follow_userのように()は不要なので注意！
-    public function follower_user()
+    public function followerUser()
     {
         return $this->belongsTo('App\User', 'follower_id');
     }

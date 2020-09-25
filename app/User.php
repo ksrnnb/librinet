@@ -97,7 +97,6 @@ class User extends Authenticatable
             foreach ($follows as $follow) {
                 $follow->delete();
             }
-            
         });
     }
 
@@ -142,7 +141,8 @@ class User extends Authenticatable
     /*
         return boolean (user has book or not)
     */
-    public function hasBook($isbn) {
+    public function hasBook($isbn)
+    {
         $books = Book::where('user_id', $this->id)
                      ->where('isbn', $isbn)
                      ->get();
@@ -153,5 +153,4 @@ class User extends Authenticatable
             return $books->contains('isInBookshelf', true);
         }
     }
-
 }

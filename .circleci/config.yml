@@ -76,6 +76,9 @@ jobs:
       - run:
           name: Run Laravel Dusk Tests
           command: php artisan dusk
+      - run:
+          name: Code Check
+          command: ./vendor/bin/phpcs --standard=phpcs.xml ./
 
       # ビルド結果を通知
       - slack/status

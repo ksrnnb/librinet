@@ -9,7 +9,6 @@ use App\Post;
 use App\Comment;
 use App\Like;
 
-
 class Like extends Model
 {
     protected $guarded = ['id'];
@@ -52,7 +51,6 @@ class Like extends Model
             'user_id' => $user_id,
             $item['key'] => $item['id'],
         ]);
-
     }
 
     public static function unlike($user_id, $post_or_comment)

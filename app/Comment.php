@@ -46,7 +46,5 @@ class Comment extends Model
         foreach ($likes as $likes) {
             $likes->delete();
         }
-
-
     }
 }

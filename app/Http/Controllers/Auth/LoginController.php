@@ -21,7 +21,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
     use AuthenticatesUsers;
 
     /**
@@ -55,7 +54,8 @@ class LoginController extends Controller
     }
 
     //  ゲストの認証
-    public function guest(Request $request) {
+    public function guest(Request $request)
+    {
         $credentials = [
             'str_id' => 'guest',
             'password' => env('GUEST_PASSWORD'),
@@ -66,7 +66,5 @@ class LoginController extends Controller
         } else {
             return redirect('/');
         }
-
-        
     }
 }

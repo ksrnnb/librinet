@@ -29,7 +29,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver()
     {
-        $options = (new ChromeOptions)->addArguments([
+        $options = (new ChromeOptions())->addArguments([
             '--disable-gpu',
             '--headless',
             '--window-size=1920,1080',
@@ -37,14 +37,18 @@ abstract class DuskTestCase extends BaseTestCase
 
         if (env('APP_ENV')  == 'develop') {
             return RemoteWebDriver::create(
-                'http://chrome:4444', DesiredCapabilities::chrome()->setCapability(
-                    ChromeOptions::CAPABILITY, $options
+                'http://chrome:4444',
+                DesiredCapabilities::chrome()->setCapability(
+                    ChromeOptions::CAPABILITY,
+                    $options
                 )
             );
         } else {
             return RemoteWebDriver::create(
-                'http://localhost:9515', DesiredCapabilities::chrome()->setCapability(
-                    ChromeOptions::CAPABILITY, $options
+                'http://localhost:9515',
+                DesiredCapabilities::chrome()->setCapability(
+                    ChromeOptions::CAPABILITY,
+                    $options
                 )
             );
         }

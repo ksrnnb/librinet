@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
         //  Userを5人、BookとPostを5冊ずつ登録。
         factory(App\User::class, 5)
             ->create()
-            ->each(function($user) {
+            ->each(function ($user) {
                 $items = [
                     ['state' => '', 'message' => '勉強になりました'],
                     ['state' => 'Linux', 'message' => 'よかったです！'],
@@ -46,7 +46,5 @@ class UserSeeder extends Seeder
         // GUEST USER
         $params = App\User::returnParamsForGuestUser();
         App\User::create($params);
-
     }
-
 }

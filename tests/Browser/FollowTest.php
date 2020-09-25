@@ -27,7 +27,6 @@ class FollowTest extends DuskTestCase
             // フォロー後、フォロー外した後の2回チェック
             $this->assertCorrectFollowAndFollowerNumber($browser, $guest_id, $target_id);
             $this->assertCorrectFollowAndFollowerNumber($browser, $guest_id, $target_id);
-            
         });
     }
 
@@ -36,7 +35,6 @@ class FollowTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
 
             $this->assertCanSeeFollowsOrFollowers($browser, 'follow');
-
         });
     }
 
@@ -45,7 +43,6 @@ class FollowTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
 
             $this->assertCanSeeFollowsOrFollowers($browser, 'follower');
-
         });
     }
 
@@ -68,7 +65,8 @@ class FollowTest extends DuskTestCase
         $ini_target_follower = $this->getFollowerNumber($browser, $target_id);
 
         $browser->visit('/user/show/' . $target_id)
-                ->press('action');
+                ->press('action')
+                ->pause(500); // DBに書き込まれるまで少し待つ
         
         // ボタン押下後のフォロー数、相手のフォロワー数取得
         $aft_follow = $this->getFollowNumber($browser, $guest_id);
@@ -85,16 +83,16 @@ class FollowTest extends DuskTestCase
     public function assertCanSeeFollowsOrFollowers($browser, $name)
     {
         $user = User::find(1);
-        $table = Follower::with('follow_user')->get();
+        $table = Follower::with('followUser')->get();
         $column = ($name == 'follow') ? 'follower_id' : 'follow_id';
 
         $people = $table->where($column, $user->id);
 
         $browser->visit('/user/show/' . $user->str_id)
-                ->click('#' . $name .'-link');
+                ->click('#' . $name . '-link');
 
         foreach ($people as $person) {
-            $relation = $name . '_user';
+            $relation = $name . 'User';
             $browser->assertSee($person->$relation->name);
         }
     }

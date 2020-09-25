@@ -9,9 +9,9 @@ use Tests\DuskTestCase;
 class CommmentTest extends DuskTestCase
 {
     /**
-     * check comment 
+     * check comment
      *
-     * 
+     *
      */
 
     public function testCommentWithoutBookAndWithoutInputComment()

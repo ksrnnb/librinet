@@ -122,7 +122,6 @@ class BookPostTest extends DuskTestCase
             $browser->visit('/book/post/' . $isbn)
                     ->assertDontSee('ジャンルの選択')
                     ->assertAttribute('#add-book', 'disabled', 'true');
-                  
         });
     }
 }

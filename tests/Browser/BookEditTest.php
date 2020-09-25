@@ -57,7 +57,6 @@ class BookEditTest extends DuskTestCase
             // TODO: あとで投稿と関連づいていない本を消した場合も必要になる。
             $book->isInBookshelf = true;
             $book->save();
-
         });
     }
 }

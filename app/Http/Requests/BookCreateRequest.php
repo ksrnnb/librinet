@@ -25,7 +25,7 @@ class BookCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'new_genre' => ['max:16', new UniqueGenre],
+            'new_genre' => ['max:16', new UniqueGenre()],
             'genre_id'  => 'numeric',
         ];
     }

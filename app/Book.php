@@ -43,7 +43,7 @@ class Book extends Model
     {
         $this->post()->create([
             'message' => $message,
-            'uuid' => Str::uuid(),
+            'uuid'    => Str::uuid(),
             'user_id' => $this->user_id,
         ]);
     }
@@ -66,11 +66,10 @@ class Book extends Model
             $book = $result->summary;
             return $book;
         }
-
     }
 
     /*
-        @param $books: 
+        @param $books:
         booksが属するgenresのgenre_idとnameの配列を返す
         return ['id' => 'name', 'id' => 'name, ...]
     */
@@ -80,18 +79,16 @@ class Book extends Model
         $genres = [];
         
         //  一冊のときでも想定どおりに処理できている。
-        foreach($books as $book) {
+        foreach ($books as $book) {
             $genre = $book->genre;
 
             // genre_idがnullの場合もあるので確認している。
             if (isset($genre)) {
                 if (array_key_exists($genre->id, $genres)) {
-                
                 } else {
                     $genres[$genre->id] = $genre->name;
                 }
             }
-
         }
 
         return $genres;
@@ -103,7 +100,7 @@ class Book extends Model
         $isbn = preg_replace('/-/', '', $isbn);
         
         // 返り値は一致すれば1, 一致しない場合は0, errorの場合はFALSE
-        $isIsbn = (boolean) preg_match('/^9784[0-9]{9}$/', $isbn);
+        $isIsbn = (bool) preg_match('/^9784[0-9]{9}$/', $isbn);
 
         return $isIsbn;
     }
@@ -128,7 +125,6 @@ class Book extends Model
     {
         // 新しく本棚に追加
         if ($form->get('add-book')) {
-    
             $book_data = $form->merge([
                 'isInBookshelf' => true,
             ]);
@@ -141,7 +137,6 @@ class Book extends Model
             } else {
                 // 既存のジャンルの場合は、既にジャンルIDが入っている
             }
-
         } else {
             $book_data = $form->merge([
                 'isInBookshelf' => false,
@@ -160,11 +155,11 @@ class Book extends Model
         // 選択した本のIDだけ取得
         $ids = array_map('\App\Book::selectedIds', $books_ids);
 
-        $books = Book::with(['post' => function($query) use ($user) {
+        $books = Book::with(['post' => function ($query) use ($user) {
             $query->where('user_id', $user->id);
         }])->get();
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $book = $books->where('id', $id)->first();
 
             $RelatesPost = $book->post instanceof Post;
@@ -177,7 +172,6 @@ class Book extends Model
                 // POSTに関連付けがなかったばあいは削除。
                 $book->delete();
             }
-
         }
     }
 
@@ -195,12 +189,12 @@ class Book extends Model
         if ($is_not_isbn) {
             // ISBN以外の値をURLに直接入力しない限り、ここにこない。
             abort('404');
-        } 
+        }
         
         if ($user == null) {
             // トップページへ飛ばす
             return redirect('/');
-        } 
+        }
 
         $books = Book::where('isbn', $isbn)
                      ->where('user_id', $user->id)
@@ -209,33 +203,27 @@ class Book extends Model
         $exists_books_in_db = $books->isNotEmpty();
 
         if ($exists_books_in_db) {
-                    
             $is_in_bookshelf = $books->contains('isInBookshelf', true);
 
             if ($is_in_bookshelf) {
-
                 if ($model == 'book') {
                     // 本棚に本があったら、このページには来れない。
                     abort('400');
-
                 } elseif ($model == 'post') {
                     // 本棚に本がある場合に、その本を投稿する
                     $book = $books->where('isInBookshelf', true)->first();
                 }
-
             } else {
                 // 本棚に本がない場合
                 $book = $books->first();
             }
         // データベースにない場合
         } else {
-            
             $book = Book::fetchBook($isbn);
 
             if ($book != null) {
                 // 本がISBNでみつけられたら
                 $book->isInBookshelf = false;
-
             } else {
                 // 追加ボタンからきているからISBNで必ずみつかるはず
                 abort('400');
@@ -243,6 +231,24 @@ class Book extends Model
         }
         $genres = Book::extractGenres($user->books);
         $params = ['genres' => $genres, 'book' => $book];
+
+        return $params;
+    }
+
+    public static function getBookParams($isbn, $genre_id = 1, $has_book = true)
+    {
+        $book = Book::fetchBook($isbn);
+
+        $params = [
+            'isbn'          => $isbn,
+            'title'         => $book->title,
+            'author'        => $book->author,
+            'cover'         => $book->cover,
+            'publisher'     => $book->publisher,
+            'pubdate'       => $book->pubdate,
+            'genre_id'      => $genre_id,         //     1: IT (GenreSeederで作成する)
+            'isInBookshelf' => $has_book,    //  true: 自分の本棚
+        ];
 
         return $params;
     }

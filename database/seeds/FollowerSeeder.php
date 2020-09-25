@@ -24,6 +24,5 @@ class FollowerSeeder extends Seeder
                 }
             }
         }
-        
     }
 }

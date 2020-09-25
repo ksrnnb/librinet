@@ -7,7 +7,6 @@
 <?php $auth_id = Auth::id(); ?>
 
 <div class="container">
-    <h5>{{$user->image}}</h5>
     <form class="d-block" action="{{$url}}" method="POST" enctype="multipart/form-data">
         <div class="row">
 
@@ -15,12 +14,18 @@
 
                 <!-- TODO: ユーザーの画像も編集できるようにしたい -->
                 @if($user->image)
-                    <img class="img-fluid" src="{{$user->image}}" alt="user-image">
+                    <img class="img-fluid" id="user-image" src="{{$user->image}}" alt="user-image">
                 @else
-                    <img class="img-fluid" src="{{asset('img/icon.svg')}}" alt="user-image">
+                    <img class="img-fluid" id="user-image" src="{{asset('img/icon.svg')}}" alt="user-image">
                 @endif
 
-                <input type="file" name="image" id="">
+                <label for="file">
+                    <input type="file" accept="image/jpeg,image/png" name="file" id="file">
+                </label>
+                (jpeg or png)
+                @error('file')
+                    <p class="text-danger">{{$message}}</p>
+                @enderror
 
             </div>
             <div class="col-10">
@@ -83,4 +88,5 @@
     
 </div>
 
+<script src="{{asset('js/user_image.js')}}"></script>
 @endsection

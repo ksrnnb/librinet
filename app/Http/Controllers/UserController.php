@@ -62,36 +62,19 @@ class UserController extends Controller
 
     public function update(Request $request, $str_id)
     {
-
-        // TODO:: 画像のValidation
-
         $user = Auth::user();
-
-        // $image = $request->file('image');
-
-        // // うまくいかんかった
-        // // $options = [
-        // //     'visibility' => 'public',
-        // //     'mimetype'   => 'image/jpeg',
-        // // ];
-
-
-        // // $path = Storage::disk('s3')->putFile('avatar', $image, $options);
-        // $path = Storage::disk('s3')->putFile('avatar', $image, 'public');
-
-        // $user->image = Storage::disk('s3')->url($path);
-
+        $image = $request->file('file');
 
         if ($user->str_id == $str_id) {
             $new_id = $request->input('str_id');
             $is_new_id = $new_id != $str_id;
 
-            // start of validation
+            // ------ start of validation --------
             $rules = [
                 'name' => 'required|max:32',
             ];
             $messages = [
-                'required' => 'ユーザー名が入力されていません',
+                'required' => 'ユーザー名が入力されていません。',
                 'name.max' => 'ユーザー名が長すぎます。32文字以内で入力してください。',
             ];
 
@@ -101,9 +84,19 @@ class UserController extends Controller
                 ]);
     
                 $messages = array_merge($messages, [
-                    'required'      => 'ユーザーIDが入力されていません',
+                    'required'      => 'ユーザーIDが入力されていません。',
                     'str_id.max'    => 'ユーザーIDが長すぎます。16文字以内で入力してください。',
                     'str_id.unique' => '入力されたユーザーIDは既に存在しています。',
+                ]);
+            }
+
+            if ($image) {
+                $rules = array_merge($rules, [
+                    'file' => 'mimetypes:image/jpeg,image/png',
+                ]);
+    
+                $messages = array_merge($messages, [
+                    'file.mimetypes' => '指定した拡張子のファイルが選択されていません。',
                 ]);
             }
 
@@ -114,7 +107,13 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
             }
-            // end of validation
+            // -------- end of validation ----------
+
+            // 画像が送信されていたらS3に登録、ユーザーにも代入
+            if ($image) {
+                $path = Storage::disk('s3')->putFile('avatar', $image, 'public');
+                $user->image = Storage::disk('s3')->url($path);
+            }
 
             $user->name = $request->input('name');
             $user->str_id = $new_id;

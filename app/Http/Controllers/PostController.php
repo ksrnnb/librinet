@@ -125,9 +125,4 @@ class PostController extends Controller
 
         return back();
     }
-
-    public function test_phpcs()
-    {
-        
-    }
 }

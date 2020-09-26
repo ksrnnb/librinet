@@ -40,8 +40,7 @@ class BookAddToBookshelfTest extends DuskTestCase
             $this->deleteIfBookExist($isbns, $user->id);
 
             $browser->loginAs($user)
-                    ->visit('/book/show/' . $isbns[0])
-                    ->press('本棚に追加する')
+                    ->visit('/book/add/' . $isbns[0])
                     ->press('本棚に追加する')
                     ->assertPathIsNot('/book');     // NG ジャンルの未入力
         });
@@ -52,8 +51,7 @@ class BookAddToBookshelfTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $isbn = '9784839955557';                // デザイン
 
-            $browser->visit('/book/show/' . $isbn)
-                    ->press('本棚に追加する')
+            $browser->visit('/book/add/' . $isbn)
                     ->type('new_genre', 'GENRE1')   // ジャンルの入力
                     ->press('本棚に追加する')
                     ->assertPathIs('/book');        // OK
@@ -65,8 +63,7 @@ class BookAddToBookshelfTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $isbn = '9784297100339';               // Docker
 
-            $browser->visit('/book/show/' . $isbn)
-                    ->press('本棚に追加する')
+            $browser->visit('/book/add/' . $isbn)
                     ->check('#conventional')
                     ->press('本棚に追加する')
                     ->assertPathIs('/book');        // OK

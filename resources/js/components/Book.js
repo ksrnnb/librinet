@@ -4,38 +4,107 @@ import ReactDOM from 'react-dom';
 const axios = require('axios');
 
 
-function Message() {
-    return <p>(* ハイフンは除かなくても検索可能)</p>;
+function SubColumn() {
+
+    const strId = document.getElementById('user-id').value;
+    const userUrl = '/user/show/' + strId;
+
+    return (
+                <div className="sub-column border-right">
+                    <a href="/home" className="no-link">
+                        <h4 className="no-link">ホーム</h4>
+                    </a>
+                    <a href="/book" className="no-link">
+                        <h4 className="mt-4">本を検索する</h4>
+                    </a>
+                    <a href="/user/search" className="no-link">
+                        <h4 className="mt-4">ユーザーを検索する</h4>
+                    </a>
+                    <a href={userUrl} className="no-link">
+                        <h4 className="mt-4">プロフィール</h4>
+                    </a>
+                    <a href="/logout" className="no-link">
+                        <h4 className="mt-4">ログアウト</h4>
+                    </a>
+                </div>
+    );
 }
 
-// 例を表示。もうすこしあったほうがいい？
+function Subtitle() {
+    return <h2>本の検索</h2>;
+}
+
+function InputPrompt() {
+    return  (
+            <>
+                <h4 className="mt-3 mb-0">13桁のISBNを入力してください</h4>
+                <p>（9784... ハイフン有りでもOK）</p>
+            </>
+    );
+}
+
+function ShowExamples() {
+    const exampleBooks = new Map([
+        [9784798060996, 'PHPフレームワーク Laravel入門 第2版'],
+        [9784297100339, 'Docker/Kubernetes実践コンテナ開発入門'],
+        [9784839955557, 'ノンデザイナーズ・デザインブック'],
+    ]);
+
+    const tableRows = [];
+    exampleBooks.forEach((title, isbn) => {
+        tableRows.push(
+                <tr key={isbn}>
+                    <td>{isbn}</td>
+                    <td>{title}</td>
+                </tr>
+        );
+    });
+
+    return tableRows;
+}
+
 function Example() {
     return(
-        <>
-            <p>例</p>
-            <p>9784297100339 Docker/Kubernetes実践コンテナ開発入門</p>
-            <p>9784839955557 ノンデザイナーズ・デザインブック</p>
-        </>
+        <div>
+            <p className="pl-3 mt-3">例</p>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ISBN</th><th scope="col">Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ShowExamples />
+                </tbody>
+            </table>
+        </div>
     );
 }
 
 function UserInput(props) {    
-    return <input type="text" id="isbn" name="isbn" onChange={props.onChange} required />;
+    // 微妙に上下にpadding/marginがあるので省く
+    return <input className="mr-3 py-0" type="text" id="isbn" name="isbn" onChange={props.onChange} required />;
 }
 
 function Button(props) {
-    return <button className="btn btn-outline-success" onClick={props.onClick} id="search">検索</button>;
+    return <input type="button" className="btn btn-outline-success" onClick={props.onClick} id="search" value="検索" />;
 }
 
 class Book extends React.Component {
 
     constructor(props) {
         super(props);
+
+        // windowサイズが800px以上であればカラムを表示
+        this.maxWidth = 800;
+        const isVisible = window.innerWidth > this.maxWidth ? true : false;
+        
         this.state = {
             input: null,
             book: null,
             errorMessage: null,
             isNotInBookshelf: null,
+            isVisible: isVisible,
         }
         
         this.bookImage = this.bookImage.bind(this);
@@ -45,6 +114,22 @@ class Book extends React.Component {
         this.setBook = this.setBook.bind(this);
         this.setError = this.setError.bind(this);
         this.validateInputAndReturnIsbn = this.validateInputAndReturnIsbn.bind(this);
+
+        this.windowSizeChange.call(this);
+    }
+
+    windowSizeChange() {
+        window.addEventListener('resize', () => {
+            let isVisible = this.state.isVisible;
+            const changedLargeToSmall = isVisible && window.innerWidth < this.maxWidth;
+            const changedSmallToLarge = (! isVisible) && window.innerWidth > this.maxWidth;
+            
+            if (changedLargeToSmall || changedSmallToLarge) {
+                this.setState({
+                    isVisible: ! isVisible,
+                });
+            }
+        });
     }
 
     bookImage() {
@@ -82,12 +167,12 @@ class Book extends React.Component {
 
         return (
             <div className="col-9">
-                <p>タイトル： {book.title}</p>
-                <p>著者：{book.author}</p>
-                <p>出版社：{book.publisher}</p>
-                <p>出版年：{pub_year}</p>
+                <p className="one-row">タイトル： {book.title}</p>
+                <p className="one-row mt-3">著者：{book.author}</p>
+                <p className="one-row mt-3">出版社：{book.publisher}</p>
+                <p className="one-row mt-3">出版年：{pub_year}</p>
                 <a href={'/book/post/' + book.isbn}>
-                    <button type="button" className="btn btn-outline-success">本の投稿をする</button>
+                    <button type="button" className="btn btn-outline-success mr-3">本の投稿をする</button>
                 </a>
                 {addButton}
             </div>
@@ -123,7 +208,7 @@ class Book extends React.Component {
         let errorMessage;
         
         if (error == 'InputError') {
-            errorMessage = '正しいISBNが入力されていません';
+            errorMessage = 'ISBNが正しく入力されていません';
             
         } else if (error == 'NotFound') {
             errorMessage = '本が見つかりませんでした';
@@ -191,16 +276,44 @@ class Book extends React.Component {
             errorMessage = <p className="error text-danger">{error}</p>
         }
 
-        return (
-            <div>
-                {errorMessage}
-                <UserInput onChange={this.onChangeInput}/>
-                <Button onClick={this.sendPost}/>
-                <Message />
-                <Example />
-                {bookElement}
-            </div>
-        );
+        if (this.state.isVisible) {
+            
+            return (
+                <div>
+                    <div>
+                        <SubColumn />
+                    </div>
+                    {/* SubColumnと同じ幅のmargin */}
+                    <div className="ml-300">
+                        <Subtitle />
+                        <label htmlFor="isbn">
+                            <InputPrompt />
+                            {errorMessage}
+                            <UserInput onChange={this.onChangeInput}/>
+                            <Button onClick={this.sendPost}/>
+                        </label>
+                        <Example />
+                        {bookElement}
+                    </div>
+                </div>
+            );
+        } else {
+
+            return (
+                <div>
+                    <Subtitle />
+                    <label htmlFor="isbn">
+                        <InputPrompt />
+                        {errorMessage}
+                        <UserInput onChange={this.onChangeInput}/>
+                        <Button onClick={this.sendPost}/>
+                    </label>
+                    <Example />
+                    {bookElement}
+                </div>
+            );
+        }
+
     }
 }
 

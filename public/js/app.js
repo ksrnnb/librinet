@@ -65889,17 +65889,76 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
-function Message() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "(* \u30CF\u30A4\u30D5\u30F3\u306F\u9664\u304B\u306A\u304F\u3066\u3082\u691C\u7D22\u53EF\u80FD)");
-} // 例を表示。もうすこしあったほうがいい？
+function SubColumn() {
+  var strId = document.getElementById('user-id').value;
+  var userUrl = '/user/show/' + strId;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "sub-column border-right"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: "/home",
+    className: "no-link"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "no-link"
+  }, "\u30DB\u30FC\u30E0")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: "/book",
+    className: "no-link"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-4"
+  }, "\u672C\u3092\u691C\u7D22\u3059\u308B")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: "/user/search",
+    className: "no-link"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-4"
+  }, "\u30E6\u30FC\u30B6\u30FC\u3092\u691C\u7D22\u3059\u308B")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: userUrl,
+    className: "no-link"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-4"
+  }, "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: "/logout",
+    className: "no-link"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-4"
+  }, "\u30ED\u30B0\u30A2\u30A6\u30C8")));
+}
 
+function Subtitle() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "\u672C\u306E\u691C\u7D22");
+}
+
+function InputPrompt() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-3 mb-0"
+  }, "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\uFF089784... \u30CF\u30A4\u30D5\u30F3\u6709\u308A\u3067\u3082OK\uFF09"));
+}
+
+function ShowExamples() {
+  var exampleBooks = new Map([[9784798060996, 'PHPフレームワーク Laravel入門 第2版'], [9784297100339, 'Docker/Kubernetes実践コンテナ開発入門'], [9784839955557, 'ノンデザイナーズ・デザインブック']]);
+  var tableRows = [];
+  exampleBooks.forEach(function (title, isbn) {
+    tableRows.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      key: isbn
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, isbn), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, title)));
+  });
+  return tableRows;
+}
 
 function Example() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "9784297100339 Docker/Kubernetes\u5B9F\u8DF5\u30B3\u30F3\u30C6\u30CA\u958B\u767A\u5165\u9580"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "9784839955557 \u30CE\u30F3\u30C7\u30B6\u30A4\u30CA\u30FC\u30BA\u30FB\u30C7\u30B6\u30A4\u30F3\u30D6\u30C3\u30AF"));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "pl-3 mt-3"
+  }, "\u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+    className: "table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    scope: "col"
+  }, "ISBN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    scope: "col"
+  }, "Title"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ShowExamples, null))));
 }
 
 function UserInput(props) {
+  // 微妙に上下にpadding/marginがあるので省く
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "mr-3 py-0",
     type: "text",
     id: "isbn",
     name: "isbn",
@@ -65909,11 +65968,13 @@ function UserInput(props) {
 }
 
 function Button(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "button",
     className: "btn btn-outline-success",
     onClick: props.onClick,
-    id: "search"
-  }, "\u691C\u7D22");
+    id: "search",
+    value: "\u691C\u7D22"
+  });
 }
 
 var Book = /*#__PURE__*/function (_React$Component) {
@@ -65926,12 +65987,16 @@ var Book = /*#__PURE__*/function (_React$Component) {
 
     _classCallCheck(this, Book);
 
-    _this = _super.call(this, props);
+    _this = _super.call(this, props); // windowサイズが800px以上であればカラムを表示
+
+    _this.maxWidth = 800;
+    var isVisible = window.innerWidth > _this.maxWidth ? true : false;
     _this.state = {
       input: null,
       book: null,
       errorMessage: null,
-      isNotInBookshelf: null
+      isNotInBookshelf: null,
+      isVisible: isVisible
     };
     _this.bookImage = _this.bookImage.bind(_assertThisInitialized(_this));
     _this.bookInfo = _this.bookInfo.bind(_assertThisInitialized(_this));
@@ -65940,10 +66005,30 @@ var Book = /*#__PURE__*/function (_React$Component) {
     _this.setBook = _this.setBook.bind(_assertThisInitialized(_this));
     _this.setError = _this.setError.bind(_assertThisInitialized(_this));
     _this.validateInputAndReturnIsbn = _this.validateInputAndReturnIsbn.bind(_assertThisInitialized(_this));
+
+    _this.windowSizeChange.call(_assertThisInitialized(_this));
+
     return _this;
   }
 
   _createClass(Book, [{
+    key: "windowSizeChange",
+    value: function windowSizeChange() {
+      var _this2 = this;
+
+      window.addEventListener('resize', function () {
+        var isVisible = _this2.state.isVisible;
+        var changedLargeToSmall = isVisible && window.innerWidth < _this2.maxWidth;
+        var changedSmallToLarge = !isVisible && window.innerWidth > _this2.maxWidth;
+
+        if (changedLargeToSmall || changedSmallToLarge) {
+          _this2.setState({
+            isVisible: !isVisible
+          });
+        }
+      });
+    }
+  }, {
     key: "bookImage",
     value: function bookImage() {
       var book = this.state.book;
@@ -65988,11 +66073,19 @@ var Book = /*#__PURE__*/function (_React$Component) {
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-9"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30BF\u30A4\u30C8\u30EB\uFF1A ", book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u8457\u8005\uFF1A", book.author), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u51FA\u7248\u793E\uFF1A", book.publisher), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u51FA\u7248\u5E74\uFF1A", pub_year), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "one-row"
+      }, "\u30BF\u30A4\u30C8\u30EB\uFF1A ", book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "one-row mt-3"
+      }, "\u8457\u8005\uFF1A", book.author), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "one-row mt-3"
+      }, "\u51FA\u7248\u793E\uFF1A", book.publisher), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "one-row mt-3"
+      }, "\u51FA\u7248\u5E74\uFF1A", pub_year), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: '/book/post/' + book.isbn
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "btn btn-outline-success"
+        className: "btn btn-outline-success mr-3"
       }, "\u672C\u306E\u6295\u7A3F\u3092\u3059\u308B")), addButton);
     }
   }, {
@@ -66026,7 +66119,7 @@ var Book = /*#__PURE__*/function (_React$Component) {
       var errorMessage;
 
       if (error == 'InputError') {
-        errorMessage = '正しいISBNが入力されていません';
+        errorMessage = 'ISBNが正しく入力されていません';
       } else if (error == 'NotFound') {
         errorMessage = '本が見つかりませんでした';
       } else {
@@ -66040,7 +66133,7 @@ var Book = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "sendPost",
     value: function sendPost() {
-      var _this2 = this;
+      var _this3 = this;
 
       var input = this.state.input;
       var isbn = this.validateInputAndReturnIsbn(input);
@@ -66049,15 +66142,15 @@ var Book = /*#__PURE__*/function (_React$Component) {
         axios.post('/book', {
           isbn: input
         }).then(function (response) {
-          _this2.setBook(response.data.params);
+          _this3.setBook(response.data.params);
         })["catch"](function (error) {
           // 本が見つからない場合は404に設定した (BookController)
           if (error.response.status = 404) {
-            _this2.setError('NotFound');
+            _this3.setError('NotFound');
           } else {
             // サーバー側のvalidationに引っ掛かった場合など。
             // JavaScript側のvalidationで十分だと思うけど一応。
-            _this2.setError('UnknownError');
+            _this3.setError('UnknownError');
           }
         });
       } else {
@@ -66098,11 +66191,25 @@ var Book = /*#__PURE__*/function (_React$Component) {
         }, error);
       }
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, errorMessage, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserInput, {
-        onChange: this.onChangeInput
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
-        onClick: this.sendPost
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Message, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Example, null), bookElement);
+      if (this.state.isVisible) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SubColumn, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "ml-300"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Subtitle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+          htmlFor: "isbn"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(InputPrompt, null), errorMessage, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserInput, {
+          onChange: this.onChangeInput
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+          onClick: this.sendPost
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Example, null), bookElement));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Subtitle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+          htmlFor: "isbn"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(InputPrompt, null), errorMessage, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserInput, {
+          onChange: this.onChangeInput
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+          onClick: this.sendPost
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Example, null), bookElement);
+      }
     }
   }]);
 

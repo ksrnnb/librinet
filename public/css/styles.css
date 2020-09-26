@@ -2,6 +2,7 @@ body {
   font-family: 'M PLUS 1p', sans-serif;
   font-size: 1.1rem;
   background-color: white;
+  padding-top: 100px;
 }
 
 .container {
@@ -22,7 +23,7 @@ a:hover {
   text-decoration: none;
 }
 
-a.nav-link {
+.nav-item .nav-link {
   color: white;
 }
 

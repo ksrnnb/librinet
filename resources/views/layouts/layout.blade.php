@@ -10,7 +10,6 @@
 </head>
 <body>
     <header>
-
         <nav class="navbar fixed-top bg-success">
         <a class="navbar-brand" href="/home">{{ config('app.name') }}</a>
 
@@ -21,40 +20,28 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">ホーム</a>
+                <a class="nav-link" href="/home">ホーム</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">本を検索する</a>
+                <a class="nav-link" href="/book">本を検索する</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">ユーザーを検索する</a>
+                <a class="nav-link" href="/user/search">ユーザーを検索する</a>
+            </li>
+            @auth
+            <li class="nav-item">
+                <a class="nav-link" href="{{'/user/show/' . Auth::user()->str_id}}">プロフィール</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">プロフィール</a>
+                <a class="nav-link" href="/logout">ログアウト</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">ログアウト</a>
-            </li>
+            @endauth
             
             </ul>
-
-
-        <!-- <a class="dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/home">ホーム</a>
-            <a class="dropdown-item" href="/book">本を検索する</a>
-            <a class="dropdown-item" href="/user/search">ユーザーを検索する</a>
-        </div> -->
-    
         </nav>
-
     </header>
 
-    <main class="pt-5">
+    <main>
         @yield('content')
     </main>
     </body>

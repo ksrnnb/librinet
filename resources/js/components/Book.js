@@ -279,10 +279,11 @@ class Book extends React.Component {
         if (this.state.isVisible) {
             
             return (
-                <div className="row mt-5">
-                    <div className="">
+                <div>
+                    <div>
                         <SubColumn />
                     </div>
+                    {/* SubColumnと同じ幅のmargin */}
                     <div className="ml-300">
                         <Subtitle />
                         <label htmlFor="isbn">
@@ -299,7 +300,7 @@ class Book extends React.Component {
         } else {
 
             return (
-                <div className="mt-5">
+                <div>
                     <Subtitle />
                     <label htmlFor="isbn">
                         <InputPrompt />

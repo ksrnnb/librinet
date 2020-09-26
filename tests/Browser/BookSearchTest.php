@@ -26,7 +26,7 @@ class BookSearchTest extends DuskTestCase
             $browser->visit('/book')
                     ->type('#isbn', 'hogehoge')
                     ->press('検索')
-                    ->assertSee('正しいISBN');
+                    ->assertSee('いません');
         });
     }
 

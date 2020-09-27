@@ -1,11 +1,29 @@
-@extends('layouts.layout')
 
-@section('content')
-<div class="container">
-    <input type="hidden" id="user-id" value="{{Auth::user()->str_id}}">
-    <div id="book-react">
-            <!-- 検索フォーム -->
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <title>{{ config('app.name') }}</title>
+</head>
+<body>
+    <main>
+        <div class="container">
+            <input type="hidden" id="app-name" value="{{ config('app.name') }}">
+            @auth
+                <input type="hidden" id="user-str-id" value="{{ Auth::user()->str_id }}">
+            @endauth
+            <div id="book-react">
+                <!-- React -->
+            </div>
+        </div>
+    </main>
+</body>
+<script src="{{asset('js/app.js')}}"></script>
+</html>
 
-@endsection
+
+

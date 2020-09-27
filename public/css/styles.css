@@ -14,12 +14,16 @@ body {
   color: white;
 }
 
+.navbar-brand:hover {
+  color: white;
+}
+
 a {
   color: black;
-  text-decoration: none;
 }
 
 a:hover {
+  color: black;
   text-decoration: none;
 }
 
@@ -43,12 +47,6 @@ a:hover {
 
 input {
   font-size: 1.2rem;
-}
-
-.dropdown-menu {
-  margin-right: 0;
-  margin-left: auto;
-  float: right;
 }
 
 .one-row {

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Header from './Header';
 
 const axios = require('axios');
 
 
-function SubColumn() {
+function SubColumn(props) {
 
-    const strId = document.getElementById('user-id').value;
-    const userUrl = '/user/show/' + strId;
+    const userUrl = props.userUrl;
 
     return (
                 <div className="sub-column border-right">
@@ -98,6 +98,10 @@ class Book extends React.Component {
         // windowサイズが800px以上であればカラムを表示
         this.maxWidth = 800;
         const isVisible = window.innerWidth > this.maxWidth ? true : false;
+
+        this.appName = document.getElementById('app-name').value;
+        const strIdElement = document.getElementById('user-str-id');
+        this.strId = strIdElement ? strIdElement.value : null;
         
         this.state = {
             input: null,
@@ -276,12 +280,16 @@ class Book extends React.Component {
             errorMessage = <p className="error text-danger">{error}</p>
         }
 
+        const appName = this.appName;
+        const userUrl = this.strId ? '/user/show' + this.strId : null;
+
         if (this.state.isVisible) {
-            
+            // サブカラム有り
             return (
                 <div>
+                    <Header app={appName} userUrl={userUrl} hasHamburger={false} />
                     <div>
-                        <SubColumn />
+                        <SubColumn userUrl="/user/show/guest" />
                     </div>
                     {/* SubColumnと同じ幅のmargin */}
                     <div className="ml-300">
@@ -301,6 +309,7 @@ class Book extends React.Component {
 
             return (
                 <div>
+                    <Header app={appName} userUrl={userUrl} hasHamburger={true} />
                     <Subtitle />
                     <label htmlFor="isbn">
                         <InputPrompt />

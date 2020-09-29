@@ -22,6 +22,7 @@ class BookController extends Controller
     {
         // $request->validated();
         // TODO: Validate独自に？
+
         $isbn = $request->input('isbn');
         $book = Book::fetchBook($isbn);
 

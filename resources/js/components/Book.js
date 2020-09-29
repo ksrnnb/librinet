@@ -1,34 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './Header';
 
-const axios = require('axios');
-
-
-function SubColumn(props) {
-
-    const userUrl = props.userUrl;
-
-    return (
-                <div className="sub-column border-right">
-                    <a href="/home" className="no-link">
-                        <h4 className="no-link">ホーム</h4>
-                    </a>
-                    <a href="/book" className="no-link">
-                        <h4 className="mt-4">本を検索する</h4>
-                    </a>
-                    <a href="/user/search" className="no-link">
-                        <h4 className="mt-4">ユーザーを検索する</h4>
-                    </a>
-                    <a href={userUrl} className="no-link">
-                        <h4 className="mt-4">プロフィール</h4>
-                    </a>
-                    <a href="/logout" className="no-link">
-                        <h4 className="mt-4">ログアウト</h4>
-                    </a>
-                </div>
-    );
-}
+const axios = window.axios;
 
 function Subtitle() {
     return <h2>本の検索</h2>;
@@ -90,25 +63,16 @@ function Button(props) {
     return <input type="button" className="btn btn-outline-success" onClick={props.onClick} id="search" value="検索" />;
 }
 
-class Book extends React.Component {
+export default class Book extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        // windowサイズが800px以上であればカラムを表示
-        this.maxWidth = 800;
-        const isVisible = window.innerWidth > this.maxWidth ? true : false;
-
-        this.appName = document.getElementById('app-name').value;
-        const strIdElement = document.getElementById('user-str-id');
-        this.strId = strIdElement ? strIdElement.value : null;
+    constructor() {
+        super();
         
         this.state = {
             input: null,
             book: null,
             errorMessage: null,
             isNotInBookshelf: null,
-            isVisible: isVisible,
         }
         
         this.bookImage = this.bookImage.bind(this);
@@ -119,21 +83,6 @@ class Book extends React.Component {
         this.setError = this.setError.bind(this);
         this.validateInputAndReturnIsbn = this.validateInputAndReturnIsbn.bind(this);
 
-        this.windowSizeChange.call(this);
-    }
-
-    windowSizeChange() {
-        window.addEventListener('resize', () => {
-            let isVisible = this.state.isVisible;
-            const changedLargeToSmall = isVisible && window.innerWidth < this.maxWidth;
-            const changedSmallToLarge = (! isVisible) && window.innerWidth > this.maxWidth;
-            
-            if (changedLargeToSmall || changedSmallToLarge) {
-                this.setState({
-                    isVisible: ! isVisible,
-                });
-            }
-        });
     }
 
     bookImage() {
@@ -231,7 +180,7 @@ class Book extends React.Component {
         const isbn = this.validateInputAndReturnIsbn(input);
         
         if (isbn) {
-            axios.post('/book', {
+            axios.post('/api/book', {
                 isbn: input,
             })
             .then(response => {
@@ -239,7 +188,7 @@ class Book extends React.Component {
             })
             .catch(error => {
                 // 本が見つからない場合は404に設定した (BookController)
-                if (error.response.status = 404) {
+                if (error.response.status == 404) {
                     this.setError('NotFound');
                 } else {
                     // サーバー側のvalidationに引っ掛かった場合など。
@@ -248,7 +197,7 @@ class Book extends React.Component {
                 }
             });
         } else {
-            this.setError('InputError')
+            this.setError('InputError');
         }
     }
 
@@ -280,52 +229,18 @@ class Book extends React.Component {
             errorMessage = <p className="error text-danger">{error}</p>
         }
 
-        const appName = this.appName;
-        const userUrl = this.strId ? '/user/show' + this.strId : null;
-
-        if (this.state.isVisible) {
-            // サブカラム有り
-            return (
-                <div>
-                    <Header app={appName} userUrl={userUrl} hasHamburger={false} />
-                    <div>
-                        <SubColumn userUrl="/user/show/guest" />
-                    </div>
-                    {/* SubColumnと同じ幅のmargin */}
-                    <div className="ml-300">
-                        <Subtitle />
-                        <label htmlFor="isbn">
-                            <InputPrompt />
-                            {errorMessage}
-                            <UserInput onChange={this.onChangeInput}/>
-                            <Button onClick={this.sendPost}/>
-                        </label>
-                        <Example />
-                        {bookElement}
-                    </div>
-                </div>
-            );
-        } else {
-
-            return (
-                <div>
-                    <Header app={appName} userUrl={userUrl} hasHamburger={true} />
-                    <Subtitle />
-                    <label htmlFor="isbn">
-                        <InputPrompt />
-                        {errorMessage}
-                        <UserInput onChange={this.onChangeInput}/>
-                        <Button onClick={this.sendPost}/>
-                    </label>
-                    <Example />
-                    {bookElement}
-                </div>
-            );
-        }
-
+        return (
+            <div>
+                <Subtitle />
+                <label htmlFor="isbn">
+                    <InputPrompt />
+                    {errorMessage}
+                    <UserInput onChange={this.onChangeInput}/>
+                    <Button onClick={this.sendPost}/>
+                </label>
+                <Example />
+                {bookElement}
+            </div>
+        );
     }
-}
-
-if (document.getElementById('book-react')) {
-    ReactDOM.render(<Book />, document.getElementById('book-react'));
 }

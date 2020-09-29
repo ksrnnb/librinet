@@ -10,17 +10,9 @@
     <title>{{ config('app.name') }}</title>
 </head>
 <body>
-    <main>
-        <div class="container">
-            <input type="hidden" id="app-name" value="{{ config('app.name') }}">
-            @auth
-                <input type="hidden" id="user-str-id" value="{{ Auth::user()->str_id }}">
-            @endauth
-            <div id="book-react">
-                <!-- React -->
-            </div>
-        </div>
-    </main>
+    <div id="app">
+        <!-- React -->
+    </div>
 </body>
 <script src="{{asset('js/app.js')}}"></script>
 </html>

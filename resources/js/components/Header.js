@@ -1,12 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+const axios = window.axios;
 
-const axios = require('axios');
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
+  
 
-export default Header;
+function closeNav() {
+    const button = document.getElementsByClassName('navbar-toggler')[0];
+    const navbarDiv = document.getElementById('navbarSupportedContent');
+
+    button.classList.add('collapsed');
+    button.setAttribute('aria-expanded', 'false');
+    navbarDiv.classList.remove('show');
+}
+
 function Header(props) {
 
+    let profileAndLogoutLink = null;
+    if (props.userUrl) {
+        profileAndLogoutLink = (
+            <>
+            <li className="nav-item">
+                <Link className="nav-link" to={props.userUrl} onClick={closeNav}>プロフィール</Link>
+            </li>
+            <li className="nav-item">
+                <Link className="nav-link" to="/logout" onClick={closeNav}>ログアウト</Link>
+            </li>
+            </>
+        );
+    }
+
     let hamburger = null;
+    
     if (props.hasHamburger) {
         hamburger = 
         <>
@@ -16,21 +46,16 @@ function Header(props) {
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
-                    <a className="nav-link" href="/home">ホーム</a>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/home" onClick={closeNav}>ホーム</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="/book">本を検索する</a>
+                    <Link className="nav-link" to="/book" onClick={closeNav}>本を検索する</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="/user/search">ユーザーを検索する</a>
+                    <Link className="nav-link" to="/user/search" onClick={closeNav}>ユーザーを検索する</Link>
                 </li>
-                <li className="nav-item">
-                    <a className="nav-link" href={props.userUrl}>プロフィール</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="/logout">ログアウト</a>
-                </li>
+                {profileAndLogoutLink}
                 </ul>
             </div>
         </>;
@@ -45,3 +70,6 @@ function Header(props) {
         </header>
     );
 }
+
+
+export default Header;

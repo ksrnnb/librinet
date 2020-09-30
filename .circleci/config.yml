@@ -76,6 +76,7 @@ jobs:
       # - run:
       #     name: Run Laravel Dusk Tests
       #     command: php artisan dusk
+
       - run:
           name: PHP Code Check
           command: ./vendor/bin/phpcs --standard=phpcs.xml ./

@@ -1,7 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+// import React from 'react';
 
-class Post extends React.Component {
-  
-}
-
+// class Post extends React.Component {}

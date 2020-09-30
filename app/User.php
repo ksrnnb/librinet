@@ -59,7 +59,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Follower', 'follow_id', 'id');
     }
 
-    public function following()
+    public function followings()
     {
         return $this->hasMany('App\Follower', 'follower_id', 'id');
     }
@@ -100,6 +100,37 @@ class User extends Authenticatable
         });
     }
 
+    public function getFollowsAndFollowersUsers()
+    {
+        // フォロー数、フォロワー数を取得
+        $follows = $this->followings->where('follower_id', $this->id);
+        $followers = $this->followers->where('follow_id', $this->id);
+        // $follows = Follower::where('follower_id', $this->id)->count();
+        // $followers = Follower::where('follow_id', $this->id)->count();
+
+        $params = compact('follows', 'followers');
+
+        return $params;
+    }
+
+    public function getFollowDataForUserPageView($viewer_id)
+    {
+        $is_following = false;
+        $viewer_followings = Follwer::where('follower_id', $viewer_id);
+        
+        if ($viewer_followings->isNotEmpty()) {
+            $is_following = $viewer_followings->groupBy('follow_id')
+                                              ->has($this->id);
+        }
+
+        // フォロー数、フォロワー数を取得
+        $params = $this->getFollowsAndFollowersNumber();
+        $params = array_merge($params, compact('is_following'));
+
+        // ['follows' => ..., 'followers' => ..., 'is_following' => ...]
+        return $params;
+    }
+
     public static function returnParamsForGuestUser()
     {
         $params = [
@@ -115,11 +146,9 @@ class User extends Authenticatable
         return $params;
     }
 
-
-
     public static function getArrayForUserPageView($str_id)
     {
-        $users = User::with(['books.genre'])->get();
+        $users = User::with(['books.genre', 'followings'])->get();
         $user = $users->where('str_id', $str_id)->first();      // select user
         $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
         $genres = Book::extractGenres($books);

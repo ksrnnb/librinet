@@ -73,16 +73,17 @@ jobs:
           name: Run Laravel Server
           command: php artisan serve
           background: true
-      - run:
-          name: Run Laravel Dusk Tests
-          command: php artisan dusk
+      # - run:
+      #     name: Run Laravel Dusk Tests
+      #     command: php artisan dusk
+
       - run:
           name: PHP Code Check
           command: ./vendor/bin/phpcs --standard=phpcs.xml ./
 
       - run:
           name: JavaScript Code Check
-          command: ./node_modules/.bin/eslint --fix ./resources/js 
+          command: ./node_modules/.bin/eslint --fix ./resources/js/components 
 
       # ビルド結果を通知
       - slack/status

@@ -62,9 +62,12 @@ class LoginController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            return redirect('/home');
+            // return redirect('/home');
+            return response()->json(['hoge' => 'hoge']);
         } else {
-            return redirect('/');
+            return response()->json(['foo' => 'foo']);
+
+            // return redirect('/');
         }
     }
 }

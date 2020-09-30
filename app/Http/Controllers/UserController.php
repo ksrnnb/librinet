@@ -30,7 +30,8 @@ class UserController extends Controller
         
         $params = array_merge($user_book_data, $follow_data);
 
-        return view('user.index', $params);
+        // return view('user.index', $params);
+        return response()->json($params);
     }
 
     public function edit(Request $request, $str_id)

@@ -1,41 +1,47 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true,
-    "amd": true
-    // amd: define()とrequire()
-  },
-
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended",
-    "prettier/react"
-  ],
-
-  "rules": {
-    "indent": [
-      "error",
-      2
+    "env": {
+      "browser": true,
+      "es6": true,
+      "amd": true
+      // amd: define()とrequire()
+    },
+  
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:prettier/recommended",
+      "prettier/react"
     ],
+  
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
 
-    "prettier/prettier": [
-      "error",
-      {
-        "tabWidth": 2,
-        "singleQuote": true,
-        "trailingComma": "es5"
+      // 変数の不使用はwarningに
+      "no-unused-vars": 1,
+
+      // propsの未validation-> warning
+      "react/prop-types": 1,
+  
+      "prettier/prettier": [
+        "error",
+        {
+          "tabWidth": 2,
+          "singleQuote": true,
+          "trailingComma": "es5"
+        }
+      ]
+    },
+  
+    "parserOptions": {
+      "sourceType": "module"
+    },
+  
+    "settings": {
+      "react": {
+        "version": "detect"
       }
-    ]
-  },
-
-  "parserOptions": {
-    "sourceType": "module"
-  },
-
-  "settings": {
-    "react": {
-      "version": "detect"
     }
   }
-}

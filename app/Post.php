@@ -87,9 +87,9 @@ class Post extends Model
         $book->registerPost($form->get('message'));
     }
 
-    public static function returnPostsOfFollowingUsers($user)
+    public static function getPostsOfFollowingUsers($user)
     {
-        $followers = $user->following;
+        $followers = $user->followings;
 
         $followIds = $followers->map(function ($follower) {
             return $follower->follow_id;
@@ -98,13 +98,11 @@ class Post extends Model
         //  自身のPostも追加
         $allPostsIds = collect($followIds)->push($user->id);
 
-        //  疑問点: Eagerローディング / load多すぎないか？　DB設計がこれでいいのかどうか...
         $posts = Post::with(['user' => function ($query) use ($allPostsIds) {
             $query->whereIn('id', $allPostsIds);
         }])->get();
 
         $posts->load('book', 'likes', 'comments.likes', 'comments.user', 'comments.book');
-
         /*
             posts: [[Post], [Post], ...]
         */
@@ -113,6 +111,10 @@ class Post extends Model
         $posts = $posts->sortByDesc(function ($product, $key) {
             return $product->updated_at;
         })->values();
+
+        // 仮で最大100個
+        // TODO:　投稿数が増えた際に、ボタン押したらリロードするようにしたい
+        $posts = $posts->take(100);
 
         return $posts;
     }

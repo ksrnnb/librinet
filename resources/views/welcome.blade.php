@@ -10,6 +10,9 @@
     <title>{{ config('app.name') }}</title>
 </head>
 <body>
+    @auth
+        <input type="hidden" id="auth-id" value="{{Auth::id()}}">
+    @endauth
     <div id="app">
         <!-- React -->
     </div>

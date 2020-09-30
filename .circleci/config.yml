@@ -82,8 +82,7 @@ jobs:
 
       - run:
           name: JavaScript Code Check
-          command: ./node_modules/.bin/eslint --fix ./resources/js 
-
+          command: ./node_modules/.bin/eslint --fix ./resources/js/components 
 
       # ビルド結果を通知
       - slack/status

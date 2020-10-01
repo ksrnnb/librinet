@@ -47,12 +47,21 @@ function Errors(props) {
 }
 
 function Results(props) {
-  const users = props.users.map((user) => {
-    return (
+  const users = props.users.map((user, i) => {
+    if (i === 0) {
+      return (
+        <div className="mt-3" key={user.id}>
+          <h2 className="mt-5" key="results">
+            検索結果
+          </h2>
+          <UserCard user={user} />
+        </div>
+      );
+    } else {
       <div className="mt-3" key={user.id}>
         <UserCard user={user} />
-      </div>
-    );
+      </div>;
+    }
   });
 
   return users;

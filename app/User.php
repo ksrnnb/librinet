@@ -106,7 +106,6 @@ class User extends Authenticatable
         
         $user = $user_book_data['user'];
         $follow_data = $user->getFollowsAndFollowersUsers();
-        $books_genres = Book::extractGenres($user->books);
         
         $posts = Post::getPostsOfFollowingUsers($user);
 
@@ -116,7 +115,7 @@ class User extends Authenticatable
         $params = array_merge(
             $user_book_data,
             $follow_data,
-            compact('posts', 'books_genres', 'example_users')
+            compact('posts', 'example_users')
         );
 
         return $params;

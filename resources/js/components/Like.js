@@ -1,72 +1,93 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 const axios = require('axios');
 
-const likeButtons = [...document.getElementsByClassName('likes')];
+export default class Like extends React.Component {
+  constructor(props) {
+    super(props);
 
-likeButtons.forEach((likeButton) => {
-  likeButton.addEventListener('click', (e) => {
-    const isAlreadyLiked = e.target.dataset.isliked == '1'; // string "0" or "1"
+    const likes = this.props.item.likes;
+    const viewerId = this.props.viewerId;
+    const count = likes.length;
 
-    if (isAlreadyLiked) {
-      unlike(e);
-    } else {
-      like(e);
-    }
-  });
-});
-
-function sendPostRequest(like) {
-  const uuid = like.parentNode.dataset.uuid;
-
-  // Laravelの場合、自動でX-XSRF-TOKENヘッダを送信しているらしい。
-  // resources/js/bootstrap.jsに書いている。
-  axios
-    .post('/like', {
-      uuid: uuid,
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
+    // 既にいいね済みの場合は、自分（みている側）のユーザーID
+    // 未いいねの場合はundefined
+    const isLiked = likes.find((like) => {
+      return like.user_id == viewerId;
     });
-}
 
-function unlike(e) {
-  const like = e.target;
-  like.dataset.isliked = '0';
-  like.classList.remove('btn-info');
-  like.classList.add('btn-outline-info');
+    this.state = {
+      count: count,
+      isLiked: isLiked,
+    };
 
-  // Buttonの隣の要素がいいね数
-  const count = like.nextElementSibling;
-  count.dataset.count = Number(count.dataset.count) - 1;
-  count.innerHTML = count.dataset.count;
-
-  sendPostRequest(like);
-}
-
-function like(e) {
-  const like = e.target;
-  like.dataset.isliked = '1';
-  like.classList.remove('btn-outline-info');
-  like.classList.add('btn-info');
-
-  // Buttonの隣の要素がいいね数
-  const count = like.nextElementSibling;
-  count.dataset.count = Number(count.dataset.count) + 1;
-  count.innerHTML = count.dataset.count;
-
-  sendPostRequest(like);
-}
-
-class Like extends React.Component {
-  render() {
-    return '';
+    this.handleLike = this.handleLike.bind(this);
   }
-}
 
-if (document.getElementById('like-react')) {
-  ReactDOM.render(<Like />, document.getElementById('like-react'));
+  sendPostRequest(uuid) {
+    axios
+      .post('/api/like', {
+        uuid: uuid,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  handleLike(e) {
+    const uuid = e.target.dataset.uuid;
+    const isLiked = this.state.isLiked;
+    const delta = isLiked ? -1 : +1;
+    const count = this.state.count + delta;
+
+    this.sendPostRequest(uuid);
+
+    this.setState({
+      isLiked: !isLiked,
+      count: count,
+    });
+  }
+
+  render() {
+    const item = this.props.item;
+    const isLiked = this.state.isLiked;
+
+    let button = null;
+    if (isLiked) {
+      button = (
+        <button
+          type="button"
+          className="likes btn btn-info"
+          data-uuid={item.uuid}
+          data-isliked="1"
+          onClick={this.handleLike}
+        >
+          いいね
+        </button>
+      );
+    } else {
+      button = (
+        <button
+          type="button"
+          className="likes btn btn-outline-info"
+          data-uuid={item.uuid}
+          data-isliked="0"
+          onClick={this.handleLike}
+        >
+          いいね
+        </button>
+      );
+    }
+
+    return (
+      <>
+        {button}
+        <p className="d-inline count" data-count={this.state.count}>
+          {this.state.count}
+        </p>
+      </>
+    );
+  }
 }

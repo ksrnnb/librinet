@@ -78,6 +78,7 @@ class App extends React.Component {
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.pages = this.pages.bind(this);
   }
 
   login(props) {
@@ -110,7 +111,7 @@ class App extends React.Component {
       .then((response) => {
         // TODO: Loginしていないときは？
         // response.data
-        // {id: 5, name: ゲスト, ....}
+        // {books, example_users, followers, follows, genres, genres_books,  posts, user}
         this.setState({
           isLogin: true,
           params: response.data,
@@ -137,17 +138,53 @@ class App extends React.Component {
     });
   }
 
-  render() {
-    const appName = document.title;
+  pages(params, isVisible) {
+    const exampleUsers = params ? params.example_users : null;
+    const posts = params ? params.posts : null;
+    const viewerId = params ? params.user.id : null;
 
-    let user = null;
-    if (this.state.params) {
-      user = this.state.params.user;
+    let margin = null;
+    if (isVisible) {
+      margin = 'ml-300';
     }
 
-    const params = this.state.params;
+    return (
+      <div className={margin}>
+        <Switch>
+          <Route
+            path="/home"
+            render={() => <Home posts={posts} viewerId={viewerId} />}
+          />
+          <Route path="/book" component={Book} />
+          <Route
+            path="/user/search"
+            render={() => <User example={exampleUsers} />}
+          />
+          <Route path="/user/profile/:strId" component={Profile} />
+          <Route
+            path="/login"
+            render={(props) => <Login props={props} login={this.login} />}
+          />
+          {/* <Route path="/logout" component={Logout} /> */}
+          <Route
+            path="/logout"
+            render={(props) => <Logout props={props} logout={this.logout} />}
+          />
+        </Switch>
+      </div>
+    );
+  }
 
-    const exampleUsers = params ? params.example_users : null;
+  render() {
+    const appName = document.title;
+    const params = this.state.params;
+    const isVisible = this.state.isVisible;
+
+    // TODO: まとめられない？
+    let user = null;
+    if (params) {
+      user = this.state.params.user;
+    }
 
     let url;
     if (this.state.isLogin) {
@@ -156,34 +193,13 @@ class App extends React.Component {
       url = null;
     }
 
-    if (this.state.isVisible) {
+    if (isVisible) {
       return (
         <Router>
           <div className="container">
             <Header userUrl={url} app={appName} hasHamburger={false} />
             <SubColumn userUrl={url} params={params} logout={this.logout} />
-            <div className="container ml-300">
-              <Switch>
-                <Route path="/home" component={Home} />
-                <Route path="/book" component={Book} />
-                <Route
-                  path="/user/search"
-                  render={() => <User example={exampleUsers} />}
-                />
-                <Route path="/user/profile/:strId" component={Profile} />
-                <Route
-                  path="/login"
-                  render={(props) => <Login props={props} login={this.login} />}
-                />
-                {/* <Route path="/logout" component={Logout} /> */}
-                <Route
-                  path="/logout"
-                  render={(props) => (
-                    <Logout props={props} logout={this.logout} />
-                  )}
-                />
-              </Switch>
-            </div>
+            {this.pages(params, isVisible)}
           </div>
         </Router>
       );
@@ -192,27 +208,7 @@ class App extends React.Component {
         <Router>
           <div className="container">
             <Header userUrl={url} app={appName} hasHamburger={true} />
-            <div className="container">
-              <Switch>
-                <Route path="/home" component={Home} />
-                <Route path="/book" component={Book} />
-                <Route
-                  path="/user/search"
-                  render={() => <User example={exampleUsers} />}
-                />
-                <Route path="/user/profile/:strId" component={Profile} />
-                <Route
-                  path="/login"
-                  render={(props) => <Login props={props} login={this.login} />}
-                />
-                <Route
-                  path="/logout"
-                  render={(props) => (
-                    <Logout props={props} logout={this.logout} />
-                  )}
-                />
-              </Switch>
-            </div>
+            {this.pages(params, isVisible)}
           </div>
         </Router>
       );

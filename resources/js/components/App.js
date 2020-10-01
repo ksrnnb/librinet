@@ -67,18 +67,41 @@ class App extends React.Component {
     const isVisible = window.innerWidth > this.maxWidth ? true : false;
 
     // TODO：非同期だからUndefined そもそも必要？
-    const params = this.getParamsOfAuthenticatedUser();
-    const isLogin = params !== null;
+    // const params = this.getParamsOfAuthenticatedUser();
+    // const isLogin = params !== null;
 
     this.state = {
       isVisible: isVisible,
-      isLogin: isLogin,
-      params: params,
+      isLogin: false,
+      params: null,
     };
+
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
+  login(props) {
+    this.getParamsOfAuthenticatedUser();
+    props.history.push('/home');
+  }
+
+  logout(props) {
+    axios
+      .post('/api/logout')
+      .then((response) => {
+        this.setState({
+          isLogin: false,
+        });
+        props.history.push('/login');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
     this.windowSizeChange.call(this);
+    this.getParamsOfAuthenticatedUser();
   }
 
   getParamsOfAuthenticatedUser() {
@@ -124,8 +147,10 @@ class App extends React.Component {
 
     const params = this.state.params;
 
+    const exampleUsers = params ? params.example_users : null;
+
     let url;
-    if (user) {
+    if (this.state.isLogin) {
       url = '/user/profile/' + user.str_id;
     } else {
       url = null;
@@ -136,15 +161,27 @@ class App extends React.Component {
         <Router>
           <div className="container">
             <Header userUrl={url} app={appName} hasHamburger={false} />
-            <SubColumn userUrl={url} params={params} />
+            <SubColumn userUrl={url} params={params} logout={this.logout} />
             <div className="container ml-300">
               <Switch>
                 <Route path="/home" component={Home} />
                 <Route path="/book" component={Book} />
-                <Route path="/user/search" component={User} />
+                <Route
+                  path="/user/search"
+                  render={() => <User example={exampleUsers} />}
+                />
                 <Route path="/user/profile/:strId" component={Profile} />
-                <Route path="/login" component={Login} />
-                <Route path="/logout" component={Logout} />
+                <Route
+                  path="/login"
+                  render={(props) => <Login props={props} login={this.login} />}
+                />
+                {/* <Route path="/logout" component={Logout} /> */}
+                <Route
+                  path="/logout"
+                  render={(props) => (
+                    <Logout props={props} logout={this.logout} />
+                  )}
+                />
               </Switch>
             </div>
           </div>
@@ -159,10 +196,21 @@ class App extends React.Component {
               <Switch>
                 <Route path="/home" component={Home} />
                 <Route path="/book" component={Book} />
-                <Route path="/user/search" component={User} />
+                <Route
+                  path="/user/search"
+                  render={() => <User example={exampleUsers} />}
+                />
                 <Route path="/user/profile/:strId" component={Profile} />
-                <Route path="/login" component={Login} />
-                <Route path="/logout" component={Logout} />
+                <Route
+                  path="/login"
+                  render={(props) => <Login props={props} login={this.login} />}
+                />
+                <Route
+                  path="/logout"
+                  render={(props) => (
+                    <Logout props={props} logout={this.logout} />
+                  )}
+                />
               </Switch>
             </div>
           </div>

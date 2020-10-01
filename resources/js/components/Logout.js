@@ -1,27 +1,14 @@
 import React from 'react';
+import Subtitle from './Subtitle';
 const axios = window.axios;
 
-export default class Logout extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  logout() {
-    axios
-      .post('/api/logout')
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  render() {
-    return (
-      <button className="btn btn-outline-danger" onClick={this.logout}>
+export default function logout(props) {
+  return (
+    <>
+      <Subtitle subtitle="Logout" />
+      <button className="btn btn-outline-danger" onClick={() => props.logout(props.props)}>
         Log out
       </button>
-    );
-  }
+    </>
+  );
 }

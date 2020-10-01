@@ -1,10 +1,7 @@
 import React from 'react';
+import Subtitle from './Subtitle';
 
 const axios = window.axios;
-
-function Subtitle() {
-  return <h2>本の検索</h2>;
-}
 
 function InputPrompt() {
   return (
@@ -38,7 +35,7 @@ function ShowExamples() {
 function Example() {
   return (
     <div>
-      <p className="pl-3 mt-3">例</p>
+      <h4 className="pl-3 mt-3">ISBN 例</h4>
       <table className="table">
         <thead>
           <tr>
@@ -254,7 +251,7 @@ export default class Book extends React.Component {
 
     return (
       <div>
-        <Subtitle />
+        <Subtitle subtitle="本の検索" />
         <label htmlFor="isbn">
           <InputPrompt />
           {errorMessage}

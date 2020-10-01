@@ -13,24 +13,30 @@ class UserController extends Controller
 {
     public function auth(Request $request)
     {
-        
         // TODO: 認証されてない場合は？？？
-        // $users = User::with(['books' => function ($query) use ($id) {
-            //     $query->where('user_id', $id);
-            // }])->get();
-            
         $str_id = Auth::user()->str_id;
 
-        $user_book_data = User::getArrayForUserPageView($str_id);
-        
-        $user = $user_book_data['user'];
-        $follow_data = $user->getFollowsAndFollowersUsers();
-        $books_genres = Book::extractGenres($user->books);
-        
-        $posts = Post::getPostsOfFollowingUsers($user);
-
-        $params = array_merge($user_book_data, $follow_data, compact('posts', 'books_genres'));
+        $params = User::getParamsForApp($str_id);
 
         return response()->json($params);
+    }
+
+    public function search(Request $request)
+    {
+        $user = $request->input('user');
+        $users = User::where('str_id', $user)->get();
+
+        // TODO: IDと名前が一致する場合を考慮してない
+        // また、部分一致の方がいいのでは？？
+        if ($users->isEmpty()) {
+            $users = User::where('name', $user)->get();
+        }
+        
+        // 見つからない場合は空の配列を返す。
+        if ($users->isEmpty()) {
+            return response()->json([]);
+        }
+
+        return response()->json($users);
     }
 }

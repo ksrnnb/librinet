@@ -13,26 +13,26 @@ use Validator;
 
 class UserController extends Controller
 {
-    public function index(Request $request, $str_id)
-    {
-        $user = User::where('str_id', $str_id)->get();
+    // public function index(Request $request, $str_id)
+    // {
+    //     $user = User::where('str_id', $str_id)->get();
     
-        if ($user->isEmpty()) {
-            // 削除してもどってここにきて更新すると$userはnull
-            return redirect('/');
-        }
+    //     if ($user->isEmpty()) {
+    //         // 削除してもどってここにきて更新すると$userはnull
+    //         return redirect('/');
+    //     }
 
-        $user_book_data = User::getArrayForUserPageView($str_id);
+    //     $user_book_data = User::getArrayForUserPageView($str_id);
 
-        $viewer_id = Auth::id();
-        $user = $user_book_data['user'];
-        $follow_data = Follower::getFollowDataForUserPageView($user, $viewer_id);
+    //     $viewer_id = Auth::id();
+    //     $user = $user_book_data['user'];
+    //     $follow_data = Follower::getFollowDataForUserPageView($user, $viewer_id);
         
-        $params = array_merge($user_book_data, $follow_data);
+    //     $params = array_merge($user_book_data, $follow_data);
 
-        // return view('user.index', $params);
-        return response()->json($params);
-    }
+    //     // return view('user.index', $params);
+    //     return response()->json($params);
+    // }
 
     public function edit(Request $request, $str_id)
     {
@@ -172,17 +172,17 @@ class UserController extends Controller
         return view('user.search');
     }
 
-    public function find(Request $request)
-    {
-        $user = $request->input('user');
-        $users = User::where('str_id', $user)->get();
+    // public function find(Request $request)
+    // {
+    //     $user = $request->input('user');
+    //     $users = User::where('str_id', $user)->get();
 
-        // IDと名前が一致する場合を考慮してない
-        // また、部分一致の方がいいのでは？？
-        if ($users->isEmpty()) {
-            $users = User::where('name', $user)->get();
-        }
+    //     // IDと名前が一致する場合を考慮してない
+    //     // また、部分一致の方がいいのでは？？
+    //     if ($users->isEmpty()) {
+    //         $users = User::where('name', $user)->get();
+    //     }
         
-        return view('user.search', ['users' => $users]);
-    }
+    //     return view('user.search', ['users' => $users]);
+    // }
 }

@@ -76,20 +76,6 @@ class PostController extends Controller
         return redirect('/home');
     }
 
-    public function add(Request $request, $isbn)
-    {
-        $user = Auth::user();
-        $params = Book::returnBookInfoOrRedirect($isbn, $user, 'post');
-
-        $is_redirect = ! is_array($params);
-
-        if ($is_redirect) {
-            return $params;     // params is redirect
-        } else {
-            return view('book_post', $params);
-        }
-    }
-
     public function create(PostRequest $request, $isbn)
     {
         $isIsbn = Book::isIsbn($isbn);

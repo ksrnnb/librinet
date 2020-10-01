@@ -1,6 +1,5 @@
 import React from 'react';
 import Subtitle from './Subtitle';
-
 const axios = window.axios;
 
 function InputPrompt() {
@@ -97,6 +96,7 @@ export default class Book extends React.Component {
     this.validateInputAndReturnIsbn = this.validateInputAndReturnIsbn.bind(
       this
     );
+    this.linkToPost = this.linkToPost.bind(this);
   }
 
   bookImage() {
@@ -127,7 +127,7 @@ export default class Book extends React.Component {
 
     if (isNotInBookshelf) {
       addButton = (
-        <a href={'/book/add/' + book.isbn}>
+        <a href={'/api/book/add/' + book.isbn}>
           <button type="button" className="btn btn-outline-success">
             本棚に追加する
           </button>
@@ -141,14 +141,28 @@ export default class Book extends React.Component {
         <p className="one-row mt-3">著者：{book.author}</p>
         <p className="one-row mt-3">出版社：{book.publisher}</p>
         <p className="one-row mt-3">出版年：{pub_year}</p>
-        <a href={'/book/post/' + book.isbn}>
-          <button type="button" className="btn btn-outline-success mr-3">
-            本の投稿をする
-          </button>
-        </a>
+        <button type="button"
+          className="btn btn-outline-success mr-3"
+          onClick={() => { this.linkToPost(book) }}
+        >
+          本の投稿をする
+        </button>
         {addButton}
       </div>
     );
+  }
+
+  linkToPost(book) {
+    const postUrl = '/book/post/' + book.isbn;
+    const apiUrl = '/api' + postUrl;
+    axios.get(apiUrl)
+      .then(response => {
+        console.log(response.data);
+        this.props.props.history.push(postUrl);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   onChangeInput(e) {

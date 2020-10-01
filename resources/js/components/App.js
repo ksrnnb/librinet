@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Header from './Header';
 import Book from './Book';
+import Header from './Header';
 import Home from './Home';
-import User from './User';
-import Profile from './Profile';
 import Login from './Login';
 import Logout from './Logout';
+import Profile from './Profile';
+import PostData from './Post';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import User from './User';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
@@ -155,7 +156,10 @@ class App extends React.Component {
             path="/home"
             render={() => <Home posts={posts} viewerId={viewerId} />}
           />
-          <Route path="/book" component={Book} />
+          <Route
+            exact
+            path="/book"
+            render={(props) => <Book props={props} />} />
           <Route
             path="/user/search"
             render={() => <User example={exampleUsers} />}
@@ -165,10 +169,13 @@ class App extends React.Component {
             path="/login"
             render={(props) => <Login props={props} login={this.login} />}
           />
-          {/* <Route path="/logout" component={Logout} /> */}
           <Route
             path="/logout"
             render={(props) => <Logout props={props} logout={this.logout} />}
+          />
+          <Route
+            path="/book/post/:isbn"
+            render={(props) => <PostData props={props} />}
           />
         </Switch>
       </div>

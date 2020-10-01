@@ -1,14 +1,11 @@
 import React from 'react';
+import Subtitle from './Subtitle';
 export default Home;
 
 function Home() {
   return (
     <div className="row">
-      <a href="/api/guest/login">
-        <button id="guest" className="btn btn-outline-success">
-          ゲストでログイン
-        </button>
-      </a>
+      <Subtitle subtitle="Here is Home Page!" />
     </div>
   );
 }

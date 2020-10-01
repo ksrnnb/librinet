@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'Api\LoginController@login');
 Route::post('/guest/login', 'Api\LoginController@guest');
 Route::post('/book', 'Api\BookController@search');
+Route::post('/user', 'Api\UserController@search');
 // Route::post('/user/profile/{str_id}', 'Api\UserController@search');
 
 Route::middleware('auth:sanctum')->group(function () {

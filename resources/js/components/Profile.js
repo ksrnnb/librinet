@@ -1,4 +1,6 @@
 import React from 'react';
+import Subtitle from './Subtitle';
+import UserCard from './UserCard';
 const axios = window.axios;
 
 function Bookshelf(props) {
@@ -75,20 +77,6 @@ function Bookshelf(props) {
   return bookshelfElement;
 }
 
-function Subtitle() {
-  return <h2>User Profile</h2>;
-}
-
-function UserImage(props) {
-  if (props.user.image) {
-    return (
-      <img className="img-fluid" src={props.user.image} alt="user-image" />
-    );
-  } else {
-    return <img className="img-fluid" src="/img/icon.svg" alt="user-image" />;
-  }
-}
-
 function EditButton(props) {
   const user = props.user;
   const viewerStrId = props.viewerStrId;
@@ -159,7 +147,7 @@ export default class Profile extends React.Component {
     //                   <!-- TODO: ここは認証済みの場合のみ -->
     return (
       <>
-        <Subtitle />
+        {/* <Subtitle subtitle="User Profile" />
         <div className="row">
           <div className="col-2">
             <UserImage user={user} />
@@ -172,6 +160,13 @@ export default class Profile extends React.Component {
             <FollowNumber params={params} />
           </div>
         </div>
+        <Bookshelf genres={params.genres} genres_books={params.genres_books} /> */}
+        <Subtitle subtitle="User Profile" />
+        <UserCard user={user}>
+          <EditButton user={user} viewerStrId={viewerStrId} />
+          {FollowButton}
+          <FollowNumber params={params} />
+        </UserCard>
         <Bookshelf genres={params.genres} genres_books={params.genres_books} />
       </>
     );

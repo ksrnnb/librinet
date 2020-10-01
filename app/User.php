@@ -100,6 +100,28 @@ class User extends Authenticatable
         });
     }
 
+    public static function getParamsForApp($str_id)
+    {
+        $user_book_data = User::getUserBooksGenres($str_id);
+        
+        $user = $user_book_data['user'];
+        $follow_data = $user->getFollowsAndFollowersUsers();
+        $books_genres = Book::extractGenres($user->books);
+        
+        $posts = Post::getPostsOfFollowingUsers($user);
+
+        // ユーザーの検索ページ用
+        $example_users = User::whereIn('id', [1, 2, 3])->get();
+
+        $params = array_merge(
+            $user_book_data,
+            $follow_data,
+            compact('posts', 'books_genres', 'example_users')
+        );
+
+        return $params;
+    }
+
     public function getFollowsAndFollowersUsers()
     {
         // フォロー数、フォロワー数を取得
@@ -146,7 +168,7 @@ class User extends Authenticatable
         return $params;
     }
 
-    public static function getArrayForUserPageView($str_id)
+    public static function getUserBooksGenres($str_id)
     {
         $users = User::with(['books.genre', 'followings'])->get();
         $user = $users->where('str_id', $str_id)->first();      // select user

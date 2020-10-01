@@ -69980,6 +69980,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     };
     _this.login = _this.login.bind(_assertThisInitialized(_this));
     _this.logout = _this.logout.bind(_assertThisInitialized(_this));
+    _this.pages = _this.pages.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -70018,7 +70019,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       axios.get('/api/user/auth').then(function (response) {
         // TODO: Loginしていないときは？
         // response.data
-        // {id: 5, name: ゲスト, ....}
+        // {books, example_users, followers, follows, genres, genres_books,  posts, user}
         _this3.setState({
           isLogin: true,
           params: response.data
@@ -70045,19 +70046,73 @@ var App = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "pages",
+    value: function pages(params, isVisible) {
       var _this5 = this;
 
+      var exampleUsers = params ? params.example_users : null;
+      var posts = params ? params.posts : null;
+      var viewerId = params ? params.user.id : null;
+      var margin = null;
+
+      if (isVisible) {
+        margin = "ml-300";
+      }
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: margin
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+        path: "/home",
+        render: function render() {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            posts: posts,
+            viewerId: viewerId
+          });
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+        path: "/book",
+        component: _Book__WEBPACK_IMPORTED_MODULE_3__["default"]
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+        path: "/user/search",
+        render: function render() {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            example: exampleUsers
+          });
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+        path: "/user/profile/:strId",
+        component: _Profile__WEBPACK_IMPORTED_MODULE_6__["default"]
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+        path: "/login",
+        render: function render(props) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Login__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            props: props,
+            login: _this5.login
+          });
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
+        path: "/logout",
+        render: function render(props) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logout__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            props: props,
+            logout: _this5.logout
+          });
+        }
+      })));
+    }
+  }, {
+    key: "render",
+    value: function render() {
       var appName = document.title;
+      var params = this.state.params;
+      var isVisible = this.state.isVisible; // TODO: まとめられない？
+
       var user = null;
 
-      if (this.state.params) {
+      if (params) {
         user = this.state.params.user;
       }
 
-      var params = this.state.params;
-      var exampleUsers = params ? params.example_users : null;
       var url;
 
       if (this.state.isLogin) {
@@ -70066,7 +70121,7 @@ var App = /*#__PURE__*/function (_React$Component) {
         url = null;
       }
 
-      if (this.state.isVisible) {
+      if (isVisible) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "container"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -70077,41 +70132,7 @@ var App = /*#__PURE__*/function (_React$Component) {
           userUrl: url,
           params: params,
           logout: this.logout
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "container ml-300"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/home",
-          component: _Home__WEBPACK_IMPORTED_MODULE_4__["default"]
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/book",
-          component: _Book__WEBPACK_IMPORTED_MODULE_3__["default"]
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/user/search",
-          render: function render() {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_5__["default"], {
-              example: exampleUsers
-            });
-          }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/user/profile/:strId",
-          component: _Profile__WEBPACK_IMPORTED_MODULE_6__["default"]
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/login",
-          render: function render(props) {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Login__WEBPACK_IMPORTED_MODULE_7__["default"], {
-              props: props,
-              login: _this5.login
-            });
-          }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/logout",
-          render: function render(props) {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logout__WEBPACK_IMPORTED_MODULE_8__["default"], {
-              props: props,
-              logout: _this5.logout
-            });
-          }
-        })))));
+        }), this.pages(params, isVisible)));
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "container"
@@ -70119,41 +70140,7 @@ var App = /*#__PURE__*/function (_React$Component) {
           userUrl: url,
           app: appName,
           hasHamburger: true
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "container"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/home",
-          component: _Home__WEBPACK_IMPORTED_MODULE_4__["default"]
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/book",
-          component: _Book__WEBPACK_IMPORTED_MODULE_3__["default"]
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/user/search",
-          render: function render() {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_5__["default"], {
-              example: exampleUsers
-            });
-          }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/user/profile/:strId",
-          component: _Profile__WEBPACK_IMPORTED_MODULE_6__["default"]
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/login",
-          render: function render(props) {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Login__WEBPACK_IMPORTED_MODULE_7__["default"], {
-              props: props,
-              login: _this5.login
-            });
-          }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Route"], {
-          path: "/logout",
-          render: function render(props) {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logout__WEBPACK_IMPORTED_MODULE_8__["default"], {
-              props: props,
-              logout: _this5.logout
-            });
-          }
-        })))));
+        }), this.pages(params, isVisible)));
       }
     }
   }]);
@@ -70677,36 +70664,13 @@ function Header(props) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (Home);
-
-function Home() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    subtitle: "Here is Home Page!"
-  }));
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/Like.js":
-/*!*****************************************!*\
-  !*** ./resources/js/components/Like.js ***!
-  \*****************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Home; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
+/* harmony import */ var _Like__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Like */ "./resources/js/components/Like.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70729,98 +70693,351 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function BookCover(props) {
+  var book = props.item.book;
+  var cover = null;
 
+  if (book) {
+    var _book$cover;
+
+    var bookUrl = '/book/profile/' + book.isbn;
+    var coverUrl = (_book$cover = book.cover) !== null && _book$cover !== void 0 ? _book$cover : '/img/book.svg';
+    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "col-3"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("figure", {
+      className: "mx-2 px-0 mb-0 book"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+      href: bookUrl
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+      className: "img-fluid",
+      src: coverUrl,
+      alt: "book_image"
+    }))));
+  } else {
+    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "col-3"
+    });
+  }
+
+  return cover;
+}
+
+function UserAndMessage(props) {
+  var _user$image;
+
+  var user = props.user;
+  var message = props.message;
+  var userUrl = '/user/profile/' + user.str_id;
+  var userImageUrl = (_user$image = user.image) !== null && _user$image !== void 0 ? _user$image : '/img/icon.svg';
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-9"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "avator col-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+    href: userUrl
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+    className: "img-fluid",
+    src: userImageUrl,
+    alt: "user-icon"
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-10"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
+    className: "h4 d-inline mr-2"
+  }, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
+    className: "d-inline"
+  }, '@' + user.str_id), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
+    className: "message"
+  }, message), props.children)));
+}
+
+function CommentButton(props) {
+  var isPost = ('comments' in props.item);
+  var button = null;
+
+  if (isPost) {
+    var postUrl = '/api/post/' + props.item.uuid;
+    button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+      href: postUrl
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      type: "button",
+      className: "btn btn-outline-info"
+    }, "Comment"));
+  }
+
+  return button;
+}
+
+function DeleteButton(props) {
+  var item = props.item;
+  var viewerId = props.viewerId;
+  var isPost = ('comments' in props.item);
+  var deleteUrl = isPost ? '/api/post/remove/' + item.uuid : '/api/comment/remove/' + item.uuid;
+  var button = null;
+
+  if (item.user_id == viewerId) {
+    button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn btn-outline-danger",
+      name: "delete"
+    }, "\u524A\u9664\u3059\u308B");
+  }
+
+  return button;
+}
+
+function BookInfo(props) {
+  var book = props.item.book;
+  var content = null;
+
+  if (book) {
+    content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
+      className: "one-row my-2"
+    }, book.title, " \uFF08 ", book.author, " \uFF09");
+  }
+
+  return content;
+} // TODO: 高さ固定
+
+
+function BaseFormat(props) {
+  var item = props.item;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row border py-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(BookCover, {
+    item: item
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(UserAndMessage, {
+    user: item.user,
+    message: item.message
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(CommentButton, {
+    item: item
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Like__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    item: item,
+    viewerId: props.viewerId
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(DeleteButton, {
+    item: item,
+    viewerId: props.viewerId
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(BookInfo, {
+    item: item
+  }));
+}
+
+function Post(props) {
+  var post = props.post;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(BaseFormat, {
+    item: post,
+    viewerId: props.viewerId
+  });
+}
+
+function Comments(props) {
+  var comments = props.comments.map(function (comment) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(BaseFormat, {
+      item: comment,
+      viewerId: props.viewerId,
+      key: comment.id
+    });
+  });
+  return comments;
+}
+
+function PostWithComments(props) {
+  var post = props.post;
+  var comments = null;
+
+  if (post.comments.length) {
+    comments = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Comments, {
+      comments: post.comments,
+      viewerId: props.viewerId
+    });
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Post, {
+    post: post,
+    viewerId: props.viewerId
+  }), comments);
+}
+
+function Posts(props) {
+  var posts = null;
+
+  if (props.posts) {
+    posts = props.posts.map(function (post) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(PostWithComments, {
+        post: post,
+        viewerId: props.viewerId,
+        key: post.id
+      });
+    });
+  }
+
+  return posts;
+}
+
+var Home = /*#__PURE__*/function (_React$Component) {
+  _inherits(Home, _React$Component);
+
+  var _super = _createSuper(Home);
+
+  function Home(props) {
+    _classCallCheck(this, Home);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(Home, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        subtitle: "Here is Home Page!"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Posts, {
+        posts: this.props.posts,
+        viewerId: this.props.viewerId
+      })));
+    }
+  }]);
+
+  return Home;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Like.js":
+/*!*****************************************!*\
+  !*** ./resources/js/components/Like.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Like; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var likeButtons = _toConsumableArray(document.getElementsByClassName('likes'));
-
-likeButtons.forEach(function (likeButton) {
-  likeButton.addEventListener('click', function (e) {
-    var isAlreadyLiked = e.target.dataset.isliked == '1'; // string "0" or "1"
-
-    if (isAlreadyLiked) {
-      unlike(e);
-    } else {
-      like(e);
-    }
-  });
-});
-
-function sendPostRequest(like) {
-  var uuid = like.parentNode.dataset.uuid; // Laravelの場合、自動でX-XSRF-TOKENヘッダを送信しているらしい。
-  // resources/js/bootstrap.jsに書いている。
-
-  axios.post('/like', {
-    uuid: uuid
-  }).then(function (response) {
-    console.log(response);
-  })["catch"](function (error) {
-    console.log(error);
-  });
-}
-
-function unlike(e) {
-  var like = e.target;
-  like.dataset.isliked = '0';
-  like.classList.remove('btn-info');
-  like.classList.add('btn-outline-info'); // Buttonの隣の要素がいいね数
-
-  var count = like.nextElementSibling;
-  count.dataset.count = Number(count.dataset.count) - 1;
-  count.innerHTML = count.dataset.count;
-  sendPostRequest(like);
-}
-
-function like(e) {
-  var like = e.target;
-  like.dataset.isliked = '1';
-  like.classList.remove('btn-outline-info');
-  like.classList.add('btn-info'); // Buttonの隣の要素がいいね数
-
-  var count = like.nextElementSibling;
-  count.dataset.count = Number(count.dataset.count) + 1;
-  count.innerHTML = count.dataset.count;
-  sendPostRequest(like);
-}
 
 var Like = /*#__PURE__*/function (_React$Component) {
   _inherits(Like, _React$Component);
 
   var _super = _createSuper(Like);
 
-  function Like() {
+  function Like(props) {
+    var _this;
+
     _classCallCheck(this, Like);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    var likes = _this.props.item.likes;
+    var viewerId = _this.props.viewerId;
+    var count = likes.length; // 既にいいね済みの場合は、自分（みている側）のユーザーID
+    // 未いいねの場合はundefined
+
+    var isLiked = likes.find(function (like) {
+      return like.user_id == viewerId;
+    });
+    _this.state = {
+      count: count,
+      isLiked: isLiked
+    };
+    _this.handleLike = _this.handleLike.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(Like, [{
+    key: "sendPostRequest",
+    value: function sendPostRequest(uuid) {
+      axios.post('/api/like', {
+        uuid: uuid
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: "handleLike",
+    value: function handleLike(e) {
+      var uuid = e.target.dataset.uuid;
+      var isLiked = this.state.isLiked;
+      var delta = isLiked ? -1 : +1;
+      var count = this.state.count + delta;
+      this.sendPostRequest(uuid);
+      this.setState({
+        isLiked: !isLiked,
+        count: count
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      return '';
+      var item = this.props.item;
+      var isLiked = this.state.isLiked;
+      var button = null;
+
+      if (isLiked) {
+        button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "likes btn btn-info",
+          "data-uuid": item.uuid,
+          "data-isliked": "1",
+          onClick: this.handleLike
+        }, "\u3044\u3044\u306D");
+      } else {
+        button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "likes btn btn-outline-info",
+          "data-uuid": item.uuid,
+          "data-isliked": "0",
+          onClick: this.handleLike
+        }, "\u3044\u3044\u306D");
+      }
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, button, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "d-inline count",
+        "data-count": this.state.count
+      }, this.state.count));
     }
   }]);
 
   return Like;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-if (document.getElementById('like-react')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Like, null), document.getElementById('like-react'));
-}
+
 
 /***/ }),
 
@@ -71285,13 +71502,26 @@ function Errors(props) {
 }
 
 function Results(props) {
-  var users = props.users.map(function (user) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "mt-3",
-      key: user.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      user: user
-    }));
+  var users = props.users.map(function (user, i) {
+    if (i === 0) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3",
+        key: user.id
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+        className: "mt-5",
+        key: "results"
+      }, "\u691C\u7D22\u7D50\u679C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        user: user
+      }));
+    } else {
+      /*#__PURE__*/
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3",
+        key: user.id
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        user: user
+      }));
+    }
   });
   return users;
 }

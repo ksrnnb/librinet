@@ -114,6 +114,7 @@ class Post extends Model
 
         // 仮で最大100個
         // TODO:　投稿数が増えた際に、ボタン押したらリロードするようにしたい
+        // TODO: たぶんフォローしてないユーザーも含めて100件になってる。->containsとかで指定のユーザーだけに絞る。
         $posts = $posts->take(100);
 
         return $posts;

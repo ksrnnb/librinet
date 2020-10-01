@@ -6,7 +6,10 @@ export default function logout(props) {
   return (
     <>
       <Subtitle subtitle="Logout" />
-      <button className="btn btn-outline-danger" onClick={() => props.logout(props.props)}>
+      <button
+        className="btn btn-outline-danger"
+        onClick={() => props.logout(props.props)}
+      >
         Log out
       </button>
     </>

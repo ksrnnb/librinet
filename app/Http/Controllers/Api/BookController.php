@@ -23,13 +23,14 @@ class BookController extends Controller
         }
 
         $user = Auth::user();
-        $isNotInBookshelf = $user->hasBook($isbn);
+        $isInBookshelf = $user->hasBook($isbn);
 
+        // falseはcompact関数に使えない
         $params = [
-            'book'              => $book,
-            'isNotInBookshelf'  => ! $user->hasBook($isbn),
+            'book' => $book,
+            'isInBookshelf' => $isInBookshelf,
         ];
 
-        return response()->json(['params' => $params]);
+        return response()->json($params);
     }
 }

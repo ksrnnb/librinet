@@ -17,9 +17,27 @@ class PostController extends Controller
         if ($params) {
             return response()->json($params);     // params is redirect
         } else {
-            abort('400');
+            return response()->json(['hoge' => 'hoge']);
             // return response($status = 404);
             // return view('book_post', $params);
         }
+    }
+
+    public function create(PostRequest $request, $isbn)
+    {
+        $isIsbn = Book::isIsbn($isbn);
+
+        if (! $isIsbn) {
+            abort('400');
+        }
+
+        $form = collect($request->except('_token'));
+        $form = $form->merge([
+            'isbn'      =>  $isbn,
+            'user_id'   =>  Auth::id(),
+        ]);
+        Post::createNewPost($form);
+
+        return redirect('/home');
     }
 }

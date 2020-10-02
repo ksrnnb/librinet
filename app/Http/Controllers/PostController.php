@@ -76,24 +76,6 @@ class PostController extends Controller
         return redirect('/home');
     }
 
-    public function create(PostRequest $request, $isbn)
-    {
-        $isIsbn = Book::isIsbn($isbn);
-
-        if (! $isIsbn) {
-            abort('400');
-        }
-
-        $form = collect($request->except('_token'));
-        $form = $form->merge([
-            'isbn'      =>  $isbn,
-            'user_id'   =>  Auth::id(),
-        ]);
-        Post::createNewPost($form);
-
-        return redirect('/home');
-    }
-
     public function remove(Request $request, $uuid)
     {
         if (Str::isUuid($uuid)) {

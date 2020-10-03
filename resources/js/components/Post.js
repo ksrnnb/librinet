@@ -1,7 +1,7 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import BookCard from './BookCard';
-
+import Functions from './Functions';
 const axios = window.axios;
 
 function AddToBookshelf(props) {
@@ -231,7 +231,6 @@ export default class PostData extends React.Component {
     this.onChangeMessage = this.onChangeMessage.bind(this);
     this.onChangeRadioButton = this.onChangeRadioButton.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.redirectHome = this.redirectHome.bind(this);
     this.setBook = this.setBook.bind(this);
     this.setInitialConvGenre = this.setInitialConvGenre.bind(this);
     this.validation = this.validation.bind(this);
@@ -336,9 +335,7 @@ export default class PostData extends React.Component {
   }
 
   onSubmit() {
-    const book = this.state.book;
-    const message = this.state.message;
-    const path = '/api/book/post/' + book.isbn;
+    const path = '/api/book/post/' + this.state.book.isbn;
 
     const params = this.getParams();
     const errors = this.validation(params);
@@ -349,23 +346,12 @@ export default class PostData extends React.Component {
       axios
         .post(path, params)
         .then((response) => {
-          this.redirectHome();
+          Functions.prototype.redirectHome.call(this);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  }
-
-  redirectHome() {
-    axios
-      .get('/api/home')
-      .then((response) => {
-        this.props.props.history.push('/home');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   setBook(params) {

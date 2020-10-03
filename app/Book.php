@@ -39,13 +39,83 @@ class Book extends Model
         }
     }
 
-    public function registerPost($message = '')
+    /*
+        @param $form
+        [
+            'add_to_bookshelf'  =>  boolean
+            'is_new_genre'      =>  boolean,
+            'new_genre'         =>  'genre_name' or empty string "",
+            'message'           =>  'message...',
+            'title'             =>  'title',
+            'author'            =>  'author',
+            'cover'             =>  'cover',
+            'publisher'         =>  'publisher',
+            'pubdate'           =>  'pubdate',
+            'isbn'              =>  'isbn'
+            'user_id'           =>  ingeger
+            'genre_id'          => integer
+        ]
+
+        @return App\Book
+    */
+
+    public static function createNewBook($form)
     {
-        $this->post()->create([
-            'message' => $message,
-            'uuid'    => Str::uuid(),
-            'user_id' => $this->user_id,
-        ]);
+        // 新しく本棚に追加
+        if ($form['add_to_bookshelf']) {
+            $book_data = $form->merge([
+                'isInBookshelf' => true,
+            ]);
+
+            // 新しいジャンルを作る場合
+            if ($form['is_new_genre']) {
+                $genre = Genre::create(['name' => $form['new_genre']]);
+    
+                $book_data = $book_data->merge(['genre_id' => $genre->id]);
+            } else {
+                // 既存のジャンルの場合は、既にジャンルIDが入っているので処理は不要
+            }
+        } else {
+            $book_data = $form->merge([
+                'isInBookshelf' => false,
+            ]);
+        }
+
+        $book_data = $book_data->except(
+            'add_to_bookshelf',
+            'is_new_genre',
+            'new_genre',
+            'message'
+        );
+
+        $book = Book::create($book_data->toArray());
+
+        return $book;
+    }
+
+    public static function deleteBooks($books_ids, $user)
+    {
+        // 選択した本のIDだけ取得
+        $ids = array_map('\App\Book::selectedIds', $books_ids);
+
+        $books = Book::with(['post' => function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        }])->get();
+
+        foreach ($ids as $id) {
+            $book = $books->where('id', $id)->first();
+
+            $RelatesPost = $book->post instanceof Post;
+
+            if ($RelatesPost) {
+                // POSTに関連づけがある場合は本棚からなくすだけ。
+                $book->isInBookshelf = false;
+                $book->save();
+            } else {
+                // POSTに関連付けがなかったばあいは削除。
+                $book->delete();
+            }
+        }
     }
 
     /*
@@ -105,81 +175,20 @@ class Book extends Model
         return $isIsbn;
     }
 
-    /*
-        argument $form
-        [
-            'add-book'  =>  1 or nothing,
-            'genre'     =>  'new' or 'conventional' or nothing,
-            'new_genre' =>  'genre_name' or nothing,
-            'message'   =>  'message...',
-            'title'     =>  'title',
-            'author'    =>  'author',
-            'cover'     =>  'cover',
-            'publisher' =>  'publisher',
-            'pubdate'   =>  'pubdate',
-            'isbn'      =>  'isbn'
-            'user_id'   =>  ingeger
-        ]
-    */
-    public static function createNewBook($form)
-    {
-        // 新しく本棚に追加
-        if ($form->get('add-book')) {
-            $book_data = $form->merge([
-                'isInBookshelf' => true,
-            ]);
-
-            // 新しいジャンルを作る場合
-            if ($form->get('genre') == 'new') {
-                $genre = Genre::create(['name' => $form->get('new_genre')]);
-    
-                $book_data = $book_data->merge(['genre_id' => $genre->id]);
-            } else {
-                // 既存のジャンルの場合は、既にジャンルIDが入っている
-            }
-        } else {
-            $book_data = $form->merge([
-                'isInBookshelf' => false,
-            ]);
-        }
-
-        $book_data = $book_data->except('add-book', 'genre', 'new_genre', 'message');
-
-        $book = Book::create($book_data->toArray());
-
-        return $book;
-    }
-
-    public static function deleteBooks($books_ids, $user)
-    {
-        // 選択した本のIDだけ取得
-        $ids = array_map('\App\Book::selectedIds', $books_ids);
-
-        $books = Book::with(['post' => function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        }])->get();
-
-        foreach ($ids as $id) {
-            $book = $books->where('id', $id)->first();
-
-            $RelatesPost = $book->post instanceof Post;
-
-            if ($RelatesPost) {
-                // POSTに関連づけがある場合は本棚からなくすだけ。
-                $book->isInBookshelf = false;
-                $book->save();
-            } else {
-                // POSTに関連付けがなかったばあいは削除。
-                $book->delete();
-            }
-        }
-    }
-
     public static function selectedIds($books_id)
     {
         $delimiter = '-';
 
         return explode($delimiter, $books_id)[1];
+    }
+
+    public function registerPost($message = '')
+    {
+        $this->post()->create([
+            'message' => $message,
+            'uuid'    => Str::uuid(),
+            'user_id' => $this->user_id,
+        ]);
     }
 
     public static function returnBookInfoOrRedirect($isbn, $user, $model)

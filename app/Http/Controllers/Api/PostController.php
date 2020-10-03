@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use App\Book;
+use App\Post;
 
 class PostController extends Controller
 {
@@ -23,21 +25,19 @@ class PostController extends Controller
         }
     }
 
-    public function create(PostRequest $request, $isbn)
+    // TODO: PostRequestつかう？
+    public function create(Request $request)
     {
-        $isIsbn = Book::isIsbn($isbn);
+        // $isIsbn = Book::isIsbn($isbn);
 
-        if (! $isIsbn) {
-            abort('400');
-        }
+        // TODO: validationしてから
+        // 扱いやすいようにcollectionにしている。
+        $form = collect($request->input());
 
-        $form = collect($request->except('_token'));
-        $form = $form->merge([
-            'isbn'      =>  $isbn,
-            'user_id'   =>  Auth::id(),
-        ]);
+        $form = $form->merge(['user_id'   =>  Auth::id()]);
+
         Post::createNewPost($form);
 
-        return redirect('/home');
+        return response('done', 200);
     }
 }

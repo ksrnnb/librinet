@@ -5,7 +5,6 @@ const axios = window.axios;
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.login = this.props.login.bind(this);
     this.guestLogin = this.guestLogin.bind(this);
     this.normalUserLogin = this.normalUserLogin.bind(this);

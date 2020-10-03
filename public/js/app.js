@@ -71200,7 +71200,6 @@ var Login = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, Login);
 
     _this = _super.call(this, props);
-    console.log(props);
     _this.login = _this.props.login.bind(_assertThisInitialized(_this));
     _this.guestLogin = _this.guestLogin.bind(_assertThisInitialized(_this));
     _this.normalUserLogin = _this.normalUserLogin.bind(_assertThisInitialized(_this));
@@ -71338,20 +71337,23 @@ var axios = window.axios;
 function AddToBookshelf(props) {
   var book = props.book;
   var isChecked = props.isChecked;
-  var style, value, isDisabled;
+  var className, isDisabled, message, value;
 
   if (book.isInBookshelf) {
-    style = 'opacity:0.5';
-    value = '0';
+    className = 'invalid';
     isDisabled = true;
+    message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "(\u672C\u68DA\u306B\u8FFD\u52A0\u6E08\u307F\u3067\u3059)");
+    value = '0';
   } else {
-    value = '1';
+    className = '';
     isDisabled = false;
+    message = null;
+    value = '1';
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "add-book",
-    style: style
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    className: className,
+    htmlFor: "add-book"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "checkbox",
     name: "add-book",
@@ -71360,14 +71362,14 @@ function AddToBookshelf(props) {
     checked: isChecked,
     disabled: isDisabled,
     onChange: props.onChange
-  }), "\u672C\u68DA\u306B\u8FFD\u52A0");
+  }), "\u672C\u68DA\u306B\u8FFD\u52A0"), message);
 }
 
 function NewGenre(props) {
   var canSelectGenre = props.canSelectGenre;
   var newGenre = props.newGenre;
   var disabled = !canSelectGenre;
-  var isNewGenre = props.isNewGenre; // もし選択されてなかったら強制的にdisable?
+  var isChecked = props.isNewGenre; // もし選択されてなかったら強制的にdisable?
   // if (!isNewGenre) {
   //   disabled = true;
   // }
@@ -71379,7 +71381,7 @@ function NewGenre(props) {
     name: "genre",
     id: "new",
     value: "new",
-    defaultChecked: true,
+    checked: isChecked,
     onChange: props.onChangeRadioButton,
     disabled: disabled
   }), "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -71391,6 +71393,7 @@ function NewGenre(props) {
     id: "new-input",
     value: newGenre,
     disabled: disabled,
+    onClick: props.onClickNewGenre,
     onChange: props.onChange
   })));
 }
@@ -71398,7 +71401,7 @@ function NewGenre(props) {
 function ConventionalGenre(props) {
   var canSelectGenre = props.canSelectGenre;
   var disabled = !canSelectGenre;
-  var isNewGenre = props.isNewGenre; // もし選択されてなかったら強制的にdisable?
+  var isChecked = !props.isNewGenre; // もし選択されてなかったら強制的にdisable?
   // if (isNewGenre) {
   //   disabled = true;
   // }
@@ -71421,12 +71424,17 @@ function ConventionalGenre(props) {
       name: "genre",
       id: "conventional",
       value: "conventional",
+      checked: isChecked,
       disabled: disabled,
       onChange: props.onChangeRadioButton
     }), "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
       name: "genre_id",
       className: "d-block",
-      disabled: disabled
+      id: "convSelect",
+      disabled: disabled,
+      value: props.convGenre,
+      onClick: props.onClickConvGenre,
+      onChange: props.onChangeConvGenre
     }, genreElements));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
@@ -71444,20 +71452,30 @@ function Genres(props) {
     divClass = "invalid";
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: divClass
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewGenre, {
     canSelectGenre: canSelectGenre,
     isNewGenre: props.isNewGenre,
     newGenre: newGenre,
+    onClickNewGenre: props.onClickNewGenre,
     onChange: props.onChangeNewGenre,
     onChangeRadioButton: props.onChangeRadioButton
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ConventionalGenre, {
     canSelectGenre: canSelectGenre,
     genres: props.genres,
+    convGenre: props.convGenre,
     isNewGenre: props.isNewGenre,
+    onChangeConvGenre: props.onChangeConvGenre,
+    onClickConvGenre: props.onClickConvGenre,
     onChangeRadioButton: props.onChangeRadioButton
   }));
+
+  if (props.book.isInBookshelf) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  } else {
+    return element;
+  }
 }
 
 function Book(props) {
@@ -71506,14 +71524,22 @@ var PostData = /*#__PURE__*/function (_React$Component) {
       isChecked: false,
       isNewGenre: true,
       message: '',
-      newGenre: ''
+      newGenre: '',
+      convGenre: ''
     };
     _this.checkedAddToBookshelf = _this.checkedAddToBookshelf.bind(_assertThisInitialized(_this));
+    _this.getParams = _this.getParams.bind(_assertThisInitialized(_this));
+    _this.onClickConvGenre = _this.onClickConvGenre.bind(_assertThisInitialized(_this));
+    _this.onClickNewGenre = _this.onClickNewGenre.bind(_assertThisInitialized(_this));
+    _this.onChangeConvGenre = _this.onChangeConvGenre.bind(_assertThisInitialized(_this));
     _this.onChangeNewGenre = _this.onChangeNewGenre.bind(_assertThisInitialized(_this));
     _this.onChangeMessage = _this.onChangeMessage.bind(_assertThisInitialized(_this));
     _this.onChangeRadioButton = _this.onChangeRadioButton.bind(_assertThisInitialized(_this));
     _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
+    _this.redirectHome = _this.redirectHome.bind(_assertThisInitialized(_this));
     _this.setBook = _this.setBook.bind(_assertThisInitialized(_this));
+    _this.setInitialConvGenre = _this.setInitialConvGenre.bind(_assertThisInitialized(_this));
+    _this.validation = _this.validation.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -71529,14 +71555,14 @@ var PostData = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var params = this.props.props.location.state;
-
-      if (params) {
-        this.setBook(params);
-      } else {
-        var isbn = this.props.props.match.params.isbn;
-        this.getBookData(isbn);
-      }
+      // const params = this.props.props.location.state;
+      // console.log(params);
+      // if (params) {
+      //   this.setBook(params);
+      // } else {
+      // 上の書き方だと、投稿後に更新ボタンを押したとき、投稿したことが反映されない
+      var isbn = this.props.props.match.params.isbn;
+      this.getBookData(isbn);
     }
   }, {
     key: "getBookData",
@@ -71548,6 +71574,48 @@ var PostData = /*#__PURE__*/function (_React$Component) {
         _this2.setBook(response.data);
       })["catch"](function (error) {
         console.log(error);
+      });
+    }
+  }, {
+    key: "getParams",
+    value: function getParams() {
+      var book = this.state.book;
+      var params = {
+        isbn: book.isbn,
+        title: book.title,
+        author: book.author,
+        publisher: book.publisher,
+        pubdate: book.pubdate,
+        cover: book.cover,
+        message: this.state.message,
+        add_to_bookshelf: this.state.isChecked,
+        is_new_genre: this.state.isNewGenre,
+        new_genre: this.state.newGenre,
+        genre_id: this.state.convGenre
+      };
+      return params;
+    }
+  }, {
+    key: "onClickConvGenre",
+    value: function onClickConvGenre() {
+      this.setState({
+        isNewGenre: false,
+        newGenre: ''
+      });
+    }
+  }, {
+    key: "onClickNewGenre",
+    value: function onClickNewGenre() {
+      this.setState({
+        isNewGenre: true
+      });
+    }
+  }, {
+    key: "onChangeConvGenre",
+    value: function onChangeConvGenre(e) {
+      var genreId = e.target.value;
+      this.setState({
+        convGenre: genreId
       });
     }
   }, {
@@ -71570,28 +71638,47 @@ var PostData = /*#__PURE__*/function (_React$Component) {
     key: "onChangeRadioButton",
     value: function onChangeRadioButton() {
       var isNewGenre = !this.state.isNewGenre;
+      var newGenre = this.state.newGenre;
+
+      if (!isNewGenre) {
+        newGenre = '';
+      }
+
       this.setState({
-        isNewGenre: isNewGenre
+        isNewGenre: isNewGenre,
+        newGenre: newGenre
       });
     }
   }, {
     key: "onSubmit",
     value: function onSubmit() {
-      var path = '/api/book/post' + this.state.book.isbn;
-      console.log(this.state.book);
-      console.log(this.state.message); // axios.post(path, {
-      // })
+      var _this3 = this;
+
+      var book = this.state.book;
+      var message = this.state.message;
+      var path = '/api/book/post/' + book.isbn;
+      var params = this.getParams();
+      var errors = this.validation(params);
+
+      if (errors.length) {
+        console.log(errors);
+      } else {
+        axios.post(path, params).then(function (response) {
+          _this3.redirectHome();
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      }
     }
   }, {
-    key: "sendPost",
-    value: function sendPost() {
-      var path = this.props.props.location;
-      axios.post(path, {
-        title: title,
-        author: author,
-        cover: cover,
-        publisher: publisher,
-        pubdata: pubdate
+    key: "redirectHome",
+    value: function redirectHome() {
+      var _this4 = this;
+
+      axios.get('/api/home').then(function (response) {
+        _this4.props.props.history.push('/home');
+      })["catch"](function (error) {
+        console.log(error);
       });
     }
   }, {
@@ -71603,6 +71690,35 @@ var PostData = /*#__PURE__*/function (_React$Component) {
         genres: params.genres,
         isChecked: isChecked
       });
+      this.setInitialConvGenre(params.genres);
+    }
+  }, {
+    key: "setInitialConvGenre",
+    value: function setInitialConvGenre(genres) {
+      var keys = Object.keys(genres);
+      var hasGenres = keys.length;
+
+      if (hasGenres) {
+        var iniValue = keys[0];
+        this.setState({
+          convGenre: iniValue
+        });
+      }
+    }
+  }, {
+    key: "validation",
+    value: function validation(params) {
+      var errors = [];
+
+      if (params.message == "") {
+        errors.push('Messege error!');
+      }
+
+      if (params.add_to_bookshelf && params.is_new_genre && params.new_genre == "") {
+        errors.push('No Input Error in new Genre!');
+      }
+
+      return errors;
     }
   }, {
     key: "render",
@@ -71611,6 +71727,7 @@ var PostData = /*#__PURE__*/function (_React$Component) {
       var book = this.state.book;
       var genres = this.state.genres;
       var message = this.state.message;
+      var convGenre = this.state.convGenre;
       var newGenre = this.state.newGenre;
       var isChecked = this.state.isChecked;
       var isNewGenre = this.state.isNewGenre;
@@ -71623,11 +71740,16 @@ var PostData = /*#__PURE__*/function (_React$Component) {
           book: book,
           onChange: this.checkedAddToBookshelf
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Genres, {
+          book: book,
           isChecked: isChecked,
           isNewGenre: isNewGenre,
           genres: genres,
           newGenre: newGenre,
+          convGenre: convGenre,
           onChangeNewGenre: this.onChangeNewGenre,
+          onClickNewGenre: this.onClickNewGenre,
+          onClickConvGenre: this.onClickConvGenre,
+          onChangeConvGenre: this.onChangeConvGenre,
           onChangeRadioButton: this.onChangeRadioButton
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Book, {
           book: book

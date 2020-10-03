@@ -8,32 +8,37 @@ function AddToBookshelf(props) {
   const book = props.book;
   const isChecked = props.isChecked;
 
-  let style, value, isDisabled;
+  let className, isDisabled, message, value;
 
   if (book.isInBookshelf) {
-    style = 'opacity:0.5';
-    value = '0';
+    className = 'invalid';
     isDisabled = true;
+    message = <p>(本棚に追加済みです)</p>;
+    value = '0';
   } else {
-    value = '1';
+    className = '';
     isDisabled = false;
+    message = null;
+    value = '1';
 
   }
 
   return (
-    <label htmlFor="add-book" style={style}>
-      <input
-        type="checkbox"
-        name="add-book"
-        id="add-book"
-        value={value}
-        checked={isChecked}
-        disabled={isDisabled}
-        onChange={props.onChange}
-      />
-        本棚に追加
-    </label>
-
+    <>
+      <label className={className} htmlFor="add-book">
+        <input
+          type="checkbox"
+          name="add-book"
+          id="add-book"
+          value={value}
+          checked={isChecked}
+          disabled={isDisabled}
+          onChange={props.onChange}
+        />
+          本棚に追加
+      </label>
+      {message}
+    </>
   );
 }
 
@@ -42,7 +47,7 @@ function NewGenre(props) {
   const newGenre = props.newGenre;
   let disabled = !canSelectGenre;
 
-  const isNewGenre = props.isNewGenre;
+  const isChecked = props.isNewGenre;
   // もし選択されてなかったら強制的にdisable?
   // if (!isNewGenre) {
   //   disabled = true;
@@ -57,7 +62,7 @@ function NewGenre(props) {
           name="genre"
           id="new"
           value="new"
-          defaultChecked
+          checked={isChecked}
           onChange={props.onChangeRadioButton}
           disabled={disabled} />
              新しいジャンルを入力
@@ -69,6 +74,7 @@ function NewGenre(props) {
           id="new-input"
           value={newGenre}
           disabled={disabled}
+          onClick={props.onClickNewGenre}
           onChange={props.onChange}
         />
       </label>
@@ -81,7 +87,7 @@ function ConventionalGenre(props) {
   const canSelectGenre = props.canSelectGenre;
   let disabled = !canSelectGenre;
 
-  const isNewGenre = props.isNewGenre;
+  const isChecked = !props.isNewGenre;
   // もし選択されてなかったら強制的にdisable?
   // if (isNewGenre) {
   //   disabled = true;
@@ -103,12 +109,21 @@ function ConventionalGenre(props) {
             name="genre"
             id="conventional"
             value="conventional"
+            checked={isChecked}
             disabled={disabled}
             onChange={props.onChangeRadioButton}
           />
             既存のジャンルから選択
-       </label>
-        <select name="genre_id" className="d-block" disabled={disabled} >
+        </label>
+        <select
+          name="genre_id"
+          className="d-block"
+          id="convSelect"
+          disabled={disabled}
+          value={props.convGenre}
+          onClick={props.onClickConvGenre}
+          onChange={props.onChangeConvGenre}
+        >
           {genreElements}
         </select>
       </>
@@ -129,23 +144,33 @@ function Genres(props) {
     divClass = "invalid";
   }
 
-  return (
+  const element = (
     <div className={divClass}>
       <NewGenre
         canSelectGenre={canSelectGenre}
         isNewGenre={props.isNewGenre}
         newGenre={newGenre}
+        onClickNewGenre={props.onClickNewGenre}
         onChange={props.onChangeNewGenre}
         onChangeRadioButton={props.onChangeRadioButton}
       />
       <ConventionalGenre
         canSelectGenre={canSelectGenre}
         genres={props.genres}
+        convGenre={props.convGenre}
         isNewGenre={props.isNewGenre}
+        onChangeConvGenre={props.onChangeConvGenre}
+        onClickConvGenre={props.onClickConvGenre}
         onChangeRadioButton={props.onChangeRadioButton}
       />
     </div>
   );
+
+  if (props.book.isInBookshelf) {
+    return <></>;
+  } else {
+    return element;
+  }
 }
 
 function Book(props) {
@@ -190,14 +215,22 @@ export default class PostData extends React.Component {
       isNewGenre: true,
       message: '',
       newGenre: '',
+      convGenre: '',
     };
 
     this.checkedAddToBookshelf = this.checkedAddToBookshelf.bind(this);
+    this.getParams = this.getParams.bind(this);
+    this.onClickConvGenre = this.onClickConvGenre.bind(this);
+    this.onClickNewGenre = this.onClickNewGenre.bind(this);
+    this.onChangeConvGenre = this.onChangeConvGenre.bind(this);
     this.onChangeNewGenre = this.onChangeNewGenre.bind(this);
     this.onChangeMessage = this.onChangeMessage.bind(this);
     this.onChangeRadioButton = this.onChangeRadioButton.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.redirectHome = this.redirectHome.bind(this);
     this.setBook = this.setBook.bind(this);
+    this.setInitialConvGenre = this.setInitialConvGenre.bind(this);
+    this.validation = this.validation.bind(this);
   }
 
   checkedAddToBookshelf() {
@@ -209,15 +242,15 @@ export default class PostData extends React.Component {
   }
 
   componentDidMount() {
-    const params = this.props.props.location.state;
+    // const params = this.props.props.location.state;
+    // console.log(params);
+    // if (params) {
+    //   this.setBook(params);
+    // } else {
 
-    if (params) {
-      this.setBook(params);
-    } else {
-      const isbn = this.props.props.match.params.isbn;
-      this.getBookData(isbn);
-    }
-
+    // 上の書き方だと、投稿後に更新ボタンを押したとき、投稿したことが反映されない
+    const isbn = this.props.props.match.params.isbn;
+    this.getBookData(isbn);
   }
 
   getBookData(isbn) {
@@ -228,7 +261,46 @@ export default class PostData extends React.Component {
       })
       .catch(error => {
         console.log(error);
-      })
+      });
+  }
+
+  getParams() {
+    const book = this.state.book;
+    const params = {
+      isbn: book.isbn,
+      title: book.title,
+      author: book.author,
+      publisher: book.publisher,
+      pubdate: book.pubdate,
+      cover: book.cover,
+      message: this.state.message,
+      add_to_bookshelf: this.state.isChecked,
+      is_new_genre: this.state.isNewGenre,
+      new_genre: this.state.newGenre,
+      genre_id: this.state.convGenre,
+    };
+
+    return params;
+  }
+
+  onClickConvGenre() {
+    this.setState({
+      isNewGenre: false,
+      newGenre: '',
+    });
+  }
+
+  onClickNewGenre() {
+    this.setState({
+      isNewGenre: true,
+    });
+  }
+
+  onChangeConvGenre(e) {
+    const genreId = e.target.value;
+    this.setState({
+      convGenre: genreId,
+    });
   }
 
   onChangeNewGenre(e) {
@@ -247,29 +319,46 @@ export default class PostData extends React.Component {
 
   onChangeRadioButton() {
     const isNewGenre = !this.state.isNewGenre;
+    let newGenre = this.state.newGenre;
+    if (!isNewGenre) {
+      newGenre = '';
+    }
+
     this.setState({
       isNewGenre: isNewGenre,
+      newGenre: newGenre,
     });
   }
 
   onSubmit() {
-    const path = '/api/book/post' + this.state.book.isbn;
-    console.log(this.state.book);
-    console.log(this.state.message);
-    // axios.post(path, {
+    const book = this.state.book;
+    const message = this.state.message;
+    const path = '/api/book/post/' + book.isbn;
 
-    // })
+    const params = this.getParams();
+    const errors = this.validation(params);
+
+    if (errors.length) {
+      console.log(errors);
+    } else {
+      axios.post(path, params)
+        .then(response => {
+          this.redirectHome();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 
-  sendPost() {
-    const path = this.props.props.location;
-    axios.post(path, {
-      title: title,
-      author: author,
-      cover: cover,
-      publisher: publisher,
-      pubdata: pubdate,
-    });
+  redirectHome() {
+    axios.get('/api/home')
+      .then(response => {
+        this.props.props.history.push('/home');
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   setBook(params) {
@@ -280,6 +369,36 @@ export default class PostData extends React.Component {
       genres: params.genres,
       isChecked: isChecked,
     });
+
+    this.setInitialConvGenre(params.genres);
+  }
+
+  setInitialConvGenre(genres) {
+    const keys = Object.keys(genres);
+    const hasGenres = keys.length;
+
+    if (hasGenres) {
+      const iniValue = keys[0];
+
+      this.setState({
+        convGenre: iniValue,
+      });
+    }
+  }
+
+  validation(params) {
+    const errors = [];
+
+    if (params.message == "") {
+      errors.push('Messege error!');
+    }
+    if (params.add_to_bookshelf
+      && params.is_new_genre
+      && params.new_genre == "") {
+      errors.push('No Input Error in new Genre!');
+    }
+
+    return errors;
   }
 
   render() {
@@ -287,6 +406,7 @@ export default class PostData extends React.Component {
     const book = this.state.book;
     const genres = this.state.genres;
     const message = this.state.message;
+    const convGenre = this.state.convGenre;
     const newGenre = this.state.newGenre;
     const isChecked = this.state.isChecked;
     const isNewGenre = this.state.isNewGenre;
@@ -301,11 +421,16 @@ export default class PostData extends React.Component {
             onChange={this.checkedAddToBookshelf}
           />
           <Genres
+            book={book}
             isChecked={isChecked}
             isNewGenre={isNewGenre}
             genres={genres}
             newGenre={newGenre}
+            convGenre={convGenre}
             onChangeNewGenre={this.onChangeNewGenre}
+            onClickNewGenre={this.onClickNewGenre}
+            onClickConvGenre={this.onClickConvGenre}
+            onChangeConvGenre={this.onChangeConvGenre}
             onChangeRadioButton={this.onChangeRadioButton}
           />
           <Book book={book} />

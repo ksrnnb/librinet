@@ -27,10 +27,7 @@ Route::get('/{any}', function () {
 
 // // -> /userを検索ページに
 // Route::get('/user/profile/{str_id}', 'UserController@profile');
-// Route::get('/user/search', 'UserController@search');
-// Route::post('/user/search', 'UserController@find');
 
-// Route::get('/user/profile/{str_id}', 'UserController@index');
 // Route::get('/user/follows/{str_id}', 'UserController@follows');
 // Route::get('/user/followers/{str_id}', 'UserController@followers');
 
@@ -43,8 +40,6 @@ Route::get('/{any}', function () {
 // // homeは認証されてなかったらゲストにリダイレクトしたい
 // Route::get('/home', 'HomeController@index')->middleware('auth');
 
-// Route::get('/book', 'BookController@index');
-// Route::post('/book', 'BookController@search');
 // Route::get('/book/show/{isbn}', 'BookController@show')->middleware('auth')->name('book');
 
 // Route::get('/book/add/{isbn}', 'BookController@add');
@@ -61,7 +56,6 @@ Route::get('/{any}', function () {
 // Route::post('/book/post/{isbn}', 'PostController@create');
 
 // Route::post('/comment/remove/{uuid}', 'CommentController@remove');
-// Route::post('/like', 'LikeController@like');
 // Route::post('/follow', 'FollowerController@follow');
 
 // Route::get('/logout', 'Auth\LoginController@logout');

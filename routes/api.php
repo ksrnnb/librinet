@@ -26,7 +26,9 @@ Route::post('/user', 'Api\UserController@search');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', 'Api\LoginController@logout');
     Route::get('/user/auth', 'Api\UserController@auth');
-    Route::post('/like', 'LikeController@like');
+    Route::post('/like', 'Api\LikeController@like');
+    Route::get('/book/post/{isbn}', 'Api\PostController@add');
+    Route::post('/book/post/{isbn}', 'Api\PostController@create');
 });
 
 // Route::middleware('auth:sanctum')->get('guest/login', 'Auth\LoginController@guest');

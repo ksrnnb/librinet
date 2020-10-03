@@ -1,6 +1,6 @@
 import React from 'react';
 import Subtitle from './Subtitle';
-
+import BookCard from './BookCard';
 const axios = window.axios;
 
 function InputPrompt() {
@@ -78,18 +78,17 @@ function Button(props) {
 }
 
 export default class Book extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       input: null,
       book: null,
+      isInBookshelf: null,
       errorMessage: null,
-      isNotInBookshelf: null,
     };
 
-    this.bookImage = this.bookImage.bind(this);
-    this.bookInfo = this.bookInfo.bind(this);
+    this.linkToPost = this.linkToPost.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.sendPost = this.sendPost.bind(this);
     this.setBook = this.setBook.bind(this);
@@ -99,35 +98,25 @@ export default class Book extends React.Component {
     );
   }
 
-  bookImage() {
+  postButton() {
     const book = this.state.book;
-    let image;
-
-    if (book.cover) {
-      image = <img className="img-fluid" src={book.cover} alt="book_image" />;
-    } else {
-      image = (
-        <img className="img-fluid" src="../img/book.svg" alt="book_image" />
-      );
-    }
-
-    return (
-      <div className="col-3">
-        <figure className="mx-2 px-0 mb-0 book">{image}</figure>
-      </div>
+    const postButton = (
+      <button
+        type="button"
+        className="btn btn-outline-success mr-3"
+        onClick={() => {
+          this.linkToPost(book);
+        }}
+      >
+        本の投稿をする
+      </button>
     );
-  }
 
-  bookInfo() {
-    const book = this.state.book;
-    const pub_year = book.pubdate.slice(0, 4) + '年';
-
-    const isNotInBookshelf = this.state.isNotInBookshelf;
     let addButton = null;
-
-    if (isNotInBookshelf) {
+    const isInBookshelf = this.state.isInBookshelf;
+    if (!isInBookshelf) {
       addButton = (
-        <a href={'/book/add/' + book.isbn}>
+        <a href={'/api/book/add/' + book.isbn}>
           <button type="button" className="btn btn-outline-success">
             本棚に追加する
           </button>
@@ -136,19 +125,30 @@ export default class Book extends React.Component {
     }
 
     return (
-      <div className="col-9">
-        <p className="one-row">タイトル： {book.title}</p>
-        <p className="one-row mt-3">著者：{book.author}</p>
-        <p className="one-row mt-3">出版社：{book.publisher}</p>
-        <p className="one-row mt-3">出版年：{pub_year}</p>
-        <a href={'/book/post/' + book.isbn}>
-          <button type="button" className="btn btn-outline-success mr-3">
-            本の投稿をする
-          </button>
-        </a>
+      <>
+        {postButton}
         {addButton}
-      </div>
+      </>
     );
+  }
+
+  linkToPost(book) {
+    const postUrl = '/book/post/' + book.isbn;
+    const apiUrl = '/api' + postUrl;
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        this.props.props.history.push({
+          pathname: postUrl,
+          state: {
+            book: response.data.book,
+            genres: response.data.genres,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   onChangeInput(e) {
@@ -171,7 +171,7 @@ export default class Book extends React.Component {
   setBook(params) {
     this.setState({
       book: params.book,
-      isNotInBookshelf: params.isNotInBookshelf,
+      isInBookshelf: params.isInBookshelf,
       errorMessage: null,
     });
   }
@@ -202,7 +202,7 @@ export default class Book extends React.Component {
           isbn: input,
         })
         .then((response) => {
-          this.setBook(response.data.params);
+          this.setBook(response.data);
         })
         .catch((error) => {
           // 本が見つからない場合は404に設定した (BookController)
@@ -232,13 +232,13 @@ export default class Book extends React.Component {
   }
 
   render() {
-    const searchedBook = this.state.book != null;
+    const book = this.state.book;
+    const hasSearchedBook = book != null;
     let bookElement = null;
-    if (searchedBook) {
+    if (hasSearchedBook) {
       bookElement = (
         <div className="row mt-5 book">
-          {this.bookImage()}
-          {this.bookInfo()}
+          <BookCard book={book}>{this.postButton()}</BookCard>
         </div>
       );
     }

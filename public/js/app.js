@@ -70623,18 +70623,71 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var axios = window.axios;
 
+function GenreForm(props) {
+  var genresBooks = props.genresBooks;
+  var genres = props.genres;
+
+  if (genresBooks) {
+    var options = Object.keys(genresBooks).map(function (genreId) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
+        label: genres[genreId],
+        key: genreId
+      }, genresBooks[genreId].map(function (book) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: book.id,
+          key: book.id
+        }, book.title);
+      }));
+    });
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      name: "book_id",
+      id: "select-book",
+      disabled: !props.isRecommended,
+      onChange: function onChange(e) {
+        props.setBookId(e.target.value);
+      }
+    }, options);
+  }
+}
+
+function RecommendButton(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "recommend",
+    className: "mt-5"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "checkbox",
+    name: "recommend",
+    id: "recommend",
+    checked: props.isRecommended,
+    onChange: props.onChangeRecommend
+  }), "\u672C\u3082\u304A\u3059\u3059\u3081\u3059\u308B");
+}
+
 function RecommendBook(props) {
-  var genresBooks = props.genresBooks; // if (genresBooks) {
-  //   Object.keys(genresBooks).map(genre
-  //   );
-  // }
+  var genresBooks = props.genresBooks;
+  var genres = props.genres;
+  var isRecommended = props.isRecommended;
+
+  if (genresBooks) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendButton, {
+      isChecked: isRecommended,
+      onChangeRecommend: props.onChangeRecommend
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(GenreForm, {
+      genres: genres,
+      genresBooks: genresBooks,
+      isRecommended: isRecommended,
+      setBookId: props.setBookId
+    }));
+  }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
 }
 
 function CommentForm(props) {
   var message = props.message;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Comment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "mt-5"
+  }, "Comment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
     cols: "30",
     rows: "10",
     value: message,
@@ -70657,13 +70710,17 @@ var Comment = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
+      bookId: null,
       item: null,
       isPost: null,
+      isRecommended: false,
       message: ''
     };
     _this.onChangeMessage = _this.onChangeMessage.bind(_assertThisInitialized(_this));
-    _this.setItem = _this.setItem.bind(_assertThisInitialized(_this));
+    _this.onChangeRecommend = _this.onChangeRecommend.bind(_assertThisInitialized(_this));
     _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
+    _this.setItem = _this.setItem.bind(_assertThisInitialized(_this));
+    _this.setBookId = _this.setBookId.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -70688,15 +70745,32 @@ var Comment = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "onChangeRecommend",
+    value: function onChangeRecommend() {
+      var isRecommended = !this.state.isRecommended;
+
+      if (isRecommended) {
+        var id = document.getElementById('select-book').value;
+        this.setState({
+          bookId: id,
+          isRecommended: isRecommended
+        });
+      } else {
+        this.setState({
+          isRecommended: isRecommended
+        });
+      }
+    }
+  }, {
     key: "onSubmit",
     value: function onSubmit() {
-      var _this3 = this;
-
+      var bookId = this.state.isRecommended ? this.state.bookId : null;
       var isPost = this.state.isPost;
       var itemId = this.state.item.id;
       var message = this.state.message;
       var userId = this.props.viewerId;
       var params = {
+        book_id: bookId,
         is_post: isPost,
         post_id: itemId,
         message: message,
@@ -70709,12 +70783,18 @@ var Comment = /*#__PURE__*/function (_React$Component) {
         console.log('Message is Empty!');
       } else {
         axios.post(path, params).then(function (response) {
-          console.log(response.data);
-          _Functions__WEBPACK_IMPORTED_MODULE_3__["default"].prototype.redirectHome.call(_this3);
+          console.log(response.data); // Functions.prototype.redirectHome.call(this);
         })["catch"](function (error) {
           console.log(error);
         });
       }
+    }
+  }, {
+    key: "setBookId",
+    value: function setBookId(id) {
+      this.setState({
+        bookId: id
+      });
     }
   }, {
     key: "setItem",
@@ -70728,6 +70808,7 @@ var Comment = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       var item = this.state.item;
+      var isRecommended = this.state.isRecommended;
       var genresBooks = this.props.genresBooks;
       var genres = this.props.genres;
       var message = this.props.message;
@@ -70741,7 +70822,10 @@ var Comment = /*#__PURE__*/function (_React$Component) {
           viewerId: viewerId
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendBook, {
           genresBooks: genresBooks,
-          genres: genres
+          genres: genres,
+          isRecommended: isRecommended,
+          onChangeRecommend: this.onChangeRecommend,
+          setBookId: this.setBookId
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CommentForm, {
           message: message,
           onClick: this.onSubmit,

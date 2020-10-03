@@ -67,6 +67,13 @@ class CommentController extends Controller
             'uuid'    => Str::uuid(),
         ];
 
+        if ($form['book_id']) {
+            $params = array_merge(
+                $params,
+                ['book_id' => $form['book_id']]
+            );
+        }
+
         if ($form['is_post']) {
             Comment::create($params);
         }

@@ -1,4 +1,5 @@
 import Book from './Book';
+import Comment from './Comment';
 import Header from './Header';
 import Home from './Home';
 import Login from './Login';
@@ -141,6 +142,8 @@ class App extends React.Component {
 
   pages(params, isVisible) {
     const exampleUsers = params ? params.example_users : null;
+    const genresBooks = params ? params.genres_books : null;
+    const genres = params ? params.genres : null;
     const posts = params ? params.posts : null;
     const viewerId = params ? params.user.id : null;
 
@@ -177,6 +180,22 @@ class App extends React.Component {
           <Route
             path="/book/post/:isbn"
             render={(props) => <PostData props={props} />}
+          />
+          {/* <Route
+            exact
+            path="/comment"
+            render={(props) => <Comment props={props} />}
+          /> */}
+          <Route
+            path="/comment/:uuid"
+            render={(props) => (
+              <Comment
+                genresBooks={genresBooks}
+                genres={genres}
+                viewerId={viewerId}
+                props={props}
+              />
+            )}
           />
         </Switch>
       </div>

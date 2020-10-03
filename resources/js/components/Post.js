@@ -20,7 +20,6 @@ function AddToBookshelf(props) {
     isDisabled = false;
     message = null;
     value = '1';
-
   }
 
   return (
@@ -35,7 +34,7 @@ function AddToBookshelf(props) {
           disabled={isDisabled}
           onChange={props.onChange}
         />
-          本棚に追加
+        本棚に追加
       </label>
       {message}
     </>
@@ -64,8 +63,9 @@ function NewGenre(props) {
           value="new"
           checked={isChecked}
           onChange={props.onChangeRadioButton}
-          disabled={disabled} />
-             新しいジャンルを入力
+          disabled={disabled}
+        />
+        新しいジャンルを入力
       </label>
       <label className="d-block" htmlFor="new_genre">
         <input
@@ -83,7 +83,6 @@ function NewGenre(props) {
 }
 
 function ConventionalGenre(props) {
-
   const canSelectGenre = props.canSelectGenre;
   let disabled = !canSelectGenre;
 
@@ -97,8 +96,12 @@ function ConventionalGenre(props) {
   const genresExist = Object.keys(genres).length;
 
   if (genresExist) {
-    const genreElements = Object.keys(genres).map(id => {
-      return <option value={id} key={id} name="genre_id">{genres[id]}</option>
+    const genreElements = Object.keys(genres).map((id) => {
+      return (
+        <option value={id} key={id} name="genre_id">
+          {genres[id]}
+        </option>
+      );
     });
 
     return (
@@ -113,7 +116,7 @@ function ConventionalGenre(props) {
             disabled={disabled}
             onChange={props.onChangeRadioButton}
           />
-            既存のジャンルから選択
+          既存のジャンルから選択
         </label>
         <select
           name="genre_id"
@@ -139,9 +142,9 @@ function Genres(props) {
   let divClass;
 
   if (canSelectGenre) {
-    divClass = "";
+    divClass = '';
   } else {
-    divClass = "invalid";
+    divClass = 'invalid';
   }
 
   const element = (
@@ -198,13 +201,14 @@ function Post(props) {
           required
         />
       </label>
-      <button className="d-block" id="submit-button" onClick={props.onSubmit}>投稿する</button>
+      <button className="d-block" id="submit-button" onClick={props.onSubmit}>
+        投稿する
+      </button>
     </>
   );
 }
 
 export default class PostData extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -255,11 +259,12 @@ export default class PostData extends React.Component {
 
   getBookData(isbn) {
     const path = '/api/book/post/' + isbn;
-    axios.get(path)
-      .then(response => {
+    axios
+      .get(path)
+      .then((response) => {
         this.setBook(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -341,22 +346,24 @@ export default class PostData extends React.Component {
     if (errors.length) {
       console.log(errors);
     } else {
-      axios.post(path, params)
-        .then(response => {
+      axios
+        .post(path, params)
+        .then((response) => {
           this.redirectHome();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
   }
 
   redirectHome() {
-    axios.get('/api/home')
-      .then(response => {
+    axios
+      .get('/api/home')
+      .then((response) => {
         this.props.props.history.push('/home');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -389,12 +396,14 @@ export default class PostData extends React.Component {
   validation(params) {
     const errors = [];
 
-    if (params.message == "") {
+    if (params.message == '') {
       errors.push('Messege error!');
     }
-    if (params.add_to_bookshelf
-      && params.is_new_genre
-      && params.new_genre == "") {
+    if (
+      params.add_to_bookshelf &&
+      params.is_new_genre &&
+      params.new_genre == ''
+    ) {
       errors.push('No Input Error in new Genre!');
     }
 
@@ -434,7 +443,11 @@ export default class PostData extends React.Component {
             onChangeRadioButton={this.onChangeRadioButton}
           />
           <Book book={book} />
-          <Post message={message} onChange={this.onChangeMessage} onSubmit={this.onSubmit} />
+          <Post
+            message={message}
+            onChange={this.onChangeMessage}
+            onSubmit={this.onSubmit}
+          />
         </>
       );
     } else {

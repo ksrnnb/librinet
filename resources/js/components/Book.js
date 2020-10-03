@@ -101,9 +101,12 @@ export default class Book extends React.Component {
   postButton() {
     const book = this.state.book;
     const postButton = (
-      <button type="button"
+      <button
+        type="button"
         className="btn btn-outline-success mr-3"
-        onClick={() => { this.linkToPost(book) }}
+        onClick={() => {
+          this.linkToPost(book);
+        }}
       >
         本の投稿をする
       </button>
@@ -129,21 +132,21 @@ export default class Book extends React.Component {
     );
   }
 
-
   linkToPost(book) {
     const postUrl = '/book/post/' + book.isbn;
     const apiUrl = '/api' + postUrl;
-    axios.get(apiUrl)
-      .then(response => {
+    axios
+      .get(apiUrl)
+      .then((response) => {
         this.props.props.history.push({
           pathname: postUrl,
           state: {
             book: response.data.book,
             genres: response.data.genres,
-          }
+          },
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -235,9 +238,7 @@ export default class Book extends React.Component {
     if (hasSearchedBook) {
       bookElement = (
         <div className="row mt-5 book">
-          <BookCard book={book}>
-            {this.postButton()}
-          </BookCard>
+          <BookCard book={book}>{this.postButton()}</BookCard>
         </div>
       );
     }

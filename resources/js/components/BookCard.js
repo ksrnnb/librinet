@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default class BookCard extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -11,9 +10,7 @@ export default class BookCard extends React.Component {
     return (
       <div className="row">
         <BookImage book={book} />
-        <BookInfo book={book}>
-          {this.props.children}
-        </BookInfo>
+        <BookInfo book={book}>{this.props.children}</BookInfo>
       </div>
     );
   }

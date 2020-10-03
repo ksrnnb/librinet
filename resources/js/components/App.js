@@ -159,7 +159,8 @@ class App extends React.Component {
           <Route
             exact
             path="/book"
-            render={(props) => <Book props={props} />} />
+            render={(props) => <Book props={props} />}
+          />
           <Route
             path="/user/search"
             render={() => <User example={exampleUsers} />}

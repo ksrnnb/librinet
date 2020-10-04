@@ -137,28 +137,40 @@ export default class Profile extends React.Component {
   componentDidMount() {
     // TODO: userがnull or undefinedの場合の処理
     // const params = this.props.location.state.params;
-    const hasState = this.props.location.state;
+    // console.log(this.props);
+    this.setup();
+  }
+
+  // componentDidUpdate(prevProps) {
+  //   if (this.props.id !== prevProps.id) {
+  //     this.setup();
+  //   }
+  // }
+
+  setup() {
+    const props = this.props.props;
+    const hasState = props.location.state;
 
     if (hasState) {
-      const params = this.props.location.state.params;
-      const viewerStrId = this.props.location.state.viewerStrId;
+      const params = props.location.state.params;
+      const viewerStrId = props.location.state.viewerStrId;
 
       this.setState({
         params: params,
         viewerStrId: viewerStrId,
       });
-
     } else {
-      const path = '/api/user/profile/' + this.props.match.params.strId;
-      axios.get(path)
-        .then(response => {
+      const path = '/api/user/profile/' + props.match.params.strId;
+      axios
+        .get(path)
+        .then((response) => {
           const params = response.data;
           this.setState({
             params: params,
             viewerStrId: params.viewer_str_id,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
@@ -177,9 +189,15 @@ export default class Profile extends React.Component {
           <UserCard user={params.user}>
             <EditButton user={params.user} viewerStrId={viewerStrId} />
             {/* {FollowButton} */}
-            <FollowNumber follows={params.follows} followers={params.followers} />
+            <FollowNumber
+              follows={params.follows}
+              followers={params.followers}
+            />
           </UserCard>
-          <Bookshelf genres={params.genres} genres_books={params.genres_books} />
+          <Bookshelf
+            genres={params.genres}
+            genres_books={params.genres_books}
+          />
         </>
       );
     } else {

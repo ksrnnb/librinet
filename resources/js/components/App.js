@@ -1,3 +1,4 @@
+import AddBook from './AddBook';
 import Book from './Book';
 import Comment from './Comment';
 import Header from './Header';
@@ -15,18 +16,12 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 const axios = window.axios;
 
 function SubColumn(props) {
-  const params = props.params;
   const userUrl = props.userUrl;
   let profileAndLoginLogoutLink = null;
   if (userUrl) {
     profileAndLoginLogoutLink = (
       <>
-        <Link
-          to={{
-            pathname: userUrl,
-            state: { params: params, viewerStrId: params.user.str_id },
-          }}
-        >
+        <Link to={userUrl}>
           <h4 className="mt-4">プロフィール</h4>
         </Link>
         <Link to="/logout">
@@ -149,6 +144,7 @@ class App extends React.Component {
     const genres = params ? params.genres : null;
     const posts = params ? params.posts : null;
     const viewerId = params ? params.user.id : null;
+    const viewerStrId = params ? params.user.str_id : null;
 
     let margin = null;
     if (isVisible) {
@@ -172,7 +168,16 @@ class App extends React.Component {
             path="/user"
             render={() => <User example={exampleUsers} />}
           />
-          <Route path="/user/profile/:strId" component={Profile} />
+          <Route
+            path="/user/profile/:strId"
+            render={(props) => (
+              <Profile
+                props={props}
+                params={params}
+                viewerStrId={viewerStrId}
+              />
+            )}
+          />
           <Route
             path="/login"
             render={(props) => <Login props={props} login={this.login} />}
@@ -185,11 +190,10 @@ class App extends React.Component {
             path="/book/post/:isbn"
             render={(props) => <PostData props={props} />}
           />
-          {/* <Route
-            exact
-            path="/comment"
-            render={(props) => <Comment props={props} />}
-          /> */}
+          <Route
+            path="/book/add/:isbn"
+            render={(props) => <AddBook props={props} />}
+          />
           <Route
             path="/comment/:uuid"
             render={(props) => (
@@ -224,6 +228,9 @@ class App extends React.Component {
       url = null;
     }
 
+    const hasLoaded = params != null;
+
+    // if (hasLoaded) {
     if (isVisible) {
       return (
         <Router>
@@ -244,6 +251,9 @@ class App extends React.Component {
         </Router>
       );
     }
+    // } else {
+    //   return <></>;
+    // }
   }
 }
 

@@ -93,38 +93,6 @@ jobs:
       # ビルド結果を通知
       - slack/status
 
-  # 更新しない場合は不要？　試してみてもいいかと。
-  aws-ecr/build-and-push-image:
-    account-url: AWS_ECR_ACCOUNT_URL
-    aws-access-key-id: AWS_ACCESS_KEY_ID
-    aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-    create-repo: true
-    # Name of dockerfile to use. Defaults to Dockerfile.
-    dockerfile: Dockerfile
-
-    # AWS_REGION_ENV_VAR_NAME
-    region: AWS_DEFAULT_REGION
-
-    # my ECR Repository
-    # repo: '${MY_APP_PREFIX}'
-    repo: 'app-ecs'
-
-    # my ECR Repo Tag
-    tag: "$CIRCLE_SHA1"
-
-  aws-ecs/deploy-service-update:
-    aws-region: AWS_DEFAULT_REGION
-    # Name of the task definition's family.
-    # タスク名とサービス名は同じにしておかないとエラーが発生する。
-    family: '${MY_APP_PREFIX}-service'
-    cluster-name: '${MY_APP_PREFIX}-cluster'
-    # Use this to update the Docker image names and/or tag names of existing containers that had been defined in the previous task definition
-    container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
-
-    # デプロイ結果を通知
-    steps:
-      - slack/status
-
 workflows:
   build_and_push_image:
     jobs:
@@ -135,6 +103,35 @@ workflows:
           filters:
             branches:
               only: master
+          # 更新しない場合は不要？　試してみてもいいかと。
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: true
+          # Name of dockerfile to use. Defaults to Dockerfile.
+          dockerfile: Dockerfile
+
+          # AWS_REGION_ENV_VAR_NAME
+          region: AWS_DEFAULT_REGION
+
+          # my ECR Repository
+          # repo: '${MY_APP_PREFIX}'
+          repo: 'app-ecs'
+
+          # my ECR Repo Tag
+          tag: "$CIRCLE_SHA1"
+
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
+          aws-region: AWS_DEFAULT_REGION
+          # Name of the task definition's family.
+          # タスク名とサービス名は同じにしておかないとエラーが発生する。
+          family: '${MY_APP_PREFIX}-service'
+          cluster-name: '${MY_APP_PREFIX}-cluster'
+          # Use this to update the Docker image names and/or tag names of existing containers that had been defined in the previous task definition
+          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
+
+
+
+

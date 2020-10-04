@@ -37,7 +37,7 @@ function UsersExample(props) {
 function Errors(props) {
   const errors = props.errors.map((error, i) => {
     return (
-      <p className="text-danger" key={i}>
+      <p className="error text-danger" key={i}>
         {error}
       </p>
     );
@@ -50,7 +50,7 @@ function Results(props) {
   const users = props.users.map((user, i) => {
     if (i === 0) {
       return (
-        <div className="mt-3" key={user.id}>
+        <div className="results mt-3" key={user.id}>
           <h2 className="mt-5" key="results">
             検索結果
           </h2>
@@ -102,10 +102,12 @@ export default class User extends React.Component {
         if (users.length) {
           this.setState({
             users: users,
+            errors: [],
           });
         } else {
           const errors = ['ユーザーが存在していません'];
           this.setState({
+            users: [],
             errors: errors,
           });
         }

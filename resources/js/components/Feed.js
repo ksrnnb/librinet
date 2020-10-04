@@ -105,7 +105,7 @@ function BookInfo(props) {
 export default function BaseFormat(props) {
   const item = props.item;
   return (
-    <div className="row border py-2">
+    <div className="feed row border py-2">
       <BookCover book={item.book} />
       <UserAndMessage user={item.user} message={item.message}>
         <CommentButton item={item} />

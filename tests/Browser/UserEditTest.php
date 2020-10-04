@@ -8,144 +8,144 @@ use Tests\DuskTestCase;
 
 class UserEditTest extends DuskTestCase
 {
-    public static $user;
-    public static $user_url;
-    public static $edit_url;
+    // public static $user;
+    // public static $user_url;
+    // public static $edit_url;
 
-    public function deleteTestUserIfExist()
-    {
-        $user = \App\User::where('str_id', 'TEST_USER_ID')->first();
+    // public function deleteTestUserIfExist()
+    // {
+    //     $user = \App\User::where('str_id', 'TEST_USER_ID')->first();
 
-        if ($user) {
-            $user->delete();
-        }
-    }
+    //     if ($user) {
+    //         $user->delete();
+    //     }
+    // }
 
-    public function createNewUserForTestAndReturnId()
-    {
-        $this->deleteTestUserIfExist();
+    // public function createNewUserForTestAndReturnId()
+    // {
+    //     $this->deleteTestUserIfExist();
         
-        $params = \App\User::returnParamsForGuestUser();
-        $test_user_data = [
-            'str_id' => 'TEST_USER_ID',
-            'email'  => 'test@test.com',
-        ];
+    //     $params = \App\User::returnParamsForGuestUser();
+    //     $test_user_data = [
+    //         'str_id' => 'TEST_USER_ID',
+    //         'email'  => 'test@test.com',
+    //     ];
 
-        $params = array_merge($params, $test_user_data);
+    //     $params = array_merge($params, $test_user_data);
 
-        return \App\User::create($params)->id;
-    }
+    //     return \App\User::create($params)->id;
+    // }
 
-    public function testEditUserName()
-    {
-        $id = $this->createNewUserForTestAndReturnId();
+    // public function testEditUserName()
+    // {
+    //     $id = $this->createNewUserForTestAndReturnId();
 
-        self::$user = \App\User::with('books')->get()->where('id', $id)->first();
-        self::$user_url = '/user/show/' . self::$user->str_id;
-        self::$edit_url = '/user/edit/' . self::$user->str_id;
+    //     self::$user = \App\User::with('books')->get()->where('id', $id)->first();
+    //     self::$user_url = '/user/show/' . self::$user->str_id;
+    //     self::$edit_url = '/user/edit/' . self::$user->str_id;
 
-        $this->browse(function (Browser $browser) {
-            $browser->loginAs(self::$user)
-                    ->visit(self::$user_url)
-                    ->press('ユーザー情報を編集する');
+    //     $this->browse(function (Browser $browser) {
+    //         $browser->loginAs(self::$user)
+    //                 ->visit(self::$user_url)
+    //                 ->press('ユーザー情報を編集する');
 
-            $ini = $browser->attribute('#name', 'value');
-            $aft = 'TEST';
+    //         $ini = $browser->attribute('#name', 'value');
+    //         $aft = 'TEST';
 
-            // 変更可能かどうか
-            $browser->type('name', $aft)
-                    ->press('編集する')
-                    ->assertPathIs(self::$user_url)
-                    ->assertSee($aft);
+    //         // 変更可能かどうか
+    //         $browser->type('name', $aft)
+    //                 ->press('編集する')
+    //                 ->assertPathIs(self::$user_url)
+    //                 ->assertSee($aft);
             
-            // 元に戻す
-            $browser->press('ユーザー情報を編集する')
-                    ->type('name', $ini)
-                    ->press('編集する');
-        });
-    }
+    //         // 元に戻す
+    //         $browser->press('ユーザー情報を編集する')
+    //                 ->type('name', $ini)
+    //                 ->press('編集する');
+    //     });
+    // }
 
-    public function testValidationUserName()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(self::$edit_url);
+    // public function testValidationUserName()
+    // {
+    //     $this->browse(function (Browser $browser) {
+    //         $browser->visit(self::$edit_url);
 
-            $ini = $browser->attribute('#name', 'value');
-            $empty = '';
-            $too_long = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+    //         $ini = $browser->attribute('#name', 'value');
+    //         $empty = '';
+    //         $too_long = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 
-            // 空の場合、NG
-            $browser->type('name', $empty)
-                    ->press('編集する')
-                    ->assertPathIs(self::$edit_url);
+    //         // 空の場合、NG
+    //         $browser->type('name', $empty)
+    //                 ->press('編集する')
+    //                 ->assertPathIs(self::$edit_url);
             
-            // 32文字以上、NG
-            $browser->type('name', $too_long)
-                    ->press('編集する')
-                    ->assertSee('長すぎます');
-        });
-    }
+    //         // 32文字以上、NG
+    //         $browser->type('name', $too_long)
+    //                 ->press('編集する')
+    //                 ->assertSee('長すぎます');
+    //     });
+    // }
 
-    public function testEditUserId()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(self::$edit_url);
+    // public function testEditUserId()
+    // {
+    //     $this->browse(function (Browser $browser) {
+    //         $browser->visit(self::$edit_url);
 
-            $ini = $browser->attribute('#str_id', 'value');
-            $aft = 'TEST_NEW_ID';
+    //         $ini = $browser->attribute('#str_id', 'value');
+    //         $aft = 'TEST_NEW_ID';
 
-            // 変更可能かどうか
-            $browser->type('str_id', $aft)
-                    ->press('編集する')
-                    ->assertPathIs('/user/show/' . $aft)     // パスも新しくなる
-                    ->assertSee($aft);
+    //         // 変更可能かどうか
+    //         $browser->type('str_id', $aft)
+    //                 ->press('編集する')
+    //                 ->assertPathIs('/user/show/' . $aft)     // パスも新しくなる
+    //                 ->assertSee($aft);
             
-            // 元に戻す
-            $browser->press('ユーザー情報を編集する')
-                    ->type('str_id', $ini)
-                    ->press('編集する');
-        });
-    }
+    //         // 元に戻す
+    //         $browser->press('ユーザー情報を編集する')
+    //                 ->type('str_id', $ini)
+    //                 ->press('編集する');
+    //     });
+    // }
 
-    public function testValidateUserId()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(self::$edit_url);
+    // public function testValidateUserId()
+    // {
+    //     $this->browse(function (Browser $browser) {
+    //         $browser->visit(self::$edit_url);
 
-            $ini = $browser->attribute('#str_id', 'value');
-            $empty = '';
-            $too_long = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-            $already_exists_id = 'guest';
+    //         $ini = $browser->attribute('#str_id', 'value');
+    //         $empty = '';
+    //         $too_long = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+    //         $already_exists_id = 'guest';
 
-            // 空の場合、NG
-            $browser->type('str_id', $empty)
-                    ->press('編集する')
-                    ->assertPathIs(self::$edit_url);
+    //         // 空の場合、NG
+    //         $browser->type('str_id', $empty)
+    //                 ->press('編集する')
+    //                 ->assertPathIs(self::$edit_url);
             
-            // 16文字以上、NG
-            $browser->type('str_id', $too_long)
-                    ->press('編集する')
-                    ->assertSee('長すぎます');
+    //         // 16文字以上、NG
+    //         $browser->type('str_id', $too_long)
+    //                 ->press('編集する')
+    //                 ->assertSee('長すぎます');
 
-            // 既に存在するID、NG
-            $browser->type('str_id', $already_exists_id)
-                    ->press('編集する')
-                    ->assertSee('既に');
-        });
-    }
+    //         // 既に存在するID、NG
+    //         $browser->type('str_id', $already_exists_id)
+    //                 ->press('編集する')
+    //                 ->assertSee('既に');
+    //     });
+    // }
 
-    public function testDeleteUserAndCannotAccessUserPageAfterDelete()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(self::$edit_url)
-                    ->press('アカウントを削除する')
-                    ->assertPathIs('/');
+    // public function testDeleteUserAndCannotAccessUserPageAfterDelete()
+    // {
+    //     $this->browse(function (Browser $browser) {
+    //         $browser->visit(self::$edit_url)
+    //                 ->press('アカウントを削除する')
+    //                 ->assertPathIs('/');
 
-            $browser->visit(self::$edit_url)
-                    ->assertPathIs('/');
+    //         $browser->visit(self::$edit_url)
+    //                 ->assertPathIs('/');
 
-            $browser->visit(self::$user_url)
-                    ->assertPathIs('/');
-        });
-    }
+    //         $browser->visit(self::$user_url)
+    //                 ->assertPathIs('/');
+    //     });
+    // }
 }

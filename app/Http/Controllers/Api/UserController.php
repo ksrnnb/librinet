@@ -11,14 +11,19 @@ use App\Post;
 
 class UserController extends Controller
 {
+    // 現在認証しているユーザーを取得する
     public function auth(Request $request)
     {
-        // TODO: 認証されてない場合は？？？
-        $str_id = Auth::user()->str_id;
+        $user = Auth::user();
+        if ($user) {
+            $params = User::getParamsForApp($user->str_id);
 
-        $params = User::getParamsForApp($str_id);
-
-        return response()->json($params);
+            return response()->json($params);
+        } else {
+            // ログインしていない場合でも、
+            // 特定のページに行かなければ問題はないので200番にした
+            return response('Not Authenticated.', 200);
+        }
     }
 
     public function search(Request $request)
@@ -38,5 +43,29 @@ class UserController extends Controller
         }
 
         return response()->json($users);
+    }
+
+    public function show(Request $request, $str_id)
+    {
+        $params = User::getUserBooksGenres($str_id);
+
+        // 登録されてないidへのアクセスだった場合
+        if ($params == null) {
+            return response('Bad Request', 400);
+        }
+
+        $user = Auth::user();
+
+        if ($user) {
+            $viewer_str_id = $user->str_id;
+            $params = array_merge($params, $viewer_str_id);
+        }
+
+        $user = $params['user'];
+        $follow_data = $user->getFollowsAndFollowersUsers();
+
+        $params = array_merge($params, $follow_data);
+
+        return response()->json($params);
     }
 }

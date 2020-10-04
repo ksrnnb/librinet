@@ -126,8 +126,6 @@ class User extends Authenticatable
         // フォロー数、フォロワー数を取得
         $follows = $this->followings->where('follower_id', $this->id);
         $followers = $this->followers->where('follow_id', $this->id);
-        // $follows = Follower::where('follower_id', $this->id)->count();
-        // $followers = Follower::where('follow_id', $this->id)->count();
 
         $params = compact('follows', 'followers');
 
@@ -167,25 +165,35 @@ class User extends Authenticatable
         return $params;
     }
 
+    /*
+    *   @param $str_id: string
+    *   @return $params or null
+    */
     public static function getUserBooksGenres($str_id)
     {
-        $users = User::with(['books.genre', 'followings'])->get();
+        $users = User::with(['books.genre'])->get();
         $user = $users->where('str_id', $str_id)->first();      // select user
-        $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
-        $genres = Book::extractGenres($books);
-        $genres_books = $books->groupBy('genre_id');
-        /*
-            genres:                  [genre_id => genre_name, ...]
-            genres_books: [[genre_id => [book, book, ...]], ...]
-        */
-        $params = [
-            'user' => $user,
-            'books' => $books,
-            'genres' => $genres,
-            'genres_books' => $genres_books,
-        ];
 
-        return $params;
+        if ($user) {
+            $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
+            $genres = Book::extractGenres($books);
+            $genres_books = $books->groupBy('genre_id');
+            /*
+                genres:                  [genre_id => genre_name, ...]
+                genres_books: [[genre_id => [book, book, ...]], ...]
+            */
+            $params = [
+                'user' => $user,
+                'books' => $books,
+                'genres' => $genres,
+                'genres_books' => $genres_books,
+            ];
+    
+            return $params;
+        // ユーザーが見つからない場合はnullを返す
+        } else {
+            return null;
+        }
     }
 
     /*

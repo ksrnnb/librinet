@@ -114,8 +114,8 @@ function EditButton(props) {
 }
 
 function FollowNumber(props) {
-  const follows = props.params.follows.length;
-  const followers = props.params.followers.length;
+  const follows = props.follows.length;
+  const followers = props.followers.length;
   return (
     <>
       <p className="mt-3 mb-0">Follow: {follows}</p>
@@ -127,50 +127,74 @@ function FollowNumber(props) {
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      params: null,
+      viewerStrId: null,
+    };
+  }
+
+  componentDidMount() {
+    // TODO: userがnull or undefinedの場合の処理
+    // const params = this.props.location.state.params;
+    const hasState = this.props.location.state;
+
+    if (hasState) {
+      const params = this.props.location.state.params;
+      const viewerStrId = this.props.location.state.viewerStrId;
+
+      this.setState({
+        params: params,
+        viewerStrId: viewerStrId,
+      });
+
+    } else {
+      const path = '/api/user/profile/' + this.props.match.params.strId;
+      axios.get(path)
+        .then(response => {
+          const params = response.data;
+          this.setState({
+            params: params,
+            viewerStrId: params.viewer_str_id,
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 
   render() {
-    // const strId = this.props.match.params.strId;
+    const hasLoaded = this.state.params != null;
 
-    // TODO: userがnull or undefinedの場合の処理
-    const params = this.props.location.state.params;
-    const user = this.props.location.state.params.user;
-    const viewerStrId = this.props.location.state.viewerStrId;
+    if (hasLoaded) {
+      const params = this.state.params;
+      const viewerStrId = this.state.viewerStrId;
 
-    // followボタンは後で実装
-    const FollowButton = null;
-    //           <!-- フォロー表示 -->
-    //               <div id="follower-react"></div>
-    //                   <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
-    //                   <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
-    //                   <input type="hidden" id="is_following" value="{{$is_following}}">
-    //                   <!-- TODO: ここは認証済みの場合のみ -->
-    return (
-      <>
-        {/* <Subtitle subtitle="User Profile" />
-        <div className="row">
-          <div className="col-2">
-            <UserImage user={user} />
-          </div>
-          <div className="col-10">
-            <p className="h4">{user.name}</p>
-            <p className="h5">{'@' + user.str_id}</p>
-            <EditButton user={user} viewerStrId={viewerStrId} />
-            {FollowButton}
-            <FollowNumber params={params} />
-          </div>
-        </div>
-        <Bookshelf genres={params.genres} genres_books={params.genres_books} /> */}
-        <Subtitle subtitle="User Profile" />
-        <UserCard user={user}>
-          <EditButton user={user} viewerStrId={viewerStrId} />
-          {FollowButton}
-          <FollowNumber params={params} />
-        </UserCard>
-        <Bookshelf genres={params.genres} genres_books={params.genres_books} />
-      </>
-    );
+      return (
+        <>
+          <Subtitle subtitle="User Profile" />
+          <UserCard user={params.user}>
+            <EditButton user={params.user} viewerStrId={viewerStrId} />
+            {/* {FollowButton} */}
+            <FollowNumber follows={params.follows} followers={params.followers} />
+          </UserCard>
+          <Bookshelf genres={params.genres} genres_books={params.genres_books} />
+        </>
+      );
+    } else {
+      return <></>;
+    }
   }
+
+  // followボタンは後で実装
+  // const FollowButton = null;
+  //           <!-- フォロー表示 -->
+  //               <div id="follower-react"></div>
+  //                   <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
+  //                   <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
+  //                   <input type="hidden" id="is_following" value="{{$is_following}}">
+  //                   <!-- TODO: ここは認証済みの場合のみ -->
 
   //   <div class="row mt-5">
   //       <div class="col-6">

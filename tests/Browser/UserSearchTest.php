@@ -9,7 +9,6 @@ use App\User;
 
 class UserTest extends DuskTestCase
 {
-
     /**
      * user search funciton
      *
@@ -19,51 +18,46 @@ class UserTest extends DuskTestCase
     public function testUserSearchWhenNoInput()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/')
-                    ->click('#guest')                   // ゲストでログイン
-                    ->clickLink('ユーザーを検索する')
-                    ->assertSee('例')
+            $browser->visit('/user')
                     ->press('検索')
-                    ->assertSee('例');
+                    ->waitFor('.error')     // errorが表示されるまで待つ
+                    ->assertSee('ユーザーが存在していません');
         });
     }
 
     public function testUserSearchWhenUsersDontExist()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/user/search')
+            $browser->visit('/user')
                     ->type('user', 'HOGEHOGE')
                     ->press('検索')
-                    ->assertSee('ユーザーが見つかりません');
+                    ->waitFor('.error')
+                    ->assertSee('ユーザーが存在していません');
         });
     }
 
-    public function testUserSearchWhenUserMatchesByIdAndCanAccessUserPage()
+    public function testUserSearchWhenUserMatchesById()
     {
         $this->browse(function (Browser $browser) {
-            $this->assertUsersExistAndCanAccessUserPage($browser, 'str_id');
+            $this->assertUsersExist($browser, 'str_id');
         });
     }
 
-    public function testUserSearchWhenUsersMatchByNameAndCanAccessUserPage()
+    public function testUserSearchWhenUserMatchesByName()
     {
         $this->browse(function (Browser $browser) {
-            $this->assertUsersExistAndCanAccessUserPage($browser, 'name');
+            $this->assertUsersExist($browser, 'name');
         });
     }
 
-    public function assertUsersExistAndCanAccessUserPage($browser, $column)
+    public function assertUsersExist($browser, $column)
     {
         $item = User::find(1)->$column;
 
-            $browser->visit('/user/search')
-                    ->type('user', $item)
-                    ->press('検索');
-            
-            // 一番上のユーザーを選択
-            $str_id = $browser->attribute('.user-link', 'data-id');
-
-            $browser->click('.user-link')
-                    ->assertPathIs('/user/show/' . $str_id);     // ユーザーページへ遷移
+        $browser->visit('/user')
+                ->type('user', $item)
+                ->press('検索')
+                ->waitFor('.results')
+                ->assertSee('検索結果');
     }
 }

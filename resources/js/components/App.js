@@ -52,7 +52,7 @@ function SubColumn(props) {
         <h4 className="mt-4">本を検索する</h4>
       </Link>
 
-      <Link to="/user/search">
+      <Link to="/user">
         <h4 className="mt-4">ユーザーを検索する</h4>
       </Link>
       {profileAndLoginLogoutLink}
@@ -114,12 +114,15 @@ class App extends React.Component {
         // TODO: Loginしていないときは？
         // response.data
         // {books, example_users, followers, follows, genres, genres_books,  posts, user}
-        this.setState({
-          isLogin: true,
-          params: response.data,
-        });
+        if (typeof response.data == 'object') {
+          this.setState({
+            isLogin: true,
+            params: response.data,
+          });
+        }
       })
       .catch((error) => {
+        console.log(error);
         alert('error happened getting auth user');
       });
   }
@@ -165,7 +168,8 @@ class App extends React.Component {
             render={(props) => <Book props={props} />}
           />
           <Route
-            path="/user/search"
+            exact
+            path="/user"
             render={() => <User example={exampleUsers} />}
           />
           <Route path="/user/profile/:strId" component={Profile} />

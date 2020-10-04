@@ -35,7 +35,7 @@ export default class UserCard extends React.Component {
     const user = this.props.user;
 
     return (
-      <div className="row border">
+      <div className="user-card row border">
         <div className="col-2">
           <UserImage user={user} onClick={this.moveUserPage} />
         </div>

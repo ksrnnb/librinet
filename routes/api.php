@@ -21,11 +21,12 @@ Route::post('/login', 'Api\LoginController@login');
 Route::post('/guest/login', 'Api\LoginController@guest');
 Route::post('/book', 'Api\BookController@search');
 Route::post('/user', 'Api\UserController@search');
+Route::get('/user/auth', 'Api\UserController@auth');
+Route::get('/user/profile/{str_id}', 'Api\UserController@show');
 // Route::post('/user/profile/{str_id}', 'Api\UserController@search');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', 'Api\LoginController@logout');
-    Route::get('/user/auth', 'Api\UserController@auth');
     Route::post('/like', 'Api\LikeController@like');
     Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');

@@ -69954,7 +69954,7 @@ function SubColumn(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("h4", {
     className: "mt-4"
   }, "\u672C\u3092\u691C\u7D22\u3059\u308B")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Link"], {
-    to: "/user/search"
+    to: "/user"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("h4", {
     className: "mt-4"
   }, "\u30E6\u30FC\u30B6\u30FC\u3092\u691C\u7D22\u3059\u308B")), profileAndLoginLogoutLink);
@@ -70024,11 +70024,14 @@ var App = /*#__PURE__*/function (_React$Component) {
         // TODO: Loginしていないときは？
         // response.data
         // {books, example_users, followers, follows, genres, genres_books,  posts, user}
-        _this3.setState({
-          isLogin: true,
-          params: response.data
-        });
+        if (_typeof(response.data) == 'object') {
+          _this3.setState({
+            isLogin: true,
+            params: response.data
+          });
+        }
       })["catch"](function (error) {
+        console.log(error);
         alert('error happened getting auth user');
       });
     }
@@ -70084,7 +70087,8 @@ var App = /*#__PURE__*/function (_React$Component) {
           });
         }
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
-        path: "/user/search",
+        exact: true,
+        path: "/user",
         render: function render() {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_10__["default"], {
             example: exampleUsers
@@ -70966,7 +70970,7 @@ function BookInfo(props) {
 function BaseFormat(props) {
   var item = props.item;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row border py-2"
+    className: "feed row border py-2"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookCover, {
     book: item.book
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserAndMessage, {
@@ -72234,8 +72238,8 @@ function EditButton(props) {
 }
 
 function FollowNumber(props) {
-  var follows = props.params.follows.length;
-  var followers = props.params.followers.length;
+  var follows = props.follows.length;
+  var followers = props.followers.length;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "mt-3 mb-0"
   }, "Follow: ", follows), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Follower: ", followers));
@@ -72247,41 +72251,82 @@ var Profile = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(Profile);
 
   function Profile(props) {
+    var _this;
+
     _classCallCheck(this, Profile);
 
-    return _super.call(this, props);
+    _this = _super.call(this, props);
+    _this.state = {
+      params: null,
+      viewerStrId: null
+    };
+    return _this;
   }
 
   _createClass(Profile, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      // TODO: userがnull or undefinedの場合の処理
+      // const params = this.props.location.state.params;
+      var hasState = this.props.location.state;
+
+      if (hasState) {
+        var params = this.props.location.state.params;
+        var viewerStrId = this.props.location.state.viewerStrId;
+        this.setState({
+          params: params,
+          viewerStrId: viewerStrId
+        });
+      } else {
+        var path = '/api/user/profile/' + this.props.match.params.strId;
+        axios.get(path).then(function (response) {
+          var params = response.data;
+
+          _this2.setState({
+            params: params,
+            viewerStrId: params.viewer_str_id
+          });
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      // const strId = this.props.match.params.strId;
-      // TODO: userがnull or undefinedの場合の処理
-      var params = this.props.location.state.params;
-      var user = this.props.location.state.params.user;
-      var viewerStrId = this.props.location.state.viewerStrId; // followボタンは後で実装
+      var hasLoaded = this.state.params != null;
 
-      var FollowButton = null; //           <!-- フォロー表示 -->
-      //               <div id="follower-react"></div>
-      //                   <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
-      //                   <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
-      //                   <input type="hidden" id="is_following" value="{{$is_following}}">
-      //                   <!-- TODO: ここは認証済みの場合のみ -->
-
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        subtitle: "User Profile"
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        user: user
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
-        user: user,
-        viewerStrId: viewerStrId
-      }), FollowButton, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
-        params: params
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Bookshelf, {
-        genres: params.genres,
-        genres_books: params.genres_books
-      }));
-    } //   <div class="row mt-5">
+      if (hasLoaded) {
+        var params = this.state.params;
+        var viewerStrId = this.state.viewerStrId;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          subtitle: "User Profile"
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          user: params.user
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
+          user: params.user,
+          viewerStrId: viewerStrId
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
+          follows: params.follows,
+          followers: params.followers
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Bookshelf, {
+          genres: params.genres,
+          genres_books: params.genres_books
+        }));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+      }
+    } // followボタンは後で実装
+    // const FollowButton = null;
+    //           <!-- フォロー表示 -->
+    //               <div id="follower-react"></div>
+    //                   <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
+    //                   <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
+    //                   <input type="hidden" id="is_following" value="{{$is_following}}">
+    //                   <!-- TODO: ここは認証済みの場合のみ -->
+    //   <div class="row mt-5">
     //       <div class="col-6">
     //           <h2>本棚</h2>
     //       </div>
@@ -72396,7 +72441,7 @@ function UsersExample(props) {
 function Errors(props) {
   var errors = props.errors.map(function (error, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-      className: "text-danger",
+      className: "error text-danger",
       key: i
     }, error);
   });
@@ -72407,7 +72452,7 @@ function Results(props) {
   var users = props.users.map(function (user, i) {
     if (i === 0) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3",
+        className: "results mt-3",
         key: user.id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
         className: "mt-5",
@@ -72470,12 +72515,14 @@ var User = /*#__PURE__*/function (_React$Component) {
 
         if (users.length) {
           _this2.setState({
-            users: users
+            users: users,
+            errors: []
           });
         } else {
           var errors = ['ユーザーが存在していません'];
 
           _this2.setState({
+            users: [],
             errors: errors
           });
         }
@@ -72595,7 +72642,7 @@ var UserCard = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var user = this.props.user;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row border"
+        className: "user-card row border"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-2"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {

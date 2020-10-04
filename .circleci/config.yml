@@ -148,4 +148,5 @@ workflows:
           family: 'app-task'
           cluster-name: '${MY_APP_PREFIX}-cluster'
           # Use this to update the Docker image names and/or tag names of existing containers that had been defined in the previous task definition
-          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=app,tag=${CIRCLE_SHA1}'
+          # container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'

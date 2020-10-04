@@ -1,6 +1,8 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import BookCard from './BookCard';
+import Errors from './Errors';
+
 const axios = window.axios;
 
 function InputPrompt() {
@@ -85,10 +87,11 @@ export default class Book extends React.Component {
       input: null,
       book: null,
       isInBookshelf: null,
-      errorMessage: null,
+      errors: null,
     };
 
     this.linkToPost = this.linkToPost.bind(this);
+    this.linkToAddBookshelf = this.linkToAddBookshelf.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.sendPost = this.sendPost.bind(this);
     this.setBook = this.setBook.bind(this);
@@ -116,11 +119,15 @@ export default class Book extends React.Component {
     const isInBookshelf = this.state.isInBookshelf;
     if (!isInBookshelf) {
       addButton = (
-        <a href={'/api/book/add/' + book.isbn}>
-          <button type="button" className="btn btn-outline-success">
-            本棚に追加する
-          </button>
-        </a>
+        <button
+          type="button"
+          className="btn btn-outline-success"
+          onClick={() => {
+            this.linkToAddBookshelf(book);
+          }}
+        >
+          本棚に追加する
+        </button>
       );
     }
 
@@ -134,21 +141,12 @@ export default class Book extends React.Component {
 
   linkToPost(book) {
     const postUrl = '/book/post/' + book.isbn;
-    const apiUrl = '/api' + postUrl;
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        this.props.props.history.push({
-          pathname: postUrl,
-          state: {
-            book: response.data.book,
-            genres: response.data.genres,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.props.history.push(postUrl);
+  }
+
+  linkToAddBookshelf(book) {
+    const addUrl = '/book/add/' + book.isbn;
+    this.props.props.history.push(addUrl);
   }
 
   onChangeInput(e) {
@@ -172,23 +170,23 @@ export default class Book extends React.Component {
     this.setState({
       book: params.book,
       isInBookshelf: params.isInBookshelf,
-      errorMessage: null,
+      errors: null,
     });
   }
 
   setError(error) {
-    let errorMessage;
+    const errors = [];
 
     if (error == 'InputError') {
-      errorMessage = 'ISBNが正しく入力されていません';
+      errors.push('ISBNが正しく入力されていません');
     } else if (error == 'NotFound') {
-      errorMessage = '本が見つかりませんでした';
+      errors.push('本が見つかりませんでした');
     } else {
-      errorMessage = '予期しないエラーが発生しました';
+      errors.push('予期しないエラーが発生しました');
     }
 
     this.setState({
-      errorMessage: errorMessage,
+      errors: errors,
     });
   }
 
@@ -243,18 +241,14 @@ export default class Book extends React.Component {
       );
     }
 
-    let errorMessage;
-    const error = this.state.errorMessage;
-    if (error) {
-      errorMessage = <p className="error text-danger">{error}</p>;
-    }
+    const errors = this.state.errors;
 
     return (
       <div>
         <Subtitle subtitle="本の検索" />
         <label htmlFor="isbn">
           <InputPrompt />
-          {errorMessage}
+          <Errors errors={errors} />
           <UserInput onChange={this.onChangeInput} />
           <Button onClick={this.sendPost} />
         </label>

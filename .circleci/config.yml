@@ -97,33 +97,37 @@ workflows:
   build_and_push_image:
     jobs:
       - build
-      - aws-ecr/build-and-push-image:
+      # - aws-ecr/build-and-push-image:
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only: master
+      #     # 更新しない場合は不要？　試してみてもいいかと。
+      #     account-url: AWS_ECR_ACCOUNT_URL
+      #     aws-access-key-id: AWS_ACCESS_KEY_ID
+      #     aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+      #     create-repo: true
+      #     # Name of dockerfile to use. Defaults to Dockerfile.
+      #     dockerfile: Dockerfile
+
+      #     # AWS_REGION_ENV_VAR_NAME
+      #     region: AWS_DEFAULT_REGION
+
+      #     # my ECR Repository
+      #     # repo: '${MY_APP_PREFIX}'
+      #     repo: 'app-ecs'
+
+      #     # my ECR Repo Tag
+      #     tag: "$CIRCLE_SHA1"
+
+      - aws-ecs/deploy-service-update:
           requires:
             - build
           filters:
             branches:
               only: master
-          # 更新しない場合は不要？　試してみてもいいかと。
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          # Name of dockerfile to use. Defaults to Dockerfile.
-          dockerfile: Dockerfile
-
-          # AWS_REGION_ENV_VAR_NAME
-          region: AWS_DEFAULT_REGION
-
-          # my ECR Repository
-          # repo: '${MY_APP_PREFIX}'
-          repo: 'app-ecs'
-
-          # my ECR Repo Tag
-          tag: "$CIRCLE_SHA1"
-
-      - aws-ecs/deploy-service-update:
-          requires:
-            - aws-ecr/build-and-push-image
+            # - aws-ecr/build-and-push-image
           aws-region: AWS_DEFAULT_REGION
           # Name of the task definition's family.
           # タスク名とサービス名は同じにしておかないとエラーが発生する。

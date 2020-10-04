@@ -58,7 +58,7 @@ class UserController extends Controller
 
         if ($user) {
             $viewer_str_id = $user->str_id;
-            $params = array_merge($params, $viewer_str_id);
+            $params = array_merge($params, compact('viewer_str_id'));
         }
 
         $user = $params['user'];

@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/like', 'Api\LikeController@like');
     Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');
+    Route::post('/book/add/{isbn}', 'Api\BookController@create');
     Route::get('/comment/{uuid}', 'Api\CommentController@add');
     Route::post('/comment/{uuid}', 'Api\CommentController@create');
 });

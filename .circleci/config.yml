@@ -134,16 +134,18 @@ workflows:
           dockerfile: Dockerfile
           # AWS_REGION_ENV_VAR_NAME
           region: AWS_DEFAULT_REGION
-          # myECRRepository
+          # my ECR Repository
           repo: 'app-ecs'
           # repo: '${MY_APP_PREFIX}'
-          # myECRRepoTag
+          # my ECR Repo Tag
           tag: "$CIRCLE_SHA1"
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_DEFAULT_REGION
-          family: '${MY_APP_PREFIX}-task'
+          # Name of the task definition's family.
           # family: '${MY_APP_PREFIX}-service'
+          family: 'app-task'
           cluster-name: '${MY_APP_PREFIX}-cluster'
+          # Use this to update the Docker image names and/or tag names of existing containers that had been defined in the previous task definition
           container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'

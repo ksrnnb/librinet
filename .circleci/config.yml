@@ -119,7 +119,8 @@ jobs:
 #           filters:
 #             branches:
 #               only: master
-build_and_push_image:
+workflows:
+  build_and_push_image:
     jobs:
       - build
       - aws-ecr/build-and-push-image:

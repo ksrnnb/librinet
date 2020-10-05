@@ -72522,6 +72522,11 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     value: function isFollowing() {
       var _this3 = this;
 
+      // ログインしていない場合はfalseを返す
+      if (typeof this.viewerUser === 'undefined') {
+        return false;
+      }
+
       var followers = this.params.followers;
       var results = followers.find(function (follower) {
         return follower.follower_id == _this3.viewerUser.id;
@@ -72551,20 +72556,25 @@ var Profile = /*#__PURE__*/function (_React$Component) {
       var isFollowing = this.state.isFollowing;
 
       if (params != null) {
-        // console.log(params);
+        var buttons = null; // ログインしている場合はボタンを表示
+
+        if (typeof viewUser !== 'undefined') {
+          buttons = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
+            user: params.user,
+            viewerStrId: viewerUser.str_id
+          }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowButton, {
+            user: params.user,
+            viewerUser: viewerUser,
+            isFollowing: isFollowing,
+            handleFollow: this.handleFollow
+          }));
+        }
+
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
           subtitle: "User Profile"
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
           user: params.user
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
-          user: params.user,
-          viewerStrId: viewerUser.str_id
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowButton, {
-          user: params.user,
-          viewerUser: viewerUser,
-          isFollowing: isFollowing,
-          handleFollow: this.handleFollow
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
+        }, buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
           follows: params.follows,
           followers: params.followers
         })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Bookshelf, {

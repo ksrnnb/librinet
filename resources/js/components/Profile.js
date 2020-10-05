@@ -230,6 +230,10 @@ export default class Profile extends React.Component {
   }
 
   isFollowing() {
+    // ログインしていない場合はfalseを返す
+    if (typeof this.viewerUser === 'undefined') {
+      return false;
+    }
     const followers = this.params.followers;
     const results = followers.find((follower) => {
       return follower.follower_id == this.viewerUser.id;
@@ -261,12 +265,12 @@ export default class Profile extends React.Component {
     const isFollowing = this.state.isFollowing;
 
     if (params != null) {
-      // console.log(params);
+      let buttons = null;
 
-      return (
-        <>
-          <Subtitle subtitle="User Profile" />
-          <UserCard user={params.user}>
+      // ログインしている場合はボタンを表示
+      if (typeof viewUser !== 'undefined') {
+        buttons = (
+          <>
             <EditButton user={params.user} viewerStrId={viewerUser.str_id} />
             <FollowButton
               user={params.user}
@@ -274,6 +278,15 @@ export default class Profile extends React.Component {
               isFollowing={isFollowing}
               handleFollow={this.handleFollow}
             />
+          </>
+        );
+      }
+
+      return (
+        <>
+          <Subtitle subtitle="User Profile" />
+          <UserCard user={params.user}>
+            {buttons}
             <FollowNumber
               follows={params.follows}
               followers={params.followers}

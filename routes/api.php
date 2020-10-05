@@ -27,12 +27,18 @@ Route::get('/user/profile/{str_id}', 'Api\UserController@show');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', 'Api\LoginController@logout');
+
     Route::post('/like', 'Api\LikeController@like');
+
+    Route::post('/book/add/{isbn}', 'Api\BookController@create');
+    
     Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');
-    Route::post('/book/add/{isbn}', 'Api\BookController@create');
+    Route::delete('/post', 'Api\PostController@remove');
+
     Route::get('/comment/{uuid}', 'Api\CommentController@add');
     Route::post('/comment/{uuid}', 'Api\CommentController@create');
+    Route::delete('/comment', 'Api\CommentController@remove');
 });
 
 // Route::middleware('auth:sanctum')->get('guest/login', 'Auth\LoginController@guest');

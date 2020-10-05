@@ -12,6 +12,8 @@ import ReactDOM from 'react-dom';
 import User from './User';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { isBoolean } from 'lodash';
+import { post } from 'jquery';
 
 const axios = window.axios;
 
@@ -76,9 +78,11 @@ class App extends React.Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.pages = this.pages.bind(this);
+    this.onClickDelete = this.onClickDelete.bind(this);
   }
 
   login(props) {
+    // TODO: 前にログインしていた場合、反映に少し時間がかかる。
     this.getParamsOfAuthenticatedUser();
     props.history.push('/home');
   }
@@ -138,6 +142,32 @@ class App extends React.Component {
     });
   }
 
+  onClickDelete(e) {
+    const uuid = e.target.dataset.uuid;
+    // 文字列の'false'はtrueになってしまうので以下のように判定
+    const isPost = e.target.dataset.ispost === 'true' ? true : false;
+
+    const path = isPost ? '/api/post' : '/api/comment';
+
+    // TODO: 本当に消しますか？って出したい
+    axios
+      .delete(path, {
+        data: { uuid: uuid },
+      })
+      .then((response) => {
+        const posts = response.data;
+        const params = this.state.params;
+        params.posts = posts;
+
+        this.setState({
+          params: params,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   pages(params, isVisible) {
     const exampleUsers = params ? params.example_users : null;
     const genresBooks = params ? params.genres_books : null;
@@ -156,7 +186,13 @@ class App extends React.Component {
         <Switch>
           <Route
             path="/home"
-            render={() => <Home posts={posts} viewerId={viewerId} />}
+            render={() => (
+              <Home
+                posts={posts}
+                viewerId={viewerId}
+                onClickDelete={this.onClickDelete}
+              />
+            )}
           />
           <Route
             exact
@@ -228,7 +264,7 @@ class App extends React.Component {
       url = null;
     }
 
-    const hasLoaded = params != null;
+    // const hasLoaded = params != null;
 
     // if (hasLoaded) {
     if (isVisible) {

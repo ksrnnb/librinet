@@ -4,7 +4,7 @@
 /storage/*.key
 /vendor
 .env
-.env.dusk.local
+.env.dusk.develop
 .env.backup
 .env.org
 .phpunit.result.cache

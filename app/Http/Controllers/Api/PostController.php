@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Str;
 use App\Book;
 use App\Post;
 
@@ -39,5 +40,15 @@ class PostController extends Controller
         Post::createNewPost($form);
 
         return response('done', 200);
+    }
+
+    public function remove(Request $request)
+    {
+        // DELETE methodのため、プロパティに入ってる
+        $uuid = $request->uuid;
+
+        $posts = delete_feed_and_get_new_feed($uuid, 'post');
+
+        return response($posts);
     }
 }

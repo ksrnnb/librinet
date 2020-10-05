@@ -97,13 +97,13 @@ workflows:
   build_and_push_image:
     jobs:
       - build
+      
       # - aws-ecr/build-and-push-image:
       #     requires:
       #       - build
       #     filters:
       #       branches:
       #         only: master
-      #     # 更新しない場合は不要？　試してみてもいいかと。
       #     account-url: AWS_ECR_ACCOUNT_URL
       #     aws-access-key-id: AWS_ACCESS_KEY_ID
       #     aws-secret-access-key: AWS_SECRET_ACCESS_KEY

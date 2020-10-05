@@ -98,17 +98,13 @@ class CommentController extends Controller
         return response('Commented!', 200);
     }
 
-    public function remove(Request $request, $uuid)
+    public function remove(Request $request)
     {
-        if (Str::isUuid($uuid)) {
-            $comment = Comment::where('uuid', $uuid)->first();
+        // DELETE methodのため、プロパティに入ってる
+        $uuid = $request->uuid;
 
-            if ($comment) {
-                $comment->delete();
-            } else {
-                abort('400');
-            }
-        }
-        return back();
+        $posts = delete_feed_and_get_new_feed($uuid, 'comment');
+
+        return response($posts);
     }
 }

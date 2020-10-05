@@ -78,7 +78,13 @@ function DeleteButton(props) {
   let button = null;
   if (item.user_id == viewerId) {
     button = (
-      <button className="btn btn-outline-danger" name="delete">
+      <button
+        className="btn btn-outline-danger"
+        name="delete"
+        onClick={props.onClick}
+        data-uuid={item.uuid}
+        data-ispost={isPost}
+      >
         削除する
       </button>
     );
@@ -102,7 +108,7 @@ function BookInfo(props) {
 }
 
 // TODO: 高さ固定
-export default function BaseFormat(props) {
+export default function Feed(props) {
   const item = props.item;
   return (
     <div className="feed row border py-2">
@@ -110,7 +116,11 @@ export default function BaseFormat(props) {
       <UserAndMessage user={item.user} message={item.message}>
         <CommentButton item={item} />
         <Like item={item} viewerId={props.viewerId} />
-        <DeleteButton item={item} viewerId={props.viewerId} />
+        <DeleteButton
+          item={item}
+          viewerId={props.viewerId}
+          onClick={props.onClickDelete}
+        />
       </UserAndMessage>
       <BookInfo item={item} />
     </div>

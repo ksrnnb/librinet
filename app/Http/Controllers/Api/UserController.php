@@ -17,7 +17,6 @@ class UserController extends Controller
         $user = Auth::user();
         if ($user) {
             $params = User::getParamsForApp($user->str_id);
-
             return response()->json($params);
         } else {
             // ログインしていない場合でも、
@@ -57,8 +56,8 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            $viewer_str_id = $user->str_id;
-            $params = array_merge($params, compact('viewer_str_id'));
+            $viewer_user = $user;
+            $params = array_merge($params, compact('viewer_user'));
         }
 
         $user = $params['user'];

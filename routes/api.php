@@ -39,6 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/comment/{uuid}', 'Api\CommentController@add');
     Route::post('/comment/{uuid}', 'Api\CommentController@create');
     Route::delete('/comment', 'Api\CommentController@remove');
+
+    Route::post('/follow', 'Api\FollowerController@follow');
 });
 
 // Route::middleware('auth:sanctum')->get('guest/login', 'Auth\LoginController@guest');

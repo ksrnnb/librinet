@@ -54,9 +54,9 @@ function PostWithComments(props) {
 }
 
 function Posts(props) {
-  let posts = null;
   if (props.posts) {
-    posts = props.posts.map((post) => {
+    const postsIterator = Object.values(props.posts);
+    const posts = postsIterator.map((post) => {
       return (
         <PostWithComments
           post={post}
@@ -66,9 +66,11 @@ function Posts(props) {
         />
       );
     });
-  }
 
-  return posts;
+    return posts;
+  } else {
+    return null;
+  }
 }
 
 export default function Home(props) {

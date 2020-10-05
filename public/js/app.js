@@ -69799,16 +69799,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./components/App */ "./resources/js/components/App.js");
 
-__webpack_require__(/*! ./components/Book */ "./resources/js/components/Book.js");
-
-__webpack_require__(/*! ./components/Follower */ "./resources/js/components/Follower.js");
-
-__webpack_require__(/*! ./components/Like */ "./resources/js/components/Like.js");
-
-__webpack_require__(/*! ./components/User */ "./resources/js/components/User.js");
-
-__webpack_require__(/*! ./components/Post */ "./resources/js/components/Post.js");
-
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -70253,7 +70243,7 @@ var App = /*#__PURE__*/function (_React$Component) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(_Profile__WEBPACK_IMPORTED_MODULE_7__["default"], {
             props: props,
             params: params,
-            viewerStrId: viewerStrId
+            viewerUser: viewerStrId
           });
         }
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
@@ -71188,115 +71178,6 @@ function Feed(props) {
 
 /***/ }),
 
-/***/ "./resources/js/components/Follower.js":
-/*!*********************************************!*\
-  !*** ./resources/js/components/Follower.js ***!
-  \*********************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var axios = window.axios;
-
-var Follower = /*#__PURE__*/function (_React$Component) {
-  _inherits(Follower, _React$Component);
-
-  var _super = _createSuper(Follower);
-
-  function Follower(props) {
-    var _this;
-
-    _classCallCheck(this, Follower);
-
-    _this = _super.call(this, props);
-    var isFollowing = document.getElementById('is_following').value == 1; // 0 or 1
-
-    _this.state = {
-      isFollowing: isFollowing
-    };
-    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
-    _this.follower_id = document.getElementById('follower_id').value;
-    _this.follow_id = document.getElementById('follow_id').value;
-    return _this;
-  }
-
-  _createClass(Follower, [{
-    key: "handleClick",
-    value: function handleClick() {
-      var isFollowing = this.state.isFollowing;
-      var action = isFollowing ? 'unfollow' : 'follow';
-      axios.post('/follow', {
-        follow_id: this.follow_id,
-        follower_id: this.follower_id,
-        action: action
-      }).then(function (response) {
-        console.log(response);
-      })["catch"](function (error) {
-        console.log(error);
-      });
-      this.setState({
-        isFollowing: !isFollowing
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var isFollowing = this.state.isFollowing;
-
-      if (isFollowing) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-info",
-          name: "action",
-          onClick: this.handleClick
-        }, "\u30D5\u30A9\u30ED\u30FC\u4E2D");
-      } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-outline-info",
-          name: "action",
-          onClick: this.handleClick
-        }, "\u30D5\u30A9\u30ED\u30FC\u3059\u308B");
-      }
-    }
-  }]);
-
-  return Follower;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-if (document.getElementById('follower-react')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Follower, null), document.getElementById('follower-react'));
-}
-
-/***/ }),
-
 /***/ "./resources/js/components/Functions.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/Functions.js ***!
@@ -71872,10 +71753,9 @@ function PostWithComments(props) {
 }
 
 function Posts(props) {
-  var posts = null;
-
   if (props.posts) {
-    posts = props.posts.map(function (post) {
+    var postsIterator = Object.values(props.posts);
+    var posts = postsIterator.map(function (post) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PostWithComments, {
         post: post,
         viewerId: props.viewerId,
@@ -71883,9 +71763,10 @@ function Posts(props) {
         onClickDelete: props.onClickDelete
       });
     });
+    return posts;
+  } else {
+    return null;
   }
-
-  return posts;
 }
 
 function Home(props) {
@@ -72522,6 +72403,31 @@ function EditButton(props) {
   return EditButton;
 }
 
+function FollowButton(props) {
+  var user = props.user;
+  var viewerUser = props.viewerUser;
+
+  if (user.id == viewerUser.id) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
+
+  var className, content;
+
+  if (props.isFollowing) {
+    className = 'btn btn-success d-block';
+    content = 'フォロー中';
+  } else {
+    className = 'btn btn-outline-success d-block';
+    content = 'フォローする';
+  }
+
+  var FollowButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: className,
+    onClick: props.handleFollow
+  }, content);
+  return FollowButton;
+}
+
 function FollowNumber(props) {
   var follows = props.follows.length;
   var followers = props.followers.length;
@@ -72541,10 +72447,16 @@ var Profile = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, Profile);
 
     _this = _super.call(this, props);
+    _this.params = null;
+    _this.viewerUser = null;
     _this.state = {
-      params: null,
-      viewerStrId: null
+      hasLoaded: false,
+      isFollowing: false
     };
+    _this.setup = _this.setup.bind(_assertThisInitialized(_this));
+    _this.handleFollow = _this.handleFollow.bind(_assertThisInitialized(_this));
+    _this.isFollowing = _this.isFollowing.bind(_assertThisInitialized(_this));
+    _this.onSubmitFollow = _this.onSubmitFollow.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -72567,23 +72479,29 @@ var Profile = /*#__PURE__*/function (_React$Component) {
       var _this2 = this;
 
       var props = this.props.props;
-      var hasState = props.location.state;
+      var params = this.props.params; // ユーザー画像やプロフィールなどをクリックしてきた場合
 
-      if (hasState) {
-        var params = props.location.state.params;
-        var viewerStrId = props.location.state.viewerStrId;
+      if (params) {
+        this.params = params;
+        this.viewerUser = params.user;
+        var hasLoaded = true;
+        var isFollowing = this.isFollowing();
         this.setState({
-          params: params,
-          viewerStrId: viewerStrId
-        });
+          hasLoaded: hasLoaded,
+          isFollowing: isFollowing
+        }); // 更新ボタンを押したり、直接URLから来た場合
       } else {
         var path = '/api/user/profile/' + props.match.params.strId;
         axios.get(path).then(function (response) {
-          var params = response.data;
+          _this2.params = response.data;
+          _this2.viewerUser = response.data.viewer_user;
+          var hasLoaded = true;
+
+          var isFollowing = _this2.isFollowing();
 
           _this2.setState({
-            params: params,
-            viewerStrId: params.viewer_str_id
+            hasLoaded: hasLoaded,
+            isFollowing: isFollowing
           });
         })["catch"](function (error) {
           console.log(error);
@@ -72591,20 +72509,61 @@ var Profile = /*#__PURE__*/function (_React$Component) {
       }
     }
   }, {
+    key: "handleFollow",
+    value: function handleFollow() {
+      var isFollowing = !this.state.isFollowing;
+      this.setState({
+        isFollowing: isFollowing
+      });
+      this.onSubmitFollow();
+    }
+  }, {
+    key: "isFollowing",
+    value: function isFollowing() {
+      var _this3 = this;
+
+      var followers = this.params.followers;
+      var results = followers.find(function (follower) {
+        return follower.follower_id == _this3.viewerUser.id;
+      }, this);
+      return typeof results !== 'undefined';
+    }
+  }, {
+    key: "onSubmitFollow",
+    value: function onSubmitFollow() {
+      var path = '/api/follow';
+      axios.post(path, {
+        targetId: this.params.user.id,
+        isFollowing: this.state.isFollowing,
+        viewerId: this.viewerUser.id
+      }).then(function (response) {
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var hasLoaded = this.state.params != null;
+      // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
+      var params = this.params;
+      var viewerUser = this.viewerUser;
+      var isFollowing = this.state.isFollowing;
 
-      if (hasLoaded) {
-        var params = this.state.params;
-        var viewerStrId = this.state.viewerStrId;
+      if (params != null) {
+        // console.log(params);
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
           subtitle: "User Profile"
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
           user: params.user
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
           user: params.user,
-          viewerStrId: viewerStrId
+          viewerStrId: viewerUser.str_id
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowButton, {
+          user: params.user,
+          viewerUser: viewerUser,
+          isFollowing: isFollowing,
+          handleFollow: this.handleFollow
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
           follows: params.follows,
           followers: params.followers
@@ -72615,39 +72574,27 @@ var Profile = /*#__PURE__*/function (_React$Component) {
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
       }
-    } // followボタンは後で実装
-    // const FollowButton = null;
-    //           <!-- フォロー表示 -->
-    //               <div id="follower-react"></div>
-    //                   <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
-    //                   <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
-    //                   <input type="hidden" id="is_following" value="{{$is_following}}">
-    //                   <!-- TODO: ここは認証済みの場合のみ -->
-    //   <div class="row mt-5">
-    //       <div class="col-6">
-    //           <h2>本棚</h2>
-    //       </div>
-    //       <!-- 編集機能 -->
-    //       @if ($user->id == $auth_id)
-    //           @if ($genres_books->isNotEmpty())
-    //               <div class="col-6">
-    //                   <a href="{{'/book/edit/' . $user->str_id}}">
-    //                       <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
-    //                   </a>
-    //                   <a href="{{'/book/delete/' . $user->str_id}}">
-    //                       <button type="submit" class="btn btn-outline-danger">本を削除する</button>
-    //                   </a>
-    //               </div>
-    //           @endif
-    //       @endif
-    //   </div>
-    //
-    //   </div>
-
+    }
   }]);
 
   return Profile;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component); //       <!-- 編集機能 -->
+//       @if ($user->id == $auth_id)
+//           @if ($genres_books->isNotEmpty())
+//               <div class="col-6">
+//                   <a href="{{'/book/edit/' . $user->str_id}}">
+//                       <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
+//                   </a>
+//                   <a href="{{'/book/delete/' . $user->str_id}}">
+//                       <button type="submit" class="btn btn-outline-danger">本を削除する</button>
+//                   </a>
+//               </div>
+//           @endif
+//       @endif
+//   </div>
+//
+//   </div>
+
 
 
 
@@ -72925,9 +72872,13 @@ var UserCard = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(UserCard);
 
   function UserCard(props) {
+    var _this;
+
     _classCallCheck(this, UserCard);
 
-    return _super.call(this, props);
+    _this = _super.call(this, props);
+    console.log(props);
+    return _this;
   }
 
   _createClass(UserCard, [{
@@ -72939,7 +72890,9 @@ var UserCard = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var user = this.props.user;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "user-card row border"
+        className: "user-card row border",
+        id: "user-card",
+        "data-id": user.id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-2"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {

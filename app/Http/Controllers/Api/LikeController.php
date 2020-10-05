@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\Like;
 
 class LikeController extends Controller
 {
@@ -16,9 +18,9 @@ class LikeController extends Controller
             Like::handleLike($uuid);
         } else {
             // uuidが送られてない場合
-            abort('400');
+            return bad_request();
         }
 
-        return back();
+        return response('Liked', 200);
     }
 }

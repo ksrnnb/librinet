@@ -25,6 +25,8 @@ function UserImage(props) {
 export default class UserCard extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log(props);
   }
 
   moveUserPage() {
@@ -35,7 +37,7 @@ export default class UserCard extends React.Component {
     const user = this.props.user;
 
     return (
-      <div className="user-card row border">
+      <div className="user-card row border" id="user-card" data-id={user.id}>
         <div className="col-2">
           <UserImage user={user} onClick={this.moveUserPage} />
         </div>

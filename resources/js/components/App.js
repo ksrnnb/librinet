@@ -207,11 +207,7 @@ class App extends React.Component {
           <Route
             path="/user/profile/:strId"
             render={(props) => (
-              <Profile
-                props={props}
-                params={params}
-                viewerStrId={viewerStrId}
-              />
+              <Profile props={props} params={params} viewerUser={viewerStrId} />
             )}
           />
           <Route

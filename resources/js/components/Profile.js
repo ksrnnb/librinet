@@ -113,6 +113,32 @@ function EditButton(props) {
   return EditButton;
 }
 
+function FollowButton(props) {
+  const user = props.user;
+  const viewerUser = props.viewerUser;
+
+  if (user.id == viewerUser.id) {
+    return <></>;
+  }
+
+  let className, content;
+
+  if (props.isFollowing) {
+    className = 'btn btn-success d-block';
+    content = 'フォロー中';
+  } else {
+    className = 'btn btn-outline-success d-block';
+    content = 'フォローする';
+  }
+
+  const FollowButton = (
+    <button className={className} onClick={props.handleFollow}>
+      {content}
+    </button>
+  );
+
+  return FollowButton;
+}
 function FollowNumber(props) {
   const follows = props.follows.length;
   const followers = props.followers.length;
@@ -128,10 +154,18 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
 
+    this.params = null;
+    this.viewerUser = null;
+
     this.state = {
-      params: null,
-      viewerStrId: null,
+      hasLoaded: false,
+      isFollowing: false,
     };
+
+    this.setup = this.setup.bind(this);
+    this.handleFollow = this.handleFollow.bind(this);
+    this.isFollowing = this.isFollowing.bind(this);
+    this.onSubmitFollow = this.onSubmitFollow.bind(this);
   }
 
   componentDidMount() {
@@ -149,25 +183,35 @@ export default class Profile extends React.Component {
 
   setup() {
     const props = this.props.props;
-    const hasState = props.location.state;
+    const params = this.props.params;
 
-    if (hasState) {
-      const params = props.location.state.params;
-      const viewerStrId = props.location.state.viewerStrId;
+    // ユーザー画像やプロフィールなどをクリックしてきた場合
+    if (params) {
+      this.params = params;
+      this.viewerUser = params.user;
+
+      const hasLoaded = true;
+      const isFollowing = this.isFollowing();
 
       this.setState({
-        params: params,
-        viewerStrId: viewerStrId,
+        hasLoaded: hasLoaded,
+        isFollowing: isFollowing,
       });
+      // 更新ボタンを押したり、直接URLから来た場合
     } else {
       const path = '/api/user/profile/' + props.match.params.strId;
       axios
         .get(path)
         .then((response) => {
-          const params = response.data;
+          this.params = response.data;
+          this.viewerUser = response.data.viewer_user;
+
+          const hasLoaded = true;
+          const isFollowing = this.isFollowing();
+
           this.setState({
-            params: params,
-            viewerStrId: params.viewer_str_id,
+            hasLoaded: hasLoaded,
+            isFollowing: isFollowing,
           });
         })
         .catch((error) => {
@@ -176,19 +220,60 @@ export default class Profile extends React.Component {
     }
   }
 
-  render() {
-    const hasLoaded = this.state.params != null;
+  handleFollow() {
+    const isFollowing = !this.state.isFollowing;
+    this.setState({
+      isFollowing: isFollowing,
+    });
 
-    if (hasLoaded) {
-      const params = this.state.params;
-      const viewerStrId = this.state.viewerStrId;
+    this.onSubmitFollow();
+  }
+
+  isFollowing() {
+    const followers = this.params.followers;
+    const results = followers.find((follower) => {
+      return follower.follower_id == this.viewerUser.id;
+    }, this);
+
+    return typeof results !== 'undefined';
+  }
+
+  onSubmitFollow() {
+    const path = '/api/follow';
+    axios
+      .post(path, {
+        targetId: this.params.user.id,
+        isFollowing: this.state.isFollowing,
+        viewerId: this.viewerUser.id,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  render() {
+    // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
+    const params = this.params;
+    const viewerUser = this.viewerUser;
+    const isFollowing = this.state.isFollowing;
+
+    if (params != null) {
+      // console.log(params);
 
       return (
         <>
           <Subtitle subtitle="User Profile" />
           <UserCard user={params.user}>
-            <EditButton user={params.user} viewerStrId={viewerStrId} />
-            {/* {FollowButton} */}
+            <EditButton user={params.user} viewerStrId={viewerUser.str_id} />
+            <FollowButton
+              user={params.user}
+              viewerUser={viewerUser}
+              isFollowing={isFollowing}
+              handleFollow={this.handleFollow}
+            />
             <FollowNumber
               follows={params.follows}
               followers={params.followers}
@@ -204,36 +289,22 @@ export default class Profile extends React.Component {
       return <></>;
     }
   }
-
-  // followボタンは後で実装
-  // const FollowButton = null;
-  //           <!-- フォロー表示 -->
-  //               <div id="follower-react"></div>
-  //                   <input type="hidden" id="follow_id" name="follow_id" value="{{$user->id}}">
-  //                   <input type="hidden" id="follower_id" name="follower_id" value="{{Auth::id()}}">
-  //                   <input type="hidden" id="is_following" value="{{$is_following}}">
-  //                   <!-- TODO: ここは認証済みの場合のみ -->
-
-  //   <div class="row mt-5">
-  //       <div class="col-6">
-  //           <h2>本棚</h2>
-  //       </div>
-
-  //       <!-- 編集機能 -->
-  //       @if ($user->id == $auth_id)
-  //           @if ($genres_books->isNotEmpty())
-  //               <div class="col-6">
-
-  //                   <a href="{{'/book/edit/' . $user->str_id}}">
-  //                       <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
-  //                   </a>
-  //                   <a href="{{'/book/delete/' . $user->str_id}}">
-  //                       <button type="submit" class="btn btn-outline-danger">本を削除する</button>
-  //                   </a>
-  //               </div>
-  //           @endif
-  //       @endif
-  //   </div>
-  //
-  //   </div>
 }
+
+//       <!-- 編集機能 -->
+//       @if ($user->id == $auth_id)
+//           @if ($genres_books->isNotEmpty())
+//               <div class="col-6">
+
+//                   <a href="{{'/book/edit/' . $user->str_id}}">
+//                       <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
+//                   </a>
+//                   <a href="{{'/book/delete/' . $user->str_id}}">
+//                       <button type="submit" class="btn btn-outline-danger">本を削除する</button>
+//                   </a>
+//               </div>
+//           @endif
+//       @endif
+//   </div>
+//
+//   </div>

@@ -112,9 +112,10 @@ class Post extends Model
             return $product->updated_at;
         })->values();
 
-        // 仮で最大100個
         // TODO:　投稿数が増えた際に、ボタン押したらリロードするようにしたい
-        // TODO: たぶんフォローしてないユーザーも含めて100件になってる。->containsとかで指定のユーザーだけに絞る。
+        // 仮で最大100個
+        // フォローしているユーザーの投稿のみ
+        $posts = $posts->whereIn('user_id', $allPostsIds);
         $posts = $posts->take(100);
 
         return $posts;

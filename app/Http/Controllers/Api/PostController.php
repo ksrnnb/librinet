@@ -47,6 +47,7 @@ class PostController extends Controller
         // DELETE methodのため、プロパティに入ってる
         $uuid = $request->uuid;
 
+        // app/helper.php
         $posts = delete_feed_and_get_new_feed($uuid, 'post');
 
         return response($posts);

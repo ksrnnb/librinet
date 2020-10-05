@@ -103,6 +103,7 @@ class CommentController extends Controller
         // DELETE methodのため、プロパティに入ってる
         $uuid = $request->uuid;
 
+        // app/helper.php
         $posts = delete_feed_and_get_new_feed($uuid, 'comment');
 
         return response($posts);

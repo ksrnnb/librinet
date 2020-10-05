@@ -13,8 +13,3 @@ require('./bootstrap');
  */
 
 require('./components/App');
-require('./components/Book');
-require('./components/Follower');
-require('./components/Like');
-require('./components/User');
-require('./components/Post');

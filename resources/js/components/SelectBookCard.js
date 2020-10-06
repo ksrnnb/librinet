@@ -2,7 +2,7 @@ import React from 'react';
 import BookImage from './BookImage';
 import BookInfo from './BookInfo';
 
-export default class BookCard extends React.Component {
+export default class SelectBookCard extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -11,10 +11,9 @@ export default class BookCard extends React.Component {
     const book = this.props.book;
     return (
       <div className="row">
+        <div className="col-1">{this.props.children}</div>
         <BookImage col="col-3" book={book} />
-        <BookInfo col="col-9" book={book}>
-          {this.props.children}
-        </BookInfo>
+        <BookInfo col="col-8" book={book}></BookInfo>
       </div>
     );
   }

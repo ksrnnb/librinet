@@ -14,6 +14,8 @@ class UserTest extends DuskTestCase
      *
      *
      */
+    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function testUserSearchWhenNoInput()
     {

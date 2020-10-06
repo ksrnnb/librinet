@@ -58,8 +58,8 @@ export default class GenreSelectFormat extends React.Component {
       .then((response) => {
         this.setBook(response.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        this.props.props.history.push('/login');
       });
   }
 

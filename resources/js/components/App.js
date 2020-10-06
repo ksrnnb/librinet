@@ -1,61 +1,12 @@
-import AddBook from './AddBook';
-import Book from './Book';
-import Comment from './Comment';
 import Header from './Header';
-import Home from './Home';
-import Login from './Login';
-import Logout from './Logout';
-import Profile from './Profile';
-import PostData from './Post';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import User from './User';
+import Pages from './Pages';
+import SubColumn from './SubColumn';
 
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { isBoolean } from 'lodash';
-import { post } from 'jquery';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const axios = window.axios;
-
-function SubColumn(props) {
-  const userUrl = props.userUrl;
-  let profileAndLoginLogoutLink = null;
-  if (userUrl) {
-    profileAndLoginLogoutLink = (
-      <>
-        <Link to={userUrl}>
-          <h4 className="mt-4">プロフィール</h4>
-        </Link>
-        <Link to="/logout">
-          <h4 className="mt-4">ログアウト</h4>
-        </Link>
-      </>
-    );
-  } else {
-    profileAndLoginLogoutLink = (
-      <Link to="login">
-        <h4 className="mt-4">ログイン</h4>
-      </Link>
-    );
-  }
-
-  return (
-    <div className="sub-column border-right">
-      <Link to="/home">
-        <h4>ホーム</h4>
-      </Link>
-
-      <Link to="/book">
-        <h4 className="mt-4">本を検索する</h4>
-      </Link>
-
-      <Link to="/user">
-        <h4 className="mt-4">ユーザーを検索する</h4>
-      </Link>
-      {profileAndLoginLogoutLink}
-    </div>
-  );
-}
 
 class App extends React.Component {
   constructor() {
@@ -65,7 +16,6 @@ class App extends React.Component {
     this.maxWidth = 800;
     const isVisible = window.innerWidth > this.maxWidth ? true : false;
 
-    // TODO：非同期だからUndefined そもそも必要？
     // const params = this.getParamsOfAuthenticatedUser();
     // const isLogin = params !== null;
 
@@ -73,11 +23,11 @@ class App extends React.Component {
       isVisible: isVisible,
       isLogin: false,
       params: null,
+      hasLoaded: false,
     };
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-    this.pages = this.pages.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
   }
 
@@ -117,6 +67,11 @@ class App extends React.Component {
           this.setState({
             isLogin: true,
             params: response.data,
+            hasLoaded: true,
+          });
+        } else {
+          this.setState({
+            hasLoaded: true,
           });
         }
       })
@@ -168,84 +123,11 @@ class App extends React.Component {
       });
   }
 
-  pages(params, isVisible) {
-    const exampleUsers = params ? params.example_users : null;
-    const genresBooks = params ? params.genres_books : null;
-    const genres = params ? params.genres : null;
-    const posts = params ? params.posts : null;
-    const viewerId = params ? params.user.id : null;
-    const viewerStrId = params ? params.user.str_id : null;
-
-    let margin = null;
-    if (isVisible) {
-      margin = 'ml-300';
-    }
-
-    return (
-      <div className={margin}>
-        <Switch>
-          <Route
-            path="/home"
-            render={() => (
-              <Home
-                posts={posts}
-                viewerId={viewerId}
-                onClickDelete={this.onClickDelete}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/book"
-            render={(props) => <Book props={props} />}
-          />
-          <Route
-            exact
-            path="/user"
-            render={() => <User example={exampleUsers} />}
-          />
-          <Route
-            path="/user/profile/:strId"
-            render={(props) => (
-              <Profile props={props} params={params} viewerUser={viewerStrId} />
-            )}
-          />
-          <Route
-            path="/login"
-            render={(props) => <Login props={props} login={this.login} />}
-          />
-          <Route
-            path="/logout"
-            render={(props) => <Logout props={props} logout={this.logout} />}
-          />
-          <Route
-            path="/book/post/:isbn"
-            render={(props) => <PostData props={props} />}
-          />
-          <Route
-            path="/book/add/:isbn"
-            render={(props) => <AddBook props={props} />}
-          />
-          <Route
-            path="/comment/:uuid"
-            render={(props) => (
-              <Comment
-                genresBooks={genresBooks}
-                genres={genres}
-                viewerId={viewerId}
-                props={props}
-              />
-            )}
-          />
-        </Switch>
-      </div>
-    );
-  }
-
   render() {
     const appName = document.title;
     const params = this.state.params;
     const isVisible = this.state.isVisible;
+    const hasLoaded = this.state.hasLoaded;
 
     // TODO: まとめられない？
     let user = null;
@@ -259,33 +141,44 @@ class App extends React.Component {
     } else {
       url = null;
     }
-
-    // const hasLoaded = params != null;
-
-    // if (hasLoaded) {
-    if (isVisible) {
-      return (
-        <Router>
-          <div className="container">
-            <Header userUrl={url} app={appName} hasHamburger={false} />
-            <SubColumn userUrl={url} params={params} logout={this.logout} />
-            {this.pages(params, isVisible)}
-          </div>
-        </Router>
-      );
+    if (hasLoaded) {
+      if (isVisible) {
+        return (
+          <Router>
+            <div className="container">
+              <Header userUrl={url} app={appName} hasHamburger={false} />
+              <SubColumn userUrl={url} params={params} logout={this.logout} />
+              {/* {this.pages(params, isVisible)} */}
+              <Pages
+                params={params}
+                isVisible={isVisible}
+                login={this.login}
+                logout={this.logout}
+                onClickDelete={this.onClickDelete}
+              />
+            </div>
+          </Router>
+        );
+      } else {
+        return (
+          <Router>
+            <div className="container">
+              <Header userUrl={url} app={appName} hasHamburger={true} />
+              <Pages
+                params={params}
+                isVisible={isVisible}
+                login={this.login}
+                logout={this.logout}
+                onClickDelete={this.onClickDelete}
+              />
+            </div>
+          </Router>
+        );
+      }
     } else {
-      return (
-        <Router>
-          <div className="container">
-            <Header userUrl={url} app={appName} hasHamburger={true} />
-            {this.pages(params, isVisible)}
-          </div>
-        </Router>
-      );
+      // TODO: 読み込み中の間に表示するコンポーネント！
+      return <></>;
     }
-    // } else {
-    //   return <></>;
-    // }
   }
 }
 

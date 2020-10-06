@@ -29,7 +29,7 @@ class LoginController extends Controller
 
             return response()->json($params);
         } else {
-            return response($status = 401);
+            return response('Cannot Authenticated', 406);
         }
     }
 

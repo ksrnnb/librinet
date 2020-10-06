@@ -70,7 +70,7 @@ function NewGenre(props) {
         <input
           type="text"
           name="new_genre"
-          id="new-input"
+          id="new-genre"
           value={newGenre}
           disabled={disabled}
           onClick={props.onClickNewGenre}

@@ -11,28 +11,22 @@ use Illuminate\Support\Str;
 class BookPostTest extends DuskTestCase
 {
 
-    // public function createNewUser()
-    // {
-    //     $user = User::create([
-    //         'str_id' => Str::random(10),
-    //         'name' => 'テストユーザー',
-    //         'email' => Str::random(6) . '@test.com',
-    //         'email_verified_at' => now(),
-    //         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-    //         'remember_token' => Str::random(10),
-    //     ]);
+    public function createNewUser()
+    {
+        $user = factory(User::class)->create();
 
-    //     return $user;
-    // }
+        return $user;
+    }
 
-    // public function testWithoutLogin()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';
-    //         $browser->visit('/book/post/' . $isbn)
-    //                 ->assertPathIs('/');
-    //     });
-    // }
+    public function testWithoutLogin()
+    {
+        $this->browse(function (Browser $browser) {
+            $isbn = '9784297100339';
+            $browser->visit('/book/post/' . $isbn)
+                    ->waitFor('#guest')
+                    ->assertPathIs('/login');
+        });
+    }
 
     // public function testNoComment()
     // {
@@ -40,9 +34,10 @@ class BookPostTest extends DuskTestCase
     //         $isbn = '9784297100339';    // Docker
     //         $user = $this->createNewUser();
 
+    //         $this->get('/sanctum/csrf-cookie');
     //         $browser->loginAs($user)
     //                 ->visit('/book/post/' . $isbn)
-    //                 ->assertSee('Docker')
+    //                 ->waitFor('#message')
     //                 ->check('add-book')
     //                 ->type('new_genre', 'Infrastructure')
     //                 ->press('投稿する')

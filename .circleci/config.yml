@@ -77,7 +77,7 @@ jobs:
           background: true
       - run:
           name: Run PHPUnit Tests
-          command: ./vendor/bin/phpunit
+          command: php artisan test
       - run:
           name: Run Laravel Dusk Tests
           command: php artisan dusk

@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -14,7 +15,7 @@ class UserTest extends DuskTestCase
      *
      *
      */
-    use RefreshDatabase;
+    // use RefreshDatabase;
     use DatabaseMigrations;
 
     public function testUserSearchWhenNoInput()

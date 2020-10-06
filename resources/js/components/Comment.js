@@ -1,7 +1,6 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import Feed from './Feed';
-import Functions from './Functions';
 const axios = window.axios;
 
 function GenreForm(props) {

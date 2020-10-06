@@ -10,14 +10,32 @@ use Laravel\Sanctum\Sanctum;
 
 class UserTest extends TestCase
 {
+    use RefreshDatabase;
 
-    public function testUserSearch()
+    protected $user;
+
+    protected function setUp(): void
     {
-        $user = User::find(1);
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+    }
+
+    public function testUserSearchById()
+    {
         $response = $this->post('/api/user', [
-            'user' => $user->str_id,
+            'user' => $this->user->str_id,
         ]);
 
-        $response->assertSee($user->name);
+        $response->assertSee($this->user->name);
+    }
+
+    public function testUserSearchByName()
+    {
+        $response = $this->post('/api/user', [
+            'user' => $this->user->name,
+        ]);
+
+        $response->assertSee($this->user->id);
     }
 }

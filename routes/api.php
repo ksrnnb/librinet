@@ -35,7 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');
     Route::delete('/post', 'Api\PostController@remove');
-
+    
+    Route::post('/genre/edit', 'Api\GenreController@edit');
     Route::get('/comment/{uuid}', 'Api\CommentController@add');
     Route::post('/comment/{uuid}', 'Api\CommentController@create');
     Route::delete('/comment', 'Api\CommentController@remove');

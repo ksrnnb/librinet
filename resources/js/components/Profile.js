@@ -1,96 +1,25 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
+import Functions from './Functions';
+import Bookshelf from './Bookshelf';
+
 const axios = window.axios;
 
-function Bookshelf(props) {
-  const genres = props.genres;
-  const genres_books = props.genres_books;
-  const bookshelfElement = [
-    <h2 className="mt-5 mb-0" key="bookshelf">
-      本棚
-    </h2>,
-  ];
-
-  // TODO 本がない場合を確認。null?
-  if (genres_books == null) {
-    bookshelfElement.push(
-      <div className="row" key="nobook">
-        <div className="col-12">
-          <p className="text-danger">本棚に本がありません</p>
-          {/* TODO: ここは自分にしか見えないように */}
-          <p>本棚に本を追加しましょう！</p>
-          <a href="/book">
-            <button type="button" className="btn btn-outline-success">
-              本を探す
-            </button>
-          </a>
-        </div>
-      </div>
-    );
-  } else {
-    bookshelfElement.push(
-      Object.keys(genres_books).map((genreId) => {
-        const books = genres_books[genreId];
-
-        const booksElement = books.map((book) => {
-          const url = '/book/profile/' + book.isbn;
-
-          let img = null;
-          if (book.cover) {
-            img = (
-              <img
-                className="img-fluid w-100"
-                src={book.cover}
-                alt="book-cover"
-              />
-            );
-          } else {
-            img = (
-              <img
-                className="img-fluid w-100"
-                src="img/book.svg"
-                alt="book-cover"
-              />
-            );
-          }
-
-          return (
-            <div className="col-3" key={book.isbn}>
-              <a href={url}>{img}</a>
-            </div>
-          );
-        });
-
-        return (
-          <div className="row" key={genreId}>
-            <div className="col-12">
-              <h2 className="mt-5">{genres[genreId]}</h2>
-            </div>
-            {booksElement}
-          </div>
-        );
-      })
-    );
-  }
-
-  return bookshelfElement;
-}
-
-function EditButton(props) {
+function EditUserButton(props) {
   const user = props.user;
   const viewerStrId = props.viewerStrId;
 
-  let EditButton;
+  let EditUserButton;
   // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
   if (user.str_id !== viewerStrId) {
-    EditButton = null;
+    EditUserButton = null;
 
     // 表示しているユーザーが、閲覧者自身の場合
   } else {
     // ゲストの場合
     if (user.str_id === 'guest') {
-      EditButton = (
+      EditUserButton = (
         <>
           <button type="button" className="btn btn-outline-success invalid">
             ユーザー情報を編集する
@@ -100,7 +29,7 @@ function EditButton(props) {
       );
       // ゲスト以外の場合
     } else {
-      EditButton = (
+      EditUserButton = (
         <a href={'/user/edit/' + user.str_id}>
           <button type="button" className="btn btn-outline-success">
             ユーザー情報を編集する
@@ -110,7 +39,7 @@ function EditButton(props) {
     }
   }
 
-  return EditButton;
+  return EditUserButton;
 }
 
 function FollowButton(props) {
@@ -150,6 +79,42 @@ function FollowNumber(props) {
   );
 }
 
+function EditBookshelfButton(props) {
+  const hasLoaded = 'books' in props;
+
+  if (hasLoaded) {
+    const canEdit = props.user.id == props.viewerUser.id;
+    const isNotEmpty = props.books.length;
+    const strId = props.user.str_id;
+    if (canEdit && isNotEmpty) {
+      return (
+        <div className="col-6">
+          <button
+            type="submit"
+            className="btn btn-outline-success"
+            onClick={() => {
+              props.redirectToEditGenre(strId);
+            }}
+          >
+            ジャンルを編集する
+          </button>
+          <button
+            type="submit"
+            className="btn btn-outline-danger"
+            onClick={() => {
+              props.redirectToDeleteBook(strId);
+            }}
+          >
+            本を削除する
+          </button>
+        </div>
+      );
+    }
+  }
+
+  return <></>;
+}
+
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -166,6 +131,8 @@ export default class Profile extends React.Component {
     this.handleFollow = this.handleFollow.bind(this);
     this.isFollowing = this.isFollowing.bind(this);
     this.onSubmitFollow = this.onSubmitFollow.bind(this);
+    this.redirectToDeleteBook = this.redirectToDeleteBook.bind(this);
+    this.redirectToEditGenre = this.redirectToEditGenre.bind(this);
   }
 
   componentDidMount() {
@@ -258,6 +225,14 @@ export default class Profile extends React.Component {
       });
   }
 
+  redirectToDeleteBook(strId) {
+    Functions.prototype.redirectToDeleteBook.call(this, strId);
+  }
+
+  redirectToEditGenre(strId) {
+    Functions.prototype.redirectToEditGenre.call(this, strId);
+  }
+
   render() {
     // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
     const params = this.params;
@@ -271,7 +246,10 @@ export default class Profile extends React.Component {
       if (typeof viewUser !== 'undefined') {
         buttons = (
           <>
-            <EditButton user={params.user} viewerStrId={viewerUser.str_id} />
+            <EditUserButton
+              user={params.user}
+              viewerStrId={viewerUser.str_id}
+            />
             <FollowButton
               user={params.user}
               viewerUser={viewerUser}
@@ -292,6 +270,13 @@ export default class Profile extends React.Component {
               followers={params.followers}
             />
           </UserCard>
+          <EditBookshelfButton
+            user={params.user}
+            books={params.books}
+            viewerUser={viewerUser}
+            redirectToDeleteBook={this.redirectToDeleteBook}
+            redirectToEditGenre={this.redirectToEditGenre}
+          />
           <Bookshelf
             genres={params.genres}
             genres_books={params.genres_books}
@@ -303,21 +288,3 @@ export default class Profile extends React.Component {
     }
   }
 }
-
-//       <!-- 編集機能 -->
-//       @if ($user->id == $auth_id)
-//           @if ($genres_books->isNotEmpty())
-//               <div class="col-6">
-
-//                   <a href="{{'/book/edit/' . $user->str_id}}">
-//                       <button type="submit" class="btn btn-outline-success">ジャンルを編集する</button>
-//                   </a>
-//                   <a href="{{'/book/delete/' . $user->str_id}}">
-//                       <button type="submit" class="btn btn-outline-danger">本を削除する</button>
-//                   </a>
-//               </div>
-//           @endif
-//       @endif
-//   </div>
-//
-//   </div>

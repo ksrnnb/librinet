@@ -77,10 +77,10 @@ jobs:
           background: true
       - run:
           name: Run PHPUnit Tests
-          command: ./vendor/bin/phpunit
-      - run:
-          name: Run Laravel Dusk Tests
-          command: php artisan dusk
+          command: php artisan test
+      # - run:
+      #     name: Run Laravel Dusk Tests
+      #     command: php artisan dusk
 
       - run:
           name: PHP Code Check

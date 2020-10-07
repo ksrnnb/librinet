@@ -36,7 +36,7 @@ jobs:
 
       - run: 
           name: Make Env file
-          command: cp .env.testing .env
+          command: cp .env.example .env
 
       # PHP CircleCI 2.0 Configuration File
       # PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev

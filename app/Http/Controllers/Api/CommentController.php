@@ -98,7 +98,7 @@ class CommentController extends Controller
         return response('Commented!', 200);
     }
 
-    public function remove(Request $request)
+    public function delete(Request $request)
     {
         // DELETE methodのため、プロパティに入ってる
         $uuid = $request->uuid;

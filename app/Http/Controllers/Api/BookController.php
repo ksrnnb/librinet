@@ -91,4 +91,13 @@ class BookController extends Controller
 
         return response()->json($params);
     }
+
+    public function delete(Request $request)
+    {
+        $ids = $request->ids;
+
+        Book::destroy($ids);
+
+        return response('has deleted', 200);
+    }
 }

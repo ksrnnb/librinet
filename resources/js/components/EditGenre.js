@@ -31,7 +31,7 @@ export default class EditGenre extends React.Component {
         newGenres: newGenres,
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -56,9 +56,11 @@ export default class EditGenre extends React.Component {
         <Subtitle subtitle="ジャンルの編集" />
         <UserCard user={params.user} />
         <Bookshelf
+          user={params.user}
           genres_books={params.genres_books}
           genres={params.genres}
           willEdit={true}
+          props={this.props.props}
         />
         <EditButton onClick={this.onSubmitNewGenres} />
       </>

@@ -158,7 +158,7 @@ class User extends Authenticatable
             'email' => 'guest@guest.com',
             'email_verified_at' => now(),
             'image' => '/img/icon_green.svg',
-            'password' => Hash::make(env('GUEST_PASSWORD')),
+            'password' => Hash::make(config('app.guest_password')),
             'remember_token' => Str::random(10),
         ];
         

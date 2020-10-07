@@ -33,7 +33,7 @@ class GenreEditTest extends TestCase
 
         $this->credential = [
             'strId' => $this->user->str_id,
-            'password' => env('GUEST_PASSWORD')
+            'password' => config('app.guest_password')
         ];
 
         // sanctum

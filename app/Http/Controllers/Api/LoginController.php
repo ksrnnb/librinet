@@ -19,8 +19,9 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         // TODO: validation
-        $str_id = $request->input('strId');
-        $password = env('GUEST_PASSWORD');      //TODO:ここは暫定
+        // $str_id = $request->input('strId');
+        $str_id = User::find(1)->str_id;
+        $password = config('app.guest_password');      //TODO:ここは暫定
 
         $credentials = compact('str_id', 'password');
 
@@ -29,7 +30,7 @@ class LoginController extends Controller
 
             return response()->json($params);
         } else {
-            return response('Cannot Authenticated', 406);
+            return response('Cannot Authenticated', 401);
         }
     }
 
@@ -37,7 +38,7 @@ class LoginController extends Controller
     public function guest(Request $request)
     {
         $str_id = 'guest';
-        $password = env('GUEST_PASSWORD');
+        $password = config('app.guest_password');
 
         $credentials = compact('str_id', 'password');
 
@@ -46,7 +47,7 @@ class LoginController extends Controller
             
             return response()->json($params);
         } else {
-            return response($status = 401);
+            return response('Cannot Authenticated', 401);
         }
     }
 }

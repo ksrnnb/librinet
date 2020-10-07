@@ -17,6 +17,7 @@ export default class Login extends React.Component {
         axios
           .post('/api/guest/login')
           .then((response) => {
+            console.log(response);
             this.login(this.props.props);
           })
           .catch((error) => {

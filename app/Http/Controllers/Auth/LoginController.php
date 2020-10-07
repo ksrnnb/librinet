@@ -58,7 +58,7 @@ class LoginController extends Controller
     {
         $credentials = [
             'str_id' => 'guest',
-            'password' => env('GUEST_PASSWORD'),
+            'password' => config('app.guest_password'),
         ];
 
         if (Auth::attempt($credentials)) {

@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Pages from './Pages';
 import SubColumn from './SubColumn';
+import Functions from './Functions';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -29,6 +30,48 @@ class App extends React.Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
+    this.deleteStateBook = this.deleteStateBook.bind(this);
+    this.deleteStateGenresBooks = this.deleteStateGenresBooks.bind(this);
+    this.redirectUserProfileAfterDeleteBooks = this.redirectUserProfileAfterDeleteBooks.bind(
+      this
+    );
+  }
+
+  componentDidMount() {
+    this.windowSizeChange.call(this);
+    this.getParamsOfAuthenticatedUser();
+  }
+
+  deleteStateBook(ids) {
+    const params = this.state.params;
+    const books = params.books;
+
+    params.books = Functions.unsetBooks(ids, books);
+
+    this.setState({
+      params: params,
+    });
+  }
+
+  deleteStateGenresBooks(ids) {
+    const params = this.state.params;
+    const genresBooks = params.genres_books;
+
+    params.genres_books = Functions.unsetGenresBooks(ids, genresBooks);
+
+    this.setState({
+      params: params,
+    });
+  }
+
+  redirectUserProfileAfterDeleteBooks(props, ids) {
+    this.deleteStateBook(ids);
+    this.deleteStateGenresBooks(ids);
+
+    const strId = this.state.params.user.str_id;
+    const path = '/user/profile/' + strId;
+
+    props.history.push(path);
   }
 
   login(props) {
@@ -49,11 +92,6 @@ class App extends React.Component {
       .catch((error) => {
         console.log(error);
       });
-  }
-
-  componentDidMount() {
-    this.windowSizeChange.call(this);
-    this.getParamsOfAuthenticatedUser();
   }
 
   getParamsOfAuthenticatedUser() {
@@ -142,6 +180,7 @@ class App extends React.Component {
       url = null;
     }
     if (hasLoaded) {
+      console.log('rendering!');
       if (isVisible) {
         return (
           <Router>
@@ -155,6 +194,10 @@ class App extends React.Component {
                 login={this.login}
                 logout={this.logout}
                 onClickDelete={this.onClickDelete}
+                deleteBooks={this.deleteBooks}
+                redirectUserProfileAfterDeleteBooks={
+                  this.redirectUserProfileAfterDeleteBooks
+                }
               />
             </div>
           </Router>
@@ -170,6 +213,9 @@ class App extends React.Component {
                 login={this.login}
                 logout={this.logout}
                 onClickDelete={this.onClickDelete}
+                redirectUserProfileAfterDeleteBooks={
+                  this.redirectUserProfileAfterDeleteBooks
+                }
               />
             </div>
           </Router>

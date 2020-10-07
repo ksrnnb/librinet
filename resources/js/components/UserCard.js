@@ -25,8 +25,6 @@ function UserImage(props) {
 export default class UserCard extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log(props);
   }
 
   moveUserPage() {

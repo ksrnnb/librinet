@@ -86,6 +86,7 @@ function EditBookshelfButton(props) {
     const canEdit = props.user.id == props.viewerUser.id;
     const isNotEmpty = props.books.length;
     const strId = props.user.str_id;
+
     if (canEdit && isNotEmpty) {
       return (
         <div className="col-6">
@@ -234,8 +235,10 @@ export default class Profile extends React.Component {
   }
 
   render() {
+    console.log('User_profile');
     // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
     const params = this.params;
+    console.log(params);
     const viewerUser = this.viewerUser;
     const isFollowing = this.state.isFollowing;
 
@@ -278,8 +281,10 @@ export default class Profile extends React.Component {
             redirectToEditGenre={this.redirectToEditGenre}
           />
           <Bookshelf
+            user={params.user}
             genres={params.genres}
             genres_books={params.genres_books}
+            props={this.props.props}
           />
         </>
       );

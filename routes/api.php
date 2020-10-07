@@ -31,15 +31,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/like', 'Api\LikeController@like');
 
     Route::post('/book/add/{isbn}', 'Api\BookController@create');
+    Route::delete('/book', 'Api\BookController@delete');
     
     Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');
-    Route::delete('/post', 'Api\PostController@remove');
+    Route::delete('/post', 'Api\PostController@delete');
     
     Route::post('/genre/edit', 'Api\GenreController@edit');
     Route::get('/comment/{uuid}', 'Api\CommentController@add');
     Route::post('/comment/{uuid}', 'Api\CommentController@create');
-    Route::delete('/comment', 'Api\CommentController@remove');
+    Route::delete('/comment', 'Api\CommentController@delete');
 
     Route::post('/follow', 'Api\FollowerController@follow');
 });

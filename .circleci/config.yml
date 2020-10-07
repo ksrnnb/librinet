@@ -20,13 +20,23 @@ jobs:
       # environmentはジョブに対する環境変数となる
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD: true
+      - APP_ENV: testing
+      - APP_DEBUG: true
+      - DB_CONNECTION: circle_test
+
+    # サーバーを $ php artisan serve で立ち上げてるので、ポート番号を指定する必要がある
+      - APP_URL: http://localhost:8000
+
+    # APP_KEYはセッションなどで利用される。テスト用なので外から見えても問題ない（はず）
+      - APP_KEY: base64:vScEjuRuIwbcIIiSxGp8/pFLbbbjKa4gjeCZAx3VZik=
+
 
     steps:
       - checkout
 
       - run: 
           name: Make Env file
-          command: cp .env.testing .env
+          command: cp .env.example .env
 
       # PHP CircleCI 2.0 Configuration File
       # PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
@@ -75,9 +85,9 @@ jobs:
           name: Run Laravel Server
           command: php artisan serve
           background: true
-      - run:
-          name: Run PHPUnit Tests
-          command: php artisan test
+      # - run:
+      #     name: Run PHPUnit Tests
+      #     command: php artisan test
       # - run:
       #     name: Run Laravel Dusk Tests
       #     command: php artisan dusk

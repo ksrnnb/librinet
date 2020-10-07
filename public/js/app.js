@@ -69985,7 +69985,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 /* harmony import */ var _SubColumn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SubColumn */ "./resources/js/components/SubColumn.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _Functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Functions */ "./resources/js/components/Functions.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70007,6 +70008,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 
@@ -70041,10 +70043,48 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.login = _this.login.bind(_assertThisInitialized(_this));
     _this.logout = _this.logout.bind(_assertThisInitialized(_this));
     _this.onClickDelete = _this.onClickDelete.bind(_assertThisInitialized(_this));
+    _this.deleteStateBook = _this.deleteStateBook.bind(_assertThisInitialized(_this));
+    _this.deleteStateGenresBooks = _this.deleteStateGenresBooks.bind(_assertThisInitialized(_this));
+    _this.redirectUserProfileAfterDeleteBooks = _this.redirectUserProfileAfterDeleteBooks.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.windowSizeChange.call(this);
+      this.getParamsOfAuthenticatedUser();
+    }
+  }, {
+    key: "deleteStateBook",
+    value: function deleteStateBook(ids) {
+      var params = this.state.params;
+      var books = params.books;
+      params.books = _Functions__WEBPACK_IMPORTED_MODULE_5__["default"].unsetBooks(ids, books);
+      this.setState({
+        params: params
+      });
+    }
+  }, {
+    key: "deleteStateGenresBooks",
+    value: function deleteStateGenresBooks(ids) {
+      var params = this.state.params;
+      var genresBooks = params.genres_books;
+      params.genres_books = _Functions__WEBPACK_IMPORTED_MODULE_5__["default"].unsetGenresBooks(ids, genresBooks);
+      this.setState({
+        params: params
+      });
+    }
+  }, {
+    key: "redirectUserProfileAfterDeleteBooks",
+    value: function redirectUserProfileAfterDeleteBooks(props, ids) {
+      this.deleteStateBook(ids);
+      this.deleteStateGenresBooks(ids);
+      var strId = this.state.params.user.str_id;
+      var path = '/user/profile/' + strId;
+      props.history.push(path);
+    }
+  }, {
     key: "login",
     value: function login(props) {
       // TODO: 前にログインしていた場合、反映に少し時間がかかる。
@@ -70065,12 +70105,6 @@ var App = /*#__PURE__*/function (_React$Component) {
       })["catch"](function (error) {
         console.log(error);
       });
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.windowSizeChange.call(this);
-      this.getParamsOfAuthenticatedUser();
     }
   }, {
     key: "getParamsOfAuthenticatedUser",
@@ -70163,8 +70197,10 @@ var App = /*#__PURE__*/function (_React$Component) {
       }
 
       if (hasLoaded) {
+        console.log('rendering!');
+
         if (isVisible) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
             className: "container"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_0__["default"], {
             userUrl: url,
@@ -70179,10 +70215,12 @@ var App = /*#__PURE__*/function (_React$Component) {
             isVisible: isVisible,
             login: this.login,
             logout: this.logout,
-            onClickDelete: this.onClickDelete
+            onClickDelete: this.onClickDelete,
+            deleteBooks: this.deleteBooks,
+            redirectUserProfileAfterDeleteBooks: this.redirectUserProfileAfterDeleteBooks
           })));
         } else {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
             className: "container"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_0__["default"], {
             userUrl: url,
@@ -70193,7 +70231,8 @@ var App = /*#__PURE__*/function (_React$Component) {
             isVisible: isVisible,
             login: this.login,
             logout: this.logout,
-            onClickDelete: this.onClickDelete
+            onClickDelete: this.onClickDelete,
+            redirectUserProfileAfterDeleteBooks: this.redirectUserProfileAfterDeleteBooks
           })));
         }
       } else {
@@ -70697,59 +70736,89 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BooksElement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BooksElement */ "./resources/js/components/BooksElement.js");
 
 
-function Bookshelf(props) {
-  var genres = props.genres;
-  var genres_books = props.genres_books;
-  var bookshelfElement = [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "mt-5 mb-0",
-    key: "bookshelf"
-  }, "\u672C\u68DA")];
-  var willEdit = props.willEdit; // TODO 本がない場合を確認。null?
 
-  if (genres_books == null) {
-    bookshelfElement.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+function Message(props) {
+  var isSelf = props.user.str_id === props.props.match.params.strId;
+
+  if (isSelf) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u68DA\u306B\u672C\u3092\u8FFD\u52A0\u3057\u307E\u3057\u3087\u3046\uFF01"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: "/book"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button",
+      className: "btn btn-outline-success"
+    }, "\u672C\u3092\u63A2\u3059")));
+  } else {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
+}
+
+function NoBook(props) {
+  var hasNoBook = props.genres_books.length === 0;
+
+  if (hasNoBook) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "row",
       key: "nobook"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-12"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
       className: "text-danger"
-    }, "\u672C\u68DA\u306B\u672C\u304C\u3042\u308A\u307E\u305B\u3093"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u68DA\u306B\u672C\u3092\u8FFD\u52A0\u3057\u307E\u3057\u3087\u3046\uFF01"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-      href: "/book"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      type: "button",
-      className: "btn btn-outline-success"
-    }, "\u672C\u3092\u63A2\u3059")))));
+    }, "\u672C\u68DA\u306B\u672C\u304C\u3042\u308A\u307E\u305B\u3093"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Message, {
+      user: props.user,
+      props: props.props
+    })));
   } else {
-    bookshelfElement.push(Object.keys(genres_books).map(function (genreId) {
-      var books = genres_books[genreId];
-      var genre;
-
-      if (willEdit) {
-        genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          className: "mb-5",
-          defaultValue: genres[genreId],
-          "data-id": genreId
-        });
-      } else {
-        genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-          className: "mt-5",
-          "data-id": genreId
-        }, genres[genreId]);
-      }
-
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row",
-        key: genreId
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-12"
-      }, genre), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BooksElement__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        books: books
-      }));
-    }));
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
+}
 
-  return bookshelfElement;
+function Books(props) {
+  var genres = props.genres;
+  var genres_books = props.genres_books;
+  var books = Object.keys(genres_books).map(function (genreId) {
+    var genre;
+    var books = genres_books[genreId];
+    var willEdit = props.willEdit;
+
+    if (willEdit) {
+      genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "mb-5",
+        defaultValue: genres[genreId],
+        "data-id": genreId
+      });
+    } else {
+      genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+        className: "mt-5",
+        "data-id": genreId
+      }, genres[genreId]);
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row",
+      key: genreId
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col-12"
+    }, genre), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BooksElement__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      books: books
+    }));
+  });
+  return books;
+}
+
+function Bookshelf(props) {
+  var genres = props.genres;
+  var genres_books = props.genres_books;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+    className: "mt-5 mb-0",
+    key: "bookshelf"
+  }, "\u672C\u68DA"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NoBook, {
+    user: props.user,
+    props: props.props,
+    genres_books: genres_books
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Books, {
+    genres: genres,
+    genres_books: genres_books
+  }));
 }
 
 /***/ }),
@@ -71016,6 +71085,175 @@ var Comment = /*#__PURE__*/function (_React$Component) {
 
 /***/ }),
 
+/***/ "./resources/js/components/DeleteBook.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/DeleteBook.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DeleteBook; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
+/* harmony import */ var _UserCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserCard */ "./resources/js/components/UserCard.js");
+/* harmony import */ var _SelectBookCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SelectBookCard */ "./resources/js/components/SelectBookCard.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+var axios = window.axios;
+
+function Books(props) {
+  var books = props.books.map(function (book) {
+    var label = 'book' + book.id;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+      className: "d-block",
+      htmlFor: label,
+      key: book.id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SelectBookCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      book: book
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "checkbox",
+      name: label,
+      id: label,
+      "data-id": book.id
+    })));
+  });
+  return books;
+}
+
+function DeleteBooks(props) {
+  var genres_books = props.genres_books;
+  var genres = props.genres;
+  var Bookshelf = Object.keys(genres_books).map(function (genre_id) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: genre_id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+      className: "mt-5"
+    }, genres[genre_id]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Books, {
+      books: genres_books[genre_id]
+    }));
+  });
+  return Bookshelf;
+}
+
+function DeleteButton(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-outline-danger d-block",
+    onClick: props.onClick
+  }, "\u524A\u9664\u3059\u308B");
+}
+
+var DeleteBook = /*#__PURE__*/function (_React$Component) {
+  _inherits(DeleteBook, _React$Component);
+
+  var _super = _createSuper(DeleteBook);
+
+  function DeleteBook(props) {
+    var _this;
+
+    _classCallCheck(this, DeleteBook);
+
+    _this = _super.call(this, props);
+    _this.deleteBooks = _this.deleteBooks.bind(_assertThisInitialized(_this));
+    _this.onSubmitDelete = _this.onSubmitDelete.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(DeleteBook, [{
+    key: "deleteBooks",
+    value: function deleteBooks() {
+      var inputs = _toConsumableArray(document.getElementsByTagName('input'));
+
+      var ids = [];
+      inputs.forEach(function (input) {
+        var bookId = input.dataset.id;
+        var willDelete = input.checked;
+
+        if (willDelete) {
+          ids.push(bookId);
+        }
+      });
+      this.onSubmitDelete(ids);
+    }
+  }, {
+    key: "onSubmitDelete",
+    value: function onSubmitDelete(ids) {
+      var _this2 = this;
+
+      var path = '/api/book';
+      axios["delete"](path, {
+        data: {
+          ids: ids
+        }
+      }).then(function (response) {
+        _this2.props.redirectUserProfileAfterDeleteBooks(_this2.props.props, ids);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      console.log('render_in_deletebook');
+      var params = this.props.params;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        subtitle: "\u672C\u306E\u524A\u9664"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        user: params.user
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteBooks, {
+        genres_books: params.genres_books,
+        genres: params.genres
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
+        onClick: this.deleteBooks
+      }));
+    }
+  }]);
+
+  return DeleteBook;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/EditGenre.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/EditGenre.js ***!
@@ -71102,8 +71340,7 @@ var EditGenre = /*#__PURE__*/function (_React$Component) {
       axios.post(path, {
         userId: userId,
         newGenres: newGenres
-      }).then(function (response) {
-        console.log(response);
+      }).then(function (response) {// console.log(response);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -71129,9 +71366,11 @@ var EditGenre = /*#__PURE__*/function (_React$Component) {
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
         user: params.user
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        user: params.user,
         genres_books: params.genres_books,
         genres: params.genres,
-        willEdit: true
+        willEdit: true,
+        props: this.props.props
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
         onClick: this.onSubmitNewGenres
       }));
@@ -71368,6 +71607,56 @@ var Functions = /*#__PURE__*/function () {
     value: function redirectToDeleteBook(strId) {
       var path = '/book/delete/' + strId;
       this.props.props.history.push(path);
+    }
+  }], [{
+    key: "unsetBooks",
+
+    /*
+     *   @param ids [bookId, bookId, ...]
+     *            will delete ids
+     *
+     *   @param books [book, book, ...]
+     *           before delete
+     *
+     *   @return books [book, book, ...]
+     *           deleted books
+     */
+    value: function unsetBooks(ids, books) {
+      ids.forEach(function (id) {
+        var index = books.findIndex(function (book) {
+          return book.id == id;
+        }); // みつからない場合の戻り値は-1
+
+        var isFound = index !== -1;
+
+        if (isFound) {
+          books.splice(index, 1);
+        }
+      });
+      return books;
+    }
+    /*
+     *   @param ids [id, id, ...]
+     *   @param genresBooks {genreId: [book ,book, ....], genreId: [...]}
+     *
+     *   @return newGenreBooks (after deleted)
+     */
+
+  }, {
+    key: "unsetGenresBooks",
+    value: function unsetGenresBooks(ids, genresBooks) {
+      var _this = this;
+
+      var newGenresBooks = new Object();
+      Object.keys(genresBooks).forEach(function (genreId) {
+        var books = genresBooks[genreId];
+        books = _this.unsetBooks(ids, books);
+
+        if (books.length) {
+          newGenresBooks[genreId] = books;
+        }
+      });
+      return newGenresBooks;
     }
   }]);
 
@@ -72127,6 +72416,8 @@ var Login = /*#__PURE__*/function (_React$Component) {
 
       axios.get('/sanctum/csrf-cookie').then(function (response) {
         axios.post('/api/guest/login').then(function (response) {
+          console.log(response);
+
           _this2.login(_this2.props.props);
         })["catch"](function (error) {
           console.log(error);
@@ -72229,7 +72520,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Post */ "./resources/js/components/Post.js");
 /* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./User */ "./resources/js/components/User.js");
 /* harmony import */ var _EditGenre__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EditGenre */ "./resources/js/components/EditGenre.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _DeleteBook__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./DeleteBook */ "./resources/js/components/DeleteBook.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
 
 
 
@@ -72259,9 +72552,10 @@ function Pages(props) {
 
   var logout = props.logout;
   var login = props.login;
+  var redirectUserProfileAfterDeleteBooks = props.redirectUserProfileAfterDeleteBooks;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: margin
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/home",
     render: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -72270,7 +72564,7 @@ function Pages(props) {
         onClickDelete: props.onClickDelete
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     exact: true,
     path: "/book",
     render: function render(props) {
@@ -72278,7 +72572,7 @@ function Pages(props) {
         props: props
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/genre/edit/:strId",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditGenre__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -72286,7 +72580,7 @@ function Pages(props) {
         props: props
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     exact: true,
     path: "/user",
     render: function render() {
@@ -72294,7 +72588,7 @@ function Pages(props) {
         example: exampleUsers
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/user/profile/:strId",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Profile__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -72303,7 +72597,7 @@ function Pages(props) {
         viewerUser: viewerStrId
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/login",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Login__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -72311,7 +72605,7 @@ function Pages(props) {
         login: login
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/logout",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logout__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -72319,21 +72613,30 @@ function Pages(props) {
         logout: logout
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/book/post/:isbn",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Post__WEBPACK_IMPORTED_MODULE_8__["default"], {
         props: props
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
+    path: "/book/delete/:strId",
+    render: function render(props) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeleteBook__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        props: props,
+        params: params,
+        redirectUserProfileAfterDeleteBooks: redirectUserProfileAfterDeleteBooks
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/book/add/:isbn",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddBook__WEBPACK_IMPORTED_MODULE_1__["default"], {
         props: props
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_11__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__["Route"], {
     path: "/comment/:uuid",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Comment__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -72824,8 +73127,10 @@ var Profile = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
+      console.log('User_profile'); // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
+
       var params = this.params;
+      console.log(params);
       var viewerUser = this.viewerUser;
       var isFollowing = this.state.isFollowing;
 
@@ -72858,8 +73163,10 @@ var Profile = /*#__PURE__*/function (_React$Component) {
           redirectToDeleteBook: this.redirectToDeleteBook,
           redirectToEditGenre: this.redirectToEditGenre
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          user: params.user,
           genres: params.genres,
-          genres_books: params.genres_books
+          genres_books: params.genres_books,
+          props: this.props.props
         }));
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
@@ -72868,6 +73175,82 @@ var Profile = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return Profile;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SelectBookCard.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/SelectBookCard.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SelectBookCard; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _BookImage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BookImage */ "./resources/js/components/BookImage.js");
+/* harmony import */ var _BookInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BookInfo */ "./resources/js/components/BookInfo.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+var SelectBookCard = /*#__PURE__*/function (_React$Component) {
+  _inherits(SelectBookCard, _React$Component);
+
+  var _super = _createSuper(SelectBookCard);
+
+  function SelectBookCard(props) {
+    _classCallCheck(this, SelectBookCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(SelectBookCard, [{
+    key: "render",
+    value: function render() {
+      var book = this.props.book;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-1"
+      }, this.props.children), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookImage__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        col: "col-3",
+        book: book
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookInfo__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        col: "col-8",
+        book: book
+      }));
+    }
+  }]);
+
+  return SelectBookCard;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 
@@ -73200,13 +73583,9 @@ var UserCard = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(UserCard);
 
   function UserCard(props) {
-    var _this;
-
     _classCallCheck(this, UserCard);
 
-    _this = _super.call(this, props);
-    console.log(props);
-    return _this;
+    return _super.call(this, props);
   }
 
   _createClass(UserCard, [{

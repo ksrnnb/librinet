@@ -25,7 +25,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         // 'image' => asset('img/icon.svg'),    <- このやり方だと、localhost/img/icon.svgになってしまう
-        'password' => Hash::make(env('GUEST_PASSWORD')),
+        'password' => Hash::make(config('app.guest_password')),
         'remember_token' => Str::random(10),
     ];
 });

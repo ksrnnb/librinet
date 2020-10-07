@@ -42,7 +42,7 @@ class PostController extends Controller
         return response('done', 200);
     }
 
-    public function remove(Request $request)
+    public function delete(Request $request)
     {
         // DELETE methodのため、プロパティに入ってる
         $uuid = $request->uuid;

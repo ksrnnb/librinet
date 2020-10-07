@@ -9,6 +9,7 @@ export default class SelectBookCard extends React.Component {
 
   render() {
     const book = this.props.book;
+
     return (
       <div className="row">
         <div className="col-1">{this.props.children}</div>

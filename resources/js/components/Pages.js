@@ -9,6 +9,7 @@ import Profile from './Profile';
 import PostData from './Post';
 import User from './User';
 import EditGenre from './EditGenre';
+import DeleteBook from './DeleteBook';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 export default function Pages(props) {
@@ -28,6 +29,8 @@ export default function Pages(props) {
   // これらがないと、コンポーネント側で読み込めない
   const logout = props.logout;
   const login = props.login;
+  const redirectUserProfileAfterDeleteBooks =
+    props.redirectUserProfileAfterDeleteBooks;
 
   return (
     <div className={margin}>
@@ -69,6 +72,18 @@ export default function Pages(props) {
         <Route
           path="/book/post/:isbn"
           render={(props) => <PostData props={props} />}
+        />
+        <Route
+          path="/book/delete/:strId"
+          render={(props) => (
+            <DeleteBook
+              props={props}
+              params={params}
+              redirectUserProfileAfterDeleteBooks={
+                redirectUserProfileAfterDeleteBooks
+              }
+            />
+          )}
         />
         <Route
           path="/book/add/:isbn"

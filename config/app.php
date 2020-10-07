@@ -12,6 +12,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
+    'guest_password' => env('GUEST_PASSWORD', 'password'),
 
     'name' => env('APP_NAME', 'Laravel'),
 

@@ -16,33 +16,36 @@ class GenreEditTest extends TestCase
     protected $user;
     protected $book;
     protected $genre;
-    protected $credential;
+    protected $hasSetUp = false;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
-        $this->book = $this->user
-                           ->books()
-                           ->save(factory(Book::class)->make());
-        $genre = factory(Genre::class)->create();
-        $this->genre = [
-            $genre->id => 'New_Genre_Name',
-        ];
-
-        $this->credential = [
-            'strId' => $this->user->str_id,
-            'password' => config('app.guest_password')
-        ];
-
-        // sanctum
-        $this->get('/sanctum/csrf-cookie')
-             ->assertStatus(204);
-
-        // login
-        $this->post('/api/login', $this->credential)
-             ->assertStatus(200);
+        if (! $this->hasSetUp) {
+            $this->hasSetUp = true;
+            $this->user = factory(User::class)->create();
+            $this->book = $this->user
+                               ->books()
+                               ->save(factory(Book::class)->make());
+            $genre = factory(Genre::class)->create();
+            $this->genre = [
+                $genre->id => 'New_Genre_Name',
+            ];
+    
+            $credential = [
+                'strId' => $this->user->str_id,
+                'password' => config('app.guest_password')
+            ];
+    
+            // sanctum
+            $this->get('/sanctum/csrf-cookie')
+                 ->assertStatus(204);
+            
+            // login
+            $this->post('/api/login', $credential)
+                 ->assertStatus(200);
+        }
     }
 
     public function testEditGenre()
@@ -62,7 +65,7 @@ class GenreEditTest extends TestCase
 
         $response = $this->post('/api/genre/edit', $params);
         $response->assertStatus(200)
-                 ->assertSeeText('updated');
+                 ->assertSee('updated');
     }
 
     public function testNoGenreCannotUpdate()

@@ -67,4 +67,17 @@ class UserController extends Controller
 
         return response()->json($params);
     }
+
+    // TODO: validation
+    public function edit(Request $request)
+    {
+        $params = $request->input('user');
+        
+        // helper
+        $params = extract_user_params($params);
+
+        User::updateUser($params);
+
+        return response('updated', 200);
+    }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UserImage(props) {
+export function UserImage(props) {
   if (props.user.image) {
     return (
       <img
@@ -36,10 +36,10 @@ export default class UserCard extends React.Component {
 
     return (
       <div className="user-card row border" id="user-card" data-id={user.id}>
-        <div className="col-2">
+        <div className="col-3">
           <UserImage user={user} onClick={this.moveUserPage} />
         </div>
-        <div className="col-10">
+        <div className="col-9">
           <p className="h4">{user.name}</p>
           <p className="h5">{'@' + user.str_id}</p>
           {this.props.children}

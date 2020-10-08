@@ -1,8 +1,27 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use App\Post;
 use App\Comment;
+
+if (! function_exists('extract_user_params')) {
+
+    function extract_user_params($params)
+    {
+        $columns = [
+            'id',
+            'str_id',
+            'name',
+            'email',
+            'image',
+        ];
+
+        $params = Arr::only($params, $columns);
+
+        return $params;
+    }
+}
 
 if (! function_exists('bad_request')) {
     

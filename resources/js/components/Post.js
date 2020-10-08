@@ -1,7 +1,7 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
-import Functions from './Functions';
+import Redirect from './Redirect';
 import GenreSelectFormat from './GenreSelectFormat';
 const axios = window.axios;
 
@@ -109,7 +109,7 @@ export default class PostData extends GenreSelectFormat {
       axios
         .post(path, params)
         .then((response) => {
-          Functions.prototype.redirectHome.call(this);
+          Redirect.home.call(this);
         })
         .catch((error) => {
           console.log(error);

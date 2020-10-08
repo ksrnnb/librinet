@@ -1,7 +1,7 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
-import Functions from './Functions';
+import Redirect from './Redirect';
 import Bookshelf from './Bookshelf';
 
 const axios = window.axios;
@@ -116,7 +116,7 @@ function EditBookshelfButton(props) {
   return <></>;
 }
 
-export default class Profile extends React.Component {
+export default class UserProfile extends React.Component {
   constructor(props) {
     super(props);
 
@@ -227,18 +227,16 @@ export default class Profile extends React.Component {
   }
 
   redirectToDeleteBook(strId) {
-    Functions.prototype.redirectToDeleteBook.call(this, strId);
+    Redirect.deleteBook.call(this, strId);
   }
 
   redirectToEditGenre(strId) {
-    Functions.prototype.redirectToEditGenre.call(this, strId);
+    Redirect.editGenre.call(this, strId);
   }
 
   render() {
-    console.log('User_profile');
     // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
     const params = this.params;
-    console.log(params);
     const viewerUser = this.viewerUser;
     const isFollowing = this.state.isFollowing;
 
@@ -246,7 +244,7 @@ export default class Profile extends React.Component {
       let buttons = null;
 
       // ログインしている場合はボタンを表示
-      if (typeof viewUser !== 'undefined') {
+      if (typeof viewerUser !== 'undefined') {
         buttons = (
           <>
             <EditUserButton

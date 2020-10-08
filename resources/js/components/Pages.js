@@ -5,10 +5,11 @@ import Comment from './Comment';
 import Home from './Home';
 import Login from './Login';
 import Logout from './Logout';
-import Profile from './Profile';
+import UserProfile from './UserProfile';
 import PostData from './Post';
 import User from './User';
 import EditGenre from './EditGenre';
+import EditUser from './EditUser';
 import DeleteBook from './DeleteBook';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ export default function Pages(props) {
   const posts = params ? params.posts : null;
   const viewerId = params ? params.user.id : null;
   const viewerStrId = params ? params.user.str_id : null;
+  const viewerUser = params ? params.user : null;
 
   let margin = null;
   if (props.isVisible) {
@@ -29,8 +31,9 @@ export default function Pages(props) {
   // これらがないと、コンポーネント側で読み込めない
   const logout = props.logout;
   const login = props.login;
-  const redirectUserProfileAfterDeleteBooks =
-    props.redirectUserProfileAfterDeleteBooks;
+  const setStateUser = props.setStateUser;
+  const setStateBooks = props.setStateBooks;
+  const setStateGenresBooks = props.setStateGenresBooks;
 
   return (
     <div className={margin}>
@@ -58,7 +61,21 @@ export default function Pages(props) {
         <Route
           path="/user/profile/:strId"
           render={(props) => (
-            <Profile props={props} params={params} viewerUser={viewerStrId} />
+            <UserProfile
+              props={props}
+              params={params}
+              viewerUser={viewerUser}
+            />
+          )}
+        />
+        <Route
+          path="/user/edit/:strId"
+          render={(props) => (
+            <EditUser
+              props={props}
+              params={params}
+              setStateUser={setStateUser}
+            />
           )}
         />
         <Route
@@ -79,9 +96,8 @@ export default function Pages(props) {
             <DeleteBook
               props={props}
               params={params}
-              redirectUserProfileAfterDeleteBooks={
-                redirectUserProfileAfterDeleteBooks
-              }
+              setStateBooks={setStateBooks}
+              setStateGenresBooks={setStateGenresBooks}
             />
           )}
         />

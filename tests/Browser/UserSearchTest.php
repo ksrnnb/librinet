@@ -2,7 +2,6 @@
 
 namespace Tests\Browser;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -15,13 +14,25 @@ class UserTest extends DuskTestCase
      *
      *
      */
-    // use RefreshDatabase;
     use DatabaseMigrations;
+
+    protected $user;
+    protected $hasCreated = false;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (!$this->hasCreated) {
+            $this->user = Factory(User::class)->create();
+            $this->hasCreated = true;
+        }
+    }
 
     public function testUserSearchWhenNoInput()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/user')
+                    ->waitFor('#user')
                     ->press('検索')
                     ->waitFor('.error')     // errorが表示されるまで待つ
                     ->assertSee('ユーザーが存在していません');
@@ -32,6 +43,7 @@ class UserTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/user')
+                    ->waitFor('#user')
                     ->type('user', 'HOGEHOGE')
                     ->press('検索')
                     ->waitFor('.error')
@@ -55,9 +67,10 @@ class UserTest extends DuskTestCase
 
     public function assertUsersExist($browser, $column)
     {
-        $item = User::find(1)->$column;
+        $item = $this->user->$column;
 
         $browser->visit('/user')
+                ->waitFor('#user')
                 ->type('user', $item)
                 ->press('検索')
                 ->waitFor('.results')

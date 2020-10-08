@@ -18,9 +18,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // TODO: validation
-        // $str_id = $request->input('strId');
-        $str_id = User::find(1)->str_id;
+        $str_id = $request->input('strId');
         $password = config('app.guest_password');      //TODO:ここは暫定
 
         $credentials = compact('str_id', 'password');

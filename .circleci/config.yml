@@ -78,9 +78,9 @@ jobs:
       - run:
           name: Run PHPUnit Tests
           command: php artisan test
-      # - run:
-      #     name: Run Laravel Dusk Tests
-      #     command: php artisan dusk
+      - run:
+          name: Run Laravel Dusk Tests
+          command: php artisan dusk
 
       - run:
           name: PHP Code Check

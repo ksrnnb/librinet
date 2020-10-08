@@ -70056,8 +70056,27 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "setStateUser",
     value: function setStateUser(user) {
+      // ユーザー削除時は空のオブジェクト
+      var isEmpty = Object.keys(user).length === 0;
+
+      if (isEmpty) {
+        this.setState({
+          isLogin: false,
+          params: null
+        });
+      } else {
+        var params = this.state.params;
+        params.user = user;
+        this.setState({
+          params: params
+        });
+      }
+    }
+  }, {
+    key: "setStatePosts",
+    value: function setStatePosts(posts) {
       var params = this.state.params;
-      params.user = user;
+      params.posts = posts;
       this.setState({
         params: params
       });
@@ -70173,6 +70192,7 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      console.log(this.state);
       var appName = document.title;
       var params = this.state.params;
       var isVisible = this.state.isVisible;
@@ -71475,7 +71495,8 @@ function DeleteButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-danger"
+    className: "btn btn-outline-danger",
+    onClick: props.onClick
   }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B"));
 }
 
@@ -71533,6 +71554,7 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
       image: user.image ? user.image : null
     };
     _this.onSubmitEdit = _this.onSubmitEdit.bind(_assertThisInitialized(_this));
+    _this.onSubmitDelete = _this.onSubmitDelete.bind(_assertThisInitialized(_this));
     _this.onChangeName = _this.onChangeName.bind(_assertThisInitialized(_this));
     _this.onChangeStrId = _this.onChangeStrId.bind(_assertThisInitialized(_this));
     _this.redirectUserProfile = _this.redirectUserProfile.bind(_assertThisInitialized(_this));
@@ -71559,6 +71581,25 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "onSubmitDelete",
+    value: function onSubmitDelete() {
+      var _this3 = this;
+
+      var path = '/api/user';
+      var user = this.props.params.user;
+      axios["delete"](path, {
+        data: user
+      }).then(function (response) {
+        var user = {};
+
+        _this3.props.setStateUser(user);
+
+        _this3.redirectHome(user.str_id);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, {
     key: "onChangeName",
     value: function onChangeName(e) {
       var name = e.target.value;
@@ -71578,6 +71619,11 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
     key: "redirectUserProfile",
     value: function redirectUserProfile(strId) {
       _Redirect__WEBPACK_IMPORTED_MODULE_3__["default"].userProfile.call(this, strId);
+    }
+  }, {
+    key: "redirectHome",
+    value: function redirectHome() {
+      _Redirect__WEBPACK_IMPORTED_MODULE_3__["default"].home.call(this);
     }
   }, {
     key: "render",
@@ -71610,7 +71656,9 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
           onClick: this.onSubmitEdit
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CancelButton, {
           onClick: this.redirectUserProfile
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SetPasswordButton, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, null)));
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SetPasswordButton, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
+          onClick: this.onSubmitDelete
+        })));
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
       }
@@ -72663,7 +72711,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
 
       axios.get('/sanctum/csrf-cookie').then(function (response) {
         axios.post('/api/login', {
-          strId: 'LZTIDF',
+          strId: 'zsOch5i',
           password: 'password'
         }).then(function (response) {
           _this3.login(_this3.props.props);
@@ -73135,7 +73183,7 @@ var Redirect = /*#__PURE__*/function () {
   _createClass(Redirect, null, [{
     key: "home",
     value: function home() {
-      this.props.props.history.push('/path');
+      this.props.props.history.push('/home');
     }
   }, {
     key: "userProfile",

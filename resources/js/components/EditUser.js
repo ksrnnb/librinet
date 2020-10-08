@@ -28,7 +28,7 @@ function CancelButton(props) {
 function DeleteButton(props) {
   return (
     <div className="col-12">
-      <button className="btn btn-outline-danger">アカウントを削除する</button>
+      <button className="btn btn-outline-danger" onClick={props.onClick}>アカウントを削除する</button>
     </div>
   );
 }
@@ -88,6 +88,7 @@ export default class EditUser extends React.Component {
     };
 
     this.onSubmitEdit = this.onSubmitEdit.bind(this);
+    this.onSubmitDelete = this.onSubmitDelete.bind(this);
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeStrId = this.onChangeStrId.bind(this);
     this.redirectUserProfile = this.redirectUserProfile.bind(this);
@@ -113,6 +114,25 @@ export default class EditUser extends React.Component {
       });
   }
 
+  onSubmitDelete() {
+    const path = '/api/user';
+
+    const user = this.props.params.user;
+
+    axios
+      .delete(path, {
+        data: user,
+      })
+      .then((response) => {
+        const user = {};
+        this.props.setStateUser(user);
+        this.redirectHome(user.str_id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   onChangeName(e) {
     const name = e.target.value;
     this.setState({
@@ -129,6 +149,10 @@ export default class EditUser extends React.Component {
 
   redirectUserProfile(strId) {
     Redirect.userProfile.call(this, strId);
+  }
+
+  redirectHome() {
+    Redirect.home.call(this);
   }
 
   render() {
@@ -161,7 +185,7 @@ export default class EditUser extends React.Component {
             <CancelButton onClick={this.redirectUserProfile} />
             {/* TODO: メールは？ */}
             <SetPasswordButton />
-            <DeleteButton />
+            <DeleteButton onClick={this.onSubmitDelete} />
           </div>
         </div>
       );

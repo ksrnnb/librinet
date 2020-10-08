@@ -35,7 +35,7 @@ export default class Login extends React.Component {
       .then((response) => {
         axios
           .post('/api/login', {
-            strId: 'LZTIDF',
+            strId: 'zsOch5i',
             password: 'password',
           })
           .then((response) => {

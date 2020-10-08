@@ -13,7 +13,7 @@ class EditUserTest extends TestCase
 
     protected $edit_path;
     protected $user;
-    protected $hasSetUp = false;
+    protected $has_setup = false;
 
     /*
     *   毎回Userの情報を配列にセットしてpostするので、メソッドにまとめた
@@ -31,28 +31,30 @@ class EditUserTest extends TestCase
     {
         parent::setUp();
 
-        if (! $this->hasSetUp) {
-            $this->hasSetUp = true;
+        if (! $this->has_setup) {
+            $this->has_setup = true;
             $this->edit_path = '/api/user/edit';
             $this->user = factory(User::class)->create();
     
-            $credential = [
+            $this->credential = [
                 'strId' => $this->user->str_id,
                 'password' => config('app.guest_password')
             ];
-    
-            // sanctum
-            $this->get('/sanctum/csrf-cookie')
-                 ->assertStatus(204);
-            
-            // login
-            $this->post('/api/login', $credential)
-                 ->assertStatus(200);
         }
+    }
+
+    public function testCannotEditWhenIsNotAuthenticated()
+    {
+        $this->user->name = 'test_name';
+
+        $this->postUser()
+             ->assertStatus(302);
     }
 
     public function testEditUser()
     {
+        $this->authenticate();
+
         $this->user->name = 'test_name';
 
         $this->postUser()
@@ -60,28 +62,30 @@ class EditUserTest extends TestCase
              ->assertSee('updated');
     }
 
-    // public function testTooLongNameAndStrId()
-    // {
-    //     $this->user->name = 'test_too_long_name_aaaaaaaaaaaaaaaaaaaa';
+    public function testTooLongNameAndStrId()
+    {
+        $this->user->name = 'test_too_long_name_aaaaaaaaaaaaaaaaaaaa';
 
-    //     $this->postUser();
+        $this->postUser()
+             ->assertStatus(302);   // Validtion errorではHTTPの場合はリダイレクト, AJAXの場合はJSON
 
-    //     $this->user->name = 'test_name';
-    //     $this->user->str_id = 'test_too_long_str_id_aaaaaaaaaaaaaaaaaaaa';
+        $this->user->name = 'test_name';
+        $this->user->str_id = 'test_too_long_str_id_aaaaaaaaaaaaaaaaaaaa';
 
-    //     $this->postUser();
+        $this->postUser()
+             ->assertStatus(302);
+    }
 
-    //     $this->user->str_id = 'test_str_id';
-    // }
+    public function testEmptyNameAndStrId()
+    {
+        $this->user->name = '';
+        $this->postUser()
+             ->assertStatus(302);
 
-    // public function testEmptyNameAndStrId()
-    // {
-    //     $this->user->name = '';
-    //     $this->postUser();
+        $this->user->name = 'test_name';
+        $this->user->str_id = '';
 
-    //     $this->user->name = 'test_name';
-    //     $this->user->str_id = '';
-
-    //     $this->postUser();
-    // }
+        $this->postUser()
+             ->assertStatus(302);
+    }
 }

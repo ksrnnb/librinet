@@ -23,8 +23,8 @@ class UserTest extends DuskTestCase
     {
         parent::setUp();
         if (!$this->hasCreated) {
-            $this->user = Factory(User::class)->create();
             $this->hasCreated = true;
+            $this->user = Factory(User::class)->create();
         }
     }
 

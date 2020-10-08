@@ -40,8 +40,26 @@ class App extends React.Component {
   }
 
   setStateUser(user) {
+    // ユーザー削除時は空のオブジェクト
+    const isEmpty = Object.keys(user).length === 0;
+    if (isEmpty) {
+      this.setState({
+        isLogin: false,
+        params: null,
+      });
+    } else {
+      const params = this.state.params;
+      params.user = user;
+
+      this.setState({
+        params: params,
+      });
+    }
+  }
+
+  setStatePosts(posts) {
     const params = this.state.params;
-    params.user = user;
+    params.posts = posts;
     this.setState({
       params: params,
     });
@@ -152,6 +170,8 @@ class App extends React.Component {
   }
 
   render() {
+
+    console.log(this.state);
     const appName = document.title;
     const params = this.state.params;
     const isVisible = this.state.isVisible;

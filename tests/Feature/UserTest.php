@@ -13,29 +13,61 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     protected $user;
+    protected $search_path;
+    protected $has_setup = false;
+
+    protected function search($input)
+    {
+        $user = [
+            'user' => $input
+        ];
+
+        $response = $this->post($this->search_path, $user);
+
+        return $response;
+    }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        if (! $this->has_setup) {
+            $this->has_setup = true;
+            $this->user = factory(User::class)->create();
+            $this->search_path = '/api/user';
+        }
     }
 
-    public function testUserSearchById()
+    public function testUserSearchByStrId()
     {
-        $response = $this->post('/api/user', [
-            'user' => $this->user->str_id,
-        ]);
-
-        $response->assertSee($this->user->name);
+        $str_id = $this->user->str_id;
+        $this->search($str_id)
+             ->assertStatus(200)
+             ->assertSee($this->user->name);
     }
 
     public function testUserSearchByName()
     {
-        $response = $this->post('/api/user', [
-            'user' => $this->user->name,
-        ]);
+        $name = $this->user->name;
+        
+        $this->search($name)
+             ->assertStatus(200)
+             ->assertSee($this->user->name);
+    }
 
-        $response->assertSee($this->user->id);
+    public function testCannotSearchWhenInputIsNullOrNotMatch()
+    {
+        $input = null;
+        
+        $this->search($input)
+             ->assertJsonCount(0);  // laravelで定義されているアサート
+             
+        $input = '';
+        $this->search($input)
+             ->assertJsonCount(0);
+             
+        $input = '';
+        $this->search($input)
+             ->assertJsonCount(0);
     }
 }

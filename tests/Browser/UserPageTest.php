@@ -9,15 +9,28 @@ use App\User;
 
 class UserPageTest extends DuskTestCase
 {
+    // use DatabaseMigrations;
 
-    public function testCanSeeUserName()
-    {
-        $this->browse(function (Browser $browser) {
-            $user = User::find(1);
+    // protected $user;
+    // protected $hasCreated = false;
 
-            $browser->visit('/user/profile/' . $user->str_id)
-                    ->waitFor('.user-card')
-                    ->assertSee($user->name);
-        });
-    }
+    // protected function setUp(): void
+    // {
+    //     parent::setUp();
+    //     if (!$this->hasCreated) {
+    //         $this->hasCreated = true;
+    //         $this->user = Factory(User::class)->create();
+    //     }
+    // }
+
+    // public function testCanSeeUserName()
+    // {
+    //     $this->browse(function (Browser $browser) {
+    //         $str_id = $this->user->str_id;
+
+    //         $browser->visit('/user/profile/' . $str_id)
+    //                 ->waitFor('.user-card')
+    //                 ->assertSee($user->name);
+    //     });
+    // }
 }

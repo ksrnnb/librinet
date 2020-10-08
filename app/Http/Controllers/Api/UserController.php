@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\EditUserRequest;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Book;
@@ -69,7 +70,7 @@ class UserController extends Controller
     }
 
     // TODO: validation
-    public function edit(Request $request)
+    public function edit(EditUserRequest $request)
     {
         $params = $request->input('user');
         
@@ -79,5 +80,17 @@ class UserController extends Controller
         User::updateUser($params);
 
         return response('updated', 200);
+    }
+
+    public function delete(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->id == $user->id) {
+            $user->delete();
+            return response('deleted', 200);
+        } else {
+            return bad_request();
+        }
     }
 }

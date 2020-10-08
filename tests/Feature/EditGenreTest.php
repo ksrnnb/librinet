@@ -13,18 +13,25 @@ class GenreEditTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $user;
     protected $book;
     protected $genre;
-    protected $hasSetUp = false;
+    protected $edit_path;
+    protected $has_setup = false;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        if (! $this->hasSetUp) {
-            $this->hasSetUp = true;
+        if (! $this->has_setup) {
+            $this->has_setup = true;
+            $this->edit_path = '/api/genre/edit';
             $this->user = factory(User::class)->create();
+    
+            $this->credential = [
+                'strId' => $this->user->str_id,
+                'password' => config('app.guest_password')
+            ];
+
             $this->book = $this->user
                                ->books()
                                ->save(factory(Book::class)->make());
@@ -32,51 +39,44 @@ class GenreEditTest extends TestCase
             $this->genre = [
                 $genre->id => 'New_Genre_Name',
             ];
-    
-            $credential = [
-                'strId' => $this->user->str_id,
-                'password' => config('app.guest_password')
-            ];
-    
-            // sanctum
-            $this->get('/sanctum/csrf-cookie')
-                 ->assertStatus(204);
-            
-            // login
-            $this->post('/api/login', $credential)
-                 ->assertStatus(200);
         }
     }
 
-    public function testEditGenre()
+    public function testCannotEditWhenIsNotAuthenticated()
     {
-        // // sanctum
-        // $this->get('/sanctum/csrf-cookie')
-        //      ->assertStatus(204);
-
-        // // login
-        // $this->post('/api/login', $this->credential)
-        //      ->assertStatus(200);
-
         $params = [
             'userId' => $this->user->id,
             'newGenres' => $this->genre,
         ];
 
-        $response = $this->post('/api/genre/edit', $params);
-        $response->assertStatus(200)
-                 ->assertSee('updated');
+        $this->post($this->edit_path, $params)
+             ->assertStatus(302);
+    }
+
+    public function testEditGenre()
+    {
+        $this->authenticate();
+        $params = [
+            'userId' => $this->user->id,
+            'newGenres' => $this->genre,
+        ];
+
+        $this->post($this->edit_path, $params)
+             ->assertStatus(200)
+             ->assertSee('updated');
     }
 
     public function testNoGenreCannotUpdate()
     {
+        $this->authenticate();
+
         // empty string
         $params = [
             'userId' => $this->user->id,
             'newGenres' => '',
         ];
 
-        $this->post('/api/genre/edit', $params)
+        $this->post($this->edit_path, $params)
              ->assertStatus(400);
 
         // emtpy array
@@ -85,7 +85,7 @@ class GenreEditTest extends TestCase
             'newGenres' => [],
         ];
 
-        $this->post('/api/genre/edit', $params)
+        $this->post($this->edit_path, $params)
              ->assertStatus(400);
 
         // emtpy array
@@ -94,19 +94,21 @@ class GenreEditTest extends TestCase
             'newGenres' => [1 => ''],
         ];
 
-        $this->post('/api/genre/edit', $params)
+        $this->post($this->edit_path, $params)
              ->assertStatus(400);
     }
 
     public function testDifferentUserCannotUpdate()
     {
+        $this->authenticate();
+
         // different user
         $params = [
             'userId' => $this->user->id + 1,
             'newGenres' => $this->genre,
         ];
 
-        $this->post('/api/genre/edit', $params)
+        $this->post($this->edit_path, $params)
              ->assertStatus(400);
     }
 }

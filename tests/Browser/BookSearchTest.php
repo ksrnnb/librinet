@@ -8,11 +8,11 @@ use Tests\DuskTestCase;
 
 class BookSearchTest extends DuskTestCase
 {
-
     public function testWithoutInput()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/book')
+                    ->waitFor('#isbn')
                     ->press('検索')
                     ->waitFor('.error')
                     ->assertSee('ISBNが正しく入力されていません');
@@ -23,6 +23,7 @@ class BookSearchTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/book')
+                    ->waitFor('#isbn')
                     ->type('#isbn', 'hogehoge')
                     ->press('検索')
                     ->assertSee('ISBNが正しく入力されていません');
@@ -34,6 +35,7 @@ class BookSearchTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $cannnot_search_number = '9784297100338';
             $browser->visit('/book')
+                    ->waitFor('#isbn')
                     ->type('#isbn', $cannnot_search_number)
                     ->press('検索')
                     ->waitFor('.error')
@@ -46,6 +48,7 @@ class BookSearchTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $isbn = '9784297100339';
             $browser->visit('/book')
+                    ->waitFor('#isbn')
                     ->type('#isbn', $isbn)
                     ->press('検索')
                     ->waitFor('.book')

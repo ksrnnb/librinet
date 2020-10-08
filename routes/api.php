@@ -30,6 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/like', 'Api\LikeController@like');
 
+    Route::post('/user/edit', 'Api\UserController@edit');
+
+
     Route::post('/book/add/{isbn}', 'Api\BookController@create');
     Route::delete('/book', 'Api\BookController@delete');
     

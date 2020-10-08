@@ -170,7 +170,6 @@ export default class Comment extends React.Component {
         .post(path, params)
         .then((response) => {
           console.log(response.data);
-          // Functions.prototype.redirectHome.call(this);
         })
         .catch((error) => {
           console.log(error);

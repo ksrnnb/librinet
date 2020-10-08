@@ -2,6 +2,7 @@ import React from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
 import SelectBookCard from './SelectBookCard';
+import Functions from './Functions';
 
 const axios = window.axios;
 
@@ -48,10 +49,13 @@ export default class DeleteBook extends React.Component {
     super(props);
 
     this.deleteBooks = this.deleteBooks.bind(this);
+    this.deleteGenresBooks = this.deleteGenresBooks.bind(this);
+    this.getIdsAndSubmit = this.getIdsAndSubmit.bind(this);
     this.onSubmitDelete = this.onSubmitDelete.bind(this);
+    this.redirectUserProfile = this.redirectUserProfile.bind(this);
   }
 
-  deleteBooks() {
+  getIdsAndSubmit() {
     const inputs = [...document.getElementsByTagName('input')];
 
     const ids = [];
@@ -66,23 +70,45 @@ export default class DeleteBook extends React.Component {
     this.onSubmitDelete(ids);
   }
 
+  deleteBooks(ids) {
+    const books = this.props.params.books;
+    const deletedBooks = Functions.unsetBooks(ids, books);
+    this.props.setStateBooks(deletedBooks);
+  }
+
+  deleteGenresBooks(ids) {
+    const genresBooks = this.props.params.genres_books;
+    const deletedGenresBooks = Functions.unsetGenresBooks(ids, genresBooks);
+    this.props.setStateGenresBooks(deletedGenresBooks);
+  }
+
+  redirectUserProfile(ids) {
+    this.deleteBooks(ids);
+    this.deleteGenresBooks(ids);
+    const props = this.props.props;
+    const strId = props.match.params.strId;
+    const path = '/user/profile/' + strId;
+
+    props.history.push(path);
+  }
+
   onSubmitDelete(ids) {
     const path = '/api/book';
+    this.redirectUserProfile(ids);
 
-    axios
-      .delete(path, {
-        data: { ids: ids },
-      })
-      .then((response) => {
-        this.props.redirectUserProfileAfterDeleteBooks(this.props.props, ids);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios
+    //   .delete(path, {
+    //     data: { ids: ids },
+    //   })
+    //   .then((response) => {
+    //     this.redirectUserProfile(ids);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
   render() {
-    console.log('render_in_deletebook');
     const params = this.props.params;
     return (
       <>
@@ -92,7 +118,7 @@ export default class DeleteBook extends React.Component {
           genres_books={params.genres_books}
           genres={params.genres}
         />
-        <DeleteButton onClick={this.deleteBooks} />
+        <DeleteButton onClick={this.getIdsAndSubmit} />
       </>
     );
   }

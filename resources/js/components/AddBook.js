@@ -2,7 +2,7 @@ import React from 'react';
 import Subtitle from './Subtitle';
 import GenreSelectFormat from './GenreSelectFormat';
 import Errors from './Errors';
-import Functions from './Functions';
+import Redirect from './Redirect';
 const axios = window.axios;
 
 export default class AddBook extends GenreSelectFormat {
@@ -29,7 +29,7 @@ export default class AddBook extends GenreSelectFormat {
         .post(path, params)
         .then((response) => {
           const strId = response.data.str_id;
-          Functions.prototype.redirectToUserProfile.call(this, strId);
+          Redirect.userProfile.call(this, strId);
         })
         .catch((error) => {
           console.log(error);

@@ -211,4 +211,17 @@ class User extends Authenticatable
             return $books->contains('isInBookshelf', true);
         }
     }
+
+    public static function updateUser($params)
+    {
+        $user = User::find($params['id']);
+
+        foreach ($params as $key => $value) {
+            $user->$key = $value;
+        }
+
+        $user->save();
+
+        return true;
+    }
 }

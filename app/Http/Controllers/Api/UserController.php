@@ -77,6 +77,9 @@ class UserController extends Controller
         // helper
         $params = extract_user_params($params);
 
+        // 暫定
+        // return response($params);
+
         User::updateUser($params);
 
         return response('updated', 200);

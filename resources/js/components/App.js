@@ -170,8 +170,6 @@ class App extends React.Component {
   }
 
   render() {
-
-    console.log(this.state);
     const appName = document.title;
     const params = this.state.params;
     const isVisible = this.state.isVisible;

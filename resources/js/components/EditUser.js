@@ -28,7 +28,9 @@ function CancelButton(props) {
 function DeleteButton(props) {
   return (
     <div className="col-12">
-      <button className="btn btn-outline-danger" onClick={props.onClick}>アカウントを削除する</button>
+      <button className="btn btn-outline-danger" onClick={props.onClick}>
+        アカウントを削除する
+      </button>
     </div>
   );
 }
@@ -91,6 +93,7 @@ export default class EditUser extends React.Component {
     this.onSubmitDelete = this.onSubmitDelete.bind(this);
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeStrId = this.onChangeStrId.bind(this);
+    this.setStateImage = this.setStateImage.bind(this);
     this.redirectUserProfile = this.redirectUserProfile.bind(this);
   }
 
@@ -100,6 +103,7 @@ export default class EditUser extends React.Component {
     const user = this.props.params.user;
     user.name = this.state.name;
     user.str_id = this.state.strId;
+    user.image = this.state.image;
 
     axios
       .post(path, {
@@ -133,6 +137,12 @@ export default class EditUser extends React.Component {
       });
   }
 
+  setStateImage(image) {
+    this.setState({
+      image: image,
+    });
+  }
+
   onChangeName(e) {
     const name = e.target.value;
     this.setState({
@@ -158,6 +168,7 @@ export default class EditUser extends React.Component {
   render() {
     const params = this.props.params;
     const props = this.props.props;
+    const image = this.state.image ? this.state.image : params.user.image;
 
     if (params != null) {
       return (
@@ -165,7 +176,10 @@ export default class EditUser extends React.Component {
           <Subtitle subtitle="Edit Profile" />
           <div className="row">
             <div className="col-3">
-              <UserImageInput user={params.user} />
+              <UserImageInput
+                image={image}
+                setStateImage={this.setStateImage}
+              />
               {/* TODO: validation error */}
             </div>
 

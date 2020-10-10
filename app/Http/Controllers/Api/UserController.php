@@ -72,10 +72,16 @@ class UserController extends Controller
     // TODO: validation
     public function edit(EditUserRequest $request)
     {
+        $validated = $request->validated();
         $params = $request->input('user');
         
         // helper
         $params = extract_user_params($params);
+
+        if (array_key_exists('image', $params)) {
+            // helper / s3にアップロードして、urlを返す。
+            $params['image'] = upload_image_s3($params['image']);
+        }
 
         User::updateUser($params);
 

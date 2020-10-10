@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueStrId;
+use App\Rules\IsBase64Image;
 
 class EditUserRequest extends FormRequest
 {
@@ -25,12 +27,21 @@ class EditUserRequest extends FormRequest
     {
         // TODO: 要修正
         return [
-            'id' => 'integer',
-            'str_id' => 'max:16',
-            // 'str_id' => ['max:16', new Rule()],
-            'name' => 'max:32',
-            'email' => 'email address',
-            // 'image' => ''
+            'user.id' => 'integer',
+            'user.name' => ['min:1, max:32'],
+            'user.str_id' => ['min:4', 'max:32', new UniqueStrId()],
+            // 'user.email' => 'email address',
+            'user.image' => ['nullable', new IsBase64Image()],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'user.name.min' => 'ユーザー名が短すぎます',
+            'user.name.max' => 'ユーザー名が長すぎます',
+            'user.str_id.min' => 'ユーザーIDが短すぎます',
+            'user.str_id.max' => 'ユーザーIDが長すぎます',
         ];
     }
 }

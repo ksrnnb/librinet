@@ -1,11 +1,11 @@
 import React from 'react';
 
 export function UserImage(props) {
-  if (props.user.image) {
+  if (props.image) {
     return (
       <img
         className="img-fluid"
-        src={props.user.image}
+        src={props.image}
         alt="user-image"
         onClick={props.onClick}
       />
@@ -37,7 +37,7 @@ export default class UserCard extends React.Component {
     return (
       <div className="user-card row border" id="user-card" data-id={user.id}>
         <div className="col-3">
-          <UserImage user={user} onClick={this.moveUserPage} />
+          <UserImage image={user.image} onClick={this.moveUserPage} />
         </div>
         <div className="col-9">
           <p className="h4">{user.name}</p>

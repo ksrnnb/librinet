@@ -52,7 +52,6 @@ export default class UserImageInput extends React.Component {
         unit: '%',
       },
     };
-    this.newIamge = null;
     this.onChangeImage = this.onChangeImage.bind(this);
     this.setCrop = this.setCrop.bind(this);
     this.setShow = this.setShow.bind(this);

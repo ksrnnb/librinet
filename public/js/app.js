@@ -87248,6 +87248,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _UserImageInput__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserImageInput */ "./resources/js/components/UserImageInput.js");
 /* harmony import */ var _Redirect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Redirect */ "./resources/js/components/Redirect.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -87269,6 +87270,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 
@@ -87354,7 +87356,8 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       strId: user.str_id,
       name: user.name,
-      image: user.image ? user.image : null
+      image: user.image ? user.image : null,
+      errors: []
     };
     _this.onSubmitEdit = _this.onSubmitEdit.bind(_assertThisInitialized(_this));
     _this.onSubmitDelete = _this.onSubmitDelete.bind(_assertThisInitialized(_this));
@@ -87378,11 +87381,17 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
       axios.post(path, {
         user: user
       }).then(function (response) {
+        console.log(response);
+
         _this2.props.setStateUser(user);
 
         _this2.redirectUserProfile(user.str_id);
       })["catch"](function (error) {
-        console.log(error);
+        var errors = Object.values(error.response.data.errors);
+
+        _this2.setState({
+          errors: errors
+        });
       });
     }
   }, {
@@ -87441,7 +87450,6 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       var params = this.props.params;
-      var props = this.props.props;
       var image = this.state.image ? this.state.image : params.user.image;
 
       if (params != null) {
@@ -87458,7 +87466,9 @@ var EditUser = /*#__PURE__*/function (_React$Component) {
           setStateImage: this.setStateImage
         })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "col-9"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserNameInput, {
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          errors: this.state.errors
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserNameInput, {
           name: this.state.name,
           onChange: this.onChangeName
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserStrIdInput, {
@@ -89563,7 +89573,6 @@ var UserImageInput = /*#__PURE__*/function (_React$Component) {
         unit: '%'
       }
     };
-    _this.newIamge = null;
     _this.onChangeImage = _this.onChangeImage.bind(_assertThisInitialized(_this));
     _this.setCrop = _this.setCrop.bind(_assertThisInitialized(_this));
     _this.setShow = _this.setShow.bind(_assertThisInitialized(_this));

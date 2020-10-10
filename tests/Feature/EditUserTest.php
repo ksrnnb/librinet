@@ -51,11 +51,22 @@ class EditUserTest extends TestCase
              ->assertStatus(302);
     }
 
-    public function testEditUser()
+    public function testEditUserName()
     {
         $this->authenticate();
 
         $this->user->name = 'test_name';
+
+        $this->postUser()
+             ->assertStatus(200)
+             ->assertSee('updated');
+    }
+
+    public function testEditUserStrId()
+    {
+        $this->authenticate();
+
+        $this->user->str_id = 'test_str_id';
 
         $this->postUser()
              ->assertStatus(200)

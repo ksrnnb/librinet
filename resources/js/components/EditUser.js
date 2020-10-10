@@ -2,6 +2,7 @@ import React from 'react';
 import Subtitle from './Subtitle';
 import UserImageInput from './UserImageInput';
 import Redirect from './Redirect';
+import Errors from './Errors';
 
 const axios = window.axios;
 
@@ -87,6 +88,7 @@ export default class EditUser extends React.Component {
       strId: user.str_id,
       name: user.name,
       image: user.image ? user.image : null,
+      errors: [],
     };
 
     this.onSubmitEdit = this.onSubmitEdit.bind(this);
@@ -110,11 +112,15 @@ export default class EditUser extends React.Component {
         user: user,
       })
       .then((response) => {
+        console.log(response);
         this.props.setStateUser(user);
         this.redirectUserProfile(user.str_id);
       })
       .catch((error) => {
-        console.log(error);
+        const errors = Object.values(error.response.data.errors);
+        this.setState({
+          errors: errors,
+        });
       });
   }
 
@@ -167,7 +173,6 @@ export default class EditUser extends React.Component {
 
   render() {
     const params = this.props.params;
-    const props = this.props.props;
     const image = this.state.image ? this.state.image : params.user.image;
 
     if (params != null) {
@@ -184,6 +189,7 @@ export default class EditUser extends React.Component {
             </div>
 
             <div className="col-9">
+              <Errors errors={this.state.errors} />
               <UserNameInput
                 name={this.state.name}
                 onChange={this.onChangeName}

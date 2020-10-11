@@ -43,7 +43,7 @@ class BookSearchTest extends DuskTestCase
         });
     }
 
-    public function testCanFetchBookDataFromIsbnAndCanBackSearchPage()
+    public function testCanFetchBookDataFromIsbnAndDontSeePostButton()
     {
         $this->browse(function (Browser $browser) {
             $isbn = '9784297100339';
@@ -52,20 +52,8 @@ class BookSearchTest extends DuskTestCase
                     ->type('#isbn', $isbn)
                     ->press('検索')
                     ->waitFor('.book')
-                    ->assertSee('Docker/Kubernetes');
+                    ->assertSee('Docker/Kubernetes')
+                    ->assertDontSee('本の投稿をする');      // 未認証のため見えない
         });
     }
-
-    // public function testCanAccessPostPageAndCanBackBookPage()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';
-    //         $browser->visit('/book/show/' . $isbn)
-    //                 ->press('本の投稿をする')
-    //                 ->back()
-    //                 ->press('本の検索画面に戻る')
-    //                 ->assertPathIs('/book');
-    //     });
-       
-    // }
 }

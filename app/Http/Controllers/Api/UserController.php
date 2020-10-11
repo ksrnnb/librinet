@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditUserRequest;
+use App\Http\Requests\SearchUserRequest;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Book;
@@ -26,17 +27,17 @@ class UserController extends Controller
         }
     }
 
-    public function search(Request $request)
+    public function search(SearchUserRequest $request)
     {
+        // TODO: ここでユーザー情報全部持ってくるようにしたい。
+        // Books, Follower, ユーザー自身のPost, Like...
         $user = $request->input('user');
-        $users = User::where('str_id', $user)->get();
-
-        // TODO: IDと名前が一致する場合を考慮してない
-        // また、部分一致の方がいいのでは？？
-        if ($users->isEmpty()) {
-            $users = User::where('name', $user)->get();
-        }
         
+        $users_matched_str_id = User::where('str_id', 'like', '%' . $user . '%')->get();
+        $users_matched_name = User::where('name', 'like', '%' . $user . '%')->get();
+        
+        $users = $users_matched_str_id->merge($users_matched_name);
+
         // 見つからない場合は空の配列を返す。
         if ($users->isEmpty()) {
             return response()->json([]);
@@ -51,7 +52,7 @@ class UserController extends Controller
 
         // 登録されてないidへのアクセスだった場合
         if ($params == null) {
-            return response('Bad Request', 400);
+            return bad_request();
         }
 
         $user = Auth::user();

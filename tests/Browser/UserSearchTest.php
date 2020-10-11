@@ -24,6 +24,7 @@ class UserTest extends DuskTestCase
         parent::setUp();
         if (!$this->hasCreated) {
             $this->hasCreated = true;
+            
             $this->user = Factory(User::class)->create();
         }
     }
@@ -35,7 +36,7 @@ class UserTest extends DuskTestCase
                     ->waitFor('#user')
                     ->press('検索')
                     ->waitFor('.error')     // errorが表示されるまで待つ
-                    ->assertSee('ユーザーが存在していません');
+                    ->assertSee('入力されていません');
         });
     }
 

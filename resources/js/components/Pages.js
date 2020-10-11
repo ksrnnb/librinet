@@ -48,7 +48,11 @@ export default function Pages(props) {
             />
           )}
         />
-        <Route exact path="/book" render={(props) => <Book props={props} />} />
+        <Route
+          exact
+          path="/book"
+          render={(props) => <Book params={params} props={props} />}
+        />
         <Route
           path="/genre/edit/:strId"
           render={(props) => <EditGenre params={params} props={props} />}

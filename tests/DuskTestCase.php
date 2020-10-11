@@ -33,6 +33,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--disable-gpu',
             '--headless',
             '--window-size=1920,1080',
+            '--no-sandbox'
         ]);
 
         if (env('APP_ENV')  == 'develop') {
@@ -52,5 +53,16 @@ abstract class DuskTestCase extends BaseTestCase
                 )
             );
         }
+    }
+
+    protected function authenticate()
+    {
+        // sanctum
+        $this->get('/sanctum/csrf-cookie')
+             ->assertStatus(204);
+        
+        // login
+        $this->post('/api/login', $this->credential)
+             ->assertStatus(200);
     }
 }

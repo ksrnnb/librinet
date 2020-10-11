@@ -76,6 +76,7 @@ function Books(props) {
 export default function Bookshelf(props) {
   const genres = props.genres;
   const genres_books = props.genres_books;
+  const willEdit = props.willEdit ? props.willEdit : false;
 
   return (
     <>
@@ -87,7 +88,7 @@ export default function Bookshelf(props) {
         props={props.props}
         genres_books={genres_books}
       />
-      <Books genres={genres} genres_books={genres_books} />
+      <Books genres={genres} genres_books={genres_books} willEdit={willEdit} />
     </>
   );
 }

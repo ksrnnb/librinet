@@ -86167,62 +86167,67 @@ function Button(props) {
   });
 }
 
+function PostButton(props) {
+  var _this = this;
+
+  var book = props.book;
+  var isLogin = props.isLogin;
+
+  if (!isLogin) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
+
+  var postButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-outline-success mr-3",
+    onClick: function onClick() {
+      _this.linkToPost(book);
+    }
+  }, "\u672C\u306E\u6295\u7A3F\u3092\u3059\u308B");
+  var addButton = null;
+  var isInBookshelf = this.state.isInBookshelf;
+
+  if (!isInBookshelf) {
+    addButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button",
+      className: "btn btn-outline-success",
+      onClick: function onClick() {
+        _this.linkToAddBookshelf(book);
+      }
+    }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B");
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, postButton, addButton);
+}
+
 var Book = /*#__PURE__*/function (_React$Component) {
   _inherits(Book, _React$Component);
 
   var _super = _createSuper(Book);
 
   function Book(props) {
-    var _this;
+    var _this2;
 
     _classCallCheck(this, Book);
 
-    _this = _super.call(this, props);
-    _this.state = {
+    _this2 = _super.call(this, props);
+    _this2.state = {
       input: null,
       book: null,
       isInBookshelf: null,
       errors: null
     };
-    _this.linkToPost = _this.linkToPost.bind(_assertThisInitialized(_this));
-    _this.linkToAddBookshelf = _this.linkToAddBookshelf.bind(_assertThisInitialized(_this));
-    _this.onChangeInput = _this.onChangeInput.bind(_assertThisInitialized(_this));
-    _this.sendPost = _this.sendPost.bind(_assertThisInitialized(_this));
-    _this.setBook = _this.setBook.bind(_assertThisInitialized(_this));
-    _this.setError = _this.setError.bind(_assertThisInitialized(_this));
-    _this.validateInputAndReturnIsbn = _this.validateInputAndReturnIsbn.bind(_assertThisInitialized(_this));
-    return _this;
+    _this2.linkToPost = _this2.linkToPost.bind(_assertThisInitialized(_this2));
+    _this2.linkToAddBookshelf = _this2.linkToAddBookshelf.bind(_assertThisInitialized(_this2));
+    _this2.onChangeInput = _this2.onChangeInput.bind(_assertThisInitialized(_this2));
+    _this2.sendPost = _this2.sendPost.bind(_assertThisInitialized(_this2));
+    _this2.setBook = _this2.setBook.bind(_assertThisInitialized(_this2));
+    _this2.setError = _this2.setError.bind(_assertThisInitialized(_this2));
+    _this2.validateInputAndReturnIsbn = _this2.validateInputAndReturnIsbn.bind(_assertThisInitialized(_this2));
+    return _this2;
   }
 
   _createClass(Book, [{
-    key: "postButton",
-    value: function postButton() {
-      var _this2 = this;
-
-      var book = this.state.book;
-      var postButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        className: "btn btn-outline-success mr-3",
-        onClick: function onClick() {
-          _this2.linkToPost(book);
-        }
-      }, "\u672C\u306E\u6295\u7A3F\u3092\u3059\u308B");
-      var addButton = null;
-      var isInBookshelf = this.state.isInBookshelf;
-
-      if (!isInBookshelf) {
-        addButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          type: "button",
-          className: "btn btn-outline-success",
-          onClick: function onClick() {
-            _this2.linkToAddBookshelf(book);
-          }
-        }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B");
-      }
-
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, postButton, addButton);
-    }
-  }, {
     key: "linkToPost",
     value: function linkToPost(book) {
       var postUrl = '/book/post/' + book.isbn;
@@ -86328,10 +86333,14 @@ var Book = /*#__PURE__*/function (_React$Component) {
           className: "row mt-5 book"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
           book: book
-        }, this.postButton()));
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PostButton, {
+          book: book,
+          isLogin: isLogin
+        })));
       }
 
       var errors = this.state.errors;
+      var isLogin = this.props.params != null;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
         subtitle: "\u672C\u306E\u691C\u7D22"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -86630,6 +86639,7 @@ function Books(props) {
 function Bookshelf(props) {
   var genres = props.genres;
   var genres_books = props.genres_books;
+  var willEdit = props.willEdit ? props.willEdit : false;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "mt-5 mb-0",
     key: "bookshelf"
@@ -86639,7 +86649,8 @@ function Bookshelf(props) {
     genres_books: genres_books
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Books, {
     genres: genres,
-    genres_books: genres_books
+    genres_books: genres_books,
+    willEdit: willEdit
   }));
 }
 
@@ -88676,6 +88687,7 @@ function Pages(props) {
     path: "/book",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Book__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        params: params,
         props: props
       });
     }
@@ -89271,8 +89283,7 @@ function Results(props) {
         user: user
       }));
     } else {
-      /*#__PURE__*/
-      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "mt-3",
         key: user.id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -89318,6 +89329,13 @@ var User = /*#__PURE__*/function (_React$Component) {
 
       var input = this.state.input; // TODO: validation
 
+      if (input == null) {
+        var errors = ['入力されていません'];
+        this.setState({
+          errors: errors
+        });
+      }
+
       axios.post('/api/user', {
         user: input
       }).then(function (response) {
@@ -89329,11 +89347,11 @@ var User = /*#__PURE__*/function (_React$Component) {
             errors: []
           });
         } else {
-          var errors = ['ユーザーが存在していません'];
+          var _errors = ['ユーザーが存在していません'];
 
           _this2.setState({
             users: [],
-            errors: errors
+            errors: _errors
           });
         }
       })["catch"](function (error) {
@@ -89913,7 +89931,8 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
       var _this2 = this;
 
       var props = this.props.props;
-      var params = this.props.params; // ユーザー画像やプロフィールなどをクリックしてきた場合
+      var params = this.props.params;
+      console.log(this.props); // ユーザー画像やプロフィールなどをクリックしてきた場合
 
       if (params) {
         this.params = params;

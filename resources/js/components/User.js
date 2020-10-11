@@ -58,9 +58,11 @@ function Results(props) {
         </div>
       );
     } else {
-      <div className="mt-3" key={user.id}>
-        <UserCard user={user} />
-      </div>;
+      return (
+        <div className="mt-3" key={user.id}>
+          <UserCard user={user} />
+        </div>
+      );
     }
   });
 
@@ -90,6 +92,12 @@ export default class User extends React.Component {
   onClickSearch() {
     const input = this.state.input;
     // TODO: validation
+    if (input == null) {
+      const errors = ['入力されていません'];
+      this.setState({
+        errors: errors,
+      });
+    }
 
     axios
       .post('/api/user', {

@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\User;
 use Laravel\Sanctum\Sanctum;
 
-class UserTest extends TestCase
+class SearchUserTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -60,14 +60,10 @@ class UserTest extends TestCase
         $input = null;
         
         $this->search($input)
-             ->assertJsonCount(0);  // laravelで定義されているアサート
+             ->assertStatus(302);
              
         $input = '';
         $this->search($input)
-             ->assertJsonCount(0);
-             
-        $input = '';
-        $this->search($input)
-             ->assertJsonCount(0);
+             ->assertStatus(302);
     }
 }

@@ -9,28 +9,31 @@ use App\User;
 
 class UserPageTest extends DuskTestCase
 {
-    // use DatabaseMigrations;
+    use DatabaseMigrations;
 
-    // protected $user;
-    // protected $hasCreated = false;
+    protected $user;
+    protected $hasCreated = false;
 
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
-    //     if (!$this->hasCreated) {
-    //         $this->hasCreated = true;
-    //         $this->user = Factory(User::class)->create();
-    //     }
-    // }
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (!$this->hasCreated) {
+            $this->hasCreated = true;
+            $this->user = Factory(User::class)->create();
+        }
+    }
 
-    // public function testCanSeeUserName()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $str_id = $this->user->str_id;
+    public function testCanSeeUserName()
+    {
+        // TODO: あとで実装する。現状、まだできていない。
+        $this->markTestIncomplete();
 
-    //         $browser->visit('/user/profile/' . $str_id)
-    //                 ->waitFor('.user-card')
-    //                 ->assertSee($user->name);
-    //     });
-    // }
+        $this->browse(function (Browser $browser) {
+            $str_id = $this->user->str_id;
+
+            $browser->visit('/user/profile/' . $str_id)
+                    ->waitFor('.user-card')
+                    ->assertSee($user->name);
+        });
+    }
 }

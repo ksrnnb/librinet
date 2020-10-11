@@ -153,6 +153,8 @@ export default class UserProfile extends React.Component {
     const props = this.props.props;
     const params = this.props.params;
 
+    console.log(this.props);
+
     // ユーザー画像やプロフィールなどをクリックしてきた場合
     if (params) {
       this.params = params;

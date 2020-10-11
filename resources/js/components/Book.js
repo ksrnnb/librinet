@@ -79,6 +79,50 @@ function Button(props) {
   );
 }
 
+function PostButton(props) {
+  const book = props.book;
+  const isLogin = props.isLogin;
+
+  if (!isLogin) {
+    return <></>;
+  }
+
+  const postButton = (
+    <button
+      type="button"
+      className="btn btn-outline-success mr-3"
+      onClick={() => {
+        this.linkToPost(book);
+      }}
+    >
+      本の投稿をする
+    </button>
+  );
+
+  let addButton = null;
+  const isInBookshelf = this.state.isInBookshelf;
+  if (!isInBookshelf) {
+    addButton = (
+      <button
+        type="button"
+        className="btn btn-outline-success"
+        onClick={() => {
+          this.linkToAddBookshelf(book);
+        }}
+      >
+        本棚に追加する
+      </button>
+    );
+  }
+
+  return (
+    <>
+      {postButton}
+      {addButton}
+    </>
+  );
+}
+
 export default class Book extends React.Component {
   constructor(props) {
     super(props);
@@ -98,44 +142,6 @@ export default class Book extends React.Component {
     this.setError = this.setError.bind(this);
     this.validateInputAndReturnIsbn = this.validateInputAndReturnIsbn.bind(
       this
-    );
-  }
-
-  postButton() {
-    const book = this.state.book;
-    const postButton = (
-      <button
-        type="button"
-        className="btn btn-outline-success mr-3"
-        onClick={() => {
-          this.linkToPost(book);
-        }}
-      >
-        本の投稿をする
-      </button>
-    );
-
-    let addButton = null;
-    const isInBookshelf = this.state.isInBookshelf;
-    if (!isInBookshelf) {
-      addButton = (
-        <button
-          type="button"
-          className="btn btn-outline-success"
-          onClick={() => {
-            this.linkToAddBookshelf(book);
-          }}
-        >
-          本棚に追加する
-        </button>
-      );
-    }
-
-    return (
-      <>
-        {postButton}
-        {addButton}
-      </>
     );
   }
 
@@ -233,15 +239,19 @@ export default class Book extends React.Component {
     const book = this.state.book;
     const hasSearchedBook = book != null;
     let bookElement = null;
+
     if (hasSearchedBook) {
       bookElement = (
         <div className="row mt-5 book">
-          <BookCard book={book}>{this.postButton()}</BookCard>
+          <BookCard book={book}>
+            <PostButton book={book} isLogin={isLogin} />
+          </BookCard>
         </div>
       );
     }
 
     const errors = this.state.errors;
+    const isLogin = this.props.params != null;
 
     return (
       <div>

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\UniqueStrId;
 use App\Rules\IsBase64Image;
+use Illuminate\Support\Facades\Auth;
 
 class EditUserRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class EditUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**

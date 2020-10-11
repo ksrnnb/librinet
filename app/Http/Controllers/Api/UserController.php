@@ -55,12 +55,12 @@ class UserController extends Controller
             return bad_request();
         }
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if ($user) {
-            $viewer_user = $user;
-            $params = array_merge($params, compact('viewer_user'));
-        }
+        // if ($user) {
+        //     $viewer_user = $user;
+        //     $params = array_merge($params, compact('viewer_user'));
+        // }
 
         $user = $params['user'];
         $follow_data = $user->getFollowsAndFollowersUsers();

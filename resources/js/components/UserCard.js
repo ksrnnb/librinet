@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropsContext } from './Pages';
 
 export function UserImage(props) {
   if (props.image) {
@@ -23,26 +24,41 @@ export function UserImage(props) {
 }
 
 export default class UserCard extends React.Component {
+
   constructor(props) {
     super(props);
+
+    this.jumpToUserPage = this.jumpToUserPage.bind(this);
   }
 
-  moveUserPage() {
-    // TODO: ユーザーページへのリンク
+  jumpToUserPage(e) {
+    const user = this.props.user;
+    const path = '/user/profile/' + user.str_id;
+    const props = this.props.props;
+
+    props.history.push({
+      pathname: path,
+      state: { user: user }
+    });
   }
 
   render() {
+
     const user = this.props.user;
 
     return (
-      <div className="user-card row border" id="user-card" data-id={user.id}>
-        <div className="col-3">
-          <UserImage image={user.image} onClick={this.moveUserPage} />
-        </div>
-        <div className="col-9">
-          <p className="h4">{user.name}</p>
-          <p className="h5">{'@' + user.str_id}</p>
-          {this.props.children}
+      <div className="card user-card" id="user-card" data-id={user.id} onClick={this.jumpToUserPage}>
+        <div className="row no-gutters">
+          <div className="col-2">
+            <UserImage image={user.image} />
+          </div>
+          <div className="col-10">
+            <div className="card-body">
+              <h5 className="card-title">{user.name}</h5>
+              <p className="card-text">{'@' + user.str_id}</p>
+            </div>
+            {/* {this.props.children} */}
+          </div>
         </div>
       </div>
     );

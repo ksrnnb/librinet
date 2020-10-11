@@ -120,9 +120,6 @@ export default class UserProfile extends React.Component {
   constructor(props) {
     super(props);
 
-    this.params = null;
-    this.viewerUser = null;
-
     this.state = {
       hasLoaded: false,
       isFollowing: false,
@@ -139,7 +136,6 @@ export default class UserProfile extends React.Component {
   componentDidMount() {
     // TODO: userがnull or undefinedの場合の処理
     // const params = this.props.location.state.params;
-    // console.log(this.props);
     this.setup();
   }
 
@@ -152,14 +148,12 @@ export default class UserProfile extends React.Component {
   setup() {
     const props = this.props.props;
     const params = this.props.params;
+    const locationState = this.props.props.location.state;
 
-    console.log(this.props);
-
-    // ユーザー画像やプロフィールなどをクリックしてきた場合
-    if (params) {
-      this.params = params;
-      this.viewerUser = params.user;
-
+    // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
+    if (locationState) {
+      this.showingUser = locationState.user;
+      // console.log(this.showingUser);
       const hasLoaded = true;
       const isFollowing = this.isFollowing();
 
@@ -167,14 +161,14 @@ export default class UserProfile extends React.Component {
         hasLoaded: hasLoaded,
         isFollowing: isFollowing,
       });
+
       // 更新ボタンを押したり、直接URLから来た場合
     } else {
       const path = '/api/user/profile/' + props.match.params.strId;
       axios
         .get(path)
         .then((response) => {
-          this.params = response.data;
-          this.viewerUser = response.data.viewer_user;
+          this.showingUser = response.data;
 
           const hasLoaded = true;
           const isFollowing = this.isFollowing();
@@ -201,12 +195,14 @@ export default class UserProfile extends React.Component {
 
   isFollowing() {
     // ログインしていない場合はfalseを返す
-    if (typeof this.viewerUser === 'undefined') {
+    const user = this.props.params.user;
+    if (typeof user === 'undefined') {
       return false;
     }
-    const followers = this.params.followers;
+
+    const followers = this.props.params.followers;
     const results = followers.find((follower) => {
-      return follower.follower_id == this.viewerUser.id;
+      return follower.follower_id == user.id;
     }, this);
 
     return typeof results !== 'undefined';
@@ -238,23 +234,31 @@ export default class UserProfile extends React.Component {
 
   render() {
     // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
-    const params = this.params;
-    const viewerUser = this.viewerUser;
+    const hasLoaded = this.state.hasLoaded;
+    const params = this.props.params;
+    const viewerUser = params.user;
+    const showingUser = this.showingUser;
     const isFollowing = this.state.isFollowing;
 
-    if (params != null) {
+    console.log('---------viewer----------');
+    console.log(viewerUser);
+    console.log('---------showing----------');
+    console.log(showingUser);
+    if (hasLoaded) {
+
       let buttons = null;
 
+      // TODO: たぶんダメだから修正
       // ログインしている場合はボタンを表示
       if (typeof viewerUser !== 'undefined') {
         buttons = (
           <>
             <EditUserButton
-              user={params.user}
+              user={viewerUser}
               viewerStrId={viewerUser.str_id}
             />
             <FollowButton
-              user={params.user}
+              user={viewerUser}
               viewerUser={viewerUser}
               isFollowing={isFollowing}
               handleFollow={this.handleFollow}
@@ -266,24 +270,24 @@ export default class UserProfile extends React.Component {
       return (
         <>
           <Subtitle subtitle="User Profile" />
-          <UserCard user={params.user}>
-            {buttons}
-            <FollowNumber
-              follows={params.follows}
-              followers={params.followers}
-            />
+          <UserCard user={showingUser.user}>
           </UserCard>
+          {buttons}
+          <FollowNumber
+            follows={showingUser.follows}
+            followers={showingUser.followers}
+          />
           <EditBookshelfButton
-            user={params.user}
-            books={params.books}
+            user={showingUser.user}
+            books={showingUser.books}
             viewerUser={viewerUser}
             redirectToDeleteBook={this.redirectToDeleteBook}
             redirectToEditGenre={this.redirectToEditGenre}
           />
           <Bookshelf
-            user={params.user}
-            genres={params.genres}
-            genres_books={params.genres_books}
+            user={showingUser}
+            genres={showingUser.genres}
+            genres_books={showingUser.genres_books}
             props={this.props.props}
           />
         </>

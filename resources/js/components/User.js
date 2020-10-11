@@ -1,6 +1,7 @@
 import React from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
+
 const axios = window.axios;
 
 function UsersExample(props) {
@@ -54,7 +55,8 @@ function Results(props) {
           <h2 className="mt-5" key="results">
             検索結果
           </h2>
-          <UserCard user={user} />
+
+          <UserCard user={user} props={props.props} />
         </div>
       );
     } else {
@@ -106,6 +108,8 @@ export default class User extends React.Component {
       .then((response) => {
         const users = response.data;
 
+        console.log(users);
+
         // ユーザーが存在していたら
         if (users.length) {
           this.setState({
@@ -129,6 +133,7 @@ export default class User extends React.Component {
     const errors = this.state.errors;
     const users = this.state.users;
     const example = this.props.example;
+    const props = this.props.props;
 
     return (
       <>
@@ -144,8 +149,8 @@ export default class User extends React.Component {
           />
           <input type="button" value="検索" onClick={this.onClickSearch} />
         </label>
+        <Results users={users} props={props} />
         <UsersExample example={example} />
-        <Results users={users} />
       </>
     );
   }

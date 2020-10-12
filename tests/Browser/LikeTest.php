@@ -8,6 +8,7 @@ use Tests\DuskTestCase;
 use App\User;
 use App\Follower;
 use App\Book;
+use Illuminate\Support\Facades\Auth;
 
 class LikeTest extends DuskTestCase
 {
@@ -35,7 +36,7 @@ class LikeTest extends DuskTestCase
                         ->registerPost('test-message');
 
             $this->credential = [
-                'strId' => $this->user1->str_id,
+                'str_id' => $this->user1->str_id,
                 'password' => config('app.guest_password')
             ];
 
@@ -50,40 +51,51 @@ class LikeTest extends DuskTestCase
     {
         // TODO: ログインがうまく動作していない。Sanctumの問題？
         // ログイン画面を実装する必要がある？
-        $this->markTestIncomplete();
+        // $this->authenticate();
 
         $this->browse(function (Browser $browser) {
 
-            $browser->visit('/home')
+            $str_id = $this->credential['str_id'];
+            $password = $this->credential['password'];
+
+            $browser->visit('/login')
+                    ->waitFor('#user-id')
+                    ->type('user-id', $str_id)
+                    ->type('password', $password)
+                    ->press('#normal-login')
+                    // ->visit('/book/post/9784297100339')
                     ->waitFor('.feed');
 
-            $ini = $browser->attribute('.count', 'data-count');
-            
-            $browser->press('いいね')
-                    ->pause(100);       // データベースの書き込みのため少し待つ
+            dump($str_id);
 
-            // 増えた or 減った
-            $count = $browser->attribute('.count', 'data-count');
-            $this->assertEquals($count, ($ini + 1) % 2);
+
+            // $ini = $browser->attribute('.count', 'data-count');
             
-            // ページ再読み込みして変わらないのを確認
-            $browser->refresh();
-            $count = $browser->attribute('.count', 'data-count');
-            $this->assertEquals($count, ($ini + 1) % 2);
+            // $browser->press('いいね')
+            //         ->pause(100);       // データベースの書き込みのため少し待つ
+
+            // // 増えた or 減った
+            // $count = $browser->attribute('.count', 'data-count');
+            // $this->assertEquals($count, ($ini + 1) % 2);
+            
+            // // ページ再読み込みして変わらないのを確認
+            // $browser->refresh();
+            // $count = $browser->attribute('.count', 'data-count');
+            // $this->assertEquals($count, ($ini + 1) % 2);
         
-            // もう一回いいね押す
-            $browser->press('いいね')
-                    ->pause(100);       // データベースの書き込みのため少し待つ
+            // // もう一回いいね押す
+            // $browser->press('いいね')
+            //         ->pause(100);       // データベースの書き込みのため少し待つ
 
 
-            // 減った or 増えた
-            $count = $browser->attribute('.count', 'data-count');
-            $this->assertEquals($count, $ini % 2);
+            // // 減った or 増えた
+            // $count = $browser->attribute('.count', 'data-count');
+            // $this->assertEquals($count, $ini % 2);
             
-            // ページ再読み込みして変わらないのを確認
-            $browser->refresh();
-            $count = $browser->attribute('.count', 'data-count');
-            $this->assertEquals($count, $ini % 2);
+            // // ページ再読み込みして変わらないのを確認
+            // $browser->refresh();
+            // $count = $browser->attribute('.count', 'data-count');
+            // $this->assertEquals($count, $ini % 2);
         });
     }
 }

@@ -54,15 +54,4 @@ abstract class DuskTestCase extends BaseTestCase
             );
         }
     }
-
-    protected function authenticate()
-    {
-        // sanctum
-        $this->get('/sanctum/csrf-cookie')
-             ->assertStatus(204);
-        
-        // login
-        $this->post('/api/login', $this->credential)
-             ->assertStatus(200);
-    }
 }

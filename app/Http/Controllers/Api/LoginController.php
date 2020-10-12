@@ -19,7 +19,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $str_id = $request->input('strId');
-        $password = config('app.guest_password');      //TODO:ここは暫定
+        $password = $request->input('password');      //TODO:ここは暫定
 
         $credentials = compact('str_id', 'password');
 

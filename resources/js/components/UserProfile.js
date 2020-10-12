@@ -258,7 +258,6 @@ export default class UserProfile extends React.Component {
     // console.log('---------showing----------');
     // console.log(showingUser);
     if (hasLoaded) {
-
       let buttons = null;
 
       // TODO: たぶんダメだから修正
@@ -266,10 +265,7 @@ export default class UserProfile extends React.Component {
       if (typeof viewerUser !== 'undefined') {
         buttons = (
           <>
-            <EditUserButton
-              user={viewerUser}
-              viewerStrId={viewerUser.str_id}
-            />
+            <EditUserButton user={viewerUser} viewerStrId={viewerUser.str_id} />
             <FollowButton
               user={viewerUser}
               viewerUser={viewerUser}
@@ -283,8 +279,7 @@ export default class UserProfile extends React.Component {
       return (
         <>
           <Subtitle subtitle="User Profile" />
-          <UserCard user={showingUserParams.user}>
-          </UserCard>
+          <UserCard user={showingUserParams.user}></UserCard>
           {buttons}
           <FollowNumber
             follows={showingUserParams.follows}

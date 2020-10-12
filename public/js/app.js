@@ -88546,7 +88546,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
 
       axios.get('/sanctum/csrf-cookie').then(function (response) {
         axios.post('/api/login', {
-          strId: '1HFMjz',
+          strId: 'U73r57d',
           password: 'password'
         }).then(function (response) {
           _this3.login(_this3.props.props);
@@ -88687,23 +88687,24 @@ function Pages(props) {
     path: "/book",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Book__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        params: params,
-        props: props
+        props: props,
+        params: params
       });
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
     path: "/genre/edit/:strId",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditGenre__WEBPACK_IMPORTED_MODULE_10__["default"], {
-        params: params,
-        props: props
+        props: props,
+        params: params
       });
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
     exact: true,
     path: "/user",
-    render: function render() {
+    render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        props: props,
         example: exampleUsers
       });
     }
@@ -88769,10 +88770,10 @@ function Pages(props) {
     path: "/comment/:uuid",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Comment__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        props: props,
         genresBooks: genresBooks,
         genres: genres,
-        viewerId: viewerId,
-        props: props
+        viewerId: viewerId
       });
     }
   })));
@@ -89280,7 +89281,8 @@ function Results(props) {
         className: "mt-5",
         key: "results"
       }, "\u691C\u7D22\u7D50\u679C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        user: user
+        user: user,
+        props: props.props
       }));
     } else {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -89364,6 +89366,7 @@ var User = /*#__PURE__*/function (_React$Component) {
       var errors = this.state.errors;
       var users = this.state.users;
       var example = this.props.example;
+      var props = this.props.props;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
         subtitle: "\u30E6\u30FC\u30B6\u30FC\u306E\u691C\u7D22"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -89381,10 +89384,11 @@ var User = /*#__PURE__*/function (_React$Component) {
         type: "button",
         value: "\u691C\u7D22",
         onClick: this.onClickSearch
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UsersExample, {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Results, {
+        users: users,
+        props: props
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UsersExample, {
         example: example
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Results, {
-        users: users
       }));
     }
   }]);
@@ -89409,6 +89413,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UserCard; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89430,6 +89435,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 function UserImage(props) {
@@ -89456,35 +89462,52 @@ var UserCard = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(UserCard);
 
   function UserCard(props) {
+    var _this;
+
     _classCallCheck(this, UserCard);
 
-    return _super.call(this, props);
+    _this = _super.call(this, props);
+    _this.jumpToUserPage = _this.jumpToUserPage.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(UserCard, [{
-    key: "moveUserPage",
-    value: function moveUserPage() {// TODO: ユーザーページへのリンク
+    key: "jumpToUserPage",
+    value: function jumpToUserPage(e) {
+      var user = this.props.user;
+      var path = '/user/profile/' + user.str_id;
+      var props = this.props.props;
+      props.history.push({
+        pathname: path,
+        state: {
+          user: user
+        }
+      });
     }
   }, {
     key: "render",
     value: function render() {
       var user = this.props.user;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "user-card row border",
+        className: "card user-card",
         id: "user-card",
-        "data-id": user.id
+        "data-id": user.id,
+        onClick: this.jumpToUserPage
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-3"
+        className: "row no-gutters"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-2"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
-        image: user.image,
-        onClick: this.moveUserPage
+        image: user.image
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-9"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        className: "h4"
+        className: "col-10"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
       }, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        className: "h5"
-      }, '@' + user.str_id), this.props.children));
+        className: "card-text"
+      }, '@' + user.str_id)))));
     }
   }]);
 
@@ -89897,8 +89920,6 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, UserProfile);
 
     _this = _super.call(this, props);
-    _this.params = null;
-    _this.viewerUser = null;
     _this.state = {
       hasLoaded: false,
       isFollowing: false
@@ -89917,9 +89938,9 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
     value: function componentDidMount() {
       // TODO: userがnull or undefinedの場合の処理
       // const params = this.props.location.state.params;
-      // console.log(this.props);
       this.setup();
-    } // componentDidUpdate(prevProps) {
+    } // TODO: 他のユーザーのページから自分のプロフィールのページへ遷移しようとするとダメ。
+    // componentDidUpdate(prevProps) {
     //   if (this.props.id !== prevProps.id) {
     //     this.setup();
     //   }
@@ -89932,22 +89953,32 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
 
       var props = this.props.props;
       var params = this.props.params;
-      console.log(this.props); // ユーザー画像やプロフィールなどをクリックしてきた場合
+      var locationState = this.props.props.location.state;
+      var queryStrId = this.props.props.match.params.strId; // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
 
-      if (params) {
-        this.params = params;
-        this.viewerUser = params.user;
+      if (locationState) {
+        this.showingUserParams = locationState.params; // console.log(this.showingUser);
+
         var hasLoaded = true;
         var isFollowing = this.isFollowing();
         this.setState({
           hasLoaded: hasLoaded,
           isFollowing: isFollowing
-        }); // 更新ボタンを押したり、直接URLから来た場合
+        }); // プロフィールをクリックしてきた場合
+      } else if (params.user.str_id === queryStrId) {
+        this.showingUserParams = params;
+        var _hasLoaded = true;
+
+        var _isFollowing = this.isFollowing();
+
+        this.setState({
+          hasLoaded: _hasLoaded,
+          isFollowing: _isFollowing
+        }); // URLを入力してきた場合
       } else {
         var path = '/api/user/profile/' + props.match.params.strId;
         axios.get(path).then(function (response) {
-          _this2.params = response.data;
-          _this2.viewerUser = response.data.viewer_user;
+          _this2.showingUserParams = response.data;
           var hasLoaded = true;
 
           var isFollowing = _this2.isFollowing();
@@ -89973,16 +90004,16 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "isFollowing",
     value: function isFollowing() {
-      var _this3 = this;
-
       // ログインしていない場合はfalseを返す
-      if (typeof this.viewerUser === 'undefined') {
+      var user = this.props.params.user;
+
+      if (typeof user === 'undefined') {
         return false;
       }
 
-      var followers = this.params.followers;
+      var followers = this.props.params.followers;
       var results = followers.find(function (follower) {
-        return follower.follower_id == _this3.viewerUser.id;
+        return follower.follower_id == user.id;
       }, this);
       return typeof results !== 'undefined';
     }
@@ -90014,19 +90045,25 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
-      var params = this.params;
-      var viewerUser = this.viewerUser;
-      var isFollowing = this.state.isFollowing;
+      var hasLoaded = this.state.hasLoaded;
+      var params = this.props.params;
+      var viewerUser = params.user;
+      var showingUserParams = this.showingUserParams;
+      var isFollowing = this.state.isFollowing; // console.log('---------viewer----------');
+      // console.log(viewerUser);
+      // console.log('---------showing----------');
+      // console.log(showingUser);
 
-      if (params != null) {
-        var buttons = null; // ログインしている場合はボタンを表示
+      if (hasLoaded) {
+        var buttons = null; // TODO: たぶんダメだから修正
+        // ログインしている場合はボタンを表示
 
         if (typeof viewerUser !== 'undefined') {
           buttons = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditUserButton, {
-            user: params.user,
+            user: viewerUser,
             viewerStrId: viewerUser.str_id
           }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowButton, {
-            user: params.user,
+            user: viewerUser,
             viewerUser: viewerUser,
             isFollowing: isFollowing,
             handleFollow: this.handleFollow
@@ -90036,20 +90073,20 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
           subtitle: "User Profile"
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          user: params.user
-        }, buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
-          follows: params.follows,
-          followers: params.followers
-        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditBookshelfButton, {
-          user: params.user,
-          books: params.books,
+          user: showingUserParams.user
+        }), buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
+          follows: showingUserParams.follows,
+          followers: showingUserParams.followers
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditBookshelfButton, {
+          user: showingUserParams.user,
+          books: showingUserParams.books,
           viewerUser: viewerUser,
           redirectToDeleteBook: this.redirectToDeleteBook,
           redirectToEditGenre: this.redirectToEditGenre
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          user: params.user,
-          genres: params.genres,
-          genres_books: params.genres_books,
+          user: showingUserParams,
+          genres: showingUserParams.genres,
+          genres_books: showingUserParams.genres_books,
           props: this.props.props
         }));
       } else {

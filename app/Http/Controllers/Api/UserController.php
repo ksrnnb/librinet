@@ -27,23 +27,17 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @param array ($request->input('user'): str_id or user_name)
+     * @return response array of users
+     */
     public function search(SearchUserRequest $request)
     {
-        // TODO: ここでユーザー情報全部持ってくるようにしたい。
-        // Books, Follower, ユーザー自身のPost, Like...
-        $user = $request->input('user');
-        
-        $users_matched_str_id = User::where('str_id', 'like', '%' . $user . '%')->get();
-        $users_matched_name = User::where('name', 'like', '%' . $user . '%')->get();
-        
-        $users = $users_matched_str_id->merge($users_matched_name);
+        $input = $request->input('user');
 
-        // 見つからない場合は空の配列を返す。
-        if ($users->isEmpty()) {
-            return response()->json([]);
-        }
+        $users = User::getUsersProfileData($input);
 
-        return response()->json($users);
+        return response($users);
     }
 
     public function show(Request $request, $str_id)
@@ -55,12 +49,12 @@ class UserController extends Controller
             return bad_request();
         }
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if ($user) {
-            $viewer_user = $user;
-            $params = array_merge($params, compact('viewer_user'));
-        }
+        // if ($user) {
+        //     $viewer_user = $user;
+        //     $params = array_merge($params, compact('viewer_user'));
+        // }
 
         $user = $params['user'];
         $follow_data = $user->getFollowsAndFollowersUsers();

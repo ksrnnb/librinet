@@ -40,59 +40,79 @@ export default function Pages(props) {
       <Switch>
         <Route
           path="/home"
-          render={() => (
+          render={() =>
             <Home
               posts={posts}
               viewerId={viewerId}
               onClickDelete={props.onClickDelete}
-            />
-          )}
+            />}
         />
         <Route
           exact
           path="/book"
-          render={(props) => <Book params={params} props={props} />}
+          render={(props) =>
+            <Book
+              props={props}
+              params={params}
+            />}
         />
         <Route
           path="/genre/edit/:strId"
-          render={(props) => <EditGenre params={params} props={props} />}
+          render={(props) =>
+            <EditGenre
+              props={props}
+              params={params}
+            />}
         />
         <Route
           exact
           path="/user"
-          render={() => <User example={exampleUsers} />}
+          render={(props) =>
+            <User
+              props={props}
+              example={exampleUsers}
+            />}
         />
         <Route
           path="/user/profile/:strId"
-          render={(props) => (
+          render={(props) =>
             <UserProfile
               props={props}
               params={params}
               viewerUser={viewerUser}
-            />
-          )}
+            />}
         />
         <Route
           path="/user/edit/:strId"
-          render={(props) => (
+          render={(props) =>
             <EditUser
               props={props}
               params={params}
               setStateUser={setStateUser}
-            />
-          )}
+            />}
         />
         <Route
           path="/login"
-          render={(props) => <Login props={props} login={login} />}
+          render={(props) =>
+            <Login
+              props={props}
+              login={login}
+            />}
         />
         <Route
           path="/logout"
-          render={(props) => <Logout props={props} logout={logout} />}
+          render={(props) =>
+            <Logout
+              props={props}
+              logout={logout}
+            />}
         />
         <Route
           path="/book/post/:isbn"
-          render={(props) => <PostData props={props} />}
+          render={(props) =>
+            <PostData
+              props={props}
+            />}
         />
         <Route
           path="/book/delete/:strId"
@@ -107,16 +127,19 @@ export default function Pages(props) {
         />
         <Route
           path="/book/add/:isbn"
-          render={(props) => <AddBook props={props} />}
+          render={(props) =>
+            <AddBook
+              props={props}
+            />}
         />
         <Route
           path="/comment/:uuid"
           render={(props) => (
             <Comment
+              props={props}
               genresBooks={genresBooks}
               genres={genres}
               viewerId={viewerId}
-              props={props}
             />
           )}
         />

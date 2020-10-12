@@ -54,6 +54,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Comment');
     }
 
+    public function likes()
+    {
+        return $this->hasMany('App\Like');
+    }
+
     public function followers()
     {
         return $this->hasMany('App\Follower', 'follow_id', 'id');
@@ -98,6 +103,30 @@ class User extends Authenticatable
                 $follow->delete();
             }
         });
+    }
+    /**
+     * @param string (str_id or user_name)
+     */
+    public static function getUsersProfileData($input)
+    {
+        $users = User::where('str_id', 'like', '%' . $input . '%')
+                     ->orWhere('name', 'like', '%' . $input . '%')
+                     ->get();
+
+        if ($users->isNotEmpty()) {
+            // SQL文10個になっている。
+            $users = $users->load(['books.genre',
+                                'posts.likes',
+                                'comments.likes',
+                                'likes',
+                                'followings',
+                                'followers',
+                                ]);
+        } else {
+            $users = [];
+        }
+
+        return $users;
     }
 
     public static function getParamsForApp($str_id)

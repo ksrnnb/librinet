@@ -1,0 +1,36 @@
+.user-card {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.ml-300 {
+  margin-left: 300px;
+}
+
+.one-row {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.invalid {
+  opacity: 0.5;
+}
+
+.error {
+  color: red;
+}
+
+/* TODO: あとでブラウザ依存確認しとく */
+.disable {
+  user-select: none;
+}
+
+label, input[type='checkbox'] {
+  cursor: pointer;
+}
+
+label, input[type='radio'] {
+  cursor: pointer;
+}

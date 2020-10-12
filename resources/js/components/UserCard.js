@@ -24,7 +24,6 @@ export function UserImage(props) {
 }
 
 export default class UserCard extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -38,16 +37,20 @@ export default class UserCard extends React.Component {
 
     props.history.push({
       pathname: path,
-      state: { user: user }
+      state: { user: user },
     });
   }
 
   render() {
-
     const user = this.props.user;
 
     return (
-      <div className="card user-card" id="user-card" data-id={user.id} onClick={this.jumpToUserPage}>
+      <div
+        className="card user-card"
+        id="user-card"
+        data-id={user.id}
+        onClick={this.jumpToUserPage}
+      >
         <div className="row no-gutters">
           <div className="col-2">
             <UserImage image={user.image} />

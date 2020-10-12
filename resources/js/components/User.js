@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
+import { DataContext } from './App';
 
 const axios = window.axios;
 
 function UsersExample(props) {
   let trElements = null;
 
-  if (props.example) {
-    trElements = props.example.map((user) => {
+  if (props.examples) {
+    trElements = props.examples.map((user) => {
       return (
         <tr key={user.id}>
           <td>{user.str_id}</td>
@@ -71,36 +72,17 @@ function Results(props) {
   return users;
 }
 
-export default class User extends React.Component {
-  constructor(props) {
-    super(props);
+export default function User(props) {
+  const [input, setInput] = useState('');
+  const [errors, setErrors] = useState([]);
+  const [users, setUsers] = useState([]);
+  const data = useContext(DataContext);
+  const examples = data.params.examples;
 
-    this.state = {
-      input: null,
-      errors: [],
-      users: [],
-    };
-
-    this.onChangeInput = this.onChangeInput.bind(this);
-    this.onClickSearch = this.onClickSearch.bind(this);
-  }
-
-  onChangeInput(e) {
-    this.setState({
-      input: e.target.value,
-    });
-  }
-
-  onClickSearch() {
-    const input = this.state.input;
-    // TODO: validation
+  function onClickSearch() {
     if (input == null) {
-      const errors = ['入力されていません'];
-      this.setState({
-        errors: errors,
-      });
+      setErrors(['入力されていません']);
     }
-
     axios
       .post('/api/user', {
         user: input,
@@ -110,16 +92,12 @@ export default class User extends React.Component {
 
         // ユーザーが存在していたら
         if (users.length) {
-          this.setState({
-            users: users,
-            errors: [],
-          });
+          setUsers(users);
+          setErrors([]);
         } else {
           const errors = ['ユーザーが存在していません'];
-          this.setState({
-            users: [],
-            errors: errors,
-          });
+          setUsers([]);
+          setErrors(errors);
         }
       })
       .catch((error) => {
@@ -127,29 +105,23 @@ export default class User extends React.Component {
       });
   }
 
-  render() {
-    const errors = this.state.errors;
-    const users = this.state.users;
-    const example = this.props.example;
-    const props = this.props.props;
-
-    return (
-      <>
-        <Subtitle subtitle="ユーザーの検索" />
-        <label htmlFor="user">
-          <h4 className="mt-5">ユーザーID or ユーザー名</h4>
-          <Errors errors={errors} />
-          <input
-            type="text"
-            id="user"
-            name="user"
-            onChange={this.onChangeInput}
-          />
-          <input type="button" value="検索" onClick={this.onClickSearch} />
-        </label>
-        <Results users={users} props={props} />
-        <UsersExample example={example} />
-      </>
-    );
-  }
+  return (
+    <>
+      <Subtitle subtitle="ユーザーの検索" />
+      <label htmlFor="user">
+        <h4 className="mt-5">ユーザーID or ユーザー名</h4>
+        <Errors errors={errors} />
+        <input
+          type="text"
+          id="user"
+          name="user"
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <input type="button" value="検索" onClick={onClickSearch} />
+      </label>
+      <Results users={users} />
+      <UsersExample examples={examples} />
+    </>
+  );
+  // }
 }

@@ -1,5 +1,5 @@
 import Header from './Header';
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
 import Pages from './Pages';
 import SubColumn from './SubColumn';
@@ -7,20 +7,16 @@ import SubColumn from './SubColumn';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const axios = window.axios;
+export const DataContext = createContext();
 
 class App extends React.Component {
   constructor() {
     super();
 
-    // windowサイズが800px以上であればカラムを表示
-    this.maxWidth = 800;
-    const isVisible = window.innerWidth > this.maxWidth ? true : false;
-
     // const params = this.getParamsOfAuthenticatedUser();
     // const isLogin = params !== null;
 
     this.state = {
-      isVisible: isVisible,
       isLogin: false,
       params: null,
       hasLoaded: false,
@@ -35,7 +31,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.windowSizeChange.call(this);
     this.getParamsOfAuthenticatedUser();
   }
 
@@ -85,7 +80,7 @@ class App extends React.Component {
   login(props) {
     // TODO: 前にログインしていた場合、反映に少し時間がかかる。
     this.getParamsOfAuthenticatedUser();
-    props.history.push('/home');
+    // props.history.push('/home');
   }
 
   logout(props) {
@@ -106,9 +101,10 @@ class App extends React.Component {
     axios
       .get('/api/user/auth')
       .then((response) => {
+        console.log(response);
         // TODO: Loginしていないときは？
         // response.data
-        // {books, example_users, followers, follows, genres, genres_books,  posts, user}
+        // {books, examples, followers, follows, genres, genres_books,  posts, user}
         if (typeof response.data == 'object') {
           this.setState({
             isLogin: true,
@@ -125,22 +121,6 @@ class App extends React.Component {
         console.log(error);
         alert('error happened getting auth user');
       });
-  }
-
-  windowSizeChange() {
-    window.addEventListener('resize', () => {
-      let isVisible = this.state.isVisible;
-      const changedLargeToSmall =
-        isVisible && window.innerWidth < this.maxWidth;
-      const changedSmallToLarge =
-        !isVisible && window.innerWidth > this.maxWidth;
-
-      if (changedLargeToSmall || changedSmallToLarge) {
-        this.setState({
-          isVisible: !isVisible,
-        });
-      }
-    });
   }
 
   onClickDelete(e) {
@@ -172,7 +152,6 @@ class App extends React.Component {
   render() {
     const appName = document.title;
     const params = this.state.params;
-    const isVisible = this.state.isVisible;
     const hasLoaded = this.state.hasLoaded;
 
     // TODO: まとめられない？
@@ -180,7 +159,6 @@ class App extends React.Component {
     if (params) {
       user = this.state.params.user;
     }
-
     let url;
     if (this.state.isLogin) {
       url = '/user/profile/' + user.str_id;
@@ -188,16 +166,14 @@ class App extends React.Component {
       url = null;
     }
     if (hasLoaded) {
-      if (isVisible) {
-        return (
+      return (
+        <DataContext.Provider value={this.state}>
           <Router>
             <div className="container">
-              <Header userUrl={url} app={appName} hasHamburger={false} />
+              <Header userUrl={url} app={appName} />
               <SubColumn userUrl={url} params={params} logout={this.logout} />
-              {/* {this.pages(params, isVisible)} */}
               <Pages
                 params={params}
-                isVisible={isVisible}
                 login={this.login}
                 logout={this.logout}
                 onClickDelete={this.onClickDelete}
@@ -210,32 +186,22 @@ class App extends React.Component {
               />
             </div>
           </Router>
-        );
-      } else {
-        return (
-          <Router>
-            <div className="container">
-              <Header userUrl={url} app={appName} hasHamburger={true} />
-              <Pages
-                params={params}
-                isVisible={isVisible}
-                login={this.login}
-                logout={this.logout}
-                onClickDelete={this.onClickDelete}
-                setStateBooks={this.setStateBooks}
-                setStateGenresBooks={this.setStateGenresBooks}
-                setStateUser={this.setStateUser}
-                redirectUserProfileAfterDeleteBooks={
-                  this.redirectUserProfileAfterDeleteBooks
-                }
-              />
-            </div>
-          </Router>
-        );
-      }
+        </DataContext.Provider>
+      );
     } else {
-      // TODO: 読み込み中の間に表示するコンポーネント！
-      return <></>;
+      // 読み込み中の処理
+      return (
+        <Router>
+          <div className="container">
+            <Header userUrl={url} app={appName} />
+            <div className="text-center mt-5">
+              <div className="spinner-border text-success" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </Router>
+      );
     }
   }
 }

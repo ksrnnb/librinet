@@ -12,6 +12,7 @@ class FollowerController extends Controller
     {
         $form = $request->input();
 
+        // targetId2, isfollowing true, viewerID 6,
         $will_follow = ! $form['isFollowing'];
         $follow_id = $form['targetId'];
         $follower_id = $form['viewerId'];
@@ -23,14 +24,19 @@ class FollowerController extends Controller
                 'follower_id' => $follower_id,
             ]);
 
-            return response('follow!');
+            $follower_users = Follower::getFollowers($follow_id);
+
+            return response()->json($follower_users);
         } else {
             // TODO: 存在しない場合、、、
             Follower::where('follower_id', $follower_id)
                     ->where('follow_id', $follow_id)
                     ->first()
                     ->delete();
-            return response('unFollow!');
+
+            $follower_users = Follower::getFollowers($follow_id);
+
+            return response($follower_users);
         }
     }
 }

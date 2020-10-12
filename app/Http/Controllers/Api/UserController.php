@@ -42,26 +42,14 @@ class UserController extends Controller
 
     public function show(Request $request, $str_id)
     {
-        $params = User::getUserBooksGenres($str_id);
+        $user = User::getIdentifiedUserProfileData($str_id);
 
         // 登録されてないidへのアクセスだった場合
-        if ($params == null) {
+        if ($user == null) {
             return bad_request();
         }
 
-        // $user = Auth::user();
-
-        // if ($user) {
-        //     $viewer_user = $user;
-        //     $params = array_merge($params, compact('viewer_user'));
-        // }
-
-        $user = $params['user'];
-        $follow_data = $user->getFollowsAndFollowersUsers();
-
-        $params = array_merge($params, $follow_data);
-
-        return response()->json($params);
+        return response()->json($user);
     }
 
     // TODO: validation

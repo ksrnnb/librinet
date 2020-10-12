@@ -29,46 +29,43 @@ function Header(props) {
     );
   }
 
-  let hamburger = null;
+  const hamburger = (
+    <>
+      <button
+        id="humburger"
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-  if (props.hasHamburger) {
-    hamburger = (
-      <>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/home" onClick={closeNav}>
-                ホーム
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/book" onClick={closeNav}>
-                本を検索する
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/user/search" onClick={closeNav}>
-                ユーザーを検索する
-              </Link>
-            </li>
-            {profileAndLogoutLink}
-          </ul>
-        </div>
-      </>
-    );
-  }
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <Link className="nav-link" to="/home" onClick={closeNav}>
+              ホーム
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/book" onClick={closeNav}>
+              本を検索する
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/user/search" onClick={closeNav}>
+              ユーザーを検索する
+            </Link>
+          </li>
+          {profileAndLogoutLink}
+        </ul>
+      </div>
+    </>
+  );
 
   return (
     <header>

@@ -24,7 +24,7 @@ export default function SubColumn(props) {
   }
 
   return (
-    <div className="sub-column border-right">
+    <div id="sub-column" className="border-right">
       <Link to="/home">
         <h4>ホーム</h4>
       </Link>

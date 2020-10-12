@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
 import Redirect from './Redirect';
 import Bookshelf from './Bookshelf';
+import { DataContext } from './App';
+import { PagesContext, PropsContext } from './Pages';
 
 const axios = window.axios;
 
@@ -116,80 +118,44 @@ function EditBookshelfButton(props) {
   return <></>;
 }
 
-export default class UserProfile extends React.Component {
-  constructor(props) {
-    super(props);
+export default function UserProfile(props) {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [showingUser, setShowingUser] = useState(null);
+  const pages_props = useContext(PropsContext);
+  const user = useContext(DataContext).params.user;
 
-    this.state = {
-      hasLoaded: false,
-      isFollowing: false,
-    };
+  useEffect(() => {
+    setup();
+  }, []);
 
-    this.setup = this.setup.bind(this);
-    this.handleFollow = this.handleFollow.bind(this);
-    this.isFollowing = this.isFollowing.bind(this);
-    this.onSubmitFollow = this.onSubmitFollow.bind(this);
-    this.redirectToDeleteBook = this.redirectToDeleteBook.bind(this);
-    this.redirectToEditGenre = this.redirectToEditGenre.bind(this);
-  }
+  function setup() {
+    function setUserData(user) {
+      setShowingUser(user);
+      setIsFollowing(followCheck(user));
+    }
 
-  componentDidMount() {
-    // TODO: userがnull or undefinedの場合の処理
-    // const params = this.props.location.state.params;
-    this.setup();
-  }
+    const locationState = pages_props.location.state;
+    const queryStrId = pages_props.match.params.strId;
+    // const isSearched = locationState && (locationState.user.str_id === queryStrId);
 
-  // TODO: 他のユーザーのページから自分のプロフィールのページへ遷移しようとするとダメ。
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.id !== prevProps.id) {
-  //     this.setup();
-  //   }
-  // }
-
-  setup() {
-    const props = this.props.props;
-    const params = this.props.params;
-    const locationState = this.props.props.location.state;
-    const queryStrId = this.props.props.match.params.strId;
-
+    // TODO: ユーザー検索などでプロフィールページに来た後に、profileをクリックすると自分が表示されない。
     // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
     if (locationState) {
-      this.showingUserParams = locationState.params;
-      // console.log(this.showingUser);
-      const hasLoaded = true;
-      const isFollowing = this.isFollowing();
-
-      this.setState({
-        hasLoaded: hasLoaded,
-        isFollowing: isFollowing,
-      });
+      const user = locationState.user;
+      setUserData(user);
 
       // プロフィールをクリックしてきた場合
-    } else if (params.user.str_id === queryStrId) {
-      this.showingUserParams = params;
-      const hasLoaded = true;
-      const isFollowing = this.isFollowing();
-
-      this.setState({
-        hasLoaded: hasLoaded,
-        isFollowing: isFollowing,
-      });
+    } else if (user.str_id === queryStrId) {
+      setUserData(user);
 
       // URLを入力してきた場合
     } else {
-      const path = '/api/user/profile/' + props.match.params.strId;
+      const path = '/api/user/profile/' + pages_props.match.params.strId;
       axios
         .get(path)
         .then((response) => {
-          this.showingUserParams = response.data;
-
-          const hasLoaded = true;
-          const isFollowing = this.isFollowing();
-
-          this.setState({
-            hasLoaded: hasLoaded,
-            isFollowing: isFollowing,
-          });
+          const user = response.data;
+          setUserData(user);
         })
         .catch((error) => {
           console.log(error);
@@ -197,111 +163,104 @@ export default class UserProfile extends React.Component {
     }
   }
 
-  handleFollow() {
-    const isFollowing = !this.state.isFollowing;
-    this.setState({
-      isFollowing: isFollowing,
-    });
+  function handleFollow() {
+    setIsFollowing(!isFollowing);
 
-    this.onSubmitFollow();
+    onSubmitFollow();
   }
 
-  isFollowing() {
+  function followCheck(tgUser) {
     // ログインしていない場合はfalseを返す
-    const user = this.props.params.user;
     if (typeof user === 'undefined') {
       return false;
     }
+    const followers = tgUser.followers;
 
-    const followers = this.props.params.followers;
     const results = followers.find((follower) => {
       return follower.follower_id == user.id;
-    }, this);
+    });
 
     return typeof results !== 'undefined';
   }
 
-  onSubmitFollow() {
+  function onSubmitFollow() {
     const path = '/api/follow';
     axios
       .post(path, {
-        targetId: this.params.user.id,
-        isFollowing: this.state.isFollowing,
-        viewerId: this.viewerUser.id,
+        targetId: showingUser.id,
+        isFollowing: isFollowing,
+        viewerId: user.id,
       })
       .then((response) => {
-        console.log(response.data);
+        console.log(response);
+        showingUser.followers = response.data;
+        setShowingUser(showingUser);
+
+        // ここのpushが大事.location.stateを利用しているためここも更新が必要。
+        const url = pages_props.match.url;
+        pages_props.history.push({
+          pathname: url,
+          state: { user: showingUser },
+        });
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  redirectToDeleteBook(strId) {
+  function redirectToDeleteBook(strId) {
     Redirect.deleteBook.call(this, strId);
   }
 
-  redirectToEditGenre(strId) {
+  function redirectToEditGenre(strId) {
     Redirect.editGenre.call(this, strId);
   }
 
-  render() {
-    // paramsには見ているページのユーザーの情報（本を含めて）が入っている。
-    const hasLoaded = this.state.hasLoaded;
-    const params = this.props.params;
-    const viewerUser = params.user;
-    const showingUserParams = this.showingUserParams;
-    const isFollowing = this.state.isFollowing;
+  let buttons = null;
 
-    // console.log('---------viewer----------');
-    // console.log(viewerUser);
-    // console.log('---------showing----------');
-    // console.log(showingUser);
-    if (hasLoaded) {
-      let buttons = null;
+  // TODO: たぶんダメだから修正
+  // ログインしている場合はボタンを表示
+  if (typeof user !== 'undefined') {
+    buttons = (
+      <>
+        {/* TODO:ここ修正が必要 */}
+        <EditUserButton user={showingUser} viewerStrId={user.str_id} />
+        <FollowButton
+          user={showingUser}
+          viewerUser={user}
+          isFollowing={isFollowing}
+          handleFollow={handleFollow}
+        />
+      </>
+    );
+  }
 
-      // TODO: たぶんダメだから修正
-      // ログインしている場合はボタンを表示
-      if (typeof viewerUser !== 'undefined') {
-        buttons = (
-          <>
-            <EditUserButton user={viewerUser} viewerStrId={viewerUser.str_id} />
-            <FollowButton
-              user={viewerUser}
-              viewerUser={viewerUser}
-              isFollowing={isFollowing}
-              handleFollow={this.handleFollow}
-            />
-          </>
-        );
-      }
-
-      return (
-        <>
-          <Subtitle subtitle="User Profile" />
-          <UserCard user={showingUserParams.user}></UserCard>
-          {buttons}
-          <FollowNumber
-            follows={showingUserParams.follows}
-            followers={showingUserParams.followers}
-          />
-          <EditBookshelfButton
-            user={showingUserParams.user}
-            books={showingUserParams.books}
-            viewerUser={viewerUser}
-            redirectToDeleteBook={this.redirectToDeleteBook}
-            redirectToEditGenre={this.redirectToEditGenre}
-          />
-          <Bookshelf
-            user={showingUserParams}
-            genres={showingUserParams.genres}
-            genres_books={showingUserParams.genres_books}
-            props={this.props.props}
-          />
-        </>
-      );
-    } else {
-      return <></>;
-    }
+  if (showingUser) {
+    return (
+      <>
+        <Subtitle subtitle="User Profile" />
+        <UserCard user={showingUser}></UserCard>
+        {buttons}
+        <FollowNumber
+          follows={showingUser.followings}
+          followers={showingUser.followers}
+        />
+        <EditBookshelfButton
+          user={showingUser}
+          books={showingUser.books}
+          viewerUser={user}
+          redirectToDeleteBook={redirectToDeleteBook}
+          redirectToEditGenre={redirectToEditGenre}
+        />
+        <Bookshelf
+          user={showingUser}
+          genres={showingUser.genres}
+          genres_books={showingUser.genres_books}
+          props={pages_props}
+        />
+      </>
+    );
+  } else {
+    return <></>;
   }
 }

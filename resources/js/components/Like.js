@@ -1,29 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 const axios = require('axios');
 
-export default class Like extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Like(props) {
+  const item = props.item;
+  const likes = props.item.likes;
+  const viewerId = props.viewerId;
 
-    const likes = this.props.item.likes;
-    const viewerId = this.props.viewerId;
-    const count = likes.length;
+  const isAlreadyLiked = likes.find((like) => {
+    return like.user_id == viewerId;
+  });
 
-    // 既にいいね済みの場合は、自分（みている側）のユーザーID
-    // 未いいねの場合はundefined
-    const isLiked = likes.find((like) => {
-      return like.user_id == viewerId;
-    });
+  const [count, setCount] = useState(likes.length);
+  const [isLiked, setIsLiked] = useState(isAlreadyLiked);
 
-    this.state = {
-      count: count,
-      isLiked: isLiked,
-    };
+  // 既にいいね済みの場合は、自分（みている側）のユーザーID
+  // 未いいねの場合はundefined
 
-    this.handleLike = this.handleLike.bind(this);
-  }
-
-  sendPostRequest(uuid) {
+  function sendPostRequest(uuid) {
     axios
       .post('/api/like', {
         uuid: uuid,
@@ -36,58 +29,32 @@ export default class Like extends React.Component {
       });
   }
 
-  handleLike(e) {
+  function handleLike(e) {
     const uuid = e.target.dataset.uuid;
-    const isLiked = this.state.isLiked;
     const delta = isLiked ? -1 : +1;
-    const count = this.state.count + delta;
 
-    this.sendPostRequest(uuid);
+    sendPostRequest(uuid);
 
-    this.setState({
-      isLiked: !isLiked,
-      count: count,
-    });
+    setIsLiked(!isLiked);
+    setCount(count + delta);
   }
 
-  render() {
-    const item = this.props.item;
-    const isLiked = this.state.isLiked;
-
-    let button = null;
-    if (isLiked) {
-      button = (
-        <button
-          type="button"
-          className="likes btn btn-info"
-          data-uuid={item.uuid}
-          data-isliked="1"
-          onClick={this.handleLike}
-        >
-          いいね
-        </button>
-      );
-    } else {
-      button = (
-        <button
-          type="button"
-          className="likes btn btn-outline-info"
-          data-uuid={item.uuid}
-          data-isliked="0"
-          onClick={this.handleLike}
-        >
-          いいね
-        </button>
-      );
-    }
-
-    return (
-      <>
-        {button}
-        <p className="d-inline count" data-count={this.state.count}>
-          {this.state.count}
-        </p>
-      </>
-    );
-  }
+  return (
+    <>
+      <button
+        type="button"
+        className={
+          isLiked ? 'likes btn btn-info' : 'likes btn btn-outline-info'
+        }
+        data-uuid={item.uuid}
+        data-isliked={isLiked ? '1' : '0'}
+        onClick={handleLike}
+      >
+        いいね
+      </button>
+      <p className="d-inline count" data-count={count}>
+        {count}
+      </p>
+    </>
+  );
 }

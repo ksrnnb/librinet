@@ -143,7 +143,6 @@ class Book extends Model
         booksが属するgenresのgenre_idとnameの配列を返す
         return ['id' => 'name', 'id' => 'name, ...]
     */
-
     public static function extractGenres($books)
     {
         $genres = [];
@@ -164,8 +163,24 @@ class Book extends Model
         return $genres;
     }
 
+    public static function getGenresAndGenresBooks($books)
+    {
+        if ($books->isNotEmpty()) {
+            $books = $books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
+            $genres = Book::extractGenres($books);
+            $genres_books = $books->groupBy('genre_id');
+            /*
+                genres:                  [genre_id => genre_name, ...]
+                genres_books: [[genre_id => [book, book, ...]], ...]
+            */
+            return [$genres, $genres_books];
+        } else {
+            return [[], []];
+        }
+    }
+
     // 13桁のISBNかどうかをチェックする
-    public static function isIsbn($isbn)
+    public static function isIsbn(string $isbn): boolean
     {
         $isbn = preg_replace('/-/', '', $isbn);
         

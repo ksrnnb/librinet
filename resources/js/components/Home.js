@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Subtitle from './Subtitle';
 import Feed from './Feed';
+import { DataContext } from './App';
 
 function Post(props) {
   const post = props.post;
@@ -74,13 +75,17 @@ function Posts(props) {
 }
 
 export default function Home(props) {
+  const data = useContext(DataContext);
+  const posts = data.params.following_posts;
+  const user = data.params.user;
+
   return (
     <div className="row">
       <div className="col-12">
         <Subtitle subtitle="Home" />
         <Posts
-          posts={props.posts}
-          viewerId={props.viewerId}
+          posts={posts}
+          viewerId={user.id}
           onClickDelete={props.onClickDelete}
         />
       </div>

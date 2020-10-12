@@ -13,6 +13,8 @@ import EditUser from './EditUser';
 import DeleteBook from './DeleteBook';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
+export const PropsContext = React.createContext();
+
 export default function Pages(props) {
   const params = props.params;
   const exampleUsers = params ? params.example_users : null;
@@ -23,11 +25,6 @@ export default function Pages(props) {
   const viewerStrId = params ? params.user.str_id : null;
   const viewerUser = params ? params.user : null;
 
-  let margin = null;
-  if (props.isVisible) {
-    margin = 'ml-300';
-  }
-
   // これらがないと、コンポーネント側で読み込めない
   const logout = props.logout;
   const login = props.login;
@@ -36,7 +33,7 @@ export default function Pages(props) {
   const setStateGenresBooks = props.setStateGenresBooks;
 
   return (
-    <div className={margin}>
+    <div id="main-column">
       <Switch>
         <Route
           path="/home"
@@ -60,16 +57,22 @@ export default function Pages(props) {
         <Route
           exact
           path="/user"
-          render={(props) => <User props={props} example={exampleUsers} />}
+          render={(props) => (
+            <PropsContext.Provider value={props}>
+              <User props={props} example={exampleUsers} />
+            </PropsContext.Provider>
+          )}
         />
         <Route
           path="/user/profile/:strId"
           render={(props) => (
-            <UserProfile
-              props={props}
-              params={params}
-              viewerUser={viewerUser}
-            />
+            <PropsContext.Provider value={props}>
+              <UserProfile
+                props={props}
+                params={params}
+                viewerUser={viewerUser}
+              />
+            </PropsContext.Provider>
           )}
         />
         <Route

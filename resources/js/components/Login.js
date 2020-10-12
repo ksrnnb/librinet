@@ -35,7 +35,8 @@ export default function Login(props) {
             password: password,
           })
           .then((response) => {
-            props.login(props.props);
+            console.log(response);
+            // props.login(props.props);
           })
           .catch((error) => {
             console.log(error);

@@ -122,6 +122,13 @@ class User extends Authenticatable
                                 'followings',
                                 'followers',
                                 ]);
+
+            foreach ($users as $user) {
+                // 扱いやすいように整理した[genre_id => books]の配列を返す
+                [$genres, $genres_books] = Book::getGenresAndGenresBooks($user->books);
+                $user->genres = $genres;
+                $user->genres_books = $genres_books;
+            }
         } else {
             $users = [];
         }
@@ -129,28 +136,49 @@ class User extends Authenticatable
         return $users;
     }
 
-    public static function getParamsForApp($str_id)
+    /**
+     * @param string (str_id or user_name)
+     */
+    public static function getIdentifiedUserProfileData(string $str_id)
     {
-        $user_book_data = User::getUserBooksGenres($str_id);
+        $user = User::where('str_id', $str_id)
+                     ->first();
+
+        if ($user) {
+            // SQL文10個になっている。
+            $user = $user->load(['books.genre',
+                                'posts.likes',
+                                'comments.likes',
+                                'likes',
+                                'followings',
+                                'followers',
+                                ]);
+
+            [$genres, $genres_books] = Book::getGenresAndGenresBooks($user->books);
+            $user->genres = $genres;
+            $user->genres_books = $genres_books;
+        } else {
+            $user = [];
+        }
+
+        return $user;
+    }
+
+    public static function getParamsForApp($str_id): array
+    {
+        $user = User::getIdentifiedUserProfileData($str_id);
         
-        $user = $user_book_data['user'];
-        $follow_data = $user->getFollowsAndFollowersUsers();
-        
-        $posts = Post::getPostsOfFollowingUsers($user);
+        $following_posts = Post::getPostsOfFollowingUsers($user);
 
         // ユーザーの検索ページ用
-        $example_users = User::whereIn('id', [1, 2, 3])->get();
+        $examples = User::whereIn('id', [1, 2, 3])->get();
 
-        $params = array_merge(
-            $user_book_data,
-            $follow_data,
-            compact('posts', 'example_users')
-        );
+        $params = compact('user', 'following_posts', 'examples');
 
         return $params;
     }
 
-    public function getFollowsAndFollowersUsers()
+    public function getFollowsAndFollowersUsers(): array
     {
         // フォロー数、フォロワー数を取得
         $follows = $this->followings->where('follower_id', $this->id);

@@ -139,6 +139,7 @@ export default class UserProfile extends React.Component {
     this.setup();
   }
 
+  // TODO: 他のユーザーのページから自分のプロフィールのページへ遷移しようとするとダメ。
   // componentDidUpdate(prevProps) {
   //   if (this.props.id !== prevProps.id) {
   //     this.setup();
@@ -149,10 +150,11 @@ export default class UserProfile extends React.Component {
     const props = this.props.props;
     const params = this.props.params;
     const locationState = this.props.props.location.state;
+    const queryStrId = this.props.props.match.params.strId;
 
     // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
     if (locationState) {
-      this.showingUser = locationState.user;
+      this.showingUserParams = locationState.params;
       // console.log(this.showingUser);
       const hasLoaded = true;
       const isFollowing = this.isFollowing();
@@ -162,13 +164,24 @@ export default class UserProfile extends React.Component {
         isFollowing: isFollowing,
       });
 
-      // 更新ボタンを押したり、直接URLから来た場合
+      // プロフィールをクリックしてきた場合
+    } else if (params.user.str_id === queryStrId) {
+      this.showingUserParams = params;
+      const hasLoaded = true;
+      const isFollowing = this.isFollowing();
+
+      this.setState({
+        hasLoaded: hasLoaded,
+        isFollowing: isFollowing,
+      });
+
+      // URLを入力してきた場合
     } else {
       const path = '/api/user/profile/' + props.match.params.strId;
       axios
         .get(path)
         .then((response) => {
-          this.showingUser = response.data;
+          this.showingUserParams = response.data;
 
           const hasLoaded = true;
           const isFollowing = this.isFollowing();
@@ -237,13 +250,13 @@ export default class UserProfile extends React.Component {
     const hasLoaded = this.state.hasLoaded;
     const params = this.props.params;
     const viewerUser = params.user;
-    const showingUser = this.showingUser;
+    const showingUserParams = this.showingUserParams;
     const isFollowing = this.state.isFollowing;
 
-    console.log('---------viewer----------');
-    console.log(viewerUser);
-    console.log('---------showing----------');
-    console.log(showingUser);
+    // console.log('---------viewer----------');
+    // console.log(viewerUser);
+    // console.log('---------showing----------');
+    // console.log(showingUser);
     if (hasLoaded) {
 
       let buttons = null;
@@ -270,24 +283,24 @@ export default class UserProfile extends React.Component {
       return (
         <>
           <Subtitle subtitle="User Profile" />
-          <UserCard user={showingUser.user}>
+          <UserCard user={showingUserParams.user}>
           </UserCard>
           {buttons}
           <FollowNumber
-            follows={showingUser.follows}
-            followers={showingUser.followers}
+            follows={showingUserParams.follows}
+            followers={showingUserParams.followers}
           />
           <EditBookshelfButton
-            user={showingUser.user}
-            books={showingUser.books}
+            user={showingUserParams.user}
+            books={showingUserParams.books}
             viewerUser={viewerUser}
             redirectToDeleteBook={this.redirectToDeleteBook}
             redirectToEditGenre={this.redirectToEditGenre}
           />
           <Bookshelf
-            user={showingUser}
-            genres={showingUser.genres}
-            genres_books={showingUser.genres_books}
+            user={showingUserParams}
+            genres={showingUserParams.genres}
+            genres_books={showingUserParams.genres_books}
             props={this.props.props}
           />
         </>

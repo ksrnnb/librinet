@@ -108,8 +108,6 @@ export default class User extends React.Component {
       .then((response) => {
         const users = response.data;
 
-        console.log(users);
-
         // ユーザーが存在していたら
         if (users.length) {
           this.setState({

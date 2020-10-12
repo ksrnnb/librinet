@@ -89341,8 +89341,7 @@ var User = /*#__PURE__*/function (_React$Component) {
       axios.post('/api/user', {
         user: input
       }).then(function (response) {
-        var users = response.data;
-        console.log(users); // ユーザーが存在していたら
+        var users = response.data; // ユーザーが存在していたら
 
         if (users.length) {
           _this2.setState({
@@ -89940,7 +89939,8 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
       // TODO: userがnull or undefinedの場合の処理
       // const params = this.props.location.state.params;
       this.setup();
-    } // componentDidUpdate(prevProps) {
+    } // TODO: 他のユーザーのページから自分のプロフィールのページへ遷移しようとするとダメ。
+    // componentDidUpdate(prevProps) {
     //   if (this.props.id !== prevProps.id) {
     //     this.setup();
     //   }
@@ -89953,21 +89953,32 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
 
       var props = this.props.props;
       var params = this.props.params;
-      var locationState = this.props.props.location.state; // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
+      var locationState = this.props.props.location.state;
+      var queryStrId = this.props.props.match.params.strId; // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
 
       if (locationState) {
-        this.showingUser = locationState.user; // console.log(this.showingUser);
+        this.showingUserParams = locationState.params; // console.log(this.showingUser);
 
         var hasLoaded = true;
         var isFollowing = this.isFollowing();
         this.setState({
           hasLoaded: hasLoaded,
           isFollowing: isFollowing
-        }); // 更新ボタンを押したり、直接URLから来た場合
+        }); // プロフィールをクリックしてきた場合
+      } else if (params.user.str_id === queryStrId) {
+        this.showingUserParams = params;
+        var _hasLoaded = true;
+
+        var _isFollowing = this.isFollowing();
+
+        this.setState({
+          hasLoaded: _hasLoaded,
+          isFollowing: _isFollowing
+        }); // URLを入力してきた場合
       } else {
         var path = '/api/user/profile/' + props.match.params.strId;
         axios.get(path).then(function (response) {
-          _this2.showingUser = response.data;
+          _this2.showingUserParams = response.data;
           var hasLoaded = true;
 
           var isFollowing = _this2.isFollowing();
@@ -90037,12 +90048,11 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
       var hasLoaded = this.state.hasLoaded;
       var params = this.props.params;
       var viewerUser = params.user;
-      var showingUser = this.showingUser;
-      var isFollowing = this.state.isFollowing;
-      console.log('---------viewer----------');
-      console.log(viewerUser);
-      console.log('---------showing----------');
-      console.log(showingUser);
+      var showingUserParams = this.showingUserParams;
+      var isFollowing = this.state.isFollowing; // console.log('---------viewer----------');
+      // console.log(viewerUser);
+      // console.log('---------showing----------');
+      // console.log(showingUser);
 
       if (hasLoaded) {
         var buttons = null; // TODO: たぶんダメだから修正
@@ -90063,20 +90073,20 @@ var UserProfile = /*#__PURE__*/function (_React$Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
           subtitle: "User Profile"
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          user: showingUser.user
+          user: showingUserParams.user
         }), buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
-          follows: showingUser.follows,
-          followers: showingUser.followers
+          follows: showingUserParams.follows,
+          followers: showingUserParams.followers
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditBookshelfButton, {
-          user: showingUser.user,
-          books: showingUser.books,
+          user: showingUserParams.user,
+          books: showingUserParams.books,
           viewerUser: viewerUser,
           redirectToDeleteBook: this.redirectToDeleteBook,
           redirectToEditGenre: this.redirectToEditGenre
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          user: showingUser,
-          genres: showingUser.genres,
-          genres_books: showingUser.genres_books,
+          user: showingUserParams,
+          genres: showingUserParams.genres,
+          genres_books: showingUserParams.genres_books,
           props: this.props.props
         }));
       } else {

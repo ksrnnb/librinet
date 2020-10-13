@@ -52,24 +52,24 @@ class LikeTest extends DuskTestCase
         // TODO: ログインがうまく動作していない。Sanctumの問題？
         // ログイン画面を実装する必要がある？
         // $this->authenticate();
-
         $this->browse(function (Browser $browser) {
 
             $str_id = $this->credential['str_id'];
             $password = $this->credential['password'];
 
-            $browser->visit('/login')
-                    ->waitFor('#user-id')
-                    ->type('user-id', $str_id)
-                    ->type('password', $password)
-                    ->press('#normal-login')
-                    // ->visit('/book/post/9784297100339')
-                    ->waitFor('.feed');
+            // $browser->visit('/login')
+            //         ->waitFor('#user-id')
+            //         ->type('user-id', $str_id)
+            //         ->type('password', $password)
+            //         ->press('Login')
+            //         ->visit('/book/post/9784297100339')
+            //         ->waitFor('.feed');
+            dump(User::find(1));
 
-            dump($str_id);
+            $browser->loginAs(User::find(1))
+                    ->assertAuthenticated();
 
 
-            // $ini = $browser->attribute('.count', 'data-count');
             
             // $browser->press('いいね')
             //         ->pause(100);       // データベースの書き込みのため少し待つ

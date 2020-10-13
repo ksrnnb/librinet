@@ -1,6 +1,7 @@
 import React from 'react';
 import AddBook from './AddBook';
 import Book from './Book';
+import BookProfile from './BookProfile';
 import Comment from './Comment';
 import Home from './Home';
 import Login from './Login';
@@ -12,7 +13,7 @@ import Followers from './Followers';
 import EditGenre from './EditGenre';
 import EditUser from './EditUser';
 import DeleteBook from './DeleteBook';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 export const PropsContext = React.createContext();
 
@@ -38,8 +39,6 @@ export default function Pages(props) {
           path="/home"
           render={() => (
             <Home
-              posts={posts}
-              viewerId={viewerId}
               onClickDelete={props.onClickDelete}
             />
           )}
@@ -47,7 +46,19 @@ export default function Pages(props) {
         <Route
           exact
           path="/book"
-          render={(props) => <Book props={props} params={params} />}
+          render={(props) =>
+            <PropsContext.Provider value={props}>
+              <Book />
+            </PropsContext.Provider>
+          }
+        />
+        <Route
+          path="/book/profile/:isbn"
+          render={(props) =>
+            <PropsContext.Provider value={props}>
+              <BookProfile />
+            </PropsContext.Provider>
+          }
         />
         <Route
           path="/genre/edit/:strId"

@@ -182,7 +182,7 @@ class Book extends Model
     }
 
     // 13桁のISBNかどうかをチェックする
-    public static function isIsbn(string $isbn): boolean
+    public static function isIsbn(string $isbn): bool
     {
         $isbn = preg_replace('/-/', '', $isbn);
         

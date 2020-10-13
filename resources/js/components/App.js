@@ -80,7 +80,7 @@ class App extends React.Component {
   login(props) {
     // TODO: 前にログインしていた場合、反映に少し時間がかかる。
     this.getParamsOfAuthenticatedUser();
-    // props.history.push('/home');
+    props.history.push('/home');
   }
 
   logout(props) {
@@ -101,7 +101,7 @@ class App extends React.Component {
     axios
       .get('/api/user/auth')
       .then((response) => {
-        console.log(response);
+
         // TODO: Loginしていないときは？
         // response.data
         // {books, examples, followers, follows, genres, genres_books,  posts, user}

@@ -76,19 +76,23 @@ function Posts(props) {
 
 export default function Home(props) {
   const data = useContext(DataContext);
-  const posts = data.params.following_posts;
-  const user = data.params.user;
+  if (data.params) {
+    const posts = data.params.following_posts;
+    const user = data.params.user;
 
-  return (
-    <div className="row">
-      <div className="col-12">
-        <Subtitle subtitle="Home" />
-        <Posts
-          posts={posts}
-          viewerId={user.id}
-          onClickDelete={props.onClickDelete}
-        />
+    return (
+      <div className="row">
+        <div className="col-12">
+          <Subtitle subtitle="Home" />
+          <Posts
+            posts={posts}
+            viewerId={user.id}
+            onClickDelete={props.onClickDelete}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <></>;
+  }
 }

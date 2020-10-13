@@ -36,7 +36,7 @@ export default function Login(props) {
           })
           .then((response) => {
             console.log(response);
-            // props.login(props.props);
+            props.login(props.props);
           })
           .catch((error) => {
             console.log(error);
@@ -93,7 +93,7 @@ export default function Login(props) {
             className="btn btn-outline-success d-block"
             onClick={normalUserLogin}
           >
-            ログイン
+            Login
           </button>
         </div>
       </div>

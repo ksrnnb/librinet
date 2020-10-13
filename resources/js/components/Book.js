@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Subtitle from './Subtitle';
-import BookCard from './BookCard';
 import Errors from './Errors';
+import SearchedBook from './SearchedBook';
 
 const axios = window.axios;
 
@@ -79,87 +79,12 @@ function Button(props) {
   );
 }
 
-function PostButton(props) {
-  const book = props.book;
-  const isLogin = props.isLogin;
+export default function Book() {
 
-  if (!isLogin) {
-    return <></>;
-  }
-
-  const postButton = (
-    <button
-      type="button"
-      className="btn btn-outline-success mr-3"
-      onClick={() => {
-        this.linkToPost(book);
-      }}
-    >
-      本の投稿をする
-    </button>
-  );
-
-  let addButton = null;
-  const isInBookshelf = this.state.isInBookshelf;
-  if (!isInBookshelf) {
-    addButton = (
-      <button
-        type="button"
-        className="btn btn-outline-success"
-        onClick={() => {
-          this.linkToAddBookshelf(book);
-        }}
-      >
-        本棚に追加する
-      </button>
-    );
-  }
-
-  return (
-    <>
-      {postButton}
-      {addButton}
-    </>
-  );
-}
-
-export default class Book extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      input: null,
-      book: null,
-      isInBookshelf: null,
-      errors: null,
-    };
-
-    this.linkToPost = this.linkToPost.bind(this);
-    this.linkToAddBookshelf = this.linkToAddBookshelf.bind(this);
-    this.onChangeInput = this.onChangeInput.bind(this);
-    this.sendPost = this.sendPost.bind(this);
-    this.setBook = this.setBook.bind(this);
-    this.setError = this.setError.bind(this);
-    this.validateInputAndReturnIsbn = this.validateInputAndReturnIsbn.bind(
-      this
-    );
-  }
-
-  linkToPost(book) {
-    const postUrl = '/book/post/' + book.isbn;
-    this.props.props.history.push(postUrl);
-  }
-
-  linkToAddBookshelf(book) {
-    const addUrl = '/book/add/' + book.isbn;
-    this.props.props.history.push(addUrl);
-  }
-
-  onChangeInput(e) {
-    this.setState({
-      input: e.target.value,
-    });
-  }
+  const [input, setInput] = useState(null);
+  const [book, setBook] = useState(null);
+  const [isInBookshelf, setIsInBookshelf] = useState(null);
+  const [errors, setErrors] = useState(null);
 
   // TODO エンターを押しても送信できるようにしたい
   // pressEnter(e) {
@@ -172,33 +97,8 @@ export default class Book extends React.Component {
   //     }
   // }
 
-  setBook(params) {
-    this.setState({
-      book: params.book,
-      isInBookshelf: params.isInBookshelf,
-      errors: null,
-    });
-  }
-
-  setError(error) {
-    const errors = [];
-
-    if (error == 'InputError') {
-      errors.push('ISBNが正しく入力されていません');
-    } else if (error == 'NotFound') {
-      errors.push('本が見つかりませんでした');
-    } else {
-      errors.push('予期しないエラーが発生しました');
-    }
-
-    this.setState({
-      errors: errors,
-    });
-  }
-
-  sendPost() {
-    const input = this.state.input;
-    const isbn = this.validateInputAndReturnIsbn(input);
+  function sendPost() {
+    const isbn = validateInputAndReturnIsbn(input);
 
     if (isbn) {
       axios
@@ -206,24 +106,27 @@ export default class Book extends React.Component {
           isbn: input,
         })
         .then((response) => {
-          this.setBook(response.data);
+          const params = response.data;
+          setBook(params.book);
+          setIsInBookshelf(params.isInBookshelf);
+          setErrors(null);
         })
         .catch((error) => {
           // 本が見つからない場合は404に設定した (BookController)
           if (error.response.status == 404) {
-            this.setError('NotFound');
+            setError('NotFound');
           } else {
             // サーバー側のvalidationに引っ掛かった場合など。
             // JavaScript側のvalidationで十分だと思うけど一応。
-            this.setError('UnknownError');
+            setError('UnknownError');
           }
         });
     } else {
-      this.setError('InputError');
+      setError('InputError');
     }
   }
 
-  validateInputAndReturnIsbn(input) {
+  function validateInputAndReturnIsbn(input) {
     if (input == null) return false;
 
     let isbn = input.replace(/-/g, '');
@@ -235,36 +138,18 @@ export default class Book extends React.Component {
     }
   }
 
-  render() {
-    const book = this.state.book;
-    const hasSearchedBook = book != null;
-    let bookElement = null;
-
-    if (hasSearchedBook) {
-      bookElement = (
-        <div className="row mt-5 book">
-          <BookCard book={book}>
-            <PostButton book={book} isLogin={isLogin} />
-          </BookCard>
-        </div>
-      );
-    }
-
-    const errors = this.state.errors;
-    const isLogin = this.props.params != null;
-
-    return (
-      <div>
-        <Subtitle subtitle="本の検索" />
-        <label htmlFor="isbn">
-          <InputPrompt />
-          <Errors errors={errors} />
-          <UserInput onChange={this.onChangeInput} />
-          <Button onClick={this.sendPost} />
-        </label>
-        <Example />
-        {bookElement}
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Subtitle subtitle="本の検索" />
+      <label htmlFor="isbn">
+        <InputPrompt />
+        <Errors errors={errors} />
+        <UserInput onChange={(e) => setInput(e.target.value)} />
+        <Button onClick={sendPost} />
+      </label>
+      {book && <SearchedBook book={book} isInBookshelf={isInBookshelf} />}
+      <Example />
+    </div>
+  );
 }
+

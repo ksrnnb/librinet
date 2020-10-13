@@ -35,7 +35,7 @@ class UserController extends Controller
     {
         $input = $request->input('user');
 
-        $users = User::getUsersProfileData($input);
+        $users = User::searchUsersAndGetUsersProfileData($input);
 
         return response($users);
     }

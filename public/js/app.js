@@ -87656,6 +87656,79 @@ function Feed(props) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Followers.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/Followers.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Followers; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
+/* harmony import */ var _UserCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UserCard */ "./resources/js/components/UserCard.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var axios = window.axios;
+function Followers() {
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_1__["PropsContext"]);
+  var strId = props.match.params.strId;
+  var target = props.match.params.target;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      users = _useState2[0],
+      setUsers = _useState2[1];
+
+  var path = '/api/followers/' + strId + '/' + target;
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(loadFollower, []);
+
+  function loadFollower() {
+    axios.get(path).then(function (response) {
+      setUsers(response.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  }
+
+  var subtitle = target === 'follows' ? 'フォロー' : 'フォロワー';
+
+  if (users) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      subtitle: subtitle
+    }), users.map(function (user) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-2",
+        key: user.id
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        user: user
+      }));
+    }));
+  } else {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/Functions.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/Functions.js ***!
@@ -88554,10 +88627,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UserProfile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UserProfile */ "./resources/js/components/UserProfile.js");
 /* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Post */ "./resources/js/components/Post.js");
 /* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./User */ "./resources/js/components/User.js");
-/* harmony import */ var _EditGenre__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EditGenre */ "./resources/js/components/EditGenre.js");
-/* harmony import */ var _EditUser__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EditUser */ "./resources/js/components/EditUser.js");
-/* harmony import */ var _DeleteBook__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./DeleteBook */ "./resources/js/components/DeleteBook.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _Followers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Followers */ "./resources/js/components/Followers.js");
+/* harmony import */ var _EditGenre__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EditGenre */ "./resources/js/components/EditGenre.js");
+/* harmony import */ var _EditUser__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./EditUser */ "./resources/js/components/EditUser.js");
+/* harmony import */ var _DeleteBook__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./DeleteBook */ "./resources/js/components/DeleteBook.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
 
 
 
@@ -88579,9 +88654,7 @@ function Pages(props) {
   var genresBooks = params ? params.genres_books : null;
   var genres = params ? params.genres : null;
   var posts = params ? params.posts : null;
-  var viewerId = params ? params.user.id : null;
-  var viewerStrId = params ? params.user.str_id : null;
-  var viewerUser = params ? params.user : null; // これらがないと、コンポーネント側で読み込めない
+  var viewerId = params ? params.user.id : null; // これらがないと、コンポーネント側で読み込めない
 
   var logout = props.logout;
   var login = props.login;
@@ -88590,7 +88663,7 @@ function Pages(props) {
   var setStateGenresBooks = props.setStateGenresBooks;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "main-column"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/home",
     render: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -88599,7 +88672,7 @@ function Pages(props) {
         onClickDelete: props.onClickDelete
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     exact: true,
     path: "/book",
     render: function render(props) {
@@ -88608,15 +88681,15 @@ function Pages(props) {
         params: params
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/genre/edit/:strId",
     render: function render(props) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditGenre__WEBPACK_IMPORTED_MODULE_10__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditGenre__WEBPACK_IMPORTED_MODULE_11__["default"], {
         props: props,
         params: params
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     exact: true,
     path: "/user",
     render: function render(props) {
@@ -88627,27 +88700,31 @@ function Pages(props) {
         example: exampleUsers
       }));
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
+    exact: true,
     path: "/user/profile/:strId",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PropsContext.Provider, {
         value: props
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserProfile__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        props: props,
-        params: params,
-        viewerUser: viewerUser
-      }));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserProfile__WEBPACK_IMPORTED_MODULE_7__["default"], null));
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
+    path: "/user/profile/:strId/:target",
+    render: function render(props) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PropsContext.Provider, {
+        value: props
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Followers__WEBPACK_IMPORTED_MODULE_10__["default"], null));
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/user/edit/:strId",
     render: function render(props) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditUser__WEBPACK_IMPORTED_MODULE_11__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditUser__WEBPACK_IMPORTED_MODULE_12__["default"], {
         props: props,
         params: params,
         setStateUser: setStateUser
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/login",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Login__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -88655,7 +88732,7 @@ function Pages(props) {
         login: login
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/logout",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logout__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -88663,31 +88740,31 @@ function Pages(props) {
         logout: logout
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/book/post/:isbn",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Post__WEBPACK_IMPORTED_MODULE_8__["default"], {
         props: props
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/book/delete/:strId",
     render: function render(props) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeleteBook__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeleteBook__WEBPACK_IMPORTED_MODULE_13__["default"], {
         props: props,
         params: params,
         setStateBooks: setStateBooks,
         setStateGenresBooks: setStateGenresBooks
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/book/add/:isbn",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddBook__WEBPACK_IMPORTED_MODULE_1__["default"], {
         props: props
       });
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Route"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["Route"], {
     path: "/comment/:uuid",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Comment__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -89702,9 +89779,14 @@ function FollowButton(props) {
 function FollowNumber(props) {
   var follows = props.follows.length;
   var followers = props.followers.length;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "mt-3 mb-0"
-  }, "Follow: ", follows), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Follower: ", followers));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "mt-3 mb-0",
+    "data-link": "/follows",
+    onClick: props.onClick
+  }, "Follow: ", follows), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    "data-link": "/followers",
+    onClick: props.onClick
+  }, "Follower: ", followers));
 }
 
 function EditBookshelfButton(props) {
@@ -89737,7 +89819,7 @@ function EditBookshelfButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
 }
 
-function UserProfile(props) {
+function UserProfile() {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState2 = _slicedToArray(_useState, 2),
       isFollowing = _useState2[0],
@@ -89748,7 +89830,7 @@ function UserProfile(props) {
       showingUser = _useState4[0],
       setShowingUser = _useState4[1];
 
-  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
   var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]).params.user;
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     setup();
@@ -89760,8 +89842,8 @@ function UserProfile(props) {
       setIsFollowing(followCheck(user));
     }
 
-    var locationState = pages_props.location.state;
-    var queryStrId = pages_props.match.params.strId; // const isSearched = locationState && (locationState.user.str_id === queryStrId);
+    var locationState = props.location.state;
+    var queryStrId = props.match.params.strId; // const isSearched = locationState && (locationState.user.str_id === queryStrId);
     // TODO: ユーザー検索などでプロフィールページに来た後に、profileをクリックすると自分が表示されない。
     // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
 
@@ -89771,7 +89853,7 @@ function UserProfile(props) {
     } else if (user.str_id === queryStrId) {
       setUserData(user); // URLを入力してきた場合
     } else {
-      var path = '/api/user/profile/' + pages_props.match.params.strId;
+      var path = '/api/user/profile/' + props.match.params.strId;
       axios.get(path).then(function (response) {
         var user = response.data;
         setUserData(user);
@@ -89799,6 +89881,11 @@ function UserProfile(props) {
     return typeof results !== 'undefined';
   }
 
+  function onClickFollowers(e) {
+    var url = props.match.url + e.target.dataset.link;
+    props.history.push(url);
+  }
+
   function onSubmitFollow() {
     var path = '/api/follow';
     axios.post(path, {
@@ -89810,8 +89897,8 @@ function UserProfile(props) {
       showingUser.followers = response.data;
       setShowingUser(showingUser); // ここのpushが大事.location.stateを利用しているためここも更新が必要。
 
-      var url = pages_props.match.url;
-      pages_props.history.push({
+      var url = props.match.url;
+      props.history.push({
         pathname: url,
         state: {
           user: showingUser
@@ -89852,7 +89939,8 @@ function UserProfile(props) {
       user: showingUser
     }), buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
       follows: showingUser.followings,
-      followers: showingUser.followers
+      followers: showingUser.followers,
+      onClick: onClickFollowers
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditBookshelfButton, {
       user: showingUser,
       books: showingUser.books,
@@ -89863,7 +89951,7 @@ function UserProfile(props) {
       user: showingUser,
       genres: showingUser.genres,
       genres_books: showingUser.genres_books,
-      props: pages_props
+      props: props
     }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);

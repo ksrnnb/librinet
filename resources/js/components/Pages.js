@@ -8,6 +8,7 @@ import Logout from './Logout';
 import UserProfile from './UserProfile';
 import PostData from './Post';
 import User from './User';
+import Followers from './Followers';
 import EditGenre from './EditGenre';
 import EditUser from './EditUser';
 import DeleteBook from './DeleteBook';
@@ -22,8 +23,6 @@ export default function Pages(props) {
   const genres = params ? params.genres : null;
   const posts = params ? params.posts : null;
   const viewerId = params ? params.user.id : null;
-  const viewerStrId = params ? params.user.str_id : null;
-  const viewerUser = params ? params.user : null;
 
   // これらがないと、コンポーネント側で読み込めない
   const logout = props.logout;
@@ -64,14 +63,19 @@ export default function Pages(props) {
           )}
         />
         <Route
+          exact
           path="/user/profile/:strId"
           render={(props) => (
             <PropsContext.Provider value={props}>
-              <UserProfile
-                props={props}
-                params={params}
-                viewerUser={viewerUser}
-              />
+              <UserProfile />
+            </PropsContext.Provider>
+          )}
+        />
+        <Route
+          path="/user/profile/:strId/:target"
+          render={(props) => (
+            <PropsContext.Provider value={props}>
+              <Followers />
             </PropsContext.Provider>
           )}
         />

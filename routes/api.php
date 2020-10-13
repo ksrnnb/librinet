@@ -23,6 +23,7 @@ Route::post('/book', 'Api\BookController@search');
 Route::post('/user', 'Api\UserController@search');
 Route::get('/user/auth', 'Api\UserController@auth');
 Route::get('/user/profile/{str_id}', 'Api\UserController@show');
+Route::get('/followers/{str_id}/{target}', 'Api\FollowerController@followers');
 // Route::post('/user/profile/{str_id}', 'Api\UserController@search');
 
 Route::middleware('auth:sanctum')->group(function () {

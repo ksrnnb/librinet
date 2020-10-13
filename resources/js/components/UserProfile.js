@@ -75,8 +75,16 @@ function FollowNumber(props) {
   const followers = props.followers.length;
   return (
     <>
-      <p className="mt-3 mb-0">Follow: {follows}</p>
-      <p>Follower: {followers}</p>
+      <button
+        className="mt-3 mb-0"
+        data-link="/follows"
+        onClick={props.onClick}
+      >
+        Follow: {follows}
+      </button>
+      <button data-link="/followers" onClick={props.onClick}>
+        Follower: {followers}
+      </button>
     </>
   );
 }
@@ -118,10 +126,10 @@ function EditBookshelfButton(props) {
   return <></>;
 }
 
-export default function UserProfile(props) {
+export default function UserProfile() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [showingUser, setShowingUser] = useState(null);
-  const pages_props = useContext(PropsContext);
+  const props = useContext(PropsContext);
   const user = useContext(DataContext).params.user;
 
   useEffect(() => {
@@ -134,8 +142,8 @@ export default function UserProfile(props) {
       setIsFollowing(followCheck(user));
     }
 
-    const locationState = pages_props.location.state;
-    const queryStrId = pages_props.match.params.strId;
+    const locationState = props.location.state;
+    const queryStrId = props.match.params.strId;
     // const isSearched = locationState && (locationState.user.str_id === queryStrId);
 
     // TODO: ユーザー検索などでプロフィールページに来た後に、profileをクリックすると自分が表示されない。
@@ -150,7 +158,7 @@ export default function UserProfile(props) {
 
       // URLを入力してきた場合
     } else {
-      const path = '/api/user/profile/' + pages_props.match.params.strId;
+      const path = '/api/user/profile/' + props.match.params.strId;
       axios
         .get(path)
         .then((response) => {
@@ -183,6 +191,11 @@ export default function UserProfile(props) {
     return typeof results !== 'undefined';
   }
 
+  function onClickFollowers(e) {
+    const url = props.match.url + e.target.dataset.link;
+    props.history.push(url);
+  }
+
   function onSubmitFollow() {
     const path = '/api/follow';
     axios
@@ -197,8 +210,8 @@ export default function UserProfile(props) {
         setShowingUser(showingUser);
 
         // ここのpushが大事.location.stateを利用しているためここも更新が必要。
-        const url = pages_props.match.url;
-        pages_props.history.push({
+        const url = props.match.url;
+        props.history.push({
           pathname: url,
           state: { user: showingUser },
         });
@@ -244,6 +257,7 @@ export default function UserProfile(props) {
         <FollowNumber
           follows={showingUser.followings}
           followers={showingUser.followers}
+          onClick={onClickFollowers}
         />
         <EditBookshelfButton
           user={showingUser}
@@ -256,7 +270,7 @@ export default function UserProfile(props) {
           user={showingUser}
           genres={showingUser.genres}
           genres_books={showingUser.genres_books}
-          props={pages_props}
+          props={props}
         />
       </>
     );

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Follower;
 
 class FollowerController extends Controller
@@ -38,5 +39,12 @@ class FollowerController extends Controller
 
             return response($follower_users);
         }
+    }
+
+    public function followers(Request $request, string $str_id, string $target): JsonResponse
+    {
+        $users = Follower::getFollowersOrFollowsByStrId($str_id, $target);
+
+        return response()->json($users);
     }
 }

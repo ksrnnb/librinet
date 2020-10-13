@@ -107,12 +107,19 @@ class User extends Authenticatable
     /**
      * @param string (str_id or user_name)
      */
-    public static function getUsersProfileData($input)
+    public static function searchUsersAndGetUsersProfileData($input)
     {
         $users = User::where('str_id', 'like', '%' . $input . '%')
                      ->orWhere('name', 'like', '%' . $input . '%')
                      ->get();
 
+        $users = User::getUsersProfileData($users);
+
+        return $users;
+    }
+
+    public static function getUsersProfileData($users)
+    {
         if ($users->isNotEmpty()) {
             // SQL文10個になっている。
             $users = $users->load(['books.genre',

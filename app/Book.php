@@ -169,6 +169,8 @@ class Book extends Model
             $books = $books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
             $genres = Book::extractGenres($books);
             $genres_books = $books->groupBy('genre_id');
+            // TODO: groupByで簡単にできないか？
+
             /*
                 genres:                  [genre_id => genre_name, ...]
                 genres_books: [[genre_id => [book, book, ...]], ...]

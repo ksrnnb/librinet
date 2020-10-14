@@ -3,13 +3,13 @@ import { PropsContext } from './Pages';
 import Subtitle from './Subtitle';
 import SearchedBook from './SearchedBook';
 
-export default function BookProfile() {
+const axios = window.axios;
 
+export default function BookProfile() {
   const props = useContext(PropsContext);
   const isbn = props.match.params.isbn;
   const [book, setBook] = useState(null);
   const [isInBookshelf, setIsInBookshelf] = useState(null);
-
 
   useEffect(loadBooks, []);
 

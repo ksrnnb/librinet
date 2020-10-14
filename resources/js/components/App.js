@@ -8,6 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 const axios = window.axios;
 export const DataContext = createContext();
+export const SetStateContext = createContext();
 
 class App extends React.Component {
   constructor() {
@@ -23,11 +24,12 @@ class App extends React.Component {
     };
 
     this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
     this.setStateBooks = this.setStateBooks.bind(this);
     this.setStateGenresBooks = this.setStateGenresBooks.bind(this);
     this.setStateUser = this.setStateUser.bind(this);
+    this.setParams = this.setParams.bind(this);
+    this.setIsLogin = this.setIsLogin.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +52,18 @@ class App extends React.Component {
         params: params,
       });
     }
+  }
+
+  setParams(params) {
+    this.setState({
+      params: params,
+    });
+  }
+
+  setIsLogin(isLogin) {
+    this.setState({
+      isLogin: isLogin,
+    });
   }
 
   setStatePosts(posts) {
@@ -83,25 +97,10 @@ class App extends React.Component {
     props.history.push('/home');
   }
 
-  logout(props) {
-    axios
-      .post('/api/logout')
-      .then((response) => {
-        this.setState({
-          isLogin: false,
-        });
-        props.history.push('/login');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   getParamsOfAuthenticatedUser() {
     axios
       .get('/api/user/auth')
       .then((response) => {
-
         // TODO: Loginしていないときは？
         // response.data
         // {books, examples, followers, follows, genres, genres_books,  posts, user}
@@ -153,6 +152,13 @@ class App extends React.Component {
     const appName = document.title;
     const params = this.state.params;
     const hasLoaded = this.state.hasLoaded;
+    const setState = {
+      params: this.setParams,
+      isLogin: this.setIsLogin,
+    };
+
+    console.log('--state---');
+    console.log(this.state);
 
     // TODO: まとめられない？
     let user = null;
@@ -168,24 +174,25 @@ class App extends React.Component {
     if (hasLoaded) {
       return (
         <DataContext.Provider value={this.state}>
-          <Router>
-            <div className="container">
-              <Header userUrl={url} app={appName} />
-              <SubColumn userUrl={url} params={params} logout={this.logout} />
-              <Pages
-                params={params}
-                login={this.login}
-                logout={this.logout}
-                onClickDelete={this.onClickDelete}
-                setStateBooks={this.setStateBooks}
-                setStateGenresBooks={this.setStateGenresBooks}
-                setStateUser={this.setStateUser}
-                redirectUserProfileAfterDeleteBooks={
-                  this.redirectUserProfileAfterDeleteBooks
-                }
-              />
-            </div>
-          </Router>
+          <SetStateContext.Provider value={setState}>
+            <Router>
+              <div className="container">
+                <Header userUrl={url} app={appName} />
+                <SubColumn userUrl={url} params={params} logout={this.logout} />
+                <Pages
+                  params={params}
+                  login={this.login}
+                  onClickDelete={this.onClickDelete}
+                  setStateBooks={this.setStateBooks}
+                  setStateGenresBooks={this.setStateGenresBooks}
+                  setStateUser={this.setStateUser}
+                  redirectUserProfileAfterDeleteBooks={
+                    this.redirectUserProfileAfterDeleteBooks
+                  }
+                />
+              </div>
+            </Router>
+          </SetStateContext.Provider>
         </DataContext.Provider>
       );
     } else {

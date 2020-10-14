@@ -1,10 +1,9 @@
 import { PropsContext } from './Pages';
-import { DataContext } from './App'
+import { DataContext } from './App';
 import BookCard from './BookCard';
 import React, { useContext } from 'react';
 
 export default function SearchedBook(props) {
-
   const pages_props = useContext(PropsContext);
   const data = useContext(DataContext);
   const book = props.book;
@@ -41,7 +40,6 @@ export default function SearchedBook(props) {
   function AddBookButton(props) {
     if (props.isInBookshelf) {
       return <></>;
-
     } else {
       return (
         <button
@@ -59,9 +57,11 @@ export default function SearchedBook(props) {
     <div className="row mt-5 book">
       <BookCard book={book}>
         <PostButton isLogin={data.isLogin} onClick={linkToPost} />
-        <AddBookButton isInBookshelf={isInBookshelf} onClick={linkToAddBookshelf} />
+        <AddBookButton
+          isInBookshelf={isInBookshelf}
+          onClick={linkToAddBookshelf}
+        />
       </BookCard>
     </div>
   );
-
 }

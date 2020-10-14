@@ -80,7 +80,6 @@ function Button(props) {
 }
 
 export default function Book() {
-
   const [input, setInput] = useState(null);
   const [book, setBook] = useState(null);
   const [isInBookshelf, setIsInBookshelf] = useState(null);
@@ -114,15 +113,15 @@ export default function Book() {
         .catch((error) => {
           // 本が見つからない場合は404に設定した (BookController)
           if (error.response.status == 404) {
-            setError('NotFound');
+            setErrors('NotFound');
           } else {
             // サーバー側のvalidationに引っ掛かった場合など。
             // JavaScript側のvalidationで十分だと思うけど一応。
-            setError('UnknownError');
+            setErrors('UnknownError');
           }
         });
     } else {
-      setError('InputError');
+      setErrors('InputError');
     }
   }
 
@@ -152,4 +151,3 @@ export default function Book() {
     </div>
   );
 }
-

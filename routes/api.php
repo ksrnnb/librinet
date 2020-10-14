@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return response()->json(['hoge' => 'hoge']);
 // });
 Route::post('/login', 'Api\LoginController@login');
+Route::post('/signup', 'Auth\RegisterController@register');
 Route::post('/guest/login', 'Api\LoginController@guest');
 Route::post('/book', 'Api\BookController@search');
 Route::post('/user', 'Api\UserController@search');

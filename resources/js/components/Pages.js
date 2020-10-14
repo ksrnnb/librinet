@@ -13,6 +13,7 @@ import Followers from './Followers';
 import EditGenre from './EditGenre';
 import EditUser from './EditUser';
 import DeleteBook from './DeleteBook';
+import Signup from './Signup';
 import { Switch, Route } from 'react-router-dom';
 
 export const PropsContext = React.createContext();
@@ -23,7 +24,7 @@ export default function Pages(props) {
   const genresBooks = params ? params.genres_books : null;
   const genres = params ? params.genres : null;
   const posts = params ? params.posts : null;
-  const viewerId = params ? params.user.id : null;
+  // const viewerId = params ? params.user.id : null;
 
   // これらがないと、コンポーネント側で読み込めない
   const logout = props.logout;
@@ -32,33 +33,38 @@ export default function Pages(props) {
   const setStateBooks = props.setStateBooks;
   const setStateGenresBooks = props.setStateGenresBooks;
 
+  // const routes = [{
+  //   path: "/book",
+  //   exact: true,
+  // }];
+
   return (
     <div id="main-column">
       <Switch>
         <Route
           path="/home"
-          render={() => (
-            <Home
-              onClickDelete={props.onClickDelete}
-            />
+          render={(props) => (
+            <PropsContext.Provider value={props}>
+              <Home onClickDelete={props.onClickDelete} />
+            </PropsContext.Provider>
           )}
         />
         <Route
-          exact
+          exact={true}
           path="/book"
-          render={(props) =>
+          render={(props) => (
             <PropsContext.Provider value={props}>
               <Book />
             </PropsContext.Provider>
-          }
+          )}
         />
         <Route
           path="/book/profile/:isbn"
-          render={(props) =>
+          render={(props) => (
             <PropsContext.Provider value={props}>
               <BookProfile />
             </PropsContext.Provider>
-          }
+          )}
         />
         <Route
           path="/genre/edit/:strId"
@@ -70,6 +76,14 @@ export default function Pages(props) {
           render={(props) => (
             <PropsContext.Provider value={props}>
               <User props={props} example={exampleUsers} />
+            </PropsContext.Provider>
+          )}
+        />
+        <Route
+          path="/signup"
+          render={(props) => (
+            <PropsContext.Provider value={props}>
+              <Signup props={props} />
             </PropsContext.Provider>
           )}
         />
@@ -106,7 +120,11 @@ export default function Pages(props) {
         />
         <Route
           path="/logout"
-          render={(props) => <Logout props={props} logout={logout} />}
+          render={(props) => (
+            <PropsContext.Provider value={props}>
+              <Logout />
+            </PropsContext.Provider>
+          )}
         />
         <Route
           path="/book/post/:isbn"
@@ -134,7 +152,7 @@ export default function Pages(props) {
               props={props}
               genresBooks={genresBooks}
               genres={genres}
-              viewerId={viewerId}
+              // viewerId={viewerId}
             />
           )}
         />

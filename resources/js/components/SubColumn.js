@@ -17,9 +17,14 @@ export default function SubColumn(props) {
     );
   } else {
     profileAndLoginLogoutLink = (
-      <Link to="login">
-        <h4 className="mt-4">ログイン</h4>
-      </Link>
+      <>
+        <Link to="signup">
+          <h4 className="mt-4">ユーザー登録</h4>
+        </Link>
+        <Link to="login">
+          <h4 className="mt-4">ログイン</h4>
+        </Link>
+      </>
     );
   }
 

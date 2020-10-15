@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Feed from './Feed';
+import { PropTypes } from 'prop-types';
+import { PropsContext } from './Pages';
+import { DataContext } from './App';
+
 const axios = window.axios;
 
 function GenreForm(props) {
-  const genresBooks = props.genresBooks;
+  const orderedBooks = props.orderedBooks;
   const genres = props.genres;
-  if (genresBooks) {
-    const options = Object.keys(genresBooks).map((genreId) => {
+  if (orderedBooks) {
+    const options = Object.keys(orderedBooks).map((genreId) => {
       return (
         <optgroup label={genres[genreId]} key={genreId}>
-          {genresBooks[genreId].map((book) => {
+          {orderedBooks[genreId].map((book) => {
             return (
               <option value={book.id} key={book.id}>
                 {book.title}
@@ -44,27 +48,24 @@ function RecommendButton(props) {
         name="recommend"
         id="recommend"
         checked={props.isRecommended}
-        onChange={props.onChangeRecommend}
+        onChange={props.onChange}
       />
       本もおすすめする
     </label>
   );
 }
 function RecommendBook(props) {
-  const genresBooks = props.genresBooks;
+  const orderedBooks = props.orderedBooks;
   const genres = props.genres;
   const isRecommended = props.isRecommended;
 
-  if (genresBooks) {
+  if (orderedBooks) {
     return (
       <>
-        <RecommendButton
-          isChecked={isRecommended}
-          onChangeRecommend={props.onChangeRecommend}
-        />
+        <RecommendButton isChecked={isRecommended} onChange={props.onChange} />
         <GenreForm
           genres={genres}
-          genresBooks={genresBooks}
+          orderedBooks={orderedBooks}
           isRecommended={isRecommended}
           setBookId={props.setBookId}
         />
@@ -75,11 +76,10 @@ function RecommendBook(props) {
 }
 
 function CommentForm(props) {
-  const message = props.message;
   return (
     <>
       <p className="mt-5">Comment</p>
-      <textarea cols="30" rows="10" value={message} onChange={props.onChange} />
+      <textarea cols="30" rows="10" onChange={props.onChange} />
       <button
         className="btn btn-outline-success d-block"
         onClick={props.onClick}
@@ -90,84 +90,59 @@ function CommentForm(props) {
   );
 }
 
-export default class Comment extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Comment() {
+  const [bookId, setBookId] = useState(null);
+  const [item, setItem] = useState(null);
+  const [isPost, setIsPost] = useState(null); // TODO: false ??
+  const [isRecommended, setIsRecommended] = useState(false);
+  const [message, setMessage] = useState('');
 
-    this.state = {
-      bookId: null,
-      item: null,
-      isPost: null,
-      isRecommended: false,
-      message: '',
-    };
+  const props = useContext(PropsContext);
+  const params = useContext(DataContext).params;
 
-    this.onChangeMessage = this.onChangeMessage.bind(this);
-    this.onChangeRecommend = this.onChangeRecommend.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.setItem = this.setItem.bind(this);
-    this.setBookId = this.setBookId.bind(this);
-  }
-
-  componentDidMount() {
-    const path = '/api/comment/' + this.props.props.match.params.uuid;
+  useEffect(() => {
+    const path = '/api/comment/' + props.match.params.uuid;
     axios
       .get(path)
       .then((response) => {
-        this.setItem(response.data);
+        const data = response.data;
+        setItem(data.item);
+        setIsPost(data.is_post);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  }, []);
 
-  onChangeMessage(e) {
-    const message = e.target.value;
-    this.setState({
-      message: message,
-    });
-  }
+  function onChangeRecommend() {
+    const newIsRecommended = !isRecommended;
+    setIsRecommended(newIsRecommended);
 
-  onChangeRecommend() {
-    const isRecommended = !this.state.isRecommended;
-
-    if (isRecommended) {
+    if (newIsRecommended) {
       const id = document.getElementById('select-book').value;
-
-      this.setState({
-        bookId: id,
-        isRecommended: isRecommended,
-      });
-    } else {
-      this.setState({
-        isRecommended: isRecommended,
-      });
+      setBookId(id);
     }
   }
 
-  onSubmit() {
-    const bookId = this.state.isRecommended ? this.state.bookId : null;
-    const isPost = this.state.isPost;
-    const itemId = this.state.item.id;
-    const message = this.state.message;
-    const userId = this.props.viewerId;
+  function onSubmit() {
+    const userId = params.user.id;
 
-    const params = {
+    const paramsForPost = {
       book_id: bookId,
       is_post: isPost,
-      post_id: itemId,
+      post_id: item.id,
       message: message,
       user_id: userId,
     };
 
-    const uuid = this.props.props.match.params.uuid;
+    const uuid = props.match.params.uuid;
     const path = '/api/comment/' + uuid;
 
     if (message == '') {
       console.log('Message is Empty!');
     } else {
       axios
-        .post(path, params)
+        .post(path, paramsForPost)
         .then((response) => {
           console.log(response.data);
         })
@@ -177,48 +152,46 @@ export default class Comment extends React.Component {
     }
   }
 
-  setBookId(id) {
-    this.setState({
-      bookId: id,
-    });
-  }
-
-  setItem(data) {
-    this.setState({
-      item: data.item,
-      isPost: data.is_post,
-    });
-  }
-
-  render() {
-    const item = this.state.item;
-    const isRecommended = this.state.isRecommended;
-    const genresBooks = this.props.genresBooks;
-    const genres = this.props.genres;
-    const message = this.props.message;
-    const viewerId = this.props.viewerId;
-
-    if (item) {
-      return (
-        <>
-          <Subtitle subtitle="Comment Page" />
-          <Feed item={item} viewerId={viewerId} />
-          <RecommendBook
-            genresBooks={genresBooks}
-            genres={genres}
-            isRecommended={isRecommended}
-            onChangeRecommend={this.onChangeRecommend}
-            setBookId={this.setBookId}
-          />
-          <CommentForm
-            message={message}
-            onClick={this.onSubmit}
-            onChange={this.onChangeMessage}
-          />
-        </>
-      );
-    } else {
-      return <></>;
-    }
+  if (item) {
+    const user = params.user;
+    const viewerId = user.id;
+    return (
+      <>
+        <Subtitle subtitle="Comment Page" />
+        <Feed item={item} viewerId={viewerId} />
+        <RecommendBook
+          orderedBooks={user.orderedBooks}
+          genres={user.genres}
+          isRecommended={isRecommended}
+          setMessage={setMessage}
+          setBookId={setBookId}
+          onChange={onChangeRecommend}
+        />
+        <CommentForm
+          onClick={onSubmit}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+      </>
+    );
+  } else {
+    return <></>;
   }
 }
+
+RecommendButton.propTypes = {
+  isRecommended: PropTypes.bool,
+  onChange: PropTypes.func,
+};
+
+RecommendBook.propTypes = {
+  orderedBooks: PropTypes.object,
+  genres: PropTypes.object,
+  isRecommended: PropTypes.bool,
+  onChange: PropTypes.func,
+  setBookId: PropTypes.func,
+};
+
+CommentForm.propTypes = {
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+};

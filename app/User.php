@@ -132,9 +132,9 @@ class User extends Authenticatable
 
             foreach ($users as $user) {
                 // 扱いやすいように整理した[genre_id => books]の配列を返す
-                [$genres, $genres_books] = Book::getGenresAndGenresBooks($user->books);
+                [$genres, $ordered_books] = Book::getGenresAndOrderedBooks($user->books);
                 $user->genres = $genres;
-                $user->genres_books = $genres_books;
+                $user->ordered_books = $ordered_books;
             }
         } else {
             $users = [];
@@ -161,9 +161,9 @@ class User extends Authenticatable
                                 'followers',
                                 ]);
 
-            [$genres, $genres_books] = Book::getGenresAndGenresBooks($user->books);
+            [$genres, $ordered_books] = Book::getGenresAndOrderedBooks($user->books);
             $user->genres = $genres;
-            $user->genres_books = $genres_books;
+            $user->ordered_books = $ordered_books;
         } else {
             $user = [];
         }
@@ -178,9 +178,18 @@ class User extends Authenticatable
         $following_posts = Post::getPostsOfFollowingUsers($user);
 
         // ユーザーの検索ページ用
-        $examples = User::whereIn('id', [1, 2, 3])->get();
+        $examples = User::getExampleUsers()['examples'];
 
         $params = compact('user', 'following_posts', 'examples');
+
+        return $params;
+    }
+
+    public static function getExampleUsers()
+    {
+        $params = [
+            'examples' => User::whereIn('id', [1, 2, 3])->get(),
+        ];
 
         return $params;
     }
@@ -227,37 +236,6 @@ class User extends Authenticatable
         ];
         
         return $params;
-    }
-
-    /*
-    *   @param $str_id: string
-    *   @return $params or null
-    */
-    public static function getUserBooksGenres($str_id)
-    {
-        $users = User::with(['books.genre'])->get();
-        $user = $users->where('str_id', $str_id)->first();      // select user
-
-        if ($user) {
-            $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
-            $genres = Book::extractGenres($books);
-            $genres_books = $books->groupBy('genre_id');
-            /*
-                genres:                  [genre_id => genre_name, ...]
-                genres_books: [[genre_id => [book, book, ...]], ...]
-            */
-            $params = [
-                'user' => $user,
-                'books' => $books,
-                'genres' => $genres,
-                'genres_books' => $genres_books,
-            ];
-    
-            return $params;
-        // ユーザーが見つからない場合はnullを返す
-        } else {
-            return null;
-        }
     }
 
     /*

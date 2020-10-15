@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
 import Bookshelf from './Bookshelf';
+import { PropTypes } from 'prop-types';
+import { DataContext } from './App';
 
 const axios = window.axios;
 
@@ -13,24 +15,20 @@ function EditButton(props) {
   );
 }
 
-export default class EditGenre extends React.Component {
-  constructor(props) {
-    super(props);
+export default function EditGenre() {
+  const params = useContext(DataContext).params;
 
-    this.onSubmitNewGenres = this.onSubmitNewGenres.bind(this);
-  }
-
-  onSubmitNewGenres() {
-    const newGenres = this.getNewGenresFromInputs();
+  function onSubmitNewGenres() {
+    const newGenres = getNewGenresFromInputs();
     const path = '/api/genre/edit';
-    const userId = this.props.params.user.id;
+    const userId = params.user.id;
 
     axios
       .post(path, {
         userId: userId,
         newGenres: newGenres,
       })
-      .then((response) => {
+      .then(() => {
         // console.log(response);
       })
       .catch((error) => {
@@ -38,7 +36,7 @@ export default class EditGenre extends React.Component {
       });
   }
 
-  getNewGenresFromInputs() {
+  function getNewGenresFromInputs() {
     const inputs = [...document.getElementsByTagName('input')];
     const newGenres = new Object();
     inputs.forEach((input) => {
@@ -48,22 +46,22 @@ export default class EditGenre extends React.Component {
     return newGenres;
   }
 
-  render() {
-    // TODO: 本がない場合の処理
-    const params = this.props.params;
-    return (
-      <>
-        <Subtitle subtitle="ジャンルの編集" />
-        <UserCard user={params.user} />
-        <Bookshelf
-          user={params.user}
-          genres_books={params.genres_books}
-          genres={params.genres}
-          willEdit={true}
-          props={this.props.props}
-        />
-        <EditButton onClick={this.onSubmitNewGenres} />
-      </>
-    );
-  }
+  // TODO: 本がない場合の処理
+  return (
+    <>
+      <Subtitle subtitle="ジャンルの編集" />
+      <UserCard user={params.user} />
+      <Bookshelf
+        user={params.user}
+        genres_books={params.genres_books}
+        genres={params.genres}
+        willEdit={true}
+      />
+      <EditButton onClick={onSubmitNewGenres} />
+    </>
+  );
 }
+
+EditButton.propTypes = {
+  onClick: PropTypes.func,
+};

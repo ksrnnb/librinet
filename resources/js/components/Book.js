@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
 import SearchedBook from './SearchedBook';
+import PropTypes from 'prop-types';
 
 const axios = window.axios;
 
@@ -151,3 +152,12 @@ export default function Book() {
     </div>
   );
 }
+
+// === validation ===
+UserInput.propTypes = {
+  onChange: PropTypes.func,
+};
+
+Button.propTypes = {
+  onClick: PropTypes.func,
+};

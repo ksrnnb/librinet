@@ -1,21 +1,22 @@
 import React from 'react';
 import BookImage from './BookImage';
 import BookInfo from './BookInfo';
+import PropTypes from 'prop-types';
 
-export default class BookCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+export default function BookCard(props) {
+  const book = props.book;
 
-  render() {
-    const book = this.props.book;
-    return (
-      <div className="row">
-        <BookImage col="col-3" book={book} />
-        <BookInfo col="col-9" book={book}>
-          {this.props.children}
-        </BookInfo>
-      </div>
-    );
-  }
+  return (
+    <div className="row">
+      <BookImage col="col-3" book={book} />
+      <BookInfo col="col-9" book={book}>
+        {props.children}
+      </BookInfo>
+    </div>
+  );
 }
+
+BookCard.propTypes = {
+  book: PropTypes.object,
+  children: PropTypes.array,
+};

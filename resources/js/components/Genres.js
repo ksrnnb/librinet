@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 
 export default function Genres(props) {
   const canSelectGenre = props.isChecked;
@@ -134,3 +135,12 @@ function ConventionalGenre(props) {
     return <></>;
   }
 }
+
+NewGenre.propTypes = {
+  canSelectGenre: PropTypes.bool,
+  newGenre: PropTypes.string,
+  isNewGenre: PropTypes.bool,
+  onChangeRadioButton: PropTypes.func,
+  onClickNewGenre: PropTypes.func,
+  onChange: PropTypes.func,
+};

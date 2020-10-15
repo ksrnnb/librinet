@@ -1,6 +1,9 @@
 import React from 'react';
 import BookCard from './BookCard';
 import Genres from './Genres';
+
+import { PropTypes } from 'prop-types';
+
 const axios = window.axios;
 
 function Book(props) {
@@ -157,7 +160,6 @@ export default class GenreSelectFormat extends React.Component {
   render() {
     const book = this.state.book;
     const genres = this.state.genres;
-    const message = this.state.message;
     const convGenre = this.state.convGenre;
     const newGenre = this.state.newGenre;
     const isChecked = this.state.isChecked;
@@ -186,3 +188,11 @@ export default class GenreSelectFormat extends React.Component {
     }
   }
 }
+
+Book.propTypes = {
+  book: PropTypes.object,
+};
+
+GenreSelectFormat.propTypes = {
+  props: PropTypes.object,
+};

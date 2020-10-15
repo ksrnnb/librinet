@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { PropsContext } from './Pages';
+import { PropTypes } from 'prop-types';
 
 export function UserImage(props) {
   if (props.image) {
@@ -8,7 +9,7 @@ export function UserImage(props) {
         className="img-fluid"
         src={props.image}
         alt="user-image"
-        onClick={props.onClick}
+        // onClick={props.onClick}
       />
     );
   } else {
@@ -17,7 +18,7 @@ export function UserImage(props) {
         className="img-fluid"
         src="/img/icon.svg"
         alt="user-image"
-        onClick={props.onClick}
+        // onClick={props.onClick}
       />
     );
   }
@@ -27,7 +28,7 @@ export default function UserCard(props) {
   const user = props.user;
   const pages_props = useContext(PropsContext);
 
-  function jumpToUserPage(e) {
+  function jumpToUserPage() {
     const user = props.user;
     const path = '/user/profile/' + user.str_id;
 
@@ -59,3 +60,8 @@ export default function UserCard(props) {
     </div>
   );
 }
+
+UserCard.propTypes = {
+  user: PropTypes.object,
+  UserImage: PropTypes.string,
+};

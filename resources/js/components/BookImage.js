@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function BookImage(props) {
   const book = props.book;
@@ -18,3 +19,8 @@ export default function BookImage(props) {
     </div>
   );
 }
+
+BookImage.propTypes = {
+  book: PropTypes.object,
+  col: PropTypes.string,
+};

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
 import SelectBookCard from './SelectBookCard';
 import Functions from './Functions';
+import { PropTypes } from 'prop-types';
+import { PropsContext } from './Pages';
+import { DataContext, SetStateContext } from './App';
 
 const axios = window.axios;
 
@@ -22,13 +25,13 @@ function Books(props) {
 }
 
 function DeleteBooks(props) {
-  const genres_books = props.genres_books;
+  const orderedBooks = props.orderedBooks;
   const genres = props.genres;
-  const Bookshelf = Object.keys(genres_books).map((genre_id) => {
+  const Bookshelf = Object.keys(orderedBooks).map((genre_id) => {
     return (
       <div key={genre_id}>
         <h2 className="mt-5">{genres[genre_id]}</h2>
-        <Books books={genres_books[genre_id]} />
+        <Books books={orderedBooks[genre_id]} />
       </div>
     );
   });
@@ -44,18 +47,12 @@ function DeleteButton(props) {
   );
 }
 
-export default class DeleteBook extends React.Component {
-  constructor(props) {
-    super(props);
+export default function DeleteBook() {
+  const props = useContext(PropsContext);
+  const params = useContext(DataContext).params;
+  const setState = useContext(SetStateContext);
 
-    this.deleteBooks = this.deleteBooks.bind(this);
-    this.deleteGenresBooks = this.deleteGenresBooks.bind(this);
-    this.getIdsAndSubmit = this.getIdsAndSubmit.bind(this);
-    this.onSubmitDelete = this.onSubmitDelete.bind(this);
-    this.redirectUserProfile = this.redirectUserProfile.bind(this);
-  }
-
-  getIdsAndSubmit() {
+  function getIdsAndSubmit() {
     const inputs = [...document.getElementsByTagName('input')];
 
     const ids = [];
@@ -67,59 +64,61 @@ export default class DeleteBook extends React.Component {
         ids.push(bookId);
       }
     });
-    this.onSubmitDelete(ids);
+    onSubmitDelete(ids);
   }
 
-  deleteBooks(ids) {
-    const books = this.props.params.books;
+  function deleteBooks(ids) {
+    const books = params.user.books;
     const deletedBooks = Functions.unsetBooks(ids, books);
-    this.props.setStateBooks(deletedBooks);
+    params.user.books = deletedBooks;
+    setState.params(params);
   }
 
-  deleteGenresBooks(ids) {
-    const genresBooks = this.props.params.genres_books;
-    const deletedGenresBooks = Functions.unsetGenresBooks(ids, genresBooks);
-    this.props.setStateGenresBooks(deletedGenresBooks);
+  function deleteOrderedBooks(ids) {
+    const orderedBooks = params.user.ordered_books;
+    const deletedOrderedBooks = Functions.unsetOrderedBooks(ids, orderedBooks);
+    params.user.ordered_books = deletedOrderedBooks;
+    setState.params(params);
   }
 
-  redirectUserProfile(ids) {
-    this.deleteBooks(ids);
-    this.deleteGenresBooks(ids);
-    const props = this.props.props;
+  function redirectUserProfile(ids) {
+    deleteBooks(ids);
+    deleteOrderedBooks(ids);
     const strId = props.match.params.strId;
     const path = '/user/profile/' + strId;
 
     props.history.push(path);
   }
 
-  onSubmitDelete(ids) {
+  function onSubmitDelete(ids) {
     const path = '/api/book';
-    this.redirectUserProfile(ids);
+    redirectUserProfile(ids);
 
-    // axios
-    //   .delete(path, {
-    //     data: { ids: ids },
-    //   })
-    //   .then((response) => {
-    //     this.redirectUserProfile(ids);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .delete(path, {
+        data: { ids: ids },
+      })
+      .then(() => {
+        redirectUserProfile(ids);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  render() {
-    const params = this.props.params;
-    return (
-      <>
-        <Subtitle subtitle="本の削除" />
-        <UserCard user={params.user} />
-        <DeleteBooks
-          genres_books={params.genres_books}
-          genres={params.genres}
-        />
-        <DeleteButton onClick={this.getIdsAndSubmit} />
-      </>
-    );
-  }
+  return (
+    <>
+      <Subtitle subtitle="本の削除" />
+      <UserCard user={params.user} />
+      <DeleteBooks
+        orderedBooks={params.user.ordered_books}
+        genres={params.user.genres}
+      />
+      <DeleteButton onClick={getIdsAndSubmit} />
+    </>
+  );
 }
+
+DeleteButton.propTypes = {
+  onClick: PropTypes.func,
+};

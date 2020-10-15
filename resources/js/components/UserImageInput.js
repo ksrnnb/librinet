@@ -3,6 +3,7 @@ import { UserImage } from './UserCard';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Modal, Button } from 'react-bootstrap';
+import { PropTypes } from 'prop-types';
 
 function ModalWindow(props) {
   const show = props.show;
@@ -52,6 +53,7 @@ export default class UserImageInput extends React.Component {
         unit: '%',
       },
     };
+
     this.onChangeImage = this.onChangeImage.bind(this);
     this.setCrop = this.setCrop.bind(this);
     this.setShow = this.setShow.bind(this);
@@ -89,7 +91,7 @@ export default class UserImageInput extends React.Component {
 
     // TODO: 閉じるときに、アニメーションになる時とならないときがある。bootstrap側の問題？
     this.setShow(false);
-    this.props.setStateImage(trimmedSrc);
+    this.props.setImage(trimmedSrc);
   }
 
   onChangeImage(e) {
@@ -218,3 +220,15 @@ export default class UserImageInput extends React.Component {
     );
   }
 }
+
+UserImageInput.propTypes = {
+  image: PropTypes.string,
+  setImage: PropTypes.func,
+};
+
+ModalWindow.propTypes = {
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
+  trimming: PropTypes.func,
+  children: PropTypes.element,
+};

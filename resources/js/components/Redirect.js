@@ -1,5 +1,3 @@
-const axios = window.axios;
-
 export default class Redirect {
   static home() {
     this.props.props.history.push('/home');

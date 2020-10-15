@@ -87,9 +87,9 @@ class BookController extends Controller
         );
 
         $book = Book::create($book_data->toArray());
-        $params = $book_data->merge(['str_id' => $user->str_id]);
+        $params = Book::getBooksAndGenres($user->str_id);
 
-        return response()->json($params);
+        return response($params);
     }
 
     public function delete(Request $request)

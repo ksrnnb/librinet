@@ -2,6 +2,7 @@ import { PropsContext } from './Pages';
 import { DataContext } from './App';
 import BookCard from './BookCard';
 import React, { useContext } from 'react';
+import { PropTypes } from 'prop-types';
 
 export default function SearchedBook(props) {
   const pages_props = useContext(PropsContext);
@@ -65,3 +66,8 @@ export default function SearchedBook(props) {
     </div>
   );
 }
+
+SearchedBook.propTypes = {
+  book: PropTypes.object,
+  isInBookshelf: PropTypes.bool,
+};

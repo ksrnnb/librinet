@@ -3,6 +3,7 @@ import { DataContext, SetStateContext } from './App';
 import Subtitle from './Subtitle';
 import React, { useContext, useEffect, useState } from 'react';
 import Errors from './Errors';
+import { PropTypes } from 'prop-types';
 
 const axios = window.axios;
 
@@ -40,11 +41,11 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
   const props = useContext(PropsContext);
-  const params = useContext(DataContext).params;
+  const isLogin = useContext(DataContext).isLogin;
   const setState = useContext(SetStateContext);
 
   useEffect(() => {
-    params && props.history.push('/home');
+    isLogin && props.history.push('/home');
   }, []);
 
   function onClickSignup() {
@@ -53,7 +54,7 @@ export default function Signup() {
     if (validated) {
       axios
         .get('/sanctum/csrf-cookie')
-        .then((response) => {
+        .then(() => {
           axios
             .post('/api/signup', {
               name: userName,
@@ -84,7 +85,7 @@ export default function Signup() {
               }
             });
         })
-        .catch((error) => {
+        .catch(() => {
           alert('Error happened.');
         });
     }
@@ -170,3 +171,14 @@ export default function Signup() {
     </>
   );
 }
+
+Label.propTypes = {
+  label: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+Errors.propTypes = {
+  errors: PropTypes.array,
+};

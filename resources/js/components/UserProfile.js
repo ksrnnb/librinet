@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
-import Redirect from './Redirect';
 import Bookshelf from './Bookshelf';
 import { DataContext } from './App';
-import { PagesContext, PropsContext } from './Pages';
+import { PropsContext } from './Pages';
+import { PropTypes } from 'prop-types';
 
 const axios = window.axios;
 
@@ -222,11 +222,13 @@ export default function UserProfile() {
   }
 
   function redirectToDeleteBook(strId) {
-    Redirect.deleteBook.call(this, strId);
+    const path = '/book/delete/' + strId;
+    props.history.push(path);
   }
 
   function redirectToEditGenre(strId) {
-    Redirect.editGenre.call(this, strId);
+    const path = '/genre/edit/' + strId;
+    props.history.push(path);
   }
 
   let buttons = null;
@@ -269,7 +271,7 @@ export default function UserProfile() {
         <Bookshelf
           user={showingUser}
           genres={showingUser.genres}
-          genres_books={showingUser.genres_books}
+          ordered_books={showingUser.ordered_books}
           props={props}
         />
       </>
@@ -278,3 +280,17 @@ export default function UserProfile() {
     return <></>;
   }
 }
+
+FollowNumber.propTypes = {
+  follows: PropTypes.array,
+  followers: PropTypes.array,
+  onClick: PropTypes.func,
+};
+
+EditBookshelfButton.propTypes = {
+  user: PropTypes.object,
+  books: PropTypes.array,
+  viewerUser: PropTypes.object,
+  redirectToDeleteBook: PropTypes.func,
+  redirectToEditGenre: PropTypes.func,
+};

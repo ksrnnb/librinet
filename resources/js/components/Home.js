@@ -1,17 +1,41 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Subtitle from './Subtitle';
 import Feed from './Feed';
 import { DataContext } from './App';
-import { PropsContext } from './Pages';
+import { PropTypes } from 'prop-types';
+
+const axios = window.axios;
 
 function Post(props) {
+  function onClickDelete(e) {
+    const uuid = e.target.dataset.uuid;
+    // 文字列の'false'はtrueになってしまうので以下のように判定
+    const isPost = e.target.dataset.ispost === 'true' ? true : false;
+
+    const path = isPost ? '/api/post' : '/api/comment';
+
+    // TODO: 本当に消しますか？って出したい
+    axios
+      .delete(path, {
+        data: { uuid: uuid },
+      })
+      .then((response) => {
+        const posts = response.data;
+        const params = this.state.params;
+        params.posts = posts;
+
+        this.setState({
+          params: params,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const post = props.post;
   return (
-    <Feed
-      item={post}
-      viewerId={props.viewerId}
-      onClickDelete={props.onClickDelete}
-    />
+    <Feed item={post} viewerId={props.viewerId} onClickDelete={onClickDelete} />
   );
 }
 
@@ -31,6 +55,33 @@ function Comments(props) {
 }
 
 function PostWithComments(props) {
+  function onClickDelete(e) {
+    const uuid = e.target.dataset.uuid;
+    const data = useContext(DataContext);
+    // 文字列の'false'はtrueになってしまうので以下のように判定
+    const isPost = e.target.dataset.ispost === 'true' ? true : false;
+
+    const path = isPost ? '/api/post' : '/api/comment';
+
+    // TODO: 本当に消しますか？って出したい
+    axios
+      .delete(path, {
+        data: { uuid: uuid },
+      })
+      .then((response) => {
+        const following_posts = response.data;
+        const params = data.params;
+        params.following_posts = following_posts;
+
+        this.setState({
+          params: params,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const post = props.post;
   let comments = null;
   if (post.comments.length) {
@@ -38,7 +89,7 @@ function PostWithComments(props) {
       <Comments
         comments={post.comments}
         viewerId={props.viewerId}
-        onClickDelete={props.onClickDelete}
+        onClickDelete={onClickDelete}
       />
     );
   }
@@ -48,7 +99,7 @@ function PostWithComments(props) {
       <Post
         post={post}
         viewerId={props.viewerId}
-        onClickDelete={props.onClickDelete}
+        onClickDelete={onClickDelete}
       />
       {comments}
     </>
@@ -60,12 +111,7 @@ function Posts(props) {
     const postsIterator = Object.values(props.posts);
     const posts = postsIterator.map((post) => {
       return (
-        <PostWithComments
-          post={post}
-          viewerId={props.viewerId}
-          key={post.id}
-          onClickDelete={props.onClickDelete}
-        />
+        <PostWithComments post={post} viewerId={props.viewerId} key={post.id} />
       );
     });
 
@@ -76,7 +122,6 @@ function Posts(props) {
 }
 
 export default function Home() {
-  const props = useContext(PropsContext);
   const data = useContext(DataContext);
   // const [data, setData] = useState(iniData);
 
@@ -90,19 +135,16 @@ export default function Home() {
   //   // }
   // }
 
-  if (data.params) {
+  const user = data.params.user;
+
+  if (user) {
     const posts = data.params.following_posts;
-    const user = data.params.user;
 
     return (
       <div className="row">
         <div className="col-12">
           <Subtitle subtitle="Home" />
-          <Posts
-            posts={posts}
-            viewerId={user.id}
-            onClickDelete={props.onClickDelete}
-          />
+          <Posts posts={posts} viewerId={user.id} />
         </div>
       </div>
     );
@@ -110,3 +152,18 @@ export default function Home() {
     return <></>;
   }
 }
+
+Posts.propTypes = {
+  posts: PropTypes.array,
+  viewerId: PropTypes.number,
+};
+
+PostWithComments.propTypes = {
+  post: PropTypes.object,
+  viewerId: PropTypes.number,
+};
+
+Post.propTypes = {
+  post: PropTypes.object,
+  viewerId: PropTypes.number,
+};

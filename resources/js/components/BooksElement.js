@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 
 export default function BooksElement(props) {
   const books = props.books;
@@ -25,3 +26,7 @@ export default function BooksElement(props) {
 
   return booksElement;
 }
+
+BooksElement.propTypes = {
+  books: PropTypes.array,
+};

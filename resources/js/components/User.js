@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
 import { DataContext } from './App';
+import { PropTypes } from 'prop-types';
 
 const axios = window.axios;
 
@@ -72,7 +73,7 @@ function Results(props) {
   return users;
 }
 
-export default function User(props) {
+export default function User() {
   const [input, setInput] = useState('');
   const [errors, setErrors] = useState([]);
   const [users, setUsers] = useState([]);
@@ -123,5 +124,19 @@ export default function User(props) {
       <UsersExample examples={examples} />
     </>
   );
-  // }
 }
+
+Results.propTypes = {
+  users: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array, // 検索前はarray
+  ]),
+};
+
+UsersExample.propTypes = {
+  examples: PropTypes.array,
+};
+
+Errors.propTypes = {
+  errors: PropTypes.array,
+};

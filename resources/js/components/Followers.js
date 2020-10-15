@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PropsContext } from './Pages';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
+
 const axios = window.axios;
 
 export default function Followers() {

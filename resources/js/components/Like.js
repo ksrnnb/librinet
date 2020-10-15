@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { PropTypes } from 'prop-types';
+
 const axios = require('axios');
 
 export default function Like(props) {
@@ -58,3 +60,8 @@ export default function Like(props) {
     </>
   );
 }
+
+Like.propTypes = {
+  item: PropTypes.object,
+  viewerId: PropTypes.number,
+};

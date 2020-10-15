@@ -3,6 +3,8 @@ import Subtitle from './Subtitle';
 import Errors from './Errors';
 import Redirect from './Redirect';
 import GenreSelectFormat from './GenreSelectFormat';
+import { PropTypes } from 'prop-types';
+
 const axios = window.axios;
 
 function AddToBookshelf(props) {
@@ -108,7 +110,7 @@ export default class PostData extends GenreSelectFormat {
     } else {
       axios
         .post(path, params)
-        .then((response) => {
+        .then(() => {
           Redirect.home.call(this);
         })
         .catch((error) => {
@@ -162,3 +164,15 @@ export default class PostData extends GenreSelectFormat {
     }
   }
 }
+
+AddToBookshelf.propTypes = {
+  isChecked: PropTypes.bool,
+  book: PropTypes.object,
+  onChange: PropTypes.func,
+};
+
+Post.propTypes = {
+  message: PropTypes.string,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
+};

@@ -36,28 +36,28 @@ export default class Functions {
 
   /*
    *   @param ids [id, id, ...]
-   *   @param genresBooks {genreId: [book ,book, ....], genreId: [...]}
+   *   @param orderedBooks {genreId: [book ,book, ....], genreId: [...]}
    *
    *   @return newGenreBooks (after deleted)
    */
 
-  static unsetGenresBooks(ids, genresBooks) {
-    const newGenresBooks = new Object();
-    Object.keys(genresBooks).forEach((genreId) => {
-      let books = genresBooks[genreId];
+  static unsetOrderedBooks(ids, orderedBooks) {
+    const newOrderedBooks = new Object();
+    Object.keys(orderedBooks).forEach((genreId) => {
+      let books = orderedBooks[genreId];
       books = this.unsetBooks(ids, books);
 
       if (books.length) {
-        newGenresBooks[genreId] = books;
+        newOrderedBooks[genreId] = books;
       }
     });
 
     // もし空のオブジェクトなら、空の配列を返す。
     // Laravelから送られるとき、データがない場合は空の配列なので合わせる。
-    if (Object.keys(newGenresBooks).length === 0) {
+    if (Object.keys(newOrderedBooks).length === 0) {
       return [];
     }
 
-    return newGenresBooks;
+    return newOrderedBooks;
   }
 }

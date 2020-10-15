@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 
 export default function SubColumn(props) {
   const userUrl = props.userUrl;
@@ -45,3 +46,7 @@ export default function SubColumn(props) {
     </div>
   );
 }
+
+SubColumn.propTypes = {
+  userUrl: PropTypes.string,
+};

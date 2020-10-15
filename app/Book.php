@@ -163,21 +163,51 @@ class Book extends Model
         return $genres;
     }
 
-    public static function getGenresAndGenresBooks($books)
+    public static function getGenresAndOrderedBooks($books)
     {
         if ($books->isNotEmpty()) {
             $books = $books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
             $genres = Book::extractGenres($books);
-            $genres_books = $books->groupBy('genre_id');
-            // TODO: groupByで簡単にできないか？
+            $ordered_books = $books->groupBy('genre_id');
 
             /*
                 genres:                  [genre_id => genre_name, ...]
-                genres_books: [[genre_id => [book, book, ...]], ...]
+                ordered_books: [[genre_id => [book, book, ...]], ...]
             */
-            return [$genres, $genres_books];
+            return [$genres, $ordered_books];
         } else {
             return [[], []];
+        }
+    }
+
+    /**
+    *   @param $str_id: string
+    *   @return $params or null
+    */
+    public static function getBooksAndGenres(string $str_id)
+    {
+        $users = User::with(['books.genre'])->get();
+        $user = $users->where('str_id', $str_id)->first();      // select user
+
+        if ($user) {
+            $books = $user->books->where('isInBookshelf', true);    // 本棚に追加した本だけを抽出
+            $genres = Book::extractGenres($books);
+            $ordered_books = $books->groupBy('genre_id');
+            /*
+                genres:                  [genre_id => genre_name, ...]
+                orderedbooks: [[genre_id => [book, book, ...]], ...]
+            */
+            $params = [
+                // 'user' => $user,
+                'books' => $books,
+                'genres' => $genres,
+                'ordered_books' => $ordered_books,
+            ];
+    
+            return $params;
+        // ユーザーが見つからない場合はnullを返す
+        } else {
+            return null;
         }
     }
 

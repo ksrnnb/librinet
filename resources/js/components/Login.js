@@ -1,26 +1,36 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { SetStateContext } from './App';
+import { PropsContext } from './Pages';
 import Subtitle from './Subtitle';
 const axios = window.axios;
 
-export default function Login(props) {
+export default function Login() {
   const [strId, setStrId] = useState('');
   const [password, setPassword] = useState('');
+  const props = useContext(PropsContext);
+  const setState = useContext(SetStateContext);
+
+  function afterLogin(user) {
+    setState.params(user);
+    setState.isLogin(true);
+    props.history.push('/home');
+  }
 
   function guestLogin() {
     axios
       .get('/sanctum/csrf-cookie')
-      .then((response) => {
+      .then(() => {
         axios
           .post('/api/guest/login')
           .then((response) => {
-            console.log(response);
-            props.login(props.props);
+            const user = response.data;
+            afterLogin(user);
           })
           .catch((error) => {
             console.log(error);
           });
       })
-      .catch((error) => {
+      .catch(() => {
         alert('Error happened.');
       });
   }
@@ -28,21 +38,21 @@ export default function Login(props) {
   function normalUserLogin() {
     axios
       .get('/sanctum/csrf-cookie')
-      .then((response) => {
+      .then(() => {
         axios
           .post('/api/login', {
             strId: strId,
             password: password,
           })
           .then((response) => {
-            console.log(response);
-            props.login(props.props);
+            const user = response.data;
+            afterLogin(user);
           })
           .catch((error) => {
             console.log(error);
           });
       })
-      .catch((error) => {
+      .catch(() => {
         alert('Error happened.');
       });
   }

@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/user', 'Api\UserController@delete');
 
 
-    Route::post('/book/add/{isbn}', 'Api\BookController@create');
+    Route::post('/book/add', 'Api\BookController@create');
     Route::delete('/book', 'Api\BookController@delete');
     
     Route::get('/book/post/{isbn}', 'Api\PostController@add');

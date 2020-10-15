@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Subtitle from './Subtitle';
 import UserImageInput from './UserImageInput';
-import Redirect from './Redirect';
 import Errors from './Errors';
+import { PropTypes } from 'prop-types';
+import { DataContext, SetStateContext } from './App';
+import { PropsContext } from './Pages';
 
 const axios = window.axios;
 
@@ -36,7 +38,7 @@ function DeleteButton(props) {
   );
 }
 
-function SetPasswordButton(props) {
+function SetPasswordButton() {
   return (
     <div className="col-12">
       <button className="btn btn-outline-success">
@@ -78,34 +80,24 @@ function UserStrIdInput(props) {
   );
 }
 
-export default class EditUser extends React.Component {
-  constructor(props) {
-    super(props);
+export default function EditUser() {
+  const data = useContext(DataContext);
+  const props = useContext(PropsContext);
+  const setState = useContext(SetStateContext);
+  const user = data.params.user;
+  const params = data.params;
 
-    const user = props.params.user;
+  const [errors, setErrors] = useState([]);
+  const [name, setName] = useState(user.name);
+  const [strId, setStrId] = useState(user.str_id);
+  const [image, setImage] = useState(user.image ? user.image : null);
 
-    this.state = {
-      strId: user.str_id,
-      name: user.name,
-      image: user.image ? user.image : null,
-      errors: [],
-    };
-
-    this.onSubmitEdit = this.onSubmitEdit.bind(this);
-    this.onSubmitDelete = this.onSubmitDelete.bind(this);
-    this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeStrId = this.onChangeStrId.bind(this);
-    this.setStateImage = this.setStateImage.bind(this);
-    this.redirectUserProfile = this.redirectUserProfile.bind(this);
-  }
-
-  onSubmitEdit() {
+  function onSubmitEdit() {
     const path = '/api/user/edit';
 
-    const user = this.props.params.user;
-    user.name = this.state.name;
-    user.str_id = this.state.strId;
-    user.image = this.state.image;
+    user.name = name;
+    user.str_id = strId;
+    user.image = image;
 
     axios
       .post(path, {
@@ -113,104 +105,92 @@ export default class EditUser extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        this.props.setStateUser(user);
-        this.redirectUserProfile(user.str_id);
+        params.user = user;
+        setState.params(params);
+        redirectUserProfile(user.str_id);
       })
       .catch((error) => {
         const errors = Object.values(error.response.data.errors);
-        this.setState({
-          errors: errors,
-        });
+        setErrors(errors);
       });
   }
 
-  onSubmitDelete() {
+  function onSubmitDelete() {
     const path = '/api/user';
-
-    const user = this.props.params.user;
 
     axios
       .delete(path, {
         data: user,
       })
-      .then((response) => {
-        const user = {};
-        this.props.setStateUser(user);
-        this.redirectHome(user.str_id);
+      .then(() => {
+        params.user = {};
+        setState.params(params);
+        props.history.push('/home');
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  setStateImage(image) {
-    this.setState({
-      image: image,
-    });
+  function redirectUserProfile(strId) {
+    const path = '/user/profile/' + strId;
+    props.history.push(path);
   }
 
-  onChangeName(e) {
-    const name = e.target.value;
-    this.setState({
-      name: name,
-    });
-  }
-
-  onChangeStrId(e) {
-    const strId = e.target.value;
-    this.setState({
-      strId: strId,
-    });
-  }
-
-  redirectUserProfile(strId) {
-    Redirect.userProfile.call(this, strId);
-  }
-
-  redirectHome() {
-    Redirect.home.call(this);
-  }
-
-  render() {
-    const params = this.props.params;
-    const image = this.state.image ? this.state.image : params.user.image;
-
-    if (params != null) {
-      return (
+  if (params != null) {
+    return (
+      <div className="row">
+        <Subtitle subtitle="Edit Profile" />
         <div className="row">
-          <Subtitle subtitle="Edit Profile" />
-          <div className="row">
-            <div className="col-3">
-              <UserImageInput
-                image={image}
-                setStateImage={this.setStateImage}
-              />
-              {/* TODO: validation error */}
-            </div>
-
-            <div className="col-9">
-              <Errors errors={this.state.errors} />
-              <UserNameInput
-                name={this.state.name}
-                onChange={this.onChangeName}
-              />
-              <UserStrIdInput
-                strId={this.state.strId}
-                onChange={this.onChangeStrId}
-              />
-            </div>
+          <div className="col-3">
+            <UserImageInput image={image} setImage={setImage} />
+            {/* TODO: validation error */}
           </div>
-          <div className="row">
-            <EditButton onClick={this.onSubmitEdit} />
-            <CancelButton onClick={this.redirectUserProfile} />
-            {/* TODO: メールは？ */}
-            <SetPasswordButton />
-            <DeleteButton onClick={this.onSubmitDelete} />
+
+          <div className="col-9">
+            <Errors errors={errors} />
+            <UserNameInput
+              name={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <UserStrIdInput
+              strId={strId}
+              onChange={(e) => setStrId(e.target.value)}
+            />
           </div>
         </div>
-      );
-    } else {
-      return <></>;
-    }
+        <div className="row">
+          <EditButton onClick={onSubmitEdit} />
+          <CancelButton onClick={redirectUserProfile} />
+          {/* TODO: メールは？ */}
+          <SetPasswordButton />
+          <DeleteButton onClick={onSubmitDelete} />
+        </div>
+      </div>
+    );
+  } else {
+    return <></>;
   }
 }
+
+CancelButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+DeleteButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+EditButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+UserNameInput.propTypes = {
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+UserStrIdInput.propTypes = {
+  strId: PropTypes.string,
+  onChange: PropTypes.func,
+};

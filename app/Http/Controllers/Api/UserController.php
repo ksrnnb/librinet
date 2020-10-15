@@ -19,12 +19,11 @@ class UserController extends Controller
         $user = Auth::user();
         if ($user) {
             $params = User::getParamsForApp($user->str_id);
-            return response()->json($params);
         } else {
-            // ログインしていない場合でも、
-            // 特定のページに行かなければ問題はないので200番にした
-            return response('Not Authenticated.', 200);
+            $params = User::getExampleUsers();
         }
+        
+        return response($params);
     }
 
     /**
@@ -62,7 +61,7 @@ class UserController extends Controller
         $params = extract_user_params($params);
 
         if (array_key_exists('image', $params)) {
-            // helper / s3にアップロードして、urlを返す。
+            // helper s3にアップロードして、urlを返す。
             $params['image'] = upload_image_s3($params['image']);
         }
 

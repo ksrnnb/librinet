@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 
 function closeNav() {
   const button = document.getElementsByClassName('navbar-toggler')[0];
@@ -10,7 +11,7 @@ function closeNav() {
   navbarDiv.classList.remove('show');
 }
 
-function Header(props) {
+export default function Header(props) {
   let profileAndLogoutLink = null;
   if (props.userUrl) {
     profileAndLogoutLink = (
@@ -71,7 +72,7 @@ function Header(props) {
     <header>
       <nav className="navbar fixed-top bg-success">
         <a className="navbar-brand" href="/home">
-          {props.app}
+          {document.title}
         </a>
         {hamburger}
       </nav>
@@ -79,4 +80,6 @@ function Header(props) {
   );
 }
 
-export default Header;
+Header.propTypes = {
+  userUrl: PropTypes.string,
+};

@@ -1,5 +1,6 @@
 import React from 'react';
 import Like from './Like';
+import { PropTypes } from 'prop-types';
 
 function BookCover(props) {
   const book = props.book;
@@ -71,9 +72,6 @@ function DeleteButton(props) {
   const item = props.item;
   const viewerId = props.viewerId;
   const isPost = 'comments' in props.item;
-  const deleteUrl = isPost
-    ? '/api/post/remove/' + item.uuid
-    : '/api/comment/remove/' + item.uuid;
 
   let button = null;
   if (item.user_id == viewerId) {
@@ -126,3 +124,15 @@ export default function Feed(props) {
     </div>
   );
 }
+
+Feed.propTypes = {
+  item: PropTypes.object,
+  viewerId: PropTypes.number,
+  onClickDelete: PropTypes.func,
+};
+
+UserAndMessage.propTypes = {
+  user: PropTypes.object,
+  message: PropTypes.string,
+  children: PropTypes.array,
+};

@@ -1,12 +1,17 @@
 import React, { useContext } from 'react';
 import Subtitle from './Subtitle';
 import Feed from './Feed';
-import { DataContext } from './App';
+import { DataContext, SetStateContext } from './App';
 import { PropTypes } from 'prop-types';
+import { PropsContext } from './Pages';
 
 const axios = window.axios;
 
 function Post(props) {
+  const params = useContext(DataContext).params;
+  const setState = useContext(SetStateContext);
+  const pages_props = useContext(PropsContext);
+
   function onClickDelete(e) {
     const uuid = e.target.dataset.uuid;
     // 文字列の'false'はtrueになってしまうので以下のように判定
@@ -20,13 +25,9 @@ function Post(props) {
         data: { uuid: uuid },
       })
       .then((response) => {
-        const posts = response.data;
-        const params = this.state.params;
-        params.posts = posts;
-
-        this.setState({
-          params: params,
-        });
+        params.following_posts = response.data;
+        setState.params(params);
+        pages_props.history.push('/home'); // ページ遷移を伴わないと更新されない
       })
       .catch((error) => {
         console.log(error);

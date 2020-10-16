@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/book/add', 'Api\BookController@create');
     Route::delete('/book', 'Api\BookController@delete');
     
-    Route::get('/book/post/{isbn}', 'Api\PostController@add');
+    // Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');
     Route::delete('/post', 'Api\PostController@delete');
     

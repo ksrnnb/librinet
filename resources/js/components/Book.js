@@ -83,7 +83,6 @@ function Button(props) {
 export default function Book() {
   const [input, setInput] = useState(null);
   const [book, setBook] = useState(null);
-  const [isInBookshelf, setIsInBookshelf] = useState(null);
   const [errors, setErrors] = useState(null);
 
   // TODO エンターを押しても送信できるようにしたい
@@ -106,23 +105,22 @@ export default function Book() {
           isbn: input,
         })
         .then((response) => {
-          const params = response.data;
-          setBook(params.book);
-          setIsInBookshelf(params.isInBookshelf);
+          const book = response.data;
+          setBook(book);
           setErrors(null);
         })
         .catch((error) => {
           // 本が見つからない場合は404に設定した (BookController)
           if (error.response.status == 404) {
-            setErrors('NotFound');
+            setErrors(['NotFound']);
           } else {
             // サーバー側のvalidationに引っ掛かった場合など。
             // JavaScript側のvalidationで十分だと思うけど一応。
-            setErrors('UnknownError');
+            setErrors(['UnknownError']);
           }
         });
     } else {
-      setErrors('InputError');
+      setErrors(['InputError']);
     }
   }
 
@@ -131,11 +129,8 @@ export default function Book() {
 
     let isbn = input.replace(/-/g, '');
     isbn = isbn.match(/^9784[0-9]{9}$/);
-    if (isbn != null) {
-      return isbn;
-    } else {
-      return false;
-    }
+
+    return isbn || false;
   }
 
   return (
@@ -147,7 +142,7 @@ export default function Book() {
         <UserInput onChange={(e) => setInput(e.target.value)} />
         <Button onClick={sendPost} />
       </label>
-      {book && <SearchedBook book={book} isInBookshelf={isInBookshelf} />}
+      {book && <SearchedBook book={book} />}
       <Example />
     </div>
   );

@@ -4,6 +4,12 @@
   }
 }
 
+.hover {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .one-row {
   white-space: nowrap;
   overflow: hidden;

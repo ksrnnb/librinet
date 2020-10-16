@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Genre;
+use App\User;
 
 class GenreController extends Controller
 {
     public function edit(Request $request)
     {
-        if (Auth::id() == $request->input('userId')) {
+        $user = Auth::user();
+
+        if ($user->id == $request->input('userId')) {
             $genres = $request->input('newGenres');
 
             $is_empty = (! $genres) || array_search(null, $genres);
@@ -28,8 +31,10 @@ class GenreController extends Controller
                 $query = ['name' => $name];
                 $genre->fill($query)->save();
             }
-            
-            return response('updated', 200);
+
+            $user = User::getParamsForApp($user->str_id);
+
+            return response()->json($user);
         } else {
             // 認証されているIDと編集しようとしているIDが違う場合
             return bad_request();

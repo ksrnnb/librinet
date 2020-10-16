@@ -205,7 +205,6 @@ export default function UserProfile() {
         viewerId: user.id,
       })
       .then((response) => {
-        console.log(response);
         showingUser.followers = response.data;
         setShowingUser(showingUser);
 
@@ -271,8 +270,7 @@ export default function UserProfile() {
         <Bookshelf
           user={showingUser}
           genres={showingUser.genres}
-          ordered_books={showingUser.ordered_books}
-          props={props}
+          orderedBooks={showingUser.ordered_books}
         />
       </>
     );
@@ -289,7 +287,7 @@ FollowNumber.propTypes = {
 
 EditBookshelfButton.propTypes = {
   user: PropTypes.object,
-  books: PropTypes.array,
+  books: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   viewerUser: PropTypes.object,
   redirectToDeleteBook: PropTypes.func,
   redirectToEditGenre: PropTypes.func,

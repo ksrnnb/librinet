@@ -1,20 +1,43 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Like from './Like';
 import { PropTypes } from 'prop-types';
+import { PropsContext } from './Pages';
+import { DataContext } from './App';
 
 function BookCover(props) {
   const book = props.book;
+  const pages_props = useContext(PropsContext);
+  const data = useContext(DataContext);
+
+  function linkToBookProfile() {
+    const isbn = book.isbn;
+    const user = data.params.user;
+    // PostしたユーザーのisInBookshelfを、閲覧しているユーザーが持っているかどうかで上書きする。
+    const isbnMatchedBook = user.books.filter((book) => book.isbn === isbn);
+    const hasBook = isbnMatchedBook.filter((book) => book.isInBookshelf).length;
+
+    book.isInBookshelf = hasBook;
+
+    const path = '/book/profile/' + book.isbn;
+    pages_props.history.push({
+      pathname: path,
+      state: book,
+    });
+  }
+
   let cover = null;
   if (book) {
-    const bookUrl = '/book/profile/' + book.isbn;
     const coverUrl = book.cover || '/img/book.svg';
 
     cover = (
       <div className="col-3">
         <figure className="mx-2 px-0 mb-0 book">
-          <a href={bookUrl}>
-            <img className="img-fluid" src={coverUrl} alt="book_image" />
-          </a>
+          <img
+            className="img-fluid hover"
+            src={coverUrl}
+            alt="book_image"
+            onClick={linkToBookProfile}
+          />
         </figure>
       </div>
     );
@@ -51,21 +74,29 @@ function UserAndMessage(props) {
 }
 
 function CommentButton(props) {
-  const isPost = 'comments' in props.item;
+  const pages_props = useContext(PropsContext);
+  const commentUrl = '/comment/' + props.item.uuid;
 
-  let button = null;
-  if (isPost) {
-    const postUrl = '/comment/' + props.item.uuid;
-    button = (
-      <a href={postUrl}>
-        <button type="button" className="btn btn-outline-info">
-          Comment
-        </button>
-      </a>
-    );
+  function linkToComment() {
+    pages_props.history.push({
+      pathname: commentUrl,
+      state: props.item,
+    });
   }
 
-  return button;
+  const button = (
+    <button
+      type="button"
+      className="btn btn-outline-info"
+      onClick={linkToComment}
+    >
+      Comment
+    </button>
+  );
+
+  const isPost = 'comments' in props.item;
+
+  return isPost ? button : null;
 }
 
 function DeleteButton(props) {

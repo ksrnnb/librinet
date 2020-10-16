@@ -85700,55 +85700,63 @@ function AddBook() {
       book = _useState4[0],
       setBook = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
       _useState6 = _slicedToArray(_useState5, 2),
-      genres = _useState6[0],
-      setGenres = _useState6[1];
+      isChecked = _useState6[0],
+      setIsChecked = _useState6[1];
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
       _useState8 = _slicedToArray(_useState7, 2),
-      isChecked = _useState8[0],
-      setIsChecked = _useState8[1];
+      isNewGenre = _useState8[0],
+      setIsNewGenre = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState10 = _slicedToArray(_useState9, 2),
-      isNewGenre = _useState10[0],
-      setIsNewGenre = _useState10[1];
+      newGenre = _useState10[0],
+      setNewGenre = _useState10[1];
 
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState12 = _slicedToArray(_useState11, 2),
-      newGenre = _useState12[0],
-      setNewGenre = _useState12[1];
-
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
-      _useState14 = _slicedToArray(_useState13, 2),
-      convGenre = _useState14[0],
-      setConvGenre = _useState14[1];
+      convGenre = _useState12[0],
+      setConvGenre = _useState12[1];
 
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]);
   var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+  var genres = data.params.user.genres;
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(setup, []);
+
+  function setup() {
     var isbn = props.match.params.isbn;
-    getBookData(isbn);
-  }, []);
+    var book = props.location.state;
+    setInitialConvGenre();
+    book ? setData(book) : getBookData();
 
-  function getBookData(isbn) {
-    //TODO: 本棚に追加済みの場合の処理
-    var path = '/api/book/post/' + isbn;
-    axios.get(path).then(function (response) {
-      setData(response.data);
-    })["catch"](function () {
-      props.history.push('/login');
-    });
-  }
+    function setInitialConvGenre() {
+      var keys = Object.keys(genres);
+      var hasGenres = keys.length;
 
-  function setData(params) {
-    var isChecked = !params.book.isInBookshelf;
-    setBook(params.book);
-    setGenres(params.genres);
-    setIsChecked(isChecked);
-    setInitialConvGenre(params.genres);
+      if (hasGenres) {
+        var iniValue = keys[0];
+        setConvGenre(iniValue);
+      }
+    }
+
+    function setData(book) {
+      var isChecked = !book.isInBookshelf;
+      setBook(book);
+      setIsChecked(isChecked);
+    }
+
+    function getBookData() {
+      //TODO: 本棚に追加済みの場合の処理
+      axios.post('/api/book', {
+        isbn: isbn
+      }).then(function (response) {
+        var book = response.data;
+        setData(book);
+      });
+    }
   }
 
   function getParams() {
@@ -85820,16 +85828,6 @@ function AddBook() {
     setIsNewGenre(!isNewGenre);
   }
 
-  function setInitialConvGenre(genres) {
-    var keys = Object.keys(genres);
-    var hasGenres = keys.length;
-
-    if (hasGenres) {
-      var iniValue = keys[0];
-      setConvGenre(iniValue);
-    }
-  }
-
   if (book && genres) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
       subtitle: "\u672C\u68DA\u306B\u8FFD\u52A0"
@@ -85853,7 +85851,7 @@ function AddBook() {
         return setConvGenre(e.target.value);
       },
       onChangeRadioButton: onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
       book: book
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       className: "btn btn-outline-success",
@@ -86097,13 +86095,8 @@ function Book() {
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState6 = _slicedToArray(_useState5, 2),
-      isInBookshelf = _useState6[0],
-      setIsInBookshelf = _useState6[1];
-
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      errors = _useState8[0],
-      setErrors = _useState8[1]; // TODO エンターを押しても送信できるようにしたい
+      errors = _useState6[0],
+      setErrors = _useState6[1]; // TODO エンターを押しても送信できるようにしたい
   // pressEnter(e) {
   //     const keyCode = e.charCode;
   //     console.log(e);
@@ -86121,22 +86114,21 @@ function Book() {
       axios.post('/api/book', {
         isbn: input
       }).then(function (response) {
-        var params = response.data;
-        setBook(params.book);
-        setIsInBookshelf(params.isInBookshelf);
+        var book = response.data;
+        setBook(book);
         setErrors(null);
       })["catch"](function (error) {
         // 本が見つからない場合は404に設定した (BookController)
         if (error.response.status == 404) {
-          setErrors('NotFound');
+          setErrors(['NotFound']);
         } else {
           // サーバー側のvalidationに引っ掛かった場合など。
           // JavaScript側のvalidationで十分だと思うけど一応。
-          setErrors('UnknownError');
+          setErrors(['UnknownError']);
         }
       });
     } else {
-      setErrors('InputError');
+      setErrors(['InputError']);
     }
   }
 
@@ -86144,12 +86136,7 @@ function Book() {
     if (input == null) return false;
     var isbn = input.replace(/-/g, '');
     isbn = isbn.match(/^9784[0-9]{9}$/);
-
-    if (isbn != null) {
-      return isbn;
-    } else {
-      return false;
-    }
+    return isbn || false;
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -86165,8 +86152,7 @@ function Book() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
     onClick: sendPost
   })), book && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchedBook__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    book: book,
-    isInBookshelf: isInBookshelf
+    book: book
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Example, null));
 } // === validation ===
 
@@ -86345,24 +86331,19 @@ function BookProfile() {
       book = _useState2[0],
       setBook = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
-      _useState4 = _slicedToArray(_useState3, 2),
-      isInBookshelf = _useState4[0],
-      setIsInBookshelf = _useState4[1];
-
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(loadBooks, []);
-  var path = '/api/book';
 
   function loadBooks() {
-    axios.post(path, {
-      isbn: isbn
-    }).then(function (response) {
-      var data = response.data;
-      setBook(data.book);
-      setIsInBookshelf(data.isInBookshelf);
-    })["catch"](function (error) {
-      console.log(error);
-    });
+    var book = props.location.state;
+    book ? setBook(book) : getBookData();
+
+    function getBookData() {
+      axios.post('/api/book', {
+        isbn: isbn
+      }).then(function (response) {
+        setBook(response.data);
+      });
+    }
   }
 
   if (book) {
@@ -86371,8 +86352,7 @@ function BookProfile() {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_2__["default"], {
       subtitle: "\u672C\u306E\u60C5\u5831"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchedBook__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      book: book,
-      isInBookshelf: isInBookshelf
+      book: book
     }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
@@ -86395,34 +86375,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+
 
 
 function BooksElement(props) {
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_2__["PropsContext"]);
+
+  function linkToBookProfile(book, url) {
+    pages_props.history.push({
+      pathname: url,
+      state: book
+    });
+  }
+
   var books = props.books;
   var booksElement = books.map(function (book) {
     var url = '/book/profile/' + book.isbn;
-    var img = null;
-
-    if (book.cover) {
-      img = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        className: "img-fluid w-100",
-        src: book.cover,
-        alt: "book-cover"
-      });
-    } else {
-      img = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        className: "img-fluid w-100",
-        src: "img/book.svg",
-        alt: "book-cover"
-      });
-    }
-
+    var src = book.cover || 'img/book.svg';
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-3",
       key: book.isbn
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-      href: url
-    }, img));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: "img-fluid w-100 hover",
+      src: src,
+      alt: "book-cover",
+      onClick: function onClick() {
+        return linkToBookProfile(book, url);
+      }
+    }));
   });
   return booksElement;
 }
@@ -86470,7 +86451,7 @@ function Message(props) {
 }
 
 function NoBook(props) {
-  var hasNoBook = props.ordered_books.length === 0;
+  var hasNoBook = props.orderedBooks.length === 0;
 
   if (hasNoBook) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -86490,10 +86471,10 @@ function NoBook(props) {
 
 function Books(props) {
   var genres = props.genres;
-  var ordered_books = props.ordered_books;
-  var books = Object.keys(ordered_books).map(function (genreId) {
+  var orderedBooks = props.orderedBooks;
+  var books = Object.keys(orderedBooks).map(function (genreId) {
     var genre;
-    var books = ordered_books[genreId];
+    var books = orderedBooks[genreId];
     var willEdit = props.willEdit;
 
     if (willEdit) {
@@ -86523,23 +86504,24 @@ function Books(props) {
 
 function Bookshelf(props) {
   var genres = props.genres;
-  var ordered_books = props.ordered_books;
+  var orderedBooks = props.orderedBooks;
   var willEdit = props.willEdit ? props.willEdit : false;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "mt-5 mb-0",
     key: "bookshelf"
   }, "\u672C\u68DA"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NoBook, {
     user: props.user,
-    ordered_books: ordered_books
+    orderedBooks: orderedBooks
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Books, {
     genres: genres,
-    ordered_books: ordered_books,
+    orderedBooks: orderedBooks,
     willEdit: willEdit
   }));
 }
 Bookshelf.propTypes = {
-  genres: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
-  ordered_books: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
+  genres: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array // 本が空の場合はarray
+  ]),
+  orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array]),
   willEdit: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
   user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object
 };
@@ -86668,34 +86650,34 @@ function Comment() {
       item = _useState4[0],
       setItem = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState6 = _slicedToArray(_useState5, 2),
-      isPost = _useState6[0],
-      setIsPost = _useState6[1]; // TODO: false ??
+      isRecommended = _useState6[0],
+      setIsRecommended = _useState6[1];
 
-
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState8 = _slicedToArray(_useState7, 2),
-      isRecommended = _useState8[0],
-      setIsRecommended = _useState8[1];
-
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
-      _useState10 = _slicedToArray(_useState9, 2),
-      message = _useState10[0],
-      setMessage = _useState10[1];
+      message = _useState8[0],
+      setMessage = _useState8[1];
 
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
   var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]).params;
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    var path = '/api/comment/' + props.match.params.uuid;
-    axios.get(path).then(function (response) {
-      var data = response.data;
-      setItem(data.item);
-      setIsPost(data.is_post);
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(setup, []);
+
+  function setup() {
+    var item = props.location.state;
+    item ? setItem(item) : getComment();
+
+    function getComment() {
+      var path = '/api/comment/' + props.match.params.uuid;
+      axios.get(path).then(function (response) {
+        var data = response.data;
+        setItem(data.item);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }
 
   function onChangeRecommend() {
     var newIsRecommended = !isRecommended;
@@ -86711,7 +86693,6 @@ function Comment() {
     var userId = params.user.id;
     var paramsForPost = {
       book_id: bookId,
-      is_post: isPost,
       post_id: item.id,
       message: message,
       user_id: userId
@@ -86723,7 +86704,7 @@ function Comment() {
       console.log('Message is Empty!');
     } else {
       axios.post(path, paramsForPost).then(function (response) {
-        console.log(response.data);
+        console.log(response.data); // TODO: 実装
       })["catch"](function (error) {
         console.log(error);
       });
@@ -86947,6 +86928,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -86965,6 +86947,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
+
 var axios = window.axios;
 
 function EditButton(props) {
@@ -86976,6 +86959,8 @@ function EditButton(props) {
 
 function EditGenre() {
   var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]).params;
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
 
   function onSubmitNewGenres() {
     var newGenres = getNewGenresFromInputs();
@@ -86984,7 +86969,10 @@ function EditGenre() {
     axios.post(path, {
       userId: userId,
       newGenres: newGenres
-    }).then(function () {// console.log(response);
+    }).then(function (response) {
+      setState.params(response.data);
+      var path = '/user/profile/' + params.user.str_id;
+      props.history.push(path);
     })["catch"](function (error) {
       console.log(error);
     });
@@ -87007,8 +86995,8 @@ function EditGenre() {
     user: params.user
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
     user: params.user,
-    genres_books: params.genres_books,
-    genres: params.genres,
+    orderedBooks: params.user.ordered_books,
+    genres: params.user.genres,
     willEdit: true
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
     onClick: onSubmitNewGenres
@@ -87157,8 +87145,7 @@ function EditUser() {
     user.image = image;
     axios.post(path, {
       user: user
-    }).then(function (response) {
-      console.log(response);
+    }).then(function () {
       params.user = user;
       setState.params(params);
       redirectUserProfile(user.str_id);
@@ -87291,28 +87278,51 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Like__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Like */ "./resources/js/components/Like.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+
+
 
 
 
 
 function BookCover(props) {
   var book = props.book;
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_3__["PropsContext"]);
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_4__["DataContext"]);
+
+  function linkToBookProfile() {
+    var isbn = book.isbn;
+    var user = data.params.user; // PostしたユーザーのisInBookshelfを、閲覧しているユーザーが持っているかどうかで上書きする。
+
+    var isbnMatchedBook = user.books.filter(function (book) {
+      return book.isbn === isbn;
+    });
+    var hasBook = isbnMatchedBook.filter(function (book) {
+      return book.isInBookshelf;
+    }).length;
+    book.isInBookshelf = hasBook;
+    var path = '/book/profile/' + book.isbn;
+    pages_props.history.push({
+      pathname: path,
+      state: book
+    });
+  }
+
   var cover = null;
 
   if (book) {
-    var bookUrl = '/book/profile/' + book.isbn;
     var coverUrl = book.cover || '/img/book.svg';
     cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-3"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("figure", {
       className: "mx-2 px-0 mb-0 book"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-      href: bookUrl
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
+      className: "img-fluid hover",
       src: coverUrl,
-      alt: "book_image"
-    }))));
+      alt: "book_image",
+      onClick: linkToBookProfile
+    })));
   } else {
     cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-3"
@@ -87351,20 +87361,23 @@ function UserAndMessage(props) {
 }
 
 function CommentButton(props) {
-  var isPost = ('comments' in props.item);
-  var button = null;
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_3__["PropsContext"]);
+  var commentUrl = '/comment/' + props.item.uuid;
 
-  if (isPost) {
-    var postUrl = '/comment/' + props.item.uuid;
-    button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-      href: postUrl
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      type: "button",
-      className: "btn btn-outline-info"
-    }, "Comment"));
+  function linkToComment() {
+    pages_props.history.push({
+      pathname: commentUrl,
+      state: props.item
+    });
   }
 
-  return button;
+  var button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-outline-info",
+    onClick: linkToComment
+  }, "Comment");
+  var isPost = ('comments' in props.item);
+  return isPost ? button : null;
 }
 
 function DeleteButton(props) {
@@ -87600,260 +87613,6 @@ var Functions = /*#__PURE__*/function () {
 }();
 
 
-
-/***/ }),
-
-/***/ "./resources/js/components/GenreSelectFormat.js":
-/*!******************************************************!*\
-  !*** ./resources/js/components/GenreSelectFormat.js ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GenreSelectFormat; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
-/* harmony import */ var _Genres__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Genres */ "./resources/js/components/Genres.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-
-
-var axios = window.axios;
-
-function Book(props) {
-  var book = props.book;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "mt-4"
-  }, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    book: book
-  }));
-}
-
-var GenreSelectFormat = /*#__PURE__*/function (_React$Component) {
-  _inherits(GenreSelectFormat, _React$Component);
-
-  var _super = _createSuper(GenreSelectFormat);
-
-  function GenreSelectFormat(props) {
-    var _this;
-
-    _classCallCheck(this, GenreSelectFormat);
-
-    _this = _super.call(this, props);
-    _this.state = {
-      book: null,
-      genres: null,
-      isChecked: true,
-      isNewGenre: true,
-      message: '',
-      newGenre: '',
-      convGenre: '',
-      errors: []
-    };
-    _this.getParams = _this.getParams.bind(_assertThisInitialized(_this));
-    _this.onClickConvGenre = _this.onClickConvGenre.bind(_assertThisInitialized(_this));
-    _this.onClickNewGenre = _this.onClickNewGenre.bind(_assertThisInitialized(_this));
-    _this.onChangeConvGenre = _this.onChangeConvGenre.bind(_assertThisInitialized(_this));
-    _this.onChangeNewGenre = _this.onChangeNewGenre.bind(_assertThisInitialized(_this));
-    _this.onChangeMessage = _this.onChangeMessage.bind(_assertThisInitialized(_this));
-    _this.onChangeRadioButton = _this.onChangeRadioButton.bind(_assertThisInitialized(_this));
-    _this.setBook = _this.setBook.bind(_assertThisInitialized(_this));
-    _this.setInitialConvGenre = _this.setInitialConvGenre.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(GenreSelectFormat, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      // const params = this.props.props.location.state;
-      // console.log(params);
-      // if (params) {
-      //   this.setBook(params);
-      // } else {
-      // 上の書き方だと、投稿後に更新ボタンを押したとき、投稿したことが反映されない
-      var isbn = this.props.props.match.params.isbn;
-      this.getBookData(isbn);
-    }
-  }, {
-    key: "getBookData",
-    value: function getBookData(isbn) {
-      var _this2 = this;
-
-      var path = '/api/book/post/' + isbn;
-      axios.get(path).then(function (response) {
-        _this2.setBook(response.data);
-      })["catch"](function () {
-        _this2.props.props.history.push('/login');
-      });
-    }
-  }, {
-    key: "getParams",
-    value: function getParams() {
-      var book = this.state.book;
-      var params = {
-        isbn: book.isbn,
-        title: book.title,
-        author: book.author,
-        publisher: book.publisher,
-        pubdate: book.pubdate,
-        cover: book.cover,
-        message: this.state.message,
-        add_to_bookshelf: this.state.isChecked,
-        is_new_genre: this.state.isNewGenre,
-        new_genre: this.state.newGenre,
-        genre_id: this.state.convGenre
-      };
-      return params;
-    }
-  }, {
-    key: "onClickConvGenre",
-    value: function onClickConvGenre() {
-      this.setState({
-        isNewGenre: false,
-        newGenre: ''
-      });
-    }
-  }, {
-    key: "onClickNewGenre",
-    value: function onClickNewGenre() {
-      this.setState({
-        isNewGenre: true
-      });
-    }
-  }, {
-    key: "onChangeConvGenre",
-    value: function onChangeConvGenre(e) {
-      var genreId = e.target.value;
-      this.setState({
-        convGenre: genreId
-      });
-    }
-  }, {
-    key: "onChangeNewGenre",
-    value: function onChangeNewGenre(e) {
-      var newGenre = e.target.value;
-      this.setState({
-        newGenre: newGenre
-      });
-    }
-  }, {
-    key: "onChangeMessage",
-    value: function onChangeMessage(e) {
-      var message = e.target.value;
-      this.setState({
-        message: message
-      });
-    }
-  }, {
-    key: "onChangeRadioButton",
-    value: function onChangeRadioButton() {
-      var isNewGenre = !this.state.isNewGenre;
-      var newGenre = this.state.newGenre;
-
-      if (!isNewGenre) {
-        newGenre = '';
-      }
-
-      this.setState({
-        isNewGenre: isNewGenre,
-        newGenre: newGenre
-      });
-    }
-  }, {
-    key: "setBook",
-    value: function setBook(params) {
-      var isChecked = !params.book.isInBookshelf;
-      this.setState({
-        book: params.book,
-        genres: params.genres,
-        isChecked: isChecked
-      });
-      this.setInitialConvGenre(params.genres);
-    }
-  }, {
-    key: "setInitialConvGenre",
-    value: function setInitialConvGenre(genres) {
-      var keys = Object.keys(genres);
-      var hasGenres = keys.length;
-
-      if (hasGenres) {
-        var iniValue = keys[0];
-        this.setState({
-          convGenre: iniValue
-        });
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var book = this.state.book;
-      var genres = this.state.genres;
-      var convGenre = this.state.convGenre;
-      var newGenre = this.state.newGenre;
-      var isChecked = this.state.isChecked;
-      var isNewGenre = this.state.isNewGenre;
-
-      if (book) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Genres__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          book: book,
-          isChecked: isChecked,
-          isNewGenre: isNewGenre,
-          genres: genres,
-          newGenre: newGenre,
-          convGenre: convGenre,
-          onChangeNewGenre: this.onChangeNewGenre,
-          onClickNewGenre: this.onClickNewGenre,
-          onClickConvGenre: this.onClickConvGenre,
-          onChangeConvGenre: this.onChangeConvGenre,
-          onChangeRadioButton: this.onChangeRadioButton
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Book, {
-          book: book
-        }));
-      } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-          className: "\u7121\u52B9\u306A\u30EA\u30AF\u30A8\u30B9\u30C8\u3067\u3059"
-        });
-      }
-    }
-  }]);
-
-  return GenreSelectFormat;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-
-Book.propTypes = {
-  book: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object
-};
-GenreSelectFormat.propTypes = {
-  props: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object
-};
 
 /***/ }),
 
@@ -88108,6 +87867,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+
 
 
 
@@ -88116,9 +87877,11 @@ __webpack_require__.r(__webpack_exports__);
 var axios = window.axios;
 
 function Post(props) {
-  function onClickDelete(e) {
-    var _this = this;
+  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]).params;
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
 
+  function onClickDelete(e) {
     var uuid = e.target.dataset.uuid; // 文字列の'false'はtrueになってしまうので以下のように判定
 
     var isPost = e.target.dataset.ispost === 'true' ? true : false;
@@ -88129,13 +87892,9 @@ function Post(props) {
         uuid: uuid
       }
     }).then(function (response) {
-      var posts = response.data;
-      var params = _this.state.params;
-      params.posts = posts;
-
-      _this.setState({
-        params: params
-      });
+      params.following_posts = response.data;
+      setState.params(params);
+      pages_props.history.push('/home'); // ページ遷移を伴わないと更新されない
     })["catch"](function (error) {
       console.log(error);
     });
@@ -88163,7 +87922,7 @@ function Comments(props) {
 
 function PostWithComments(props) {
   function onClickDelete(e) {
-    var _this2 = this;
+    var _this = this;
 
     var uuid = e.target.dataset.uuid;
     var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]); // 文字列の'false'はtrueになってしまうので以下のように判定
@@ -88180,7 +87939,7 @@ function PostWithComments(props) {
       var params = data.params;
       params.following_posts = following_posts;
 
-      _this2.setState({
+      _this.setState({
         params: params
       });
     })["catch"](function (error) {
@@ -88317,22 +88076,16 @@ function Like(props) {
   // 未いいねの場合はundefined
 
 
-  function sendPostRequest(uuid) {
-    axios.post('/api/like', {
-      uuid: uuid
-    }).then(function (response) {
-      console.log(response);
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  }
-
-  function handleLike(e) {
-    var uuid = e.target.dataset.uuid;
+  function sendLikeRequest(uuid) {
+    // さきに値を変える
     var delta = isLiked ? -1 : +1;
-    sendPostRequest(uuid);
     setIsLiked(!isLiked);
     setCount(count + delta);
+    axios.post('/api/like', {
+      uuid: uuid
+    }).then(function () {})["catch"](function (error) {
+      console.log(error);
+    });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -88340,7 +88093,9 @@ function Like(props) {
     className: isLiked ? 'likes btn btn-info' : 'likes btn btn-outline-info',
     "data-uuid": item.uuid,
     "data-isliked": isLiked ? '1' : '0',
-    onClick: handleLike
+    onClick: function onClick(e) {
+      return sendLikeRequest(e.target.dataset.uuid);
+    }
   }, "\u3044\u3044\u306D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "d-inline count",
     "data-count": count
@@ -88589,35 +88344,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
-/* harmony import */ var _Redirect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Redirect */ "./resources/js/components/Redirect.js");
-/* harmony import */ var _GenreSelectFormat__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GenreSelectFormat */ "./resources/js/components/GenreSelectFormat.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_5__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Genres__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Genres */ "./resources/js/components/Genres.js");
+/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
@@ -88678,179 +88423,207 @@ function Post(props) {
   }, "\u6295\u7A3F\u3059\u308B"));
 }
 
-var PostData = /*#__PURE__*/function (_GenreSelectFormat) {
-  _inherits(PostData, _GenreSelectFormat);
+function PostData() {
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
 
-  var _super = _createSuper(PostData);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      book = _useState2[0],
+      setBook = _useState2[1];
 
-  function PostData(props) {
-    var _this;
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isChecked = _useState4[0],
+      setIsChecked = _useState4[1];
 
-    _classCallCheck(this, PostData);
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isNewGenre = _useState6[0],
+      setIsNewGenre = _useState6[1];
 
-    _this = _super.call(this, props);
-    _this.checkedAddToBookshelf = _this.checkedAddToBookshelf.bind(_assertThisInitialized(_this));
-    _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
-    _this.validation = _this.validation.bind(_assertThisInitialized(_this));
-    return _this;
-  }
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState8 = _slicedToArray(_useState7, 2),
+      newGenre = _useState8[0],
+      setNewGenre = _useState8[1];
 
-  _createClass(PostData, [{
-    key: "checkedAddToBookshelf",
-    value: function checkedAddToBookshelf() {
-      var isChecked = !this.state.isChecked;
-      this.setState({
-        isChecked: isChecked,
-        newGenre: ''
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      errors = _useState10[0],
+      setErrors = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState12 = _slicedToArray(_useState11, 2),
+      convGenre = _useState12[0],
+      setConvGenre = _useState12[1];
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState14 = _slicedToArray(_useState13, 2),
+      message = _useState14[0],
+      setMessage = _useState14[1];
+
+  var genres = data.params.user.genres;
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(setup, []);
+
+  function setup() {
+    var isbn = props.match.params.isbn;
+    var book = props.location.state;
+    setInitialConvGenre();
+    book ? setData(book) : getBookData();
+
+    function getBookData() {
+      //TODO: 本棚に追加済みの場合の処理
+      axios.post('/api/book', {
+        isbn: isbn
+      }).then(function (response) {
+        var book = response.data;
+        setData(book);
       });
     }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      // const params = this.props.props.location.state;
-      // console.log(params);
-      // if (params) {
-      //   this.setBook(params);
-      // } else {
-      // 上の書き方だと、投稿後に更新ボタンを押したとき、投稿したことが反映されない
-      var isbn = this.props.props.match.params.isbn;
-      this.getBookData(isbn);
-    }
-  }, {
-    key: "onSubmit",
-    value: function onSubmit() {
-      var _this2 = this;
 
-      var path = '/api/book/post/' + this.state.book.isbn;
-      var params = this.getParams();
-      var errors = this.validation(params);
+    function setInitialConvGenre() {
+      var keys = Object.keys(genres);
+      var hasGenres = keys.length;
 
-      if (errors.length) {
-        this.setState({
-          errors: errors
-        }); // page上部へ
-
-        window.scrollTo(0, 0);
-      } else {
-        axios.post(path, params).then(function () {
-          _Redirect__WEBPACK_IMPORTED_MODULE_3__["default"].home.call(_this2);
-        })["catch"](function (error) {
-          console.log(error);
-        });
+      if (hasGenres) {
+        var iniValue = keys[0];
+        setConvGenre(iniValue);
       }
     }
-  }, {
-    key: "validation",
-    value: function validation(params) {
-      var errors = [];
-
-      if (params.message == '') {
-        errors.push('Messege error!');
-      }
-
-      if (params.add_to_bookshelf && params.is_new_genre && params.new_genre == '') {
-        errors.push('No Input Error in new Genre!');
-      }
-
-      return errors;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var book = this.state.book;
-      var errors = this.state.errors;
-      var message = this.state.message;
-      var isChecked = this.state.isChecked;
-
-      if (book) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          subtitle: "\u6295\u7A3F\u753B\u9762"
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          errors: errors
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddToBookshelf, {
-          isChecked: isChecked,
-          book: book,
-          onChange: this.checkedAddToBookshelf
-        }), _get(_getPrototypeOf(PostData.prototype), "render", this).call(this), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
-          message: message,
-          onChange: this.onChangeMessage,
-          onSubmit: this.onSubmit
-        }));
-      } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-          className: "\u7121\u52B9\u306A\u30EA\u30AF\u30A8\u30B9\u30C8\u3067\u3059"
-        });
-      }
-    }
-  }]);
-
-  return PostData;
-}(_GenreSelectFormat__WEBPACK_IMPORTED_MODULE_4__["default"]);
-
-
-AddToBookshelf.propTypes = {
-  isChecked: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].bool,
-  book: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].object,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
-};
-Post.propTypes = {
-  message: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
-  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/Redirect.js":
-/*!*********************************************!*\
-  !*** ./resources/js/components/Redirect.js ***!
-  \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Redirect; });
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Redirect = /*#__PURE__*/function () {
-  function Redirect() {
-    _classCallCheck(this, Redirect);
   }
 
-  _createClass(Redirect, null, [{
-    key: "home",
-    value: function home() {
-      this.props.props.history.push('/home');
-    }
-  }, {
-    key: "userProfile",
-    value: function userProfile(strId) {
-      var path = '/user/profile/' + strId;
-      this.props.props.history.push(path);
-    }
-  }, {
-    key: "editGenre",
-    value: function editGenre(strId) {
-      var path = '/genre/edit/' + strId;
-      this.props.props.history.push(path);
-    }
-  }, {
-    key: "deleteBook",
-    value: function deleteBook(strId) {
-      var path = '/book/delete/' + strId;
-      this.props.props.history.push(path);
-    }
-  }]);
+  function setData(book) {
+    var isChecked = !book.isInBookshelf;
+    setBook(book);
+    setIsChecked(isChecked);
+  }
 
-  return Redirect;
-}();
+  function getParams() {
+    var params = {
+      isbn: book.isbn,
+      title: book.title,
+      author: book.author,
+      publisher: book.publisher,
+      pubdate: book.pubdate,
+      cover: book.cover,
+      add_to_bookshelf: isChecked,
+      is_new_genre: isNewGenre,
+      new_genre: newGenre,
+      genre_id: convGenre,
+      message: message
+    };
+    return params;
+  }
 
+  function onSubmit() {
+    var path = '/api/book/post/' + book.isbn;
+    var params = getParams();
+    var errors = validation(params);
 
+    if (errors.length) {
+      setErrors(errors); // page上部へ
+
+      window.scrollTo(0, 0);
+    } else {
+      axios.post(path, params).then(function (response) {
+        linkToHome(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }
+
+  function linkToHome(response) {
+    // stateを更新する
+    var params = response.data;
+    setState.params(params);
+    window.scrollTo(0, 0);
+    props.history.push('/home');
+  }
+
+  function onClickConvGenre() {
+    setIsNewGenre(false);
+    setNewGenre('');
+  }
+
+  function onChangeRadioButton() {
+    // 新しいジャンル->既存のジャンルへの切り替えだったらフォームを消去
+    if (isNewGenre) {
+      setNewGenre('');
+    }
+
+    setIsNewGenre(!isNewGenre);
+  }
+
+  function validation(params) {
+    var errors = [];
+
+    if (params.message == '') {
+      errors.push('メッセージが入力されていません');
+    }
+
+    if (params.add_to_bookshelf && params.is_new_genre && params.new_genre == '') {
+      errors.push('ジャンル名が入力されていません');
+    }
+
+    return errors;
+  }
+
+  if (book && genres) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      subtitle: "\u6295\u7A3F\u753B\u9762"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      errors: errors
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddToBookshelf, {
+      isChecked: isChecked,
+      book: book,
+      onChange: function onChange() {
+        return setIsChecked(!isChecked);
+      }
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Genres__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      book: book,
+      isChecked: isChecked,
+      isNewGenre: isNewGenre,
+      genres: genres,
+      newGenre: newGenre,
+      convGenre: convGenre,
+      onChangeNewGenre: function onChangeNewGenre(e) {
+        return setNewGenre(e.target.value);
+      },
+      onClickNewGenre: function onClickNewGenre() {
+        return setIsNewGenre(true);
+      },
+      onClickConvGenre: onClickConvGenre,
+      onChangeConvGenre: function onChangeConvGenre(e) {
+        return setConvGenre(e.target.value);
+      },
+      onChangeRadioButton: onChangeRadioButton
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      book: book
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
+      message: message,
+      onChange: function onChange(e) {
+        return setMessage(e.target.value);
+      },
+      onSubmit: onSubmit
+    }));
+  } else {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+      className: "\u7121\u52B9\u306A\u30EA\u30AF\u30A8\u30B9\u30C8\u3067\u3059"
+    });
+  }
+}
+AddToBookshelf.propTypes = {
+  isChecked: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
+  book: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
+};
+Post.propTypes = {
+  message: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].string,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func,
+  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
+};
 
 /***/ }),
 
@@ -88973,16 +88746,22 @@ function SearchedBook(props) {
   var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_3__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_0__["PropsContext"]);
   var data = Object(react__WEBPACK_IMPORTED_MODULE_3__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["DataContext"]);
   var book = props.book;
-  var isInBookshelf = props.isInBookshelf;
+  var isInBookshelf = book.isInBookshelf;
 
   function linkToPost() {
     var postUrl = '/book/post/' + book.isbn;
-    pages_props.history.push(postUrl);
+    pages_props.history.push({
+      pathname: postUrl,
+      state: book
+    });
   }
 
   function linkToAddBookshelf() {
     var addUrl = '/book/add/' + book.isbn;
-    pages_props.history.push(addUrl);
+    pages_props.history.push({
+      pathname: addUrl,
+      state: book
+    });
   }
 
   function PostButton() {
@@ -88999,8 +88778,8 @@ function SearchedBook(props) {
     }
   }
 
-  function AddBookButton(props) {
-    if (props.isInBookshelf) {
+  function AddBookButton() {
+    if (isInBookshelf) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3___default.a.Fragment, null);
     } else {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
@@ -89019,7 +88798,6 @@ function SearchedBook(props) {
     isLogin: data.isLogin,
     onClick: linkToPost
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(AddBookButton, {
-    isInBookshelf: isInBookshelf,
     onClick: linkToAddBookshelf
   })));
 }
@@ -89136,7 +88914,7 @@ function Label(props) {
 }
 
 function Signup() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_3__["useState"])([]),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_3__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       userName = _useState2[0],
       setUserName = _useState2[1];
@@ -90121,7 +89899,6 @@ function UserProfile() {
       isFollowing: isFollowing,
       viewerId: user.id
     }).then(function (response) {
-      console.log(response);
       showingUser.followers = response.data;
       setShowingUser(showingUser); // ここのpushが大事.location.stateを利用しているためここも更新が必要。
 
@@ -90180,8 +89957,7 @@ function UserProfile() {
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
       user: showingUser,
       genres: showingUser.genres,
-      ordered_books: showingUser.ordered_books,
-      props: props
+      orderedBooks: showingUser.ordered_books
     }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
@@ -90194,7 +89970,7 @@ FollowNumber.propTypes = {
 };
 EditBookshelfButton.propTypes = {
   user: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].object,
-  books: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].array,
+  books: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].array, prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].object]),
   viewerUser: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].object,
   redirectToDeleteBook: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].func,
   redirectToEditGenre: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].func

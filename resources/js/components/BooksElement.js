@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { PropTypes } from 'prop-types';
+import { PropsContext } from './Pages';
 
 export default function BooksElement(props) {
+  const pages_props = useContext(PropsContext);
+  function linkToBookProfile(book, url) {
+    pages_props.history.push({
+      pathname: url,
+      state: book,
+    });
+  }
+
   const books = props.books;
   const booksElement = books.map((book) => {
     const url = '/book/profile/' + book.isbn;
-
-    let img = null;
-    if (book.cover) {
-      img = (
-        <img className="img-fluid w-100" src={book.cover} alt="book-cover" />
-      );
-    } else {
-      img = (
-        <img className="img-fluid w-100" src="img/book.svg" alt="book-cover" />
-      );
-    }
+    const src = book.cover || 'img/book.svg';
 
     return (
       <div className="col-3" key={book.isbn}>
-        <a href={url}>{img}</a>
+        <img
+          className="img-fluid w-100 hover"
+          src={src}
+          alt="book-cover"
+          onClick={() => linkToBookProfile(book, url)}
+        />
       </div>
     );
   });

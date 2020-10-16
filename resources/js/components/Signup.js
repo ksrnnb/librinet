@@ -34,7 +34,7 @@ function Label(props) {
 }
 
 export default function Signup() {
-  const [userName, setUserName] = useState([]);
+  const [userName, setUserName] = useState('');
   const [strId, setStrId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

@@ -103,8 +103,7 @@ export default function EditUser() {
       .post(path, {
         user: user,
       })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         params.user = user;
         setState.params(params);
         redirectUserProfile(user.str_id);

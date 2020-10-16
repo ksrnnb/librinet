@@ -9,20 +9,22 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Support\Str;
 use App\Book;
 use App\Post;
+use App\User;
 
 class PostController extends Controller
 {
+    // TODO: いらないはず。確認したら消す。
     public function add(Request $request, $isbn)
     {
         $user = Auth::user();
+        // TODO: 整理する。名前も。。。
         $params = Book::returnBookInfoOrRedirect($isbn, $user, 'post');
 
         if ($params) {
-            return response()->json($params);     // params is redirect
+            return response($params);     // params is redirect
         } else {
-            return response()->json(['hoge' => 'hoge']);
-            // return response($status = 404);
-            // return view('book_post', $params);
+            // TODO: どうする？
+            return response('');
         }
     }
 
@@ -30,16 +32,19 @@ class PostController extends Controller
     public function create(Request $request)
     {
         // $isIsbn = Book::isIsbn($isbn);
+        $user = Auth::user();
 
         // TODO: validationしてから
         // 扱いやすいようにcollectionにしている。
         $form = collect($request->input());
 
-        $form = $form->merge(['user_id'   =>  Auth::id()]);
+        $form = $form->merge(['user_id'   =>  $user->id]);
 
         Post::createNewPost($form);
 
-        return response('done', 200);
+        $user = User::getParamsForApp($user->str_id);
+
+        return response()->json($user);
     }
 
     public function delete(Request $request)

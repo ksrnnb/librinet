@@ -93,26 +93,32 @@ function CommentForm(props) {
 export default function Comment() {
   const [bookId, setBookId] = useState(null);
   const [item, setItem] = useState(null);
-  const [isPost, setIsPost] = useState(null); // TODO: false ??
   const [isRecommended, setIsRecommended] = useState(false);
   const [message, setMessage] = useState('');
 
   const props = useContext(PropsContext);
   const params = useContext(DataContext).params;
 
-  useEffect(() => {
-    const path = '/api/comment/' + props.match.params.uuid;
-    axios
-      .get(path)
-      .then((response) => {
-        const data = response.data;
-        setItem(data.item);
-        setIsPost(data.is_post);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  useEffect(setup, []);
+
+  function setup() {
+    const item = props.location.state;
+
+    item ? setItem(item) : getComment();
+
+    function getComment() {
+      const path = '/api/comment/' + props.match.params.uuid;
+      axios
+        .get(path)
+        .then((response) => {
+          const data = response.data;
+          setItem(data.item);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
 
   function onChangeRecommend() {
     const newIsRecommended = !isRecommended;
@@ -129,7 +135,6 @@ export default function Comment() {
 
     const paramsForPost = {
       book_id: bookId,
-      is_post: isPost,
       post_id: item.id,
       message: message,
       user_id: userId,
@@ -145,6 +150,7 @@ export default function Comment() {
         .post(path, paramsForPost)
         .then((response) => {
           console.log(response.data);
+          // TODO: 実装
         })
         .catch((error) => {
           console.log(error);

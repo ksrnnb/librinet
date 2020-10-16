@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
-import Redirect from './Redirect';
-import GenreSelectFormat from './GenreSelectFormat';
 import { PropTypes } from 'prop-types';
+import { PropsContext } from './Pages';
+import { DataContext, SetStateContext } from './App';
+import Genres from './Genres';
+import BookCard from './BookCard';
 
 const axios = window.axios;
 
@@ -66,52 +68,95 @@ function Post(props) {
   );
 }
 
-export default class PostData extends GenreSelectFormat {
-  constructor(props) {
-    super(props);
+export default function PostData() {
+  const props = useContext(PropsContext);
 
-    this.checkedAddToBookshelf = this.checkedAddToBookshelf.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.validation = this.validation.bind(this);
+  const data = useContext(DataContext);
+  const setState = useContext(SetStateContext);
+
+  const [book, setBook] = useState(null);
+  const [isChecked, setIsChecked] = useState(true);
+  const [isNewGenre, setIsNewGenre] = useState(true);
+  const [newGenre, setNewGenre] = useState('');
+  const [errors, setErrors] = useState([]);
+  const [convGenre, setConvGenre] = useState('');
+  const [message, setMessage] = useState('');
+
+  const genres = data.params.user.genres;
+
+  useEffect(setup, []);
+
+  function setup() {
+    const isbn = props.match.params.isbn;
+    const book = props.location.state;
+
+    setInitialConvGenre();
+    book ? setData(book) : getBookData();
+
+    function getBookData() {
+      //TODO: 本棚に追加済みの場合の処理
+      axios
+        .post('/api/book', {
+          isbn: isbn,
+        })
+        .then((response) => {
+          const book = response.data;
+          setData(book);
+        });
+    }
+
+    function setInitialConvGenre() {
+      const keys = Object.keys(genres);
+      const hasGenres = keys.length;
+
+      if (hasGenres) {
+        const iniValue = keys[0];
+
+        setConvGenre(iniValue);
+      }
+    }
   }
 
-  checkedAddToBookshelf() {
-    const isChecked = !this.state.isChecked;
-    this.setState({
-      isChecked: isChecked,
-      newGenre: '',
-    });
+  function setData(book) {
+    const isChecked = !book.isInBookshelf;
+
+    setBook(book);
+    setIsChecked(isChecked);
   }
 
-  componentDidMount() {
-    // const params = this.props.props.location.state;
-    // console.log(params);
-    // if (params) {
-    //   this.setBook(params);
-    // } else {
+  function getParams() {
+    const params = {
+      isbn: book.isbn,
+      title: book.title,
+      author: book.author,
+      publisher: book.publisher,
+      pubdate: book.pubdate,
+      cover: book.cover,
+      add_to_bookshelf: isChecked,
+      is_new_genre: isNewGenre,
+      new_genre: newGenre,
+      genre_id: convGenre,
+      message: message,
+    };
 
-    // 上の書き方だと、投稿後に更新ボタンを押したとき、投稿したことが反映されない
-    const isbn = this.props.props.match.params.isbn;
-    this.getBookData(isbn);
+    return params;
   }
 
-  onSubmit() {
-    const path = '/api/book/post/' + this.state.book.isbn;
+  function onSubmit() {
+    const path = '/api/book/post/' + book.isbn;
 
-    const params = this.getParams();
-    const errors = this.validation(params);
+    const params = getParams();
+    const errors = validation(params);
 
     if (errors.length) {
-      this.setState({
-        errors: errors,
-      });
+      setErrors(errors);
       // page上部へ
       window.scrollTo(0, 0);
     } else {
       axios
         .post(path, params)
-        .then(() => {
-          Redirect.home.call(this);
+        .then((response) => {
+          linkToHome(response);
         })
         .catch((error) => {
           console.log(error);
@@ -119,49 +164,81 @@ export default class PostData extends GenreSelectFormat {
     }
   }
 
-  validation(params) {
+  function linkToHome(response) {
+    // stateを更新する
+    const params = response.data;
+
+    setState.params(params);
+    window.scrollTo(0, 0);
+    props.history.push('/home');
+  }
+
+  function onClickConvGenre() {
+    setIsNewGenre(false);
+    setNewGenre('');
+  }
+
+  function onChangeRadioButton() {
+    // 新しいジャンル->既存のジャンルへの切り替えだったらフォームを消去
+    if (isNewGenre) {
+      setNewGenre('');
+    }
+
+    setIsNewGenre(!isNewGenre);
+  }
+
+  function validation(params) {
     const errors = [];
 
     if (params.message == '') {
-      errors.push('Messege error!');
+      errors.push('メッセージが入力されていません');
     }
+
     if (
       params.add_to_bookshelf &&
       params.is_new_genre &&
       params.new_genre == ''
     ) {
-      errors.push('No Input Error in new Genre!');
+      errors.push('ジャンル名が入力されていません');
     }
 
     return errors;
   }
 
-  render() {
-    const book = this.state.book;
-    const errors = this.state.errors;
-    const message = this.state.message;
-    const isChecked = this.state.isChecked;
-    if (book) {
-      return (
-        <>
-          <Subtitle subtitle="投稿画面" />
-          <Errors errors={errors} />
-          <AddToBookshelf
-            isChecked={isChecked}
-            book={book}
-            onChange={this.checkedAddToBookshelf}
-          />
-          {super.render()}
-          <Post
-            message={message}
-            onChange={this.onChangeMessage}
-            onSubmit={this.onSubmit}
-          />
-        </>
-      );
-    } else {
-      return <h2 className="無効なリクエストです"></h2>;
-    }
+  if (book && genres) {
+    return (
+      <>
+        <Subtitle subtitle="投稿画面" />
+        <Errors errors={errors} />
+        <AddToBookshelf
+          isChecked={isChecked}
+          book={book}
+          onChange={() => setIsChecked(!isChecked)}
+        />
+        <Genres
+          book={book}
+          isChecked={isChecked}
+          isNewGenre={isNewGenre}
+          genres={genres}
+          newGenre={newGenre}
+          convGenre={convGenre}
+          onChangeNewGenre={(e) => setNewGenre(e.target.value)}
+          onClickNewGenre={() => setIsNewGenre(true)}
+          onClickConvGenre={onClickConvGenre}
+          onChangeConvGenre={(e) => setConvGenre(e.target.value)}
+          onChangeRadioButton={onChangeRadioButton}
+        />
+        <p>本の情報</p>
+        <BookCard book={book} />
+        <Post
+          message={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onSubmit={onSubmit}
+        />
+      </>
+    );
+  } else {
+    return <h2 className="無効なリクエストです"></h2>;
   }
 }
 

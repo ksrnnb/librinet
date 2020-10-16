@@ -24,7 +24,7 @@ function Message(props) {
 }
 
 function NoBook(props) {
-  const hasNoBook = props.ordered_books.length === 0;
+  const hasNoBook = props.orderedBooks.length === 0;
 
   if (hasNoBook) {
     return (
@@ -42,11 +42,11 @@ function NoBook(props) {
 
 function Books(props) {
   const genres = props.genres;
-  const ordered_books = props.ordered_books;
+  const orderedBooks = props.orderedBooks;
 
-  const books = Object.keys(ordered_books).map((genreId) => {
+  const books = Object.keys(orderedBooks).map((genreId) => {
     let genre;
-    const books = ordered_books[genreId];
+    const books = orderedBooks[genreId];
     const willEdit = props.willEdit;
 
     if (willEdit) {
@@ -78,7 +78,7 @@ function Books(props) {
 
 export default function Bookshelf(props) {
   const genres = props.genres;
-  const ordered_books = props.ordered_books;
+  const orderedBooks = props.orderedBooks;
   const willEdit = props.willEdit ? props.willEdit : false;
 
   return (
@@ -86,19 +86,18 @@ export default function Bookshelf(props) {
       <h2 className="mt-5 mb-0" key="bookshelf">
         本棚
       </h2>
-      <NoBook user={props.user} ordered_books={ordered_books} />
-      <Books
-        genres={genres}
-        ordered_books={ordered_books}
-        willEdit={willEdit}
-      />
+      <NoBook user={props.user} orderedBooks={orderedBooks} />
+      <Books genres={genres} orderedBooks={orderedBooks} willEdit={willEdit} />
     </>
   );
 }
 
 Bookshelf.propTypes = {
-  genres: PropTypes.object,
-  ordered_books: PropTypes.object,
+  genres: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array, // 本が空の場合はarray
+  ]),
+  orderedBooks: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   willEdit: PropTypes.bool,
   user: PropTypes.object,
 };

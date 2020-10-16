@@ -10,7 +10,6 @@ const axios = window.axios;
 export default function AddBook() {
   const [errors, setErrors] = useState([]);
   const [book, setBook] = useState(null);
-  const [genres, setGenres] = useState(null);
   const [isChecked, setIsChecked] = useState(true);
   const [isNewGenre, setIsNewGenre] = useState(true);
   const [newGenre, setNewGenre] = useState('');
@@ -19,32 +18,47 @@ export default function AddBook() {
   const props = useContext(PropsContext);
   const data = useContext(DataContext);
   const setState = useContext(SetStateContext);
+  const genres = data.params.user.genres;
 
-  useEffect(() => {
+  useEffect(setup, []);
+
+  function setup() {
     const isbn = props.match.params.isbn;
-    getBookData(isbn);
-  }, []);
+    const book = props.location.state;
 
-  function getBookData(isbn) {
-    //TODO: 本棚に追加済みの場合の処理
-    const path = '/api/book/post/' + isbn;
-    axios
-      .get(path)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch(() => {
-        props.history.push('/login');
-      });
-  }
+    setInitialConvGenre();
 
-  function setData(params) {
-    const isChecked = !params.book.isInBookshelf;
+    book ? setData(book) : getBookData();
 
-    setBook(params.book);
-    setGenres(params.genres);
-    setIsChecked(isChecked);
-    setInitialConvGenre(params.genres);
+    function setInitialConvGenre() {
+      const keys = Object.keys(genres);
+      const hasGenres = keys.length;
+
+      if (hasGenres) {
+        const iniValue = keys[0];
+
+        setConvGenre(iniValue);
+      }
+    }
+
+    function setData(book) {
+      const isChecked = !book.isInBookshelf;
+
+      setBook(book);
+      setIsChecked(isChecked);
+    }
+
+    function getBookData() {
+      //TODO: 本棚に追加済みの場合の処理
+      axios
+        .post('/api/book', {
+          isbn: isbn,
+        })
+        .then((response) => {
+          const book = response.data;
+          setData(book);
+        });
+    }
   }
 
   function getParams() {
@@ -123,17 +137,6 @@ export default function AddBook() {
     setIsNewGenre(!isNewGenre);
   }
 
-  function setInitialConvGenre(genres) {
-    const keys = Object.keys(genres);
-    const hasGenres = keys.length;
-
-    if (hasGenres) {
-      const iniValue = keys[0];
-
-      setConvGenre(iniValue);
-    }
-  }
-
   if (book && genres) {
     return (
       <>
@@ -152,6 +155,7 @@ export default function AddBook() {
           onChangeConvGenre={(e) => setConvGenre(e.target.value)}
           onChangeRadioButton={onChangeRadioButton}
         />
+        <p>本の情報</p>
         <BookCard book={book} />
         <button className="btn btn-outline-success" onClick={submitBook}>
           本棚に追加する

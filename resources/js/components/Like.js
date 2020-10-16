@@ -18,27 +18,20 @@ export default function Like(props) {
   // 既にいいね済みの場合は、自分（みている側）のユーザーID
   // 未いいねの場合はundefined
 
-  function sendPostRequest(uuid) {
+  function sendLikeRequest(uuid) {
+    // さきに値を変える
+    const delta = isLiked ? -1 : +1;
+    setIsLiked(!isLiked);
+    setCount(count + delta);
+
     axios
       .post('/api/like', {
         uuid: uuid,
       })
-      .then((response) => {
-        console.log(response);
-      })
+      .then(() => {})
       .catch((error) => {
         console.log(error);
       });
-  }
-
-  function handleLike(e) {
-    const uuid = e.target.dataset.uuid;
-    const delta = isLiked ? -1 : +1;
-
-    sendPostRequest(uuid);
-
-    setIsLiked(!isLiked);
-    setCount(count + delta);
   }
 
   return (
@@ -50,7 +43,7 @@ export default function Like(props) {
         }
         data-uuid={item.uuid}
         data-isliked={isLiked ? '1' : '0'}
-        onClick={handleLike}
+        onClick={(e) => sendLikeRequest(e.target.dataset.uuid)}
       >
         いいね
       </button>

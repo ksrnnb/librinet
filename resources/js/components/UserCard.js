@@ -3,25 +3,9 @@ import { PropsContext } from './Pages';
 import { PropTypes } from 'prop-types';
 
 export function UserImage(props) {
-  if (props.image) {
-    return (
-      <img
-        className="img-fluid"
-        src={props.image}
-        alt="user-image"
-        // onClick={props.onClick}
-      />
-    );
-  } else {
-    return (
-      <img
-        className="img-fluid"
-        src="/img/icon.svg"
-        alt="user-image"
-        // onClick={props.onClick}
-      />
-    );
-  }
+  const image = props.image || '/img/icon.svg';
+
+  return <img className="img-fluid" src={image} alt="user-image" />;
 }
 
 export default function UserCard(props) {
@@ -60,6 +44,10 @@ export default function UserCard(props) {
     </div>
   );
 }
+
+UserImage.propTypes = {
+  image: PropTypes.string,
+};
 
 UserCard.propTypes = {
   user: PropTypes.object,

@@ -32,12 +32,13 @@ class LoginTest extends DuskTestCase
 
     public function testLogin()
     {
-        $this->get('/sanctum/csrf-cookie')
-            ->assertStatus(204);
-
-        // login
-        $this->post('/api/login', $this->credential)
-            ->assertStatus(200);
+        // // sanctum
+        // $this->get('/sanctum/csrf-cookie')
+        //      ->assertStatus(204);
+        
+        // // login
+        // $this->post('/api/login', $this->credential)
+        //      ->assertStatus(200);
 
         $this->browse(function (Browser $browser) {
             // sanctum
@@ -45,18 +46,16 @@ class LoginTest extends DuskTestCase
             // $uses = array_flip(class_uses_recursive(static::class));
             // dd($uses);
 
-            // $str_id = $this->user->str_id;
-            // $password = config('app.guest_password');
+            $str_id = $this->user->str_id;
+            $password = config('app.guest_password');
 
-            // $browser->visit('/login')
-            //         ->waitFor('#user-id')
-            //         ->type('user-id', $str_id)
-            //         ->type('password', $password)
-            //         ->press('Login')
-            //         ->waitForText('Home')
-            $browser->visit('/book/add/9784297100339')
-                    ->waitFor('#new-genre')
-                    ->assertSee('#new-genre');
+            $browser->visit('/login')
+                    ->waitFor('#user-id')
+                    ->type('user-id', $str_id)
+                    ->type('password', $password)
+                    ->press('Login');
+
+                    // assertAuthenticated()はエラーになる
         });
     }
 }

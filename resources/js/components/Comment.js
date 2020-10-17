@@ -55,6 +55,7 @@ function RecommendButton(props) {
   );
 }
 function RecommendBook(props) {
+  // TODO: 本のお勧めが表示されない
   const orderedBooks = props.orderedBooks;
   const genres = props.genres;
   const isRecommended = props.isRecommended;
@@ -104,6 +105,7 @@ export default function Comment() {
   function setup() {
     const item = props.location.state;
 
+    console.log(item);
     item ? setItem(item) : getComment();
 
     function getComment() {
@@ -150,7 +152,7 @@ export default function Comment() {
         .post(path, paramsForPost)
         .then((response) => {
           console.log(response.data);
-          // TODO: 実装
+          // TODO: コメント後にセットする。
         })
         .catch((error) => {
           console.log(error);

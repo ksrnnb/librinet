@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Book');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification');
+    }
+
     public function posts()
     {
         return $this->hasMany('App\Post');
@@ -169,6 +174,41 @@ class User extends Authenticatable
         }
 
         return $user;
+    }
+
+    public static function getParamsForApp2($str_id): array
+    {
+        $user = User::where('str_id', $str_id)
+                     ->first();
+
+        if ($user) {
+            $user = $user->load(['books.genre',
+                                'notifications.comment.user',
+                                'notifications.follower.followerUser',
+                                'notifications.like.user',
+                                'posts.book',
+                                'posts.likes',
+                                'comments.book',
+                                'comments.likes',
+                                'likes',
+                                'followings',
+                                'followers',
+                                ]);
+
+            [$genres, $ordered_books] = Book::getGenresAndOrderedBooks($user->books);
+            $user->genres = $genres;
+            $user->ordered_books = $ordered_books;
+        } else {
+            $user = [];
+        }
+        
+        $following_posts = Post::getPostsOfFollowingUsers($user);
+
+        // ユーザーの検索ページ用
+        $examples = User::getExampleUsers()['examples'];
+
+        $params = compact('user', 'following_posts', 'examples');
+        return $params;
     }
 
     public static function getParamsForApp($str_id): array

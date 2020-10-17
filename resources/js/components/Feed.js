@@ -74,21 +74,11 @@ function UserAndMessage(props) {
 }
 
 function CommentButton(props) {
-  const pages_props = useContext(PropsContext);
-  const commentUrl = '/comment/' + props.item.uuid;
-
-  function linkToComment() {
-    pages_props.history.push({
-      pathname: commentUrl,
-      state: props.item,
-    });
-  }
-
   const button = (
     <button
       type="button"
       className="btn btn-outline-info"
-      onClick={linkToComment}
+      onClick={props.linkToComment}
     >
       Comment
     </button>
@@ -143,7 +133,7 @@ export default function Feed(props) {
     <div className="feed row border py-2">
       <BookCover book={item.book} />
       <UserAndMessage user={item.user} message={item.message}>
-        <CommentButton item={item} />
+        <CommentButton item={item} linkToComment={props.linkToComment} />
         <Like item={item} viewerId={props.viewerId} />
         <DeleteButton
           item={item}
@@ -166,4 +156,8 @@ UserAndMessage.propTypes = {
   user: PropTypes.object,
   message: PropTypes.string,
   children: PropTypes.array,
+};
+
+Feed.propTypes = {
+  linkToComment: PropTypes.func,
 };

@@ -8,6 +8,9 @@ export default function SubColumn(props) {
   if (userUrl) {
     profileAndLoginLogoutLink = (
       <>
+        <Link to="/notification">
+          <h4 className="mt-4">通知</h4>
+        </Link>
         <Link to={userUrl}>
           <h4 className="mt-4">プロフィール</h4>
         </Link>

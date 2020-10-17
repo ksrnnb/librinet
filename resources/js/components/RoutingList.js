@@ -13,6 +13,7 @@ import EditGenre from './EditGenre';
 import EditUser from './EditUser';
 import DeleteBook from './DeleteBook';
 import Signup from './Signup';
+import Notification from './Notification';
 
 export const routingList = [
   {
@@ -92,5 +93,10 @@ export const routingList = [
   {
     path: '/comment/:uuid',
     component: Comment,
+  },
+
+  {
+    path: '/notification',
+    component: Notification,
   },
 ];

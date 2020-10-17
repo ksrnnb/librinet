@@ -86607,6 +86607,7 @@ function RecommendButton(props) {
 }
 
 function RecommendBook(props) {
+  // TODO: 本のお勧めが表示されない
   var orderedBooks = props.orderedBooks;
   var genres = props.genres;
   var isRecommended = props.isRecommended;
@@ -86666,6 +86667,7 @@ function Comment() {
 
   function setup() {
     var item = props.location.state;
+    console.log(item);
     item ? setItem(item) : getComment();
 
     function getComment() {
@@ -86704,7 +86706,7 @@ function Comment() {
       console.log('Message is Empty!');
     } else {
       axios.post(path, paramsForPost).then(function (response) {
-        console.log(response.data); // TODO: 実装
+        console.log(response.data); // TODO: コメント後にセットする。
       })["catch"](function (error) {
         console.log(error);
       });
@@ -87361,20 +87363,10 @@ function UserAndMessage(props) {
 }
 
 function CommentButton(props) {
-  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_3__["PropsContext"]);
-  var commentUrl = '/comment/' + props.item.uuid;
-
-  function linkToComment() {
-    pages_props.history.push({
-      pathname: commentUrl,
-      state: props.item
-    });
-  }
-
   var button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
     className: "btn btn-outline-info",
-    onClick: linkToComment
+    onClick: props.linkToComment
   }, "Comment");
   var isPost = ('comments' in props.item);
   return isPost ? button : null;
@@ -87423,7 +87415,8 @@ function Feed(props) {
     user: item.user,
     message: item.message
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CommentButton, {
-    item: item
+    item: item,
+    linkToComment: props.linkToComment
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Like__WEBPACK_IMPORTED_MODULE_1__["default"], {
     item: item,
     viewerId: props.viewerId
@@ -87444,6 +87437,9 @@ UserAndMessage.propTypes = {
   user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
   message: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string,
   children: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array
+};
+Feed.propTypes = {
+  linkToComment: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
 };
 
 /***/ }),
@@ -87791,6 +87787,12 @@ function Header(props) {
       className: "nav-item"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
       className: "nav-link",
+      to: "/notification",
+      onClick: closeNav
+    }, "\u901A\u77E5")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      className: "nav-item"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      className: "nav-link",
       to: props.userUrl,
       onClick: closeNav
     }, "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
@@ -87877,34 +87879,12 @@ __webpack_require__.r(__webpack_exports__);
 var axios = window.axios;
 
 function Post(props) {
-  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]).params;
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
-  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
-
-  function onClickDelete(e) {
-    var uuid = e.target.dataset.uuid; // 文字列の'false'はtrueになってしまうので以下のように判定
-
-    var isPost = e.target.dataset.ispost === 'true' ? true : false;
-    var path = isPost ? '/api/post' : '/api/comment'; // TODO: 本当に消しますか？って出したい
-
-    axios["delete"](path, {
-      data: {
-        uuid: uuid
-      }
-    }).then(function (response) {
-      params.following_posts = response.data;
-      setState.params(params);
-      pages_props.history.push('/home'); // ページ遷移を伴わないと更新されない
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  }
-
   var post = props.post;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Feed__WEBPACK_IMPORTED_MODULE_2__["default"], {
     item: post,
     viewerId: props.viewerId,
-    onClickDelete: onClickDelete
+    onClickDelete: props.onClickDelete,
+    linkToComment: props.linkToComment
   });
 }
 
@@ -87921,11 +87901,13 @@ function Comments(props) {
 }
 
 function PostWithComments(props) {
-  function onClickDelete(e) {
-    var _this = this;
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
+  var post = props.post;
 
-    var uuid = e.target.dataset.uuid;
-    var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]); // 文字列の'false'はtrueになってしまうので以下のように判定
+  function onClickDelete(e) {
+    var uuid = e.target.dataset.uuid; // 文字列の'false'はtrueになってしまうので以下のように判定
 
     var isPost = e.target.dataset.ispost === 'true' ? true : false;
     var path = isPost ? '/api/post' : '/api/comment'; // TODO: 本当に消しますか？って出したい
@@ -87938,31 +87920,31 @@ function PostWithComments(props) {
       var following_posts = response.data;
       var params = data.params;
       params.following_posts = following_posts;
-
-      _this.setState({
-        params: params
-      });
+      setState.params(params);
+      pages_props.history.push('/home');
     })["catch"](function (error) {
       console.log(error);
     });
   }
 
-  var post = props.post;
-  var comments = null;
-
-  if (post.comments.length) {
-    comments = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Comments, {
-      comments: post.comments,
-      viewerId: props.viewerId,
-      onClickDelete: onClickDelete
+  function linkToComment() {
+    var url = '/comment/' + post.uuid;
+    pages_props.history.push({
+      pathname: url,
+      state: post
     });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
     post: post,
     viewerId: props.viewerId,
+    onClickDelete: onClickDelete,
+    linkToComment: linkToComment
+  }), post.comments.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Comments, {
+    comments: post.comments,
+    viewerId: props.viewerId,
     onClickDelete: onClickDelete
-  }), comments);
+  }));
 }
 
 function Posts(props) {
@@ -88020,7 +88002,9 @@ PostWithComments.propTypes = {
 };
 Post.propTypes = {
   post: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].object,
-  viewerId: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].number
+  viewerId: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].number,
+  onClickDelete: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func,
+  linkToComment: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
 };
 
 /***/ }),
@@ -88287,6 +88271,164 @@ function logout() {
     onClick: onClickLogout
   }, "Log out"));
 }
+
+/***/ }),
+
+/***/ "./resources/js/components/Notification.js":
+/*!*************************************************!*\
+  !*** ./resources/js/components/Notification.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Notification; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+
+
+
+
+
+var axios = window.axios;
+/**
+ * @param {object} notification
+ * @return {string}
+ */
+
+function getMessageAndImage(notification) {
+  var info = new Object();
+
+  if (notification.comment) {
+    info.user = notification.comment.user;
+    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u6295\u7A3F\u306B\u30B3\u30E1\u30F3\u30C8\u3057\u307E\u3057\u305F");
+    info.path = '/api/comment/id/' + notification.comment.id;
+  } else if (notification.follower) {
+    info.user = notification.follower.follower_user;
+    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u3092\u30D5\u30A9\u30ED\u30FC\u3057\u307E\u3057\u305F");
+    info.path = '/user/profile/' + info.user.str_id;
+  } else if (notification.like.post_id) {
+    info.user = notification.like.user;
+    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u6295\u7A3F\u306B\u3044\u3044\u306D\u3057\u307E\u3057\u305F");
+    info.path = '/api/post/id/' + notification.like.post_id;
+  } else if (notification.like.comment_id) {
+    info.user = notification.like.user;
+    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u30B3\u30E1\u30F3\u30C8\u306B\u3044\u3044\u306D\u3057\u307E\u3057\u305F");
+    info.path = '/api/comment/id/' + notification.like.comment_id;
+  }
+
+  info.image = info.user.image || '/img/icon.svg';
+  return info;
+}
+/**
+ * @param {integer} deltaMiliSec
+ * @return {string}
+ */
+
+
+function getDeltaTimeMessage(deltaMiliSec) {
+  var deltaTimeSec = deltaMiliSec / 1000;
+  var timeMessage;
+
+  if (deltaTimeSec < 60) {
+    timeMessage = "".concat(deltaTimeSec, "\u79D2\u524D");
+  } else if (deltaTimeSec < 60 * 60) {
+    timeMessage = "".concat(Math.floor(deltaTimeSec / 60), "\u5206\u524D");
+  } else if (deltaTimeSec < 60 * 60 * 24) {
+    timeMessage = "".concat(Math.floor(deltaTimeSec / 60 / 60), "\u6642\u9593\u524D");
+  } else {
+    timeMessage = "".concat(Math.floor(deltaTimeSec / 60 / 60 / 24), "\u65E5\u524D");
+  }
+
+  return timeMessage;
+}
+/**
+ * notificationモデルを1個受け取って、通知のCardを返す。
+ * @param {object} props
+ * @return {JSX}
+ */
+
+
+function Notice(props) {
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
+  var notification = props.notification;
+  var deltaTimeMiliSec = new Date() - new Date(notification.created_at);
+  var timeMessage = getDeltaTimeMessage(deltaTimeMiliSec);
+  var info = getMessageAndImage(notification);
+
+  function onClickCard() {
+    // comment or postへのリンク
+    if (info.path.includes('api')) {
+      axios.get(info.path).then(function (response) {
+        var post = response.data;
+        var path = '/comment/' + post.uuid;
+        window.scroll(0, 0);
+        pages_props.history.push({
+          pathname: path,
+          state: post
+        });
+      })["catch"](function () {
+        // 投稿がみつからない場合（既に削除済みなど）
+        alert('投稿がみつかりません。既に削除された可能性があります');
+      }); // ユーザーへのリンクの場合はそのまま移動する。
+    } else {
+      var path = '/user/profile/' + info.user.str_id;
+      pages_props.history.push(path);
+    }
+  } // TODO: Comment -> Postへのリンク、いいね→投稿 or コメントへのリンク, フォロー-> userへのリンク
+
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "card hover mb-3",
+    onClick: function onClick() {
+      return onClickCard();
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "row no-gutters"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: "img-fluid",
+    src: info.image,
+    alt: "user-image"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-10"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "card-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "card-text"
+  }, info.message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "card-text"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+    className: "text-muted"
+  }, timeMessage))))));
+}
+
+function Notification() {
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["DataContext"]);
+  var notifications = data.params.user.notifications || []; // 日付の新しい順にソート
+
+  notifications.sort(function (a, b) {
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    subtitle: "\u901A\u77E5"
+  }), notifications.map(function (notification) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Notice, {
+      notification: notification,
+      key: notification.id
+    });
+  }));
+}
+Notice.propTypes = {
+  notification: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object
+};
 
 /***/ }),
 
@@ -88652,6 +88794,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EditUser__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./EditUser */ "./resources/js/components/EditUser.js");
 /* harmony import */ var _DeleteBook__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./DeleteBook */ "./resources/js/components/DeleteBook.js");
 /* harmony import */ var _Signup__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Signup */ "./resources/js/components/Signup.js");
+/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Notification */ "./resources/js/components/Notification.js");
+
 
 
 
@@ -88716,6 +88860,9 @@ var routingList = [{
 }, {
   path: '/comment/:uuid',
   component: _Comment__WEBPACK_IMPORTED_MODULE_3__["default"]
+}, {
+  path: '/notification',
+  component: _Notification__WEBPACK_IMPORTED_MODULE_15__["default"]
 }];
 
 /***/ }),
@@ -89103,6 +89250,10 @@ function SubColumn(props) {
 
   if (userUrl) {
     profileAndLoginLogoutLink = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      to: "/notification"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+      className: "mt-4"
+    }, "\u901A\u77E5")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
       to: userUrl
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
       className: "mt-4"
@@ -89362,21 +89513,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function UserImage(props) {
-  if (props.image) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
-      src: props.image,
-      alt: "user-image" // onClick={props.onClick}
-
-    });
-  } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
-      src: "/img/icon.svg",
-      alt: "user-image" // onClick={props.onClick}
-
-    });
-  }
+  var image = props.image || '/img/icon.svg';
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: "img-fluid",
+    src: image,
+    alt: "user-image"
+  });
 }
 function UserCard(props) {
   var user = props.user;
@@ -89414,6 +89556,9 @@ function UserCard(props) {
     className: "card-text"
   }, '@' + user.str_id)))));
 }
+UserImage.propTypes = {
+  image: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string
+};
 UserCard.propTypes = {
   user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
   UserImage: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string

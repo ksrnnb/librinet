@@ -9,6 +9,7 @@
 
         <!-- 除外するルール -->
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
+        <exclude name="PSR12.Traits.UseDeclaration.MultipleImport" />
 
     </rule>
 

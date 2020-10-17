@@ -57,17 +57,19 @@ class LikeTest extends DuskTestCase
             $str_id = $this->credential['str_id'];
             $password = $this->credential['password'];
 
-            // $browser->visit('/login')
-            //         ->waitFor('#user-id')
-            //         ->type('user-id', $str_id)
-            //         ->type('password', $password)
-            //         ->press('Login')
-            //         ->visit('/book/post/9784297100339')
-            //         ->waitFor('.feed');
-            dump(User::find(1));
+            $browser->visit('/login')
+                    ->waitFor('#user-id')
+                    ->type('user-id', $str_id)
+                    ->type('password', $password)
+                    ->press('Login')
+                    ->waitFor('.feed', 10)
+                    ->press('いいね')
+                    ->pause(3000);
 
-            $browser->loginAs(User::find(1))
-                    ->assertAuthenticated();
+            // dump(User::find(1));
+
+            // $browser->loginAs(User::find(1))
+            //         ->assertAuthenticated();
 
 
             

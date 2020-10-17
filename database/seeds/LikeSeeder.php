@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Events\Liked;
 
 class LikeSeeder extends Seeder
 {
@@ -13,15 +14,23 @@ class LikeSeeder extends Seeder
     {
         //  Postにいいね
         $post = App\Post::find(2);
-        $post->likes()->create([
+        $like = $post->likes()->create([
             'user_id' => 4,
         ]);
 
-        //  Commentにいいね2
+        event(new Liked($like));
+        
+        //  Commentにいいね (コメントのユーザーはid2)
         $comment = App\Comment::find(1);
-        $comment->likes()->createMany([
+        $likes = $comment->likes()->createMany([
+            ['user_id' => 1],
+            ['user_id' => 3],
             ['user_id' => 4],
             ['user_id' => 5],
         ]);
+
+        foreach ($likes as $like) {
+            event(new Liked($like));
+        }
     }
 }

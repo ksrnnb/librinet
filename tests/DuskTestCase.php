@@ -34,7 +34,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--headless',
             '--window-size=1920,1080',
             '--no-sandbox',
-            '--lang=ja_JP'
+            // '--enable-file-cookies',
         ]);
 
         if (env('APP_ENV')  == 'develop') {

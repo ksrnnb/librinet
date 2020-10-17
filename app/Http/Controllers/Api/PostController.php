@@ -13,19 +13,15 @@ use App\User;
 
 class PostController extends Controller
 {
-    // TODO: いらないはず。確認したら消す。
-    public function add(Request $request, $isbn)
+    public function get(Request $request, $id)
     {
-        $user = Auth::user();
-        // TODO: 整理する。名前も。。。
-        $params = Book::returnBookInfoOrRedirect($isbn, $user, 'post');
-
-        if ($params) {
-            return response($params);     // params is redirect
-        } else {
-            // TODO: どうする？
-            return response('');
+        $post = Post::find($id);
+        if ($post) {
+            $post->loadPostInfoAndComments();
+            return response()->json($post);
         }
+
+        return response('投稿がみつかりません', 404);
     }
 
     // TODO: PostRequestつかう？

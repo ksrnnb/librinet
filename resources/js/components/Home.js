@@ -8,35 +8,14 @@ import { PropsContext } from './Pages';
 const axios = window.axios;
 
 function Post(props) {
-  const params = useContext(DataContext).params;
-  const setState = useContext(SetStateContext);
-  const pages_props = useContext(PropsContext);
-
-  function onClickDelete(e) {
-    const uuid = e.target.dataset.uuid;
-    // 文字列の'false'はtrueになってしまうので以下のように判定
-    const isPost = e.target.dataset.ispost === 'true' ? true : false;
-
-    const path = isPost ? '/api/post' : '/api/comment';
-
-    // TODO: 本当に消しますか？って出したい
-    axios
-      .delete(path, {
-        data: { uuid: uuid },
-      })
-      .then((response) => {
-        params.following_posts = response.data;
-        setState.params(params);
-        pages_props.history.push('/home'); // ページ遷移を伴わないと更新されない
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   const post = props.post;
   return (
-    <Feed item={post} viewerId={props.viewerId} onClickDelete={onClickDelete} />
+    <Feed
+      item={post}
+      viewerId={props.viewerId}
+      onClickDelete={props.onClickDelete}
+      linkToComment={props.linkToComment}
+    />
   );
 }
 
@@ -56,9 +35,13 @@ function Comments(props) {
 }
 
 function PostWithComments(props) {
+  const data = useContext(DataContext);
+  const pages_props = useContext(PropsContext);
+  const setState = useContext(SetStateContext);
+  const post = props.post;
+
   function onClickDelete(e) {
     const uuid = e.target.dataset.uuid;
-    const data = useContext(DataContext);
     // 文字列の'false'はtrueになってしまうので以下のように判定
     const isPost = e.target.dataset.ispost === 'true' ? true : false;
 
@@ -74,25 +57,20 @@ function PostWithComments(props) {
         const params = data.params;
         params.following_posts = following_posts;
 
-        this.setState({
-          params: params,
-        });
+        setState.params(params);
+        pages_props.history.push('/home');
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  const post = props.post;
-  let comments = null;
-  if (post.comments.length) {
-    comments = (
-      <Comments
-        comments={post.comments}
-        viewerId={props.viewerId}
-        onClickDelete={onClickDelete}
-      />
-    );
+  function linkToComment() {
+    const url = '/comment/' + post.uuid;
+    pages_props.history.push({
+      pathname: url,
+      state: post,
+    });
   }
 
   return (
@@ -101,8 +79,15 @@ function PostWithComments(props) {
         post={post}
         viewerId={props.viewerId}
         onClickDelete={onClickDelete}
+        linkToComment={linkToComment}
       />
-      {comments}
+      {post.comments.length > 0 && (
+        <Comments
+          comments={post.comments}
+          viewerId={props.viewerId}
+          onClickDelete={onClickDelete}
+        />
+      )}
     </>
   );
 }
@@ -167,4 +152,6 @@ PostWithComments.propTypes = {
 Post.propTypes = {
   post: PropTypes.object,
   viewerId: PropTypes.number,
+  onClickDelete: PropTypes.func,
+  linkToComment: PropTypes.func,
 };

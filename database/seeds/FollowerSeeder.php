@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Events\Followed;
 
 class FollowerSeeder extends Seeder
 {
@@ -17,10 +18,12 @@ class FollowerSeeder extends Seeder
         for ($follow_id = 1; $follow_id <= $count; $follow_id++) {
             for ($follower_id = 1; $follower_id <= $count; $follower_id++) {
                 if ($follow_id != $follower_id) {
-                    App\Follower::create([
+                    $follower = App\Follower::create([
                         'follow_id' => $follow_id,
                         'follower_id' => $follower_id,
                     ]);
+
+                    event(new Followed($follower));
                 }
             }
         }

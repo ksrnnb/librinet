@@ -18,6 +18,11 @@ class Follower extends Model
         return $this->belongsTo('App\User', 'follower_id');
     }
 
+    public function notification()
+    {
+        return $this->hasOne('App\Notification');
+    }
+
     public static function getFollowers($follow_id)
     {
         $followers = Follower::where('follow_id', $follow_id)->get();

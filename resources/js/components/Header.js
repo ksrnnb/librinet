@@ -17,6 +17,11 @@ export default function Header(props) {
     profileAndLogoutLink = (
       <>
         <li className="nav-item">
+          <Link className="nav-link" to="/notification" onClick={closeNav}>
+            通知
+          </Link>
+        </li>
+        <li className="nav-item">
           <Link className="nav-link" to={props.userUrl} onClick={closeNav}>
             プロフィール
           </Link>

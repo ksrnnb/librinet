@@ -7,9 +7,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Post;
 use App\Comment;
+use App\Events\Commented;
 
 class CommentController extends Controller
 {
+
+    public function get(Request $request, $id)
+    {
+        $comment = Comment::find($id);
+
+        if ($comment) {
+            $post = Post::where('id', $comment->post_id)->first();
+            $post->loadPostInfoAndComments();
+            return response()->json($post);
+        }
+
+        return response('投稿がみつかりません', 404);
+    }
+
     public function add(Request $request, $uuid)
     {
         if (Str::isUUid($uuid)) {
@@ -74,8 +89,9 @@ class CommentController extends Controller
             );
         }
 
-        if ($form['is_post']) {
-            Comment::create($params);
+        if (isset($form['post_id'])) {
+            $comment = Comment::create($params);
+            event(new Commented($comment));
         }
 
         // if (isset($form['recommend'])) {

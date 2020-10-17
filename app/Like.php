@@ -8,10 +8,16 @@ use Illuminate\Support\Str;
 use App\Post;
 use App\Comment;
 use App\Like;
+use App\Events\Liked;
 
 class Like extends Model
 {
     protected $guarded = ['id'];
+    
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
     
     public function comment()
     {
@@ -21,6 +27,11 @@ class Like extends Model
     public function post()
     {
         return $this->belongsTo('App\Post');
+    }
+
+    public function notification()
+    {
+        return $this->hasOne('App\Notification');
     }
 
     /*
@@ -47,10 +58,12 @@ class Like extends Model
     {
         $item = Like::returnKeyId($post_or_comment);
         
-        Like::create([
+        $like = Like::create([
             'user_id' => $user_id,
             $item['key'] => $item['id'],
         ]);
+
+        event(new Liked($like));
     }
 
     public static function unlike($user_id, $post_or_comment)

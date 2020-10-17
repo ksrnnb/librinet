@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Follower;
+use App\Events\Followed;
 
 class FollowerController extends Controller
 {
@@ -20,10 +21,12 @@ class FollowerController extends Controller
         
         if ($will_follow) {
             // TODO: もし既に存在していた場合、、、
-            Follower::create([
+            $follower = Follower::create([
                 'follow_id' => $follow_id,
                 'follower_id' => $follower_id,
             ]);
+
+            event(new Followed($follower));
 
             $follower_users = Follower::getFollowers($follow_id);
 

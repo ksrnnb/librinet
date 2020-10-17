@@ -176,7 +176,7 @@ class User extends Authenticatable
         return $user;
     }
 
-    public static function getParamsForApp2($str_id): array
+    public static function getParamsForApp($str_id): array
     {
         $user = User::where('str_id', $str_id)
                      ->first();
@@ -211,19 +211,19 @@ class User extends Authenticatable
         return $params;
     }
 
-    public static function getParamsForApp($str_id): array
-    {
-        $user = User::getIdentifiedUserProfileData($str_id);
+    // public static function getParamsForApp($str_id): array
+    // {
+    //     $user = User::getIdentifiedUserProfileData($str_id);
         
-        $following_posts = Post::getPostsOfFollowingUsers($user);
+    //     $following_posts = Post::getPostsOfFollowingUsers($user);
 
-        // ユーザーの検索ページ用
-        $examples = User::getExampleUsers()['examples'];
+    //     // ユーザーの検索ページ用
+    //     $examples = User::getExampleUsers()['examples'];
 
-        $params = compact('user', 'following_posts', 'examples');
+    //     $params = compact('user', 'following_posts', 'examples');
 
-        return $params;
-    }
+    //     return $params;
+    // }
 
     public static function getExampleUsers()
     {

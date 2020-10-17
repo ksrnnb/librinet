@@ -118,8 +118,9 @@ function Notice(props) {
 export default function Notification() {
   const data = useContext(DataContext);
   const notifications = data.params.user.notifications || [];
-
+  console.log(notifications);
   // 日付の新しい順にソート
+  // TODO: これはバックエンド側でやるべき？
   notifications.sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at);
   });

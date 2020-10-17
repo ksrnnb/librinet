@@ -86541,7 +86541,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
-/* harmony import */ var _Feed__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Feed */ "./resources/js/components/Feed.js");
+/* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Home */ "./resources/js/components/Home.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
@@ -86663,6 +86663,7 @@ function Comment() {
 
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
   var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]).params;
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(setup, []);
 
   function setup() {
@@ -86706,7 +86707,9 @@ function Comment() {
       console.log('Message is Empty!');
     } else {
       axios.post(path, paramsForPost).then(function (response) {
-        console.log(response.data); // TODO: コメント後にセットする。
+        setState.params(response.data);
+        window.scroll(0, 0);
+        props.history.push('/home');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -86718,8 +86721,8 @@ function Comment() {
     var viewerId = user.id;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
       subtitle: "Comment Page"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Feed__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      item: item,
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home__WEBPACK_IMPORTED_MODULE_2__["PostWithComments"], {
+      post: item,
       viewerId: viewerId
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendBook, {
       orderedBooks: user.orderedBooks,
@@ -86744,7 +86747,7 @@ RecommendButton.propTypes = {
 };
 RecommendBook.propTypes = {
   orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
-  genres: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
+  genres: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array,
   isRecommended: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func,
   setBookId: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
@@ -87337,21 +87340,26 @@ function BookCover(props) {
 function UserAndMessage(props) {
   var user = props.user;
   var message = props.message;
-  var userUrl = '/user/profile/' + user.str_id;
   var userImageUrl = user.image || '/img/icon.svg';
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_3__["PropsContext"]);
+
+  function linkToUserProfile() {
+    var userUrl = '/user/profile/' + user.str_id;
+    pages_props.history.push(userUrl);
+  }
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-9"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "avator col-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: userUrl
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "img-fluid",
+    className: "img-fluid hover",
     src: userImageUrl,
-    alt: "user-icon"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    alt: "user-icon",
+    onClick: linkToUserProfile
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-10"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "h4 d-inline mr-2"
@@ -87856,11 +87864,12 @@ Header.propTypes = {
 /*!*****************************************!*\
   !*** ./resources/js/components/Home.js ***!
   \*****************************************/
-/*! exports provided: default */
+/*! exports provided: PostWithComments, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostWithComments", function() { return PostWithComments; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Home; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -88412,7 +88421,9 @@ function Notice(props) {
 
 function Notification() {
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["DataContext"]);
-  var notifications = data.params.user.notifications || []; // 日付の新しい順にソート
+  var notifications = data.params.user.notifications || [];
+  console.log(notifications); // 日付の新しい順にソート
+  // TODO: これはバックエンド側でやるべき？
 
   notifications.sort(function (a, b) {
     return new Date(b.created_at) - new Date(a.created_at);

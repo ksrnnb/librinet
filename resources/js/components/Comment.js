@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
-import Feed from './Feed';
+import { PostWithComments } from './Home';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
-import { DataContext } from './App';
+import { DataContext, SetStateContext } from './App';
 
 const axios = window.axios;
 
@@ -99,6 +99,7 @@ export default function Comment() {
 
   const props = useContext(PropsContext);
   const params = useContext(DataContext).params;
+  const setState = useContext(SetStateContext);
 
   useEffect(setup, []);
 
@@ -151,8 +152,9 @@ export default function Comment() {
       axios
         .post(path, paramsForPost)
         .then((response) => {
-          console.log(response.data);
-          // TODO: コメント後にセットする。
+          setState.params(response.data);
+          window.scroll(0, 0);
+          props.history.push('/home');
         })
         .catch((error) => {
           console.log(error);
@@ -166,7 +168,7 @@ export default function Comment() {
     return (
       <>
         <Subtitle subtitle="Comment Page" />
-        <Feed item={item} viewerId={viewerId} />
+        <PostWithComments post={item} viewerId={viewerId} />
         <RecommendBook
           orderedBooks={user.orderedBooks}
           genres={user.genres}
@@ -193,7 +195,7 @@ RecommendButton.propTypes = {
 
 RecommendBook.propTypes = {
   orderedBooks: PropTypes.object,
-  genres: PropTypes.object,
+  genres: PropTypes.array,
   isRecommended: PropTypes.bool,
   onChange: PropTypes.func,
   setBookId: PropTypes.func,

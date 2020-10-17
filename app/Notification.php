@@ -20,6 +20,6 @@ class Notification extends Model
 
     public function follower()
     {
-        return $this->belongsTo('App\Follower');
+        return $this->belongsTo('App\Follower', 'follower_id', 'follower_id');
     }
 }

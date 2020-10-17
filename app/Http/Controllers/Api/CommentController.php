@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Post;
+use App\User;
 use App\Comment;
 use App\Events\Commented;
 
@@ -93,25 +95,10 @@ class CommentController extends Controller
             $comment = Comment::create($params);
             event(new Commented($comment));
         }
+        $user = Auth::user();
+        $params = User::getParamsForApp($user->str_id);
 
-        // if (isset($form['recommend'])) {
-        //     Comment::create([
-        //         'message' => $form['message'],
-        //         'uuid'    => Str::uuid(),
-        //         'post_id' => $form['post_id'],
-        //         'user_id' => Auth::id(),
-        //         'book_id' => $form['book_id'],
-        //     ]);
-        // } else {
-        //     Comment::create([
-        //         'message' => $form['message'],
-        //         'uuid'    => Str::uuid(),
-        //         'post_id' => $form['post_id'],
-        //         'user_id' => Auth::id(),
-        //     ]);
-        // }
-
-        return response('Commented!', 200);
+        return response()->json($params);
     }
 
     public function delete(Request $request)

@@ -51,16 +51,24 @@ function BookCover(props) {
 function UserAndMessage(props) {
   const user = props.user;
   const message = props.message;
-  const userUrl = '/user/profile/' + user.str_id;
   const userImageUrl = user.image || '/img/icon.svg';
+  const pages_props = useContext(PropsContext);
+
+  function linkToUserProfile() {
+    const userUrl = '/user/profile/' + user.str_id;
+    pages_props.history.push(userUrl);
+  }
 
   return (
     <div className="col-9">
       <div className="row">
         <div className="avator col-2">
-          <a href={userUrl}>
-            <img className="img-fluid" src={userImageUrl} alt="user-icon" />
-          </a>
+          <img
+            className="img-fluid hover"
+            src={userImageUrl}
+            alt="user-icon"
+            onClick={linkToUserProfile}
+          />
         </div>
         <div className="col-10">
           <p className="h4 d-inline mr-2">{user.name}</p>

@@ -34,7 +34,7 @@ function Comments(props) {
   return comments;
 }
 
-function PostWithComments(props) {
+export function PostWithComments(props) {
   const data = useContext(DataContext);
   const pages_props = useContext(PropsContext);
   const setState = useContext(SetStateContext);

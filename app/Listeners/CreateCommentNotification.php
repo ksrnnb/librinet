@@ -29,6 +29,7 @@ class CreateCommentNotification
     {
         $comment = $event->comment;
         $post = $comment->post;
+        $post->touch(); // postを更新する
 
         Notification::create([
             'user_id' => $post->user_id,

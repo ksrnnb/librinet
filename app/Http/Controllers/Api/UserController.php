@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            $params = User::getParamsForApp2($user->str_id);
+            $params = User::getParamsForApp($user->str_id);
         } else {
             $params = User::getExampleUsers();
         }

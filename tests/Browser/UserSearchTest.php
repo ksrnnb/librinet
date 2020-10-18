@@ -17,16 +17,12 @@ class UserTest extends DuskTestCase
     use DatabaseMigrations;
 
     protected $user;
-    protected $hasCreated = false;
 
     protected function setUp(): void
     {
         parent::setUp();
-        if (!$this->hasCreated) {
-            $this->hasCreated = true;
-            
-            $this->user = Factory(User::class)->create();
-        }
+        
+        $this->user = Factory(User::class)->create();
     }
 
     public function testUserSearchWhenNoInput()

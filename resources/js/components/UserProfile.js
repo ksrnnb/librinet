@@ -92,7 +92,8 @@ function FollowNumber(props) {
 function EditBookshelfButton(props) {
   const hasLoaded = 'books' in props;
 
-  if (hasLoaded) {
+  // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
+  if (hasLoaded && props.viewerUser) {
     const canEdit = props.user.id == props.viewerUser.id;
     const isNotEmpty = props.books.length;
     const strId = props.user.str_id;
@@ -153,7 +154,8 @@ export default function UserProfile() {
       setUserData(user);
 
       // プロフィールをクリックしてきた場合
-    } else if (user.str_id === queryStrId) {
+      // ログインしてない場合もあるので、userが代入されているか確認
+    } else if (user && user.str_id === queryStrId) {
       setUserData(user);
 
       // URLを入力してきた場合

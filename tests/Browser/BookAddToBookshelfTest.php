@@ -10,63 +10,93 @@ use App\Book;
 
 class BookAddToBookshelfTest extends DuskTestCase
 {
-    // public function deleteIfBookExist($isbns, $id)
-    // {
-    //     foreach ($isbns as $isbn) {
-    //         $books = Book::where('isbn', $isbn)->get();
-    //         $book = $books->where('user_id', $id)->first();
-        
-    //         if ($book) {
-    //             $book->delete();
-    //         }
-    //     }
-    // }
+    use DatabaseMigrations;
 
-    // public function testWithoutLogin()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';                // docker
-    //         $browser->visit('/book/add/' . $isbn)
-    //                 ->assertPathIs('/');
-    //     });
-    // }
+    protected $user;
+    protected $credential;
+    protected $isbn;
 
-    // public function testWithoutInput()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbns = ['9784839955557', '9784297100339'];     // デザイン, Docker
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = Factory(User::class)->create();
 
-    //         $user = User::where('str_id', 'guest')->first();
-    //         $this->deleteIfBookExist($isbns, $user->id);
+        // design, docker, wrong ISBN
+        $this->isbn = ['9784839955557', '9784297100339', '9784297100338'];
 
-    //         $browser->loginAs($user)
-    //                 ->visit('/book/add/' . $isbns[0])
-    //                 ->press('本棚に追加する')
-    //                 ->assertPathIsNot('/book');     // NG ジャンルの未入力
-    //     });
-    // }
+        $this->credential = [
+            'str_id' => $this->user->str_id,
+            'password' => config('app.guest_password')
+        ];
+    }
 
-    // public function testWithInputNewGenre()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784839955557';                // デザイン
+    public function testWithoutLogin()
+    {
+        $this->browse(function (Browser $browser) {
+            $path = '/book/add/' . $this->isbn[0];
 
-    //         $browser->visit('/book/add/' . $isbn)
-    //                 ->type('new_genre', 'GENRE1')   // ジャンルの入力
-    //                 ->press('本棚に追加する')
-    //                 ->assertPathIs('/book');        // OK
-    //     });
-    // }
+            $browser->visit($path)
+                    ->waitForLocation('/home')
+                    ->assertSee('ログイン');
+        });
+    }
 
-    // public function testWithConventionalGenre()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';               // Docker
+    public function testWrongIsbn()
+    {
+        $this->browse(function (Browser $browser) {
+            $path = '/book/add/' . $this->isbn[2];
 
-    //         $browser->visit('/book/add/' . $isbn)
-    //                 ->check('#conventional')
-    //                 ->press('本棚に追加する')
-    //                 ->assertPathIs('/book');        // OK
-    //     });
-    // }
+            $browser = $this->login($browser);
+
+            // 本が見つからない場合
+            $browser->visit($path)
+                    ->pause(5000) // pauseを入れないとno such alertとなる。なぜかは不明。
+                    ->waitForDialog()
+                    ->assertDialogOpened('本が見つかりません')
+                    ->acceptDialog()
+                    ->assertDontSee('本棚に追加');
+
+            // ISBNでない場合
+            $browser->visit($path . 'test_wrong_link')
+                    ->waitForText('エラー')
+                    ->assertSee('エラーが発生しました');
+        });
+    }
+
+    public function testWithoutInput()
+    {
+        $this->browse(function (Browser $browser) {
+            $path = '/book/add/' . $this->isbn[0];
+
+            $browser->visit($path)
+                    ->waitFor('#new-genre')
+                    ->press('本棚に追加する')
+                    ->waitFor('.error')
+                    ->assertPathIs($path);
+        });
+    }
+
+    public function testCanAddBook()
+    {
+        $this->browse(function (Browser $browser) {
+            $path = '/book/add/' . $this->isbn[0];
+            // 新しいジャンル
+            $browser->visit($path)
+                    ->waitFor('#new-genre')
+                    ->type('new-genre', 'TEST_GENRE')
+                    ->press('本棚に追加する')
+                    ->waitFor('#user-card')
+                    ->assertSee('本棚');
+
+            $path = '/book/add/' . $this->isbn[1];
+            // 既存のジャンル
+            $isbn = '9784297100339';
+                    $browser->visit($path)
+                    ->waitFor('#new-genre')
+                    ->check('#conventional')
+                    ->press('本棚に追加する')
+                    ->waitFor('#user-card')
+                    ->assertSee('本棚');
+        });
+    }
 }

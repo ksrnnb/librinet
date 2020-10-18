@@ -10,113 +10,176 @@ use Illuminate\Support\Str;
 
 class BookPostTest extends DuskTestCase
 {
+    use DatabaseMigrations;
 
-    public function createNewUser()
+    protected $user;
+    protected $credential;
+    protected $isbn;
+    protected $path;
+
+    protected function setUp(): void
     {
-        $user = factory(User::class)->create();
+        parent::setUp();
+        $this->user = Factory(User::class)->create();
 
-        return $user;
+        $this->credential = [
+            'str_id' => $this->user->str_id,
+            'password' => config('app.guest_password')
+        ];
+
+        // design, docker, wrong ISBN
+        $this->isbn = ['9784839955557', '9784297100339', '9784297100338'];
+        $this->path = '/book/post/' . $this->isbn[0];
+    }
+
+    public function addBook($browser, $message = 'TEST_MESSAGE', $genre_name = 'TEST_GENRE')
+    {
+        // 本を追加
+        $browser->visit($this->path)
+                ->waitFor('#message')
+                ->check('add-book')
+                ->type('new-genre', $genre_name)
+                ->type('message', $message)
+                ->press('投稿する')
+                ->waitFor('.feed');
+
+        return $browser;
     }
 
     public function testWithoutLogin()
     {
         $this->browse(function (Browser $browser) {
-            $isbn = '9784297100339';
-            $browser->visit('/book/post/' . $isbn)
-                    ->waitFor('#guest')
-                    ->assertPathIs('/login');
+            $browser->visit($this->path)
+                    ->waitForLocation('/home')
+                    ->assertSee('ログイン');
         });
     }
 
-    // public function testNoComment()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';    // Docker
-    //         $user = $this->createNewUser();
+    public function testWrongIsbn()
+    {
+        $this->browse(function (Browser $browser) {
+            $no_book_path = '/book/post/' . $this->isbn[2];
 
-    //         $this->get('/sanctum/csrf-cookie');
-    //         $browser->loginAs($user)
-    //                 ->visit('/book/post/' . $isbn)
-    //                 ->waitFor('#message')
-    //                 ->check('add-book')
-    //                 ->type('new_genre', 'Infrastructure')
-    //                 ->press('投稿する')
-    //                 ->assertSee('Docker');
-    //     });
-    // }
+            $browser = $this->login($browser);
 
-    // public function testNoGenreInput()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';    // Docker
-    //         $message = 'なかなかいいと思います！';
+            // 本が見つからない場合
+            $browser->visit($no_book_path)
+                    ->pause(5000) // pauseを入れないとno such alertとなる。なぜかは不明。
+                    ->waitForDialog()
+                    ->assertDialogOpened('本が見つかりません')
+                    ->acceptDialog()
+                    ->assertDontSee('本棚に追加');
 
-    //         $browser->visit('/book/post/' . $isbn)
-    //                 ->assertSee('Docker')
-    //                 ->check('add-book')
-    //                 ->type('message', $message)
-    //                 ->press('投稿する')
-    //                 ->assertSee('Docker');
-    //     });
-    // }
+            // ISBNでない場合
+            $browser->visit($this->path . 'test_wrong_link')
+                    ->waitForText('エラー')
+                    ->assertSee('エラーが発生しました');
+        });
+    }
 
-    // public function testDontAddToBookshelf()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';    // Docker
-    //         $message = 'なかなかいいと思います！';
+    public function testWithoutGenre()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit($this->path)
+                    ->waitFor('#message')
+                    ->type('message', 'TEST_MESSAGE')
+                    ->press('投稿する')
+                    ->waitFor('.error')
+                    ->assertPathIs($this->path);
+        });
+    }
 
-    //         $browser->visit('/book/post/' . $isbn)
-    //                 ->uncheck('add-book')
-    //                 ->type('message', $message)
-    //                 ->press('投稿する')
-    //                 ->assertPathIs('/home')
-    //                 ->assertSee($message);
-    //     });
-    // }
+    public function testWithoutComment()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit($this->path)
+                    ->waitFor('#new-genre')
+                    ->type('new-genre', 'TEST_GENRE')
+                    ->press('投稿する')
+                    ->waitFor('.error')
+                    ->assertPathIs($this->path);
+        });
+    }
 
-    // public function testAddToBookshelfWithNewGenre()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';    // Docker
-    //         $message = 'なかなかいいと思います！';
+    public function testDontAddToBookshelf()
+    {
+        $this->browse(function (Browser $browser) {
+            $message = 'TEST_MESSAGE';
 
-    //         $browser->visit('/book/post/' . $isbn)
-    //                 ->assertDontSee('既存')         // 新規ユーザーはまだ本が未登録なのでみえない
-    //                 ->check('add-book')
-    //                 ->type('new_genre', 'Infrastructure')
-    //                 ->type('message', $message)
-    //                 ->press('投稿する')
-    //                 ->assertPathIs('/home')
-    //                 ->assertSee($message);
-    //     });
-    // }
+            $browser->visit($this->path)
+                    ->waitFor('#message')
+                    ->uncheck('add-book')
+                    ->type('message', $message)
+                    ->press('投稿する')
+                    ->waitFor('.feed')
+                    ->assertSee($message)
+                    ->visit('/user/profile/' . $this->user->str_id)
+                    ->waitForText('Profile')
+                    ->assertSee('本がありません');
+        });
+    }
 
-    // public function testAddToBookshelfWithConventionalGenre()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784822283117';    // ネットワーク
-    //         $message = 'ネットワークの勉強になりました';
+    public function testAddBookWithNewGenreAndCannotAddAgain()
+    {
+        $this->browse(function (Browser $browser) {
+            $message = 'TEST_MESSAGE';
 
-    //         $browser->visit('/book/post/' . $isbn)
-    //                 ->check('add-book')
-    //                 ->check('#conventional')
-    //                 ->select('genre_id', 'Infrastructure')
-    //                 ->type('message', $message)
-    //                 ->press('投稿する')
-    //                 ->assertPathIs('/home')
-    //                 ->assertSee($message);
-    //     });
-    // }
+            // 本を追加
+            $browser = $this->addBook($browser, $message);
+            
+            $browser->assertSee($message)
+                    ->visit('/user/profile/' . $this->user->str_id)
+                    ->waitForText('Profile')
+                    ->assertDontSee('本がありません');
 
-    // public function testCannotSelectAddBookWhenBookIsAlreadyInBookshelf()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $isbn = '9784297100339';    // Docker
+            // 本が追加済みで、ジャンルが選べないのを確認
+            $browser->visit($this->path)
+                    ->waitFor('#message')
+                    ->assertNotChecked('add-book')
+                    ->assertSee('追加済み')
+                    ->assertDontSee('ジャンル');
+        });
+    }
 
-    //         $browser->visit('/book/post/' . $isbn)
-    //                 ->assertDontSee('ジャンルの選択')
-    //                 ->assertAttribute('#add-book', 'disabled', 'true');
-    //     });
-    // }
+    public function testCannotSelectGenreWithoutCheckedAddingBox()
+    {
+        $this->browse(function (Browser $browser) {
+            // 本を追加
+            $name = 'TEST_GENRE';
+            $browser = $this->addBook($browser, $message = 'TEST', $genre_name = $name);
+            $new_path = '/book/post/' . $this->isbn[1];
+
+            $browser->visit($new_path)
+                    ->waitFor('#message')
+                    ->uncheck('add-book')
+                    ->assertDisabled('genre')
+                    ->assertDisabled('new-genre')
+                    ->assertDisabled('genre_id');
+        });
+    }
+
+    public function testAddBookWithConventionalGenre()
+    {
+        $this->browse(function (Browser $browser) {
+            $message_1 = 'TEST_MESSAGE_1';
+            $message_2 = 'TEST_MESSAGE_2';
+            $new_path = '/book/post/' . $this->isbn[1];
+            $genre_name = 'TEST_GENRE';
+
+            // 本を追加
+            $browser = $this->addBook($browser, $message_1, $genre_name);
+
+            // もう一冊追加
+            $browser->visit($new_path)
+                    ->waitFor('#message')
+                    ->check('add-book')
+                    ->check('#conventional')
+                    ->select('genre_id', $genre_name)
+                    ->type('message', $message_2)
+                    ->press('投稿する')
+                    ->waitFor('.feed')
+                    ->assertSee($message_1)
+                    ->assertSee($message_2);
+        });
+    }
 }

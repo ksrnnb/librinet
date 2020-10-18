@@ -52,7 +52,7 @@ function Books(props) {
     if (willEdit) {
       genre = (
         <input
-          className="mb-5"
+          className="mb-5 genres"
           defaultValue={genres[genreId]}
           data-id={genreId}
         />

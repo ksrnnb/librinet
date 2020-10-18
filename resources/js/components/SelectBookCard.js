@@ -7,7 +7,7 @@ export default function SelectBookCard(props) {
   const book = props.book;
 
   return (
-    <div className="row">
+    <div className="row select-book-card">
       <div className="col-1">{props.children}</div>
       <BookImage col="col-3" book={book} />
       <BookInfo col="col-8" book={book}></BookInfo>

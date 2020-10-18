@@ -112,15 +112,15 @@ export default function Book() {
         .catch((error) => {
           // 本が見つからない場合は404に設定した (BookController)
           if (error.response.status == 404) {
-            setErrors(['NotFound']);
+            setErrors(['本が見つかりませんでした']);
           } else {
             // サーバー側のvalidationに引っ掛かった場合など。
             // JavaScript側のvalidationで十分だと思うけど一応。
-            setErrors(['UnknownError']);
+            setErrors(['Unknown Error']);
           }
         });
     } else {
-      setErrors(['InputError']);
+      setErrors(['ISBNが正しく入力されていません']);
     }
   }
 

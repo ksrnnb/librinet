@@ -11,6 +11,23 @@ abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    // 各テストで共通の処理。一回ログインすれば、
+    // そのテストファイルの中ではログインが継続される。
+    public function login($browser)
+    {
+        $str_id = $this->credential['str_id'];
+        $password = $this->credential['password'];
+
+        $browser->visit('/login')
+                ->waitFor('#user-id')
+                ->type('user-id', $str_id)
+                ->type('password', $password)
+                ->press('Login')
+                ->waitForText('Home');
+
+        return $browser;
+    }
+
     /**
      * Prepare for Dusk test execution.
      *
@@ -34,7 +51,6 @@ abstract class DuskTestCase extends BaseTestCase
             '--headless',
             '--window-size=1920,1080',
             '--no-sandbox',
-            // '--enable-file-cookies',
         ]);
 
         if (env('APP_ENV')  == 'develop') {

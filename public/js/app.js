@@ -85690,6 +85690,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var axios = window.axios;
 function AddBook() {
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]); // ログインしていない場合はページ遷移
+
+  if (!data.params.user) {
+    props.history.push('/home');
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       errors = _useState2[0],
@@ -85720,9 +85729,6 @@ function AddBook() {
       convGenre = _useState12[0],
       setConvGenre = _useState12[1];
 
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
-  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]);
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
   var genres = data.params.user.genres;
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(setup, []);
 
@@ -85755,6 +85761,13 @@ function AddBook() {
       }).then(function (response) {
         var book = response.data;
         setData(book);
+      })["catch"](function (error) {
+        // ISBNが違う場合 404
+        if (error.response.status === 404) {
+          alert('本が見つかりません'); // 既に追加済みの場合など
+        } else {
+          props.history.push('/error');
+        }
       });
     }
   }
@@ -85858,9 +85871,7 @@ function AddBook() {
       onClick: submitBook
     }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B"));
   } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-      className: "\u7121\u52B9\u306A\u30EA\u30AF\u30A8\u30B9\u30C8\u3067\u3059"
-    });
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
 }
 
@@ -86120,15 +86131,15 @@ function Book() {
       })["catch"](function (error) {
         // 本が見つからない場合は404に設定した (BookController)
         if (error.response.status == 404) {
-          setErrors(['NotFound']);
+          setErrors(['本が見つかりませんでした']);
         } else {
           // サーバー側のvalidationに引っ掛かった場合など。
           // JavaScript側のvalidationで十分だと思うけど一応。
-          setErrors(['UnknownError']);
+          setErrors(['Unknown Error']);
         }
       });
     } else {
-      setErrors(['InputError']);
+      setErrors(['ISBNが正しく入力されていません']);
     }
   }
 
@@ -86188,7 +86199,7 @@ __webpack_require__.r(__webpack_exports__);
 function BookCard(props) {
   var book = props.book;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
+    className: "row book-card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookImage__WEBPACK_IMPORTED_MODULE_1__["default"], {
     col: "col-3",
     book: book
@@ -86479,7 +86490,7 @@ function Books(props) {
 
     if (willEdit) {
       genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        className: "mb-5",
+        className: "mb-5 genres",
         defaultValue: genres[genreId],
         "data-id": genreId
       });
@@ -86886,16 +86897,20 @@ function DeleteBook() {
 
   function onSubmitDelete(ids) {
     var path = '/api/book';
-    redirectUserProfile(ids);
-    axios["delete"](path, {
-      data: {
-        ids: ids
-      }
-    }).then(function () {
-      redirectUserProfile(ids);
-    })["catch"](function (error) {
-      console.log(error);
-    });
+
+    if (ids.length) {
+      axios["delete"](path, {
+        data: {
+          ids: ids
+        }
+      }).then(function () {
+        redirectUserProfile(ids);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    } else {
+      alert('本が選択されていません');
+    }
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -87234,6 +87249,31 @@ UserStrIdInput.propTypes = {
   strId: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].string,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
 };
+
+/***/ }),
+
+/***/ "./resources/js/components/ErrorPage.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/ErrorPage.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ErrorPage; });
+/* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function ErrorPage() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_0__["default"], {
+    subtitle: "\u30A8\u30E9\u30FC\u30DA\u30FC\u30B8"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", {
+    className: "mt-5"
+  }, "\u4E88\u671F\u3057\u306A\u3044\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F"));
+}
 
 /***/ }),
 
@@ -87694,10 +87734,10 @@ function NewGenre(props) {
     disabled: disabled
   }), "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: "d-block",
-    htmlFor: "new_genre"
+    htmlFor: "new-genre"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
-    name: "new_genre",
+    name: "new-genre",
     id: "new-genre",
     value: newGenre,
     disabled: disabled,
@@ -87738,7 +87778,7 @@ function ConventionalGenre(props) {
     }), "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
       name: "genre_id",
       className: "d-block",
-      id: "convSelect",
+      id: "genre_id",
       disabled: disabled,
       value: props.convGenre,
       onClick: props.onClickConvGenre,
@@ -88577,9 +88617,14 @@ function Post(props) {
 }
 
 function PostData() {
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]);
   var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]); // ログインしていない場合はページ遷移
+
+  if (!data.params.user) {
+    props.history.push('/home');
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -88632,6 +88677,13 @@ function PostData() {
       }).then(function (response) {
         var book = response.data;
         setData(book);
+      })["catch"](function (error) {
+        // ISBNが違う場合 404
+        if (error.response.status === 404) {
+          alert('本が見つかりません'); // 既に追加済みの場合など
+        } else {
+          props.history.push('/error');
+        }
       });
     }
 
@@ -88794,18 +88846,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Book__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Book */ "./resources/js/components/Book.js");
 /* harmony import */ var _BookProfile__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BookProfile */ "./resources/js/components/BookProfile.js");
 /* harmony import */ var _Comment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Comment */ "./resources/js/components/Comment.js");
-/* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Home */ "./resources/js/components/Home.js");
-/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Login */ "./resources/js/components/Login.js");
-/* harmony import */ var _Logout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Logout */ "./resources/js/components/Logout.js");
-/* harmony import */ var _UserProfile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UserProfile */ "./resources/js/components/UserProfile.js");
-/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Post */ "./resources/js/components/Post.js");
-/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./User */ "./resources/js/components/User.js");
-/* harmony import */ var _Followers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Followers */ "./resources/js/components/Followers.js");
-/* harmony import */ var _EditGenre__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EditGenre */ "./resources/js/components/EditGenre.js");
-/* harmony import */ var _EditUser__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./EditUser */ "./resources/js/components/EditUser.js");
-/* harmony import */ var _DeleteBook__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./DeleteBook */ "./resources/js/components/DeleteBook.js");
-/* harmony import */ var _Signup__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Signup */ "./resources/js/components/Signup.js");
-/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Notification */ "./resources/js/components/Notification.js");
+/* harmony import */ var _ErrorPage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ErrorPage */ "./resources/js/components/ErrorPage.js");
+/* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Home */ "./resources/js/components/Home.js");
+/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Login */ "./resources/js/components/Login.js");
+/* harmony import */ var _Logout__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Logout */ "./resources/js/components/Logout.js");
+/* harmony import */ var _UserProfile__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UserProfile */ "./resources/js/components/UserProfile.js");
+/* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Post */ "./resources/js/components/Post.js");
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./User */ "./resources/js/components/User.js");
+/* harmony import */ var _Followers__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Followers */ "./resources/js/components/Followers.js");
+/* harmony import */ var _EditGenre__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./EditGenre */ "./resources/js/components/EditGenre.js");
+/* harmony import */ var _EditUser__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./EditUser */ "./resources/js/components/EditUser.js");
+/* harmony import */ var _DeleteBook__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./DeleteBook */ "./resources/js/components/DeleteBook.js");
+/* harmony import */ var _Signup__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Signup */ "./resources/js/components/Signup.js");
+/* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Notification */ "./resources/js/components/Notification.js");
+
 
 
 
@@ -88824,31 +88878,31 @@ __webpack_require__.r(__webpack_exports__);
 
 var routingList = [{
   path: '/home',
-  component: _Home__WEBPACK_IMPORTED_MODULE_4__["default"]
+  component: _Home__WEBPACK_IMPORTED_MODULE_5__["default"]
 }, {
   path: '/login',
-  component: _Login__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _Login__WEBPACK_IMPORTED_MODULE_6__["default"]
 }, {
   path: '/logout',
-  component: _Logout__WEBPACK_IMPORTED_MODULE_6__["default"]
+  component: _Logout__WEBPACK_IMPORTED_MODULE_7__["default"]
 }, {
   isExact: true,
   path: '/signup',
-  component: _Signup__WEBPACK_IMPORTED_MODULE_14__["default"]
+  component: _Signup__WEBPACK_IMPORTED_MODULE_15__["default"]
 }, {
   isExact: true,
   path: '/user',
-  component: _User__WEBPACK_IMPORTED_MODULE_9__["default"]
+  component: _User__WEBPACK_IMPORTED_MODULE_10__["default"]
 }, {
   isExact: true,
   path: '/user/profile/:strId',
-  component: _UserProfile__WEBPACK_IMPORTED_MODULE_7__["default"]
+  component: _UserProfile__WEBPACK_IMPORTED_MODULE_8__["default"]
 }, {
   path: '/user/profile/:strId/:target',
-  component: _Followers__WEBPACK_IMPORTED_MODULE_10__["default"]
+  component: _Followers__WEBPACK_IMPORTED_MODULE_11__["default"]
 }, {
   path: '/user/edit/:strId',
-  component: _EditUser__WEBPACK_IMPORTED_MODULE_12__["default"]
+  component: _EditUser__WEBPACK_IMPORTED_MODULE_13__["default"]
 }, {
   isExact: true,
   path: '/book',
@@ -88861,19 +88915,22 @@ var routingList = [{
   component: _AddBook__WEBPACK_IMPORTED_MODULE_0__["default"]
 }, {
   path: '/book/post/:isbn',
-  component: _Post__WEBPACK_IMPORTED_MODULE_8__["default"]
+  component: _Post__WEBPACK_IMPORTED_MODULE_9__["default"]
 }, {
   path: '/book/delete/:strId',
-  component: _DeleteBook__WEBPACK_IMPORTED_MODULE_13__["default"]
+  component: _DeleteBook__WEBPACK_IMPORTED_MODULE_14__["default"]
 }, {
   path: '/genre/edit/:strId',
-  component: _EditGenre__WEBPACK_IMPORTED_MODULE_11__["default"]
+  component: _EditGenre__WEBPACK_IMPORTED_MODULE_12__["default"]
 }, {
   path: '/comment/:uuid',
   component: _Comment__WEBPACK_IMPORTED_MODULE_3__["default"]
 }, {
   path: '/notification',
-  component: _Notification__WEBPACK_IMPORTED_MODULE_15__["default"]
+  component: _Notification__WEBPACK_IMPORTED_MODULE_16__["default"]
+}, {
+  path: '/error',
+  component: _ErrorPage__WEBPACK_IMPORTED_MODULE_4__["default"]
 }];
 
 /***/ }),
@@ -88937,14 +88994,16 @@ function SearchedBook(props) {
   }
 
   function AddBookButton() {
-    if (isInBookshelf) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3___default.a.Fragment, null);
-    } else {
+    var isLogin = data.isLogin;
+
+    if (isLogin && !isInBookshelf) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
         type: "button",
         className: "btn btn-outline-success",
         onClick: linkToAddBookshelf
       }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B");
+    } else {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3___default.a.Fragment, null);
     }
   }
 
@@ -88989,7 +89048,7 @@ __webpack_require__.r(__webpack_exports__);
 function SelectBookCard(props) {
   var book = props.book;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
+    className: "row select-book-card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-1"
   }, props.children), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookImage__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -89122,14 +89181,9 @@ function Signup() {
           password_confirmation: confirmPassword
         }).then(function (response) {
           var params = response.data;
-          console.log('----params---');
-          console.log(params);
           setState.params(params);
           setState.isLogin(true);
-          props.history.push('/home'); // props.history.push({
-          //   pathname: '/home',
-          //   state: params,
-          // });
+          props.history.push('/home');
         })["catch"](function (error) {
           console.log('--error----');
           console.log(error); // validation errorの場合
@@ -89444,7 +89498,7 @@ function User() {
   var examples = data.params.examples;
 
   function onClickSearch() {
-    if (input == null) {
+    if (input === '') {
       setErrors(['入力されていません']);
     }
 
@@ -89952,9 +90006,9 @@ function FollowNumber(props) {
 }
 
 function EditBookshelfButton(props) {
-  var hasLoaded = ('books' in props);
+  var hasLoaded = ('books' in props); // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
 
-  if (hasLoaded) {
+  if (hasLoaded && props.viewerUser) {
     var canEdit = props.user.id == props.viewerUser.id;
     var isNotEmpty = props.books.length;
     var strId = props.user.str_id;
@@ -90012,7 +90066,8 @@ function UserProfile() {
     if (locationState) {
       var _user = locationState.user;
       setUserData(_user); // プロフィールをクリックしてきた場合
-    } else if (user.str_id === queryStrId) {
+      // ログインしてない場合もあるので、userが代入されているか確認
+    } else if (user && user.str_id === queryStrId) {
       setUserData(user); // URLを入力してきた場合
     } else {
       var path = '/api/user/profile/' + props.match.params.strId;

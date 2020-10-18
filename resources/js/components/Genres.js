@@ -67,10 +67,10 @@ function NewGenre(props) {
         />
         新しいジャンルを入力
       </label>
-      <label className="d-block" htmlFor="new_genre">
+      <label className="d-block" htmlFor="new-genre">
         <input
           type="text"
-          name="new_genre"
+          name="new-genre"
           id="new-genre"
           value={newGenre}
           disabled={disabled}
@@ -121,7 +121,7 @@ function ConventionalGenre(props) {
         <select
           name="genre_id"
           className="d-block"
-          id="convSelect"
+          id="genre_id"
           disabled={disabled}
           value={props.convGenre}
           onClick={props.onClickConvGenre}

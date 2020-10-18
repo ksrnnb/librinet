@@ -81,7 +81,7 @@ export default function User() {
   const examples = data.params.examples;
 
   function onClickSearch() {
-    if (input == null) {
+    if (input === '') {
       setErrors(['入力されていません']);
     }
     axios

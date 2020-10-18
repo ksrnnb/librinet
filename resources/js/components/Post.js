@@ -69,10 +69,15 @@ function Post(props) {
 }
 
 export default function PostData() {
-  const props = useContext(PropsContext);
-
   const data = useContext(DataContext);
   const setState = useContext(SetStateContext);
+  const props = useContext(PropsContext);
+
+  // ログインしていない場合はページ遷移
+  if (!data.params.user) {
+    props.history.push('/home');
+    return <></>;
+  }
 
   const [book, setBook] = useState(null);
   const [isChecked, setIsChecked] = useState(true);
@@ -102,7 +107,15 @@ export default function PostData() {
         .then((response) => {
           const book = response.data;
           setData(book);
-        });
+        }).catch(error => {
+          // ISBNが違う場合 404
+          if (error.response.status === 404) {
+            alert('本が見つかりません');
+            // 既に追加済みの場合など
+          } else {
+            props.history.push('/error');
+          }
+        })
     }
 
     function setInitialConvGenre() {

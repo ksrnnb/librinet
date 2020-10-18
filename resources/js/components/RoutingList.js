@@ -2,6 +2,7 @@ import AddBook from './AddBook';
 import Book from './Book';
 import BookProfile from './BookProfile';
 import Comment from './Comment';
+import ErrorPage from './ErrorPage';
 import Home from './Home';
 import Login from './Login';
 import Logout from './Logout';
@@ -98,5 +99,10 @@ export const routingList = [
   {
     path: '/notification',
     component: Notification,
+  },
+
+  {
+    path: '/error',
+    component: ErrorPage,
   },
 ];

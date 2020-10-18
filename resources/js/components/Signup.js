@@ -65,15 +65,9 @@ export default function Signup() {
             })
             .then((response) => {
               const params = response.data;
-              console.log('----params---');
-              console.log(params);
               setState.params(params);
               setState.isLogin(true);
               props.history.push('/home');
-              // props.history.push({
-              //   pathname: '/home',
-              //   state: params,
-              // });
             })
             .catch((error) => {
               console.log('--error----');

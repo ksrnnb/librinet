@@ -69,10 +69,15 @@ function Post(props) {
 }
 
 export default function PostData() {
-  const props = useContext(PropsContext);
-
   const data = useContext(DataContext);
   const setState = useContext(SetStateContext);
+  const props = useContext(PropsContext);
+
+  // ログインしていない場合はページ遷移
+  if (!data.params.user) {
+    props.history.push('/home');
+    return <></>;
+  }
 
   const [book, setBook] = useState(null);
   const [isChecked, setIsChecked] = useState(true);
@@ -102,6 +107,17 @@ export default function PostData() {
         .then((response) => {
           const book = response.data;
           setData(book);
+        })
+        .catch((error) => {
+          // ISBNが違う場合 404
+          if (error.response.status === 404) {
+            setErrors(['本がみつかりませんでした']);
+            // validation error
+          } else if (error.response.status == 422) {
+            setErrors(['URLが正しくありません']);
+          } else {
+            props.history.push('/error');
+          }
         });
     }
 
@@ -238,7 +254,7 @@ export default function PostData() {
       </>
     );
   } else {
-    return <h2 className="無効なリクエストです"></h2>;
+    return <Errors errors={errors} />;
   }
 }
 

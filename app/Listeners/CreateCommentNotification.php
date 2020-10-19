@@ -31,9 +31,12 @@ class CreateCommentNotification
         $post = $comment->post;
         $post->touch(); // postを更新する
 
-        Notification::create([
-            'user_id' => $post->user_id,
-            'comment_id' => $comment->id,
-        ]);
+        // 自分でコメントした場合は通知を作成しない
+        if ($comment->user_id !== $post->user_id) {
+            Notification::create([
+                'user_id' => $post->user_id,
+                'comment_id' => $comment->id,
+            ]);
+        }
     }
 }

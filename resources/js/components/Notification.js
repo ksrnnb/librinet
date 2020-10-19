@@ -12,22 +12,28 @@ const axios = window.axios;
 function getMessageAndImage(notification) {
   const info = new Object();
 
-  if (notification.comment) {
-    info.user = notification.comment.user;
-    info.message = `${info.user.name}さんが、あなたの投稿にコメントしました`;
-    info.path = '/api/comment/id/' + notification.comment.id;
-  } else if (notification.follower) {
-    info.user = notification.follower.follower_user;
-    info.message = `${info.user.name}さんが、あなたをフォローしました`;
-    info.path = '/user/profile/' + info.user.str_id;
-  } else if (notification.like.post_id) {
-    info.user = notification.like.user;
-    info.message = `${info.user.name}さんが、あなたの投稿にいいねしました`;
-    info.path = '/api/post/id/' + notification.like.post_id;
-  } else if (notification.like.comment_id) {
-    info.user = notification.like.user;
-    info.message = `${info.user.name}さんが、あなたのコメントにいいねしました`;
-    info.path = '/api/comment/id/' + notification.like.comment_id;
+  // 投稿などが削除済みの場合はエラーになるので、何も返さない。
+  // TODO: Notificationもデータベースから消す必要がある。
+  try {
+    if (notification.comment) {
+      info.user = notification.comment.user;
+      info.message = `${info.user.name}さんが、あなたの投稿にコメントしました`;
+      info.path = '/api/comment/id/' + notification.comment.id;
+    } else if (notification.follower) {
+      info.user = notification.follower.follower_user;
+      info.message = `${info.user.name}さんが、あなたをフォローしました`;
+      info.path = '/user/profile/' + info.user.str_id;
+    } else if (notification.like.post_id) {
+      info.user = notification.like.user;
+      info.message = `${info.user.name}さんが、あなたの投稿にいいねしました`;
+      info.path = '/api/post/id/' + notification.like.post_id;
+    } else if (notification.like.comment_id) {
+      info.user = notification.like.user;
+      info.message = `${info.user.name}さんが、あなたのコメントにいいねしました`;
+      info.path = '/api/comment/id/' + notification.like.comment_id;
+    }
+  } catch (error) {
+    return null;
   }
 
   info.image = info.user.image || '/img/icon.svg';
@@ -39,7 +45,7 @@ function getMessageAndImage(notification) {
  * @return {string}
  */
 function getDeltaTimeMessage(deltaMiliSec) {
-  const deltaTimeSec = deltaMiliSec / 1000;
+  const deltaTimeSec = Math.floor(deltaMiliSec / 1000);
   let timeMessage;
 
   if (deltaTimeSec < 60) {
@@ -95,32 +101,43 @@ function Notice(props) {
     }
   }
 
-  // TODO: Comment -> Postへのリンク、いいね→投稿 or コメントへのリンク, フォロー-> userへのリンク
-  return (
-    <div className="card hover mb-3" onClick={() => onClickCard()}>
-      <div className="row no-gutters">
-        <div className="col-2">
-          <img className="img-fluid" src={info.image} alt="user-image" />
-        </div>
-        <div className="col-10">
-          <div className="card-body">
-            <p className="card-text">{info.message}</p>
-            <p className="card-text">
-              <small className="text-muted">{timeMessage}</small>
-            </p>
+  // 通知内容の項目が既に削除されていた場合はnull
+  if (info) {
+    return (
+      <div className="card hover mb-3" onClick={() => onClickCard()}>
+        <div className="row no-gutters">
+          <div className="col-2">
+            <img className="img-fluid" src={info.image} alt="user-image" />
+          </div>
+          <div className="col-10">
+            <div className="card-body">
+              <p className="card-text">{info.message}</p>
+              <p className="card-text">
+                <small className="text-muted">{timeMessage}</small>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <></>;
+  }
 }
 
 export default function Notification() {
   const data = useContext(DataContext);
+  const props = useContext(PropsContext);
+
+  const isNotLogin = typeof data.params.user === 'undefined';
+
+  if (isNotLogin) {
+    props.history.push('/home');
+    return <></>;
+  }
+
   const notifications = data.params.user.notifications || [];
-  console.log(notifications);
-  // 日付の新しい順にソート
-  // TODO: これはバックエンド側でやるべき？
+  // 通知を日付の新しい順にソート
   notifications.sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at);
   });

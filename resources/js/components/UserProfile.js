@@ -23,7 +23,7 @@ function EditUserButton(props) {
     if (user.str_id === 'guest') {
       EditUserButton = (
         <>
-          <button type="button" className="btn btn-outline-success invalid">
+          <button type="button" className="btn btn-outline-success" disabled>
             ユーザー情報を編集する
           </button>
           <p className="text-danger">注意：ゲストユーザーは編集できません</p>
@@ -77,12 +77,19 @@ function FollowNumber(props) {
     <>
       <button
         className="mt-3 mb-0"
+        id="follow"
         data-link="/follows"
+        data-count={follows}
         onClick={props.onClick}
       >
         Follow: {follows}
       </button>
-      <button data-link="/followers" onClick={props.onClick}>
+      <button
+        id="follower"
+        data-link="/followers"
+        data-count={followers}
+        onClick={props.onClick}
+      >
         Follower: {followers}
       </button>
     </>
@@ -92,7 +99,8 @@ function FollowNumber(props) {
 function EditBookshelfButton(props) {
   const hasLoaded = 'books' in props;
 
-  if (hasLoaded) {
+  // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
+  if (hasLoaded && props.viewerUser) {
     const canEdit = props.user.id == props.viewerUser.id;
     const isNotEmpty = props.books.length;
     const strId = props.user.str_id;
@@ -153,7 +161,8 @@ export default function UserProfile() {
       setUserData(user);
 
       // プロフィールをクリックしてきた場合
-    } else if (user.str_id === queryStrId) {
+      // ログインしてない場合もあるので、userが代入されているか確認
+    } else if (user && user.str_id === queryStrId) {
       setUserData(user);
 
       // URLを入力してきた場合

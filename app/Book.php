@@ -231,11 +231,13 @@ class Book extends Model
 
     public function registerPost($message = '')
     {
-        $this->post()->create([
+        $post = $this->post()->create([
             'message' => $message,
             'uuid'    => Str::uuid(),
             'user_id' => $this->user_id,
         ]);
+
+        return $post;
     }
 
     public static function returnBookInfoOrRedirect($isbn, $user, $model)

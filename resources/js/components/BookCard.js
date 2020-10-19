@@ -7,7 +7,7 @@ export default function BookCard(props) {
   const book = props.book;
 
   return (
-    <div className="row">
+    <div className="row book-card">
       <BookImage col="col-3" book={book} />
       <BookInfo col="col-9" book={book}>
         {props.children}

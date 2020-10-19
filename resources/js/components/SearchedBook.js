@@ -46,9 +46,9 @@ export default function SearchedBook(props) {
   }
 
   function AddBookButton() {
-    if (isInBookshelf) {
-      return <></>;
-    } else {
+    const isLogin = data.isLogin;
+
+    if (isLogin && !isInBookshelf) {
       return (
         <button
           type="button"
@@ -58,6 +58,8 @@ export default function SearchedBook(props) {
           本棚に追加する
         </button>
       );
+    } else {
+      return <></>;
     }
   }
 

@@ -65,15 +65,9 @@ export default function Signup() {
             })
             .then((response) => {
               const params = response.data;
-              console.log('----params---');
-              console.log(params);
               setState.params(params);
               setState.isLogin(true);
               props.history.push('/home');
-              // props.history.push({
-              //   pathname: '/home',
-              //   state: params,
-              // });
             })
             .catch((error) => {
               console.log('--error----');
@@ -98,7 +92,9 @@ export default function Signup() {
       newErrors.push('ユーザー名が入力されていません');
     }
 
-    if (strId.length < 4) {
+    if (strId.length === 0) {
+      newErrors.push('ユーザーIDが入力されていません');
+    } else if (strId.length < 4) {
       newErrors.push('ユーザーIDが短すぎます');
     }
 
@@ -108,8 +104,14 @@ export default function Signup() {
 
     if (password !== confirmPassword) {
       newErrors.push('パスワードが一致していません');
-    } else if (password.length < 8) {
+    } else if (password.length === 0) {
+      newErrors.push('パスワードが入力されていません');
+    } else if (password.length < 6) {
       newErrors.push('パスワードが短すぎます');
+    }
+
+    if (confirmPassword.length === 0) {
+      newErrors.push('確認用パスワードが入力されていません');
     }
 
     if (newErrors.length) {
@@ -134,7 +136,7 @@ export default function Signup() {
               onChange={(e) => setUserName(e.target.value)}
             />
             <Label
-              label="ユーザーID"
+              label="ユーザーID (英数字4文字以上)"
               name="user-id"
               value={strId}
               onChange={(e) => setStrId(e.target.value)}
@@ -146,7 +148,7 @@ export default function Signup() {
               onChange={(e) => setEmail(e.target.value)}
             />
             <Label
-              label="パスワード"
+              label="パスワード（英数字6文字以上）"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

@@ -18,14 +18,15 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        
         $str_id = $request->input('strId');
         $password = $request->input('password');      //TODO:ここは暫定
-
+        
         $credentials = compact('str_id', 'password');
-
+        
         if (Auth::attempt($credentials)) {
             $params = User::getParamsForApp($str_id);
-
+            
             return response()->json($params);
         } else {
             return response('Cannot Authenticated', 401);

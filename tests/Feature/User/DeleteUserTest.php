@@ -20,7 +20,7 @@ class DeleteUserTest extends TestCase
         parent::setUp();
 
         if (! $this->has_setup) {
-            $this->has_setUp = true;
+            $this->has_setup = true;
             $this->delete_path = '/api/user';
             $this->user = factory(User::class)->create();
     

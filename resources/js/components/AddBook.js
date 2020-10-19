@@ -8,6 +8,16 @@ import { DataContext, SetStateContext } from './App';
 const axios = window.axios;
 
 export default function AddBook() {
+  const data = useContext(DataContext);
+  const setState = useContext(SetStateContext);
+  const props = useContext(PropsContext);
+
+  // ログインしていない場合はページ遷移
+  if (!data.params.user) {
+    props.history.push('/home');
+    return <></>;
+  }
+
   const [errors, setErrors] = useState([]);
   const [book, setBook] = useState(null);
   const [isChecked, setIsChecked] = useState(true);
@@ -15,9 +25,6 @@ export default function AddBook() {
   const [newGenre, setNewGenre] = useState('');
   const [convGenre, setConvGenre] = useState('');
 
-  const props = useContext(PropsContext);
-  const data = useContext(DataContext);
-  const setState = useContext(SetStateContext);
   const genres = data.params.user.genres;
 
   useEffect(setup, []);
@@ -57,6 +64,15 @@ export default function AddBook() {
         .then((response) => {
           const book = response.data;
           setData(book);
+        })
+        .catch((error) => {
+          // ISBNが違う場合 404
+          if (error.response.status === 404) {
+            alert('本が見つかりません');
+            // 既に追加済みの場合など
+          } else {
+            props.history.push('/error');
+          }
         });
     }
   }
@@ -163,6 +179,6 @@ export default function AddBook() {
       </>
     );
   } else {
-    return <h2 className="無効なリクエストです"></h2>;
+    return <></>;
   }
 }

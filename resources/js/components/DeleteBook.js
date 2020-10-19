@@ -92,18 +92,21 @@ export default function DeleteBook() {
 
   function onSubmitDelete(ids) {
     const path = '/api/book';
-    redirectUserProfile(ids);
 
-    axios
-      .delete(path, {
-        data: { ids: ids },
-      })
-      .then(() => {
-        redirectUserProfile(ids);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (ids.length) {
+      axios
+        .delete(path, {
+          data: { ids: ids },
+        })
+        .then(() => {
+          redirectUserProfile(ids);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert('本が選択されていません');
+    }
   }
 
   return (

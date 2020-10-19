@@ -12,50 +12,41 @@ class LoginTest extends DuskTestCase
     use DatabaseMigrations;
 
     protected $user;
-    protected $has_created;
     protected $credential;
 
     protected function setUp(): void
     {
         parent::setUp();
-        if (!$this->has_created) {
-            $this->has_created = true;
-            
-            $this->user = Factory(User::class)->create();
+        
+        $this->user = Factory(User::class)->create();
 
-            $this->credential = [
-                'str_id' => $this->user->str_id,
-                'password' => config('app.guest_password')
-            ];
-        }
+        $this->credential = [
+            'str_id' => $this->user->str_id,
+            'password' => config('app.guest_password')
+        ];
     }
 
-    public function testLogin()
+    public function testNormalUserLogin()
     {
-        // // sanctum
-        // $this->get('/sanctum/csrf-cookie')
-        //      ->assertStatus(204);
-        
-        // // login
-        // $this->post('/api/login', $this->credential)
-        //      ->assertStatus(200);
-
         $this->browse(function (Browser $browser) {
-            // sanctum
 
-            // $uses = array_flip(class_uses_recursive(static::class));
-            // dd($uses);
+            $browser = $this->login($browser);
 
-            $str_id = $this->user->str_id;
-            $password = config('app.guest_password');
+            $browser->assertSee('ログアウト');
+        });
+    }
+
+    public function testGuestUserLogin()
+    {
+        $this->browse(function (Browser $browser) {
+
+            Factory(User::class)->create(['str_id' => 'guest']);
 
             $browser->visit('/login')
                     ->waitFor('#user-id')
-                    ->type('user-id', $str_id)
-                    ->type('password', $password)
-                    ->press('Login');
-
-                    // assertAuthenticated()はエラーになる
+                    ->press('ゲスト')
+                    ->waitForText('Home')
+                    ->assertSee('ログアウト');
         });
     }
 }

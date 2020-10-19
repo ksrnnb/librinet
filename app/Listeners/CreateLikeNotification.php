@@ -34,10 +34,13 @@ class CreateLikeNotification
         } elseif ($like['comment_id']) {
             $user_id = $like->comment->user_id;
         }
-        
-        Notification::create([
-            'user_id' => $user_id,
-            'like_id' => $like->id,
-        ]);
+
+        // 自分でいいねした場合は通知を作成しない
+        if ($user_id !== $like->user_id) {
+            Notification::create([
+                'user_id' => $user_id,
+                'like_id' => $like->id,
+            ]);
+        }
     }
 }

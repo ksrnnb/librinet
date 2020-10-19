@@ -8,7 +8,7 @@ use Tests\DuskTestCase;
 use App\User;
 use Illuminate\Support\Str;
 
-class BookPostTest extends DuskTestCase
+class PostTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
@@ -64,16 +64,13 @@ class BookPostTest extends DuskTestCase
 
             // 本が見つからない場合
             $browser->visit($no_book_path)
-                    ->pause(5000) // pauseを入れないとno such alertとなる。なぜかは不明。
-                    ->waitForDialog()
-                    ->assertDialogOpened('本が見つかりません')
-                    ->acceptDialog()
-                    ->assertDontSee('本棚に追加');
+                    ->waitFor('.error')
+                    ->assertSee('本がみつかりませんでした');
 
             // ISBNでない場合
             $browser->visit($this->path . 'test_wrong_link')
-                    ->waitForText('エラー')
-                    ->assertSee('エラーが発生しました');
+                    ->waitFor('.error')
+                    ->assertSee('URLが正しくありません');
         });
     }
 

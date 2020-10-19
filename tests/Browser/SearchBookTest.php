@@ -7,7 +7,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\User;
 
-class BookSearchTest extends DuskTestCase
+class SearchBookTest extends DuskTestCase
 {
     use DatabaseMigrations;
 

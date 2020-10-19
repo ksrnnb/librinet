@@ -23,7 +23,7 @@ function EditUserButton(props) {
     if (user.str_id === 'guest') {
       EditUserButton = (
         <>
-          <button type="button" className="btn btn-outline-success invalid">
+          <button type="button" className="btn btn-outline-success" disabled>
             ユーザー情報を編集する
           </button>
           <p className="text-danger">注意：ゲストユーザーは編集できません</p>
@@ -77,12 +77,19 @@ function FollowNumber(props) {
     <>
       <button
         className="mt-3 mb-0"
+        id="follow"
         data-link="/follows"
+        data-count={follows}
         onClick={props.onClick}
       >
         Follow: {follows}
       </button>
-      <button data-link="/followers" onClick={props.onClick}>
+      <button
+        id="follower"
+        data-link="/followers"
+        data-count={followers}
+        onClick={props.onClick}
+      >
         Follower: {followers}
       </button>
     </>

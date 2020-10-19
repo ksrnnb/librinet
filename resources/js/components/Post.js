@@ -107,15 +107,18 @@ export default function PostData() {
         .then((response) => {
           const book = response.data;
           setData(book);
-        }).catch(error => {
+        })
+        .catch((error) => {
           // ISBNが違う場合 404
           if (error.response.status === 404) {
-            alert('本が見つかりません');
-            // 既に追加済みの場合など
+            setErrors(['本がみつかりませんでした']);
+            // validation error
+          } else if (error.response.status == 422) {
+            setErrors(['URLが正しくありません']);
           } else {
             props.history.push('/error');
           }
-        })
+        });
     }
 
     function setInitialConvGenre() {
@@ -251,7 +254,7 @@ export default function PostData() {
       </>
     );
   } else {
-    return <h2 className="無効なリクエストです"></h2>;
+    return <Errors errors={errors} />;
   }
 }
 

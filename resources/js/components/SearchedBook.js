@@ -48,7 +48,7 @@ export default function SearchedBook(props) {
   function AddBookButton() {
     const isLogin = data.isLogin;
 
-    if (isLogin && (!isInBookshelf)) {
+    if (isLogin && !isInBookshelf) {
       return (
         <button
           type="button"

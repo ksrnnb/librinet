@@ -29,9 +29,12 @@ class CreateFollowNotification
     {
         $follower = $event->follower;
 
-        Notification::create([
-            'user_id' => $follower->follow_id,
-            'follower_id' => $follower->follower_id,
-        ]);
+        // 自分で自分をフォローした場合は、Notificationを作成しない。
+        if ($follower->follow_id !== $follower->follower_id) {
+            Notification::create([
+                'user_id' => $follower->follow_id,
+                'follower_id' => $follower->follower_id,
+            ]);
+        }
     }
 }

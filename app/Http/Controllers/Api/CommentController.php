@@ -24,25 +24,18 @@ class CommentController extends Controller
             return response()->json($post);
         }
 
-        return response('投稿がみつかりません', 404);
+        return response('投稿がみつかりませんでした', 404);
     }
 
     public function add(Request $request, $uuid)
     {
         if (Str::isUUid($uuid)) {
             // $post = Post::where('uuid', $uuid)->first();
-            $post = Post::with(['user', 'book', 'likes'])
-                        ->get()
-                        ->where('uuid', $uuid)
-                        ->first();
-
+            $post = Post::where('uuid', $uuid)->first();
+            
             if ($post) {
-                $params = [
-                    'item' => $post,
-                    'is_post' => true,
-                ];
-
-                return response()->json($params);
+                $post->loadPostInfoAndComments();
+                return response()->json($post);
             
             // Postではない場合
             } else {
@@ -60,15 +53,15 @@ class CommentController extends Controller
 
                     return response()->json($params);
 
-                // PostもCommentも見つからない場合 -> 不正なアクセス
+                // PostもCommentも見つからない場合
                 } else {
-                    return response('Bad Request', 400);
+                    return response('投稿がみつかりませんでした', 404);
                 }
             }
         
-        // そもそもuuidですらない場合 -> 不正なアクセス
+        // そもそもuuidですらない場合
         } else {
-            return response('Bad Request', 400);
+            return response('投稿がみつかりませんでした', 404);
         }
     }
 

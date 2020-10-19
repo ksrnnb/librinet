@@ -9,7 +9,7 @@ use App\User;
 use App\Book;
 use App\Genre;
 
-class BookEditTest extends DuskTestCase
+class EditGenreTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
@@ -51,7 +51,7 @@ class BookEditTest extends DuskTestCase
                     ->assertSee('本がありません')
                     ->press('本を探す')
                     ->waitFor('#isbn')
-                    ->assertSee('本の検索');
+                    ->assertSee('本の検索');
         });
     }
 

@@ -7,7 +7,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\User;
 
-class UserTest extends DuskTestCase
+class SearchUserTest extends DuskTestCase
 {
     /**
      * user search funciton
@@ -41,7 +41,7 @@ class UserTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/user')
                     ->waitFor('#user')
-                    ->type('user', 'HOGEHOGE')
+                    ->type('user', 'test_wrong_input')
                     ->press('検索')
                     ->waitFor('.error')
                     ->assertSee('ユーザーが存在していません');
@@ -71,6 +71,8 @@ class UserTest extends DuskTestCase
                 ->type('user', $item)
                 ->press('検索')
                 ->waitFor('.results')
-                ->assertSee('検索結果');
+                ->assertSee('検索結果')
+                ->click('.user-card')
+                ->assertSee('本棚');
     }
 }

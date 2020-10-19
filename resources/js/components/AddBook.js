@@ -18,15 +18,12 @@ export default function AddBook() {
     return <></>;
   }
 
-
   const [errors, setErrors] = useState([]);
   const [book, setBook] = useState(null);
   const [isChecked, setIsChecked] = useState(true);
   const [isNewGenre, setIsNewGenre] = useState(true);
   const [newGenre, setNewGenre] = useState('');
   const [convGenre, setConvGenre] = useState('');
-
-
 
   const genres = data.params.user.genres;
 
@@ -64,10 +61,11 @@ export default function AddBook() {
         .post('/api/book', {
           isbn: isbn,
         })
-        .then(response => {
+        .then((response) => {
           const book = response.data;
           setData(book);
-        }).catch(error => {
+        })
+        .catch((error) => {
           // ISBNが違う場合 404
           if (error.response.status === 404) {
             alert('本が見つかりません');

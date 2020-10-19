@@ -1,4 +1,4 @@
-import Subtitle from "./Subtitle";
+import Subtitle from './Subtitle';
 import React from 'react';
 
 export default function ErrorPage() {

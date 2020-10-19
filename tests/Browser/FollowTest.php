@@ -10,90 +10,63 @@ use App\Follower;
 
 class FollowTest extends DuskTestCase
 {
-    /**
-     * A Dusk test example.
-     *
-     * @return void
-     */
-    // public function testFollowAction()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $browser->visit('/')
-    //                 ->click('#guest');      // ゲストでログイン
+    use DatabaseMigrations;
 
-    //         $guest_id = 'guest';
-    //         $target_id = User::find(1)->str_id;
+    protected $user1;
+    protected $user2;
+    protected $credential;
+    protected $path;
 
-    //         // フォロー後、フォロー外した後の2回チェック
-    //         $this->assertCorrectFollowAndFollowerNumber($browser, $guest_id, $target_id);
-    //         $this->assertCorrectFollowAndFollowerNumber($browser, $guest_id, $target_id);
-    //     });
-    // }
+    protected function setUp(): void
+    {
+        parent::setUp();
+            
+        $this->user1 = Factory(User::class)->create();
+        $this->user2 = Factory(User::class)->create();
 
-    // public function testShowFollows()
-    // {
-    //     $this->browse(function (Browser $browser) {
+        $this->credential = [
+            'str_id' => $this->user1->str_id,
+            'password' => config('app.guest_password')
+        ];
 
-    //         $this->assertCanSeeFollowsOrFollowers($browser, 'follow');
-    //     });
-    // }
+        $this->my_path = '/user/profile/' . $this->user1->str_id;
+        $this->target_path = '/user/profile/' . $this->user2->str_id;
+    }
 
-    // public function testShowFollowers()
-    // {
-    //     $this->browse(function (Browser $browser) {
+    public function testFollowAndCheckFollowNumber()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser = $this->login($browser);
 
-    //         $this->assertCanSeeFollowsOrFollowers($browser, 'follower');
-    //     });
-    // }
+            // フォローした後、フォロワーが1人増えるのを確認
+            $browser->visit($this->target_path)
+                    ->waitFor('.user-card')
+                    ->assertSee('フォローする')
+                    ->press('フォローする')
+                    ->waitForText('Follower: 1')
+                    ->assertDataAttribute('#follow', 'count', '0')
+                    ->assertDataAttribute('#follower', 'count', '1');
 
-    // public function getFollowNumber($browser, $id)
-    // {
-    //     return $browser->visit('/user/show/' . $id)
-    //                   ->attribute('#follow', 'data-count');
-    // }
+            // 自分のページに戻って、フォローが1人増えるのを確認
+            $browser->visit($this->my_path)
+                    ->waitFor('.user-card')
+                    ->assertDataAttribute('#follow', 'count', '1')
+                    ->assertDataAttribute('#follower', 'count', '0');
+                    
+            // フォローを外して、フォロワーが減るのを確認
+            $browser->visit($this->target_path)
+                    ->waitFor('.user-card')
+                    ->assertSee('フォロー中')
+                    ->press('フォロー中')
+                    ->waitForText('Follower: 0')
+                    ->assertDataAttribute('#follow', 'count', '0')
+                    ->assertDataAttribute('#follower', 'count', '0');
 
-    // public function getFollowerNumber($browser, $id)
-    // {
-    //     return $browser->visit('/user/show/' . $id)
-    //                   ->attribute('#follower', 'data-count');
-    // }
-
-    // public function assertCorrectFollowAndFollowerNumber($browser, $guest_id, $target_id)
-    // {
-    //     // 最初のフォロー数、相手のフォロワー数取得
-    //     $ini_follow = $this->getFollowNumber($browser, $guest_id);
-    //     $ini_target_follower = $this->getFollowerNumber($browser, $target_id);
-
-    //     $browser->visit('/user/show/' . $target_id)
-    //             ->press('action')
-    //             ->pause(500); // DBに書き込まれるまで少し待つ
-        
-    //     // ボタン押下後のフォロー数、相手のフォロワー数取得
-    //     $aft_follow = $this->getFollowNumber($browser, $guest_id);
-    //     $aft_target_follower = $this->getFollowerNumber($browser, $target_id);
-
-    //     $is_following = $aft_follow > $ini_follow;
-
-    //     $delta = $is_following ? 1 : -1;
-
-    //     $this->assertEquals($aft_follow, $ini_follow + $delta);
-    //     $this->assertEquals($aft_target_follower, $ini_target_follower + $delta);
-    // }
-
-    // public function assertCanSeeFollowsOrFollowers($browser, $name)
-    // {
-    //     $user = User::find(1);
-    //     $table = Follower::with('followUser')->get();
-    //     $column = ($name == 'follow') ? 'follower_id' : 'follow_id';
-
-    //     $people = $table->where($column, $user->id);
-
-    //     $browser->visit('/user/show/' . $user->str_id)
-    //             ->click('#' . $name . '-link');
-
-    //     foreach ($people as $person) {
-    //         $relation = $name . 'User';
-    //         $browser->assertSee($person->$relation->name);
-    //     }
-    // }
+            // 自分のページに戻って、フォローが1人減るのを確認
+            $browser->visit($this->my_path)
+                    ->waitFor('.user-card')
+                    ->assertDataAttribute('#follow', 'count', '0')
+                    ->assertDataAttribute('#follower', 'count', '0');
+        });
+    }
 }

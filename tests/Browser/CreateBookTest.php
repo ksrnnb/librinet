@@ -8,7 +8,7 @@ use Tests\DuskTestCase;
 use App\User;
 use App\Book;
 
-class BookAddToBookshelfTest extends DuskTestCase
+class CreateBookTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
@@ -76,7 +76,7 @@ class BookAddToBookshelfTest extends DuskTestCase
         });
     }
 
-    public function testCanAddBook()
+    public function testCanCreateBook()
     {
         $this->browse(function (Browser $browser) {
             $path = '/book/add/' . $this->isbn[0];

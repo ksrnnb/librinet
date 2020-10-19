@@ -107,7 +107,6 @@ export default function DeleteBook() {
     } else {
       alert('本が選択されていません');
     }
-
   }
 
   return (

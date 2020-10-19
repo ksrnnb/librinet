@@ -109,18 +109,6 @@ function Posts(props) {
 
 export default function Home() {
   const data = useContext(DataContext);
-  // const [data, setData] = useState(iniData);
-
-  // useEffect(setup, []);
-
-  // function setup() {
-  //   // 一番上のstateを更新せんといかん。
-  //   // const data = { params: props.history.location.state };
-  //   // if (data) {
-  //   //   setData(data);
-  //   // }
-  // }
-
   const user = data.params.user;
 
   if (user) {
@@ -135,12 +123,22 @@ export default function Home() {
       </div>
     );
   } else {
-    return <></>;
+    // TODO 未ログインの処理
+    return (
+      <>
+        <div className="row">
+          <div className="col-12">
+            <Subtitle subtitle="Home" />
+            <p className="text-danger">ログインしていません</p>
+          </div>
+        </div>
+      </>
+    );
   }
 }
 
 Posts.propTypes = {
-  posts: PropTypes.array,
+  posts: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   viewerId: PropTypes.number,
 };
 

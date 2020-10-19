@@ -82,28 +82,29 @@ export default function User() {
 
   function onClickSearch() {
     if (input === '') {
-      setErrors(['入力されていません']);
-    }
-    axios
-      .post('/api/user', {
-        user: input,
-      })
-      .then((response) => {
-        const users = response.data;
+      setErrors(['フォームが入力されていません']);
+    } else {
+      axios
+        .post('/api/user', {
+          user: input,
+        })
+        .then((response) => {
+          const users = response.data;
 
-        // ユーザーが存在していたら
-        if (users.length) {
-          setUsers(users);
-          setErrors([]);
-        } else {
-          const errors = ['ユーザーが存在していません'];
-          setUsers([]);
-          setErrors(errors);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+          // ユーザーが存在していたら
+          if (users.length) {
+            setUsers(users);
+            setErrors([]);
+          } else {
+            const errors = ['ユーザーが存在していません'];
+            setUsers([]);
+            setErrors(errors);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   return (

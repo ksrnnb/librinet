@@ -4,6 +4,7 @@ import { PostWithComments } from './Home';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
+import Errors from './Errors';
 
 const axios = window.axios;
 
@@ -42,7 +43,7 @@ function GenreForm(props) {
 
 function RecommendButton(props) {
   return (
-    <label htmlFor="recommend" className="mt-5">
+    <label htmlFor="recommend" className="mt-5 d-block">
       <input
         type="checkbox"
         name="recommend"
@@ -54,11 +55,14 @@ function RecommendButton(props) {
     </label>
   );
 }
+
 function RecommendBook(props) {
   // TODO: 本のお勧めが表示されない
   const orderedBooks = props.orderedBooks;
   const genres = props.genres;
   const isRecommended = props.isRecommended;
+
+  console.log(props);
 
   if (orderedBooks) {
     return (
@@ -79,8 +83,16 @@ function RecommendBook(props) {
 function CommentForm(props) {
   return (
     <>
-      <p className="mt-5">Comment</p>
-      <textarea cols="30" rows="10" onChange={props.onChange} />
+      <label htmlFor="message">
+        <p className="mt-5">Comment</p>
+        <textarea
+          id="message"
+          name="message"
+          cols="30"
+          rows="10"
+          onChange={props.onChange}
+        />
+      </label>
       <button
         className="btn btn-outline-success d-block"
         onClick={props.onClick}
@@ -92,21 +104,21 @@ function CommentForm(props) {
 }
 
 export default function Comment() {
+  const props = useContext(PropsContext);
+  const params = useContext(DataContext).params;
+  const setState = useContext(SetStateContext);
+
   const [bookId, setBookId] = useState(null);
   const [item, setItem] = useState(null);
   const [isRecommended, setIsRecommended] = useState(false);
   const [message, setMessage] = useState('');
-
-  const props = useContext(PropsContext);
-  const params = useContext(DataContext).params;
-  const setState = useContext(SetStateContext);
+  const [errors, setErrors] = useState([]);
 
   useEffect(setup, []);
 
   function setup() {
     const item = props.location.state;
 
-    console.log(item);
     item ? setItem(item) : getComment();
 
     function getComment() {
@@ -114,11 +126,18 @@ export default function Comment() {
       axios
         .get(path)
         .then((response) => {
-          const data = response.data;
-          setItem(data.item);
+          const post = response.data;
+          setItem(post);
         })
         .catch((error) => {
-          console.log(error);
+          // TODO: errorの場合の処理
+          if (error.response.status === 401) {
+            props.history.push('/home');
+          } else if (error.response.status === 404) {
+            setErrors([error.response.data]);
+          } else {
+            console.log('hoge');
+          }
         });
     }
   }
@@ -146,8 +165,8 @@ export default function Comment() {
     const uuid = props.match.params.uuid;
     const path = '/api/comment/' + uuid;
 
-    if (message == '') {
-      console.log('Message is Empty!');
+    if (message === '') {
+      setErrors(['コメントが入力されていません']);
     } else {
       axios
         .post(path, paramsForPost)
@@ -170,13 +189,14 @@ export default function Comment() {
         <Subtitle subtitle="Comment Page" />
         <PostWithComments post={item} viewerId={viewerId} />
         <RecommendBook
-          orderedBooks={user.orderedBooks}
+          orderedBooks={user.ordered_books}
           genres={user.genres}
           isRecommended={isRecommended}
           setMessage={setMessage}
           setBookId={setBookId}
           onChange={onChangeRecommend}
         />
+        <Errors errors={errors} />
         <CommentForm
           onClick={onSubmit}
           onChange={(e) => setMessage(e.target.value)}
@@ -184,7 +204,7 @@ export default function Comment() {
       </>
     );
   } else {
-    return <></>;
+    return <Errors errors={errors} />;
   }
 }
 
@@ -195,7 +215,7 @@ RecommendButton.propTypes = {
 
 RecommendBook.propTypes = {
   orderedBooks: PropTypes.object,
-  genres: PropTypes.array,
+  genres: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   isRecommended: PropTypes.bool,
   onChange: PropTypes.func,
   setBookId: PropTypes.func,

@@ -86557,6 +86557,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -86568,6 +86569,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -86607,7 +86609,7 @@ function GenreForm(props) {
 function RecommendButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "recommend",
-    className: "mt-5"
+    className: "mt-5 d-block"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "checkbox",
     name: "recommend",
@@ -86622,6 +86624,7 @@ function RecommendBook(props) {
   var orderedBooks = props.orderedBooks;
   var genres = props.genres;
   var isRecommended = props.isRecommended;
+  console.log(props);
 
   if (orderedBooks) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendButton, {
@@ -86639,19 +86642,27 @@ function RecommendBook(props) {
 }
 
 function CommentForm(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "message"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "mt-5"
   }, "Comment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    id: "message",
+    name: "message",
     cols: "30",
     rows: "10",
     onChange: props.onChange
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-outline-success d-block",
     onClick: props.onClick
   }, "\u30B3\u30E1\u30F3\u30C8\u3059\u308B"));
 }
 
 function Comment() {
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
+  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]).params;
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState2 = _slicedToArray(_useState, 2),
       bookId = _useState2[0],
@@ -86672,23 +86683,31 @@ function Comment() {
       message = _useState8[0],
       setMessage = _useState8[1];
 
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
-  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]).params;
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      errors = _useState10[0],
+      setErrors = _useState10[1];
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(setup, []);
 
   function setup() {
     var item = props.location.state;
-    console.log(item);
     item ? setItem(item) : getComment();
 
     function getComment() {
       var path = '/api/comment/' + props.match.params.uuid;
       axios.get(path).then(function (response) {
-        var data = response.data;
-        setItem(data.item);
+        var post = response.data;
+        setItem(post);
       })["catch"](function (error) {
-        console.log(error);
+        // TODO: errorの場合の処理
+        if (error.response.status === 401) {
+          props.history.push('/home');
+        } else if (error.response.status === 404) {
+          setErrors([error.response.data]);
+        } else {
+          console.log('hoge');
+        }
       });
     }
   }
@@ -86714,8 +86733,8 @@ function Comment() {
     var uuid = props.match.params.uuid;
     var path = '/api/comment/' + uuid;
 
-    if (message == '') {
-      console.log('Message is Empty!');
+    if (message === '') {
+      setErrors(['コメントが入力されていません']);
     } else {
       axios.post(path, paramsForPost).then(function (response) {
         setState.params(response.data);
@@ -86736,12 +86755,14 @@ function Comment() {
       post: item,
       viewerId: viewerId
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendBook, {
-      orderedBooks: user.orderedBooks,
+      orderedBooks: user.ordered_books,
       genres: user.genres,
       isRecommended: isRecommended,
       setMessage: setMessage,
       setBookId: setBookId,
       onChange: onChangeRecommend
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      errors: errors
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CommentForm, {
       onClick: onSubmit,
       onChange: function onChange(e) {
@@ -86749,7 +86770,9 @@ function Comment() {
       }
     }));
   } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      errors: errors
+    });
   }
 }
 RecommendButton.propTypes = {
@@ -86758,7 +86781,7 @@ RecommendButton.propTypes = {
 };
 RecommendBook.propTypes = {
   orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
-  genres: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array,
+  genres: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object]),
   isRecommended: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func,
   setBookId: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
@@ -88013,16 +88036,7 @@ function Posts(props) {
 }
 
 function Home() {
-  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]); // const [data, setData] = useState(iniData);
-  // useEffect(setup, []);
-  // function setup() {
-  //   // 一番上のstateを更新せんといかん。
-  //   // const data = { params: props.history.location.state };
-  //   // if (data) {
-  //   //   setData(data);
-  //   // }
-  // }
-
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
   var user = data.params.user;
 
   if (user) {
@@ -88038,11 +88052,20 @@ function Home() {
       viewerId: user.id
     })));
   } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+    // TODO 未ログインの処理
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col-12"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      subtitle: "Home"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "text-danger"
+    }, "\u30ED\u30B0\u30A4\u30F3\u3057\u3066\u3044\u307E\u305B\u3093"))));
   }
 }
 Posts.propTypes = {
-  posts: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].array,
+  posts: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].array, prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].object]),
   viewerId: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].number
 };
 PostWithComments.propTypes = {
@@ -88352,24 +88375,29 @@ var axios = window.axios;
  */
 
 function getMessageAndImage(notification) {
-  var info = new Object();
+  var info = new Object(); // 投稿などが削除済みの場合はエラーになるので、何も返さない。
+  // TODO: Notificationもデータベースから消す必要がある。
 
-  if (notification.comment) {
-    info.user = notification.comment.user;
-    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u6295\u7A3F\u306B\u30B3\u30E1\u30F3\u30C8\u3057\u307E\u3057\u305F");
-    info.path = '/api/comment/id/' + notification.comment.id;
-  } else if (notification.follower) {
-    info.user = notification.follower.follower_user;
-    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u3092\u30D5\u30A9\u30ED\u30FC\u3057\u307E\u3057\u305F");
-    info.path = '/user/profile/' + info.user.str_id;
-  } else if (notification.like.post_id) {
-    info.user = notification.like.user;
-    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u6295\u7A3F\u306B\u3044\u3044\u306D\u3057\u307E\u3057\u305F");
-    info.path = '/api/post/id/' + notification.like.post_id;
-  } else if (notification.like.comment_id) {
-    info.user = notification.like.user;
-    info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u30B3\u30E1\u30F3\u30C8\u306B\u3044\u3044\u306D\u3057\u307E\u3057\u305F");
-    info.path = '/api/comment/id/' + notification.like.comment_id;
+  try {
+    if (notification.comment) {
+      info.user = notification.comment.user;
+      info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u6295\u7A3F\u306B\u30B3\u30E1\u30F3\u30C8\u3057\u307E\u3057\u305F");
+      info.path = '/api/comment/id/' + notification.comment.id;
+    } else if (notification.follower) {
+      info.user = notification.follower.follower_user;
+      info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u3092\u30D5\u30A9\u30ED\u30FC\u3057\u307E\u3057\u305F");
+      info.path = '/user/profile/' + info.user.str_id;
+    } else if (notification.like.post_id) {
+      info.user = notification.like.user;
+      info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u6295\u7A3F\u306B\u3044\u3044\u306D\u3057\u307E\u3057\u305F");
+      info.path = '/api/post/id/' + notification.like.post_id;
+    } else if (notification.like.comment_id) {
+      info.user = notification.like.user;
+      info.message = "".concat(info.user.name, "\u3055\u3093\u304C\u3001\u3042\u306A\u305F\u306E\u30B3\u30E1\u30F3\u30C8\u306B\u3044\u3044\u306D\u3057\u307E\u3057\u305F");
+      info.path = '/api/comment/id/' + notification.like.comment_id;
+    }
+  } catch (error) {
+    return null;
   }
 
   info.image = info.user.image || '/img/icon.svg';
@@ -88382,7 +88410,7 @@ function getMessageAndImage(notification) {
 
 
 function getDeltaTimeMessage(deltaMiliSec) {
-  var deltaTimeSec = deltaMiliSec / 1000;
+  var deltaTimeSec = Math.floor(deltaMiliSec / 1000);
   var timeMessage;
 
   if (deltaTimeSec < 60) {
@@ -88430,40 +88458,50 @@ function Notice(props) {
       var path = '/user/profile/' + info.user.str_id;
       pages_props.history.push(path);
     }
-  } // TODO: Comment -> Postへのリンク、いいね→投稿 or コメントへのリンク, フォロー-> userへのリンク
+  } // 通知内容の項目が既に削除されていた場合はnull
 
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card hover mb-3",
-    onClick: function onClick() {
-      return onClickCard();
-    }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row no-gutters"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "img-fluid",
-    src: info.image,
-    alt: "user-image"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-10"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "card-text"
-  }, info.message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "card-text"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
-    className: "text-muted"
-  }, timeMessage))))));
+  if (info) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "card hover mb-3",
+      onClick: function onClick() {
+        return onClickCard();
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row no-gutters"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col-2"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: "img-fluid",
+      src: info.image,
+      alt: "user-image"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col-10"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "card-body"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "card-text"
+    }, info.message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "card-text"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+      className: "text-muted"
+    }, timeMessage))))));
+  } else {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
 }
 
 function Notification() {
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["DataContext"]);
-  var notifications = data.params.user.notifications || [];
-  console.log(notifications); // 日付の新しい順にソート
-  // TODO: これはバックエンド側でやるべき？
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
+  var isNotLogin = typeof data.params.user === 'undefined';
+
+  if (isNotLogin) {
+    props.history.push('/home');
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  }
+
+  var notifications = data.params.user.notifications || []; // 通知を日付の新しい順にソート
 
   notifications.sort(function (a, b) {
     return new Date(b.created_at) - new Date(a.created_at);
@@ -88680,7 +88718,9 @@ function PostData() {
       })["catch"](function (error) {
         // ISBNが違う場合 404
         if (error.response.status === 404) {
-          alert('本が見つかりません'); // 既に追加済みの場合など
+          setErrors(['本がみつかりませんでした']); // validation error
+        } else if (error.response.status == 422) {
+          setErrors(['URLが正しくありません']);
         } else {
           props.history.push('/error');
         }
@@ -88814,8 +88854,8 @@ function PostData() {
       onSubmit: onSubmit
     }));
   } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-      className: "\u7121\u52B9\u306A\u30EA\u30AF\u30A8\u30B9\u30C8\u3067\u3059"
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      errors: errors
     });
   }
 }
@@ -89207,7 +89247,9 @@ function Signup() {
       newErrors.push('ユーザー名が入力されていません');
     }
 
-    if (strId.length < 4) {
+    if (strId.length === 0) {
+      newErrors.push('ユーザーIDが入力されていません');
+    } else if (strId.length < 4) {
       newErrors.push('ユーザーIDが短すぎます');
     }
 
@@ -89217,8 +89259,14 @@ function Signup() {
 
     if (password !== confirmPassword) {
       newErrors.push('パスワードが一致していません');
-    } else if (password.length < 8) {
+    } else if (password.length === 0) {
+      newErrors.push('パスワードが入力されていません');
+    } else if (password.length < 6) {
       newErrors.push('パスワードが短すぎます');
+    }
+
+    if (confirmPassword.length === 0) {
+      newErrors.push('確認用パスワードが入力されていません');
     }
 
     if (newErrors.length) {
@@ -89245,7 +89293,7 @@ function Signup() {
       return setUserName(e.target.value);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Label, {
-    label: "\u30E6\u30FC\u30B6\u30FCID",
+    label: "\u30E6\u30FC\u30B6\u30FCID (\u82F1\u6570\u5B574\u6587\u5B57\u4EE5\u4E0A)",
     name: "user-id",
     value: strId,
     onChange: function onChange(e) {
@@ -89259,7 +89307,7 @@ function Signup() {
       return setEmail(e.target.value);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Label, {
-    label: "\u30D1\u30B9\u30EF\u30FC\u30C9",
+    label: "\u30D1\u30B9\u30EF\u30FC\u30C9\uFF08\u82F1\u6570\u5B576\u6587\u5B57\u4EE5\u4E0A\uFF09",
     name: "password",
     value: password,
     onChange: function onChange(e) {
@@ -89499,25 +89547,25 @@ function User() {
 
   function onClickSearch() {
     if (input === '') {
-      setErrors(['入力されていません']);
+      setErrors(['フォームが入力されていません']);
+    } else {
+      axios.post('/api/user', {
+        user: input
+      }).then(function (response) {
+        var users = response.data; // ユーザーが存在していたら
+
+        if (users.length) {
+          setUsers(users);
+          setErrors([]);
+        } else {
+          var _errors = ['ユーザーが存在していません'];
+          setUsers([]);
+          setErrors(_errors);
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
-
-    axios.post('/api/user', {
-      user: input
-    }).then(function (response) {
-      var users = response.data; // ユーザーが存在していたら
-
-      if (users.length) {
-        setUsers(users);
-        setErrors([]);
-      } else {
-        var _errors = ['ユーザーが存在していません'];
-        setUsers([]);
-        setErrors(_errors);
-      }
-    })["catch"](function (error) {
-      console.log(error);
-    });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -89950,7 +89998,8 @@ function EditUserButton(props) {
     if (user.str_id === 'guest') {
       EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "btn btn-outline-success invalid"
+        className: "btn btn-outline-success",
+        disabled: true
       }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "text-danger"
       }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306F\u7DE8\u96C6\u3067\u304D\u307E\u305B\u3093")); // ゲスト以外の場合
@@ -89997,10 +90046,14 @@ function FollowNumber(props) {
   var followers = props.followers.length;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "mt-3 mb-0",
+    id: "follow",
     "data-link": "/follows",
+    "data-count": follows,
     onClick: props.onClick
   }, "Follow: ", follows), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    id: "follower",
     "data-link": "/followers",
+    "data-count": followers,
     onClick: props.onClick
   }, "Follower: ", followers));
 }

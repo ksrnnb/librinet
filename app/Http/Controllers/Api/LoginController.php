@@ -27,7 +27,6 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $params = User::getParamsForApp($str_id);
             
-            \Log::debug($_SERVER["HTTP_HOST"]);
             return response()->json($params);
         } else {
             return response('Cannot Authenticated', 401);

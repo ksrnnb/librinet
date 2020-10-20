@@ -87,31 +87,35 @@ export default function Signup() {
 
   function validation() {
     const newErrors = [];
-    // TODO: Server sideと合わせる
-    if (userName.length === 0) {
-      newErrors.push('ユーザー名が入力されていません');
+
+    // \x20: 半角スペース, \u3000: 全角スペース
+    const isUserName = /^[^\x20\u3000]{1,32}$/;
+    const isUserId = /^\w{4,32}$/;
+    const isEmail = /\w+@[a-zA-z_\.]+/;
+    const isPasswordCharacter = /^[\w\|\^\$\*\+\?\.\(\)\[\]\/\\!@#$%&-_+={}:;"'?>.,<`~]{6,255}$/;
+
+    if (!isUserName.test(userName)) {
+      newErrors.push('ユーザー名が正しく入力されていません');
     }
 
-    if (strId.length === 0) {
-      newErrors.push('ユーザーIDが入力されていません');
-    } else if (strId.length < 4) {
-      newErrors.push('ユーザーIDが短すぎます');
+    if (!isUserId.test(strId)) {
+      newErrors.push('ユーザーIDが正しく入力されていません');
     }
 
-    if (email.length === 0) {
-      newErrors.push('メールアドレスが入力されていません');
+    if (!isEmail.test(email)) {
+      newErrors.push('メールアドレスが正しく入力されていません');
     }
 
     if (password !== confirmPassword) {
       newErrors.push('パスワードが一致していません');
-    } else if (password.length === 0) {
-      newErrors.push('パスワードが入力されていません');
-    } else if (password.length < 6) {
-      newErrors.push('パスワードが短すぎます');
     }
 
-    if (confirmPassword.length === 0) {
-      newErrors.push('確認用パスワードが入力されていません');
+    if (!isPasswordCharacter.test(password)) {
+      newErrors.push('パスワードが正しく入力されていません');
+    }
+
+    if (!isPasswordCharacter.test(confirmPassword)) {
+      newErrors.push('確認用パスワードが正しく入力されていません');
     }
 
     if (newErrors.length) {

@@ -68,6 +68,16 @@ class CreateUserTest extends TestCase
         $this->form['name'] = 'too_long_name' . str_repeat('a', 32);
         $this->post($this->path, $this->form)
              ->assertStatus(302);
+
+        // include space validation
+        $this->form['name'] = 'include space name';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
+
+        // include space validation (全角)
+        $this->form['name'] = 'include　space　name';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
     }
 
     public function testCannotCreateStrIdValidation()
@@ -86,6 +96,16 @@ class CreateUserTest extends TestCase
         $this->form['str_id'] = 'too_long_str_id' . str_repeat('a', 32);
         $this->post($this->path, $this->form)
              ->assertStatus(302);
+
+        // include space
+        $this->form['str_id'] = 'include space id';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
+
+        // include symbol
+        $this->form['str_id'] = 'str_id_include_@';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
     }
 
     public function testCannotCreateEmailValidation()
@@ -97,6 +117,21 @@ class CreateUserTest extends TestCase
 
         // too long email validation
         $this->form['email'] = 'too_long_email' . str_repeat('a', 255) . '@test.com';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
+
+        // start from @ sign
+        $this->form['email'] = '@_start_from_at_sign';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
+
+        // end with @ sign
+        $this->form['email'] = 'start_from_at_sign_@';
+        $this->post($this->path, $this->form)
+             ->assertStatus(302);
+
+        // 2 @ sign
+        $this->form['email'] = 'include_2_@sign@test.com';
         $this->post($this->path, $this->form)
              ->assertStatus(302);
     }

@@ -51,10 +51,36 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         $rules = [
-            'str_id'    => ['required', 'string', 'min:4', 'max:32', 'unique:users'],
-            'name'      => ['required', 'string', 'max:32'],
-            'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password'  => ['required', 'string', 'min:6', 'max:255', 'confirmed'],
+            'str_id'    => [
+                'required',
+                'string',
+                'regex:/^\w{4,32}$/',
+                'unique:users',
+            ],
+            'name'      => [
+                'required',
+                'string',
+                // PHPは\u3000が使えないので注意。Unicode propertyを参照。
+                'regex:/^[^\s\p{C}]{1,32}$/',
+            ],
+            'email'     => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users',
+            ],
+            'password'  => [
+                'required',
+                'string',
+                'regex:/^[\w\|\^\$\*\+\?\.\(\)\[\]\/\\!@#$%&-_+={}:;"\'?>.,<`~]{6,255}$/',
+                'confirmed',
+            ],
+            'password_confirmation' => [
+                'required',
+                'string',
+                'regex:/^[\w\|\^\$\*\+\?\.\(\)\[\]\/\\!@#$%&-_+={}:;"\'?>.,<`~]{6,255}$/',
+            ],
         ];
 
         $messages = [

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { BookIcon } from './Icon';
 
 const axios = require('axios');
 
@@ -28,29 +29,19 @@ export default function Like(props) {
       .post('/api/like', {
         uuid: uuid,
       })
-      .then(() => {})
+      .then(() => { })
       .catch((error) => {
         console.log(error);
       });
   }
 
   return (
-    <>
-      <button
-        type="button"
-        className={
-          isLiked ? 'likes btn btn-info' : 'likes btn btn-outline-info'
-        }
-        data-uuid={item.uuid}
-        data-isliked={isLiked ? '1' : '0'}
-        onClick={(e) => sendLikeRequest(e.target.dataset.uuid)}
-      >
-        いいね
-      </button>
-      <p className="d-inline count" data-count={count}>
+    <div>
+      <BookIcon uuid={item.uuid} isLiked={isLiked} sendLikeRequest={sendLikeRequest} />
+      <p className="d-inline count pl-1" data-count={count}>
         {count}
       </p>
-    </>
+    </div>
   );
 }
 

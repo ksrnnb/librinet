@@ -10907,7 +10907,7 @@ a.text-dark:focus {
 body {
   font-family: "M PLUS 1p", sans-serif;
   font-size: 1.1rem;
-  background-color: white;
+  background-color: #ebf5e7;
   padding-top: 100px;
 }
 
@@ -10975,7 +10975,115 @@ input {
   cursor: pointer;
 }
 
-.one-row {
+.feed-wrapper {
+  background-color: white;
+}
+
+.feed {
+  height: 150px;
+  padding: 10px 10px 0px 10px;
+  display: flex;
+}
+
+.feed-image {
+  height: 150px;
+  display: flex;
+}
+
+.feed-image .book-cover-wrapper {
+  height: 90%;
+  width: 110px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.feed-image .book-cover-wrapper .book-cover {
+  height: 100%;
+  max-width: 100%;
+}
+
+.feed-image .user-image-wrapper {
+  vertical-align: top;
+}
+
+.feed-image .user-image-wrapper .user-image {
+  margin-left: 10px;
+  width: 70px;
+}
+
+.feed-message {
+  margin-left: 20px;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-user-name {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.feed-user-id {
+  font-size: 0.9em;
+  color: #666666;
+}
+
+.book-info {
+  padding: 10px 10px 0px 10px;
+  margin: 0px;
+}
+
+.no-button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+.no-button:hover {
+  cursor: default;
+}
+
+.icon-group {
+  display: flex;
+  max-width: 300px;
+  margin-top: auto;
+  justify-content: space-between;
+}
+
+.icon {
+  width: 24px;
+  stroke: #cccccc;
+  fill: #cccccc;
+}
+
+.icon:hover {
+  cursor: pointer;
+}
+
+#comment-icon:hover {
+  stroke: #38c172;
+  fill: #38c172;
+}
+
+#book-icon[data-isliked="1"] {
+  fill: #38c172;
+}
+
+#book-icon:hover {
+  fill: #38c172;
+}
+
+#trash-icon:hover {
+  fill: #e3342f;
+}
+
+.one-row,
+.book-info {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -27,8 +27,9 @@ class PostTest extends DuskTestCase
             'password' => config('app.guest_password')
         ];
 
-        // design, docker, wrong ISBN
-        $this->isbn = ['9784839955557', '9784297100339', '9784297100338'];
+        // Linux, docker, wrong ISBN
+        // circleci環境だと、エラー出るので変えてみる。ssh接続して、編集後はOKだった。
+        $this->isbn = ['9784797397642', '9784297100339', '9784297100338'];
         $this->path = '/book/post/' . $this->isbn[0];
     }
 

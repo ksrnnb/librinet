@@ -85864,7 +85864,7 @@ function AddBook() {
         return setConvGenre(e.target.value);
       },
       onChangeRadioButton: onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_4__["BookCard"], {
       book: book
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       className: "btn btn-outline-success",
@@ -86182,35 +86182,80 @@ Button.propTypes = {
 /*!*********************************************!*\
   !*** ./resources/js/components/BookCard.js ***!
   \*********************************************/
-/*! exports provided: default */
+/*! exports provided: BookImage, BookInfo, BookCard */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BookCard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookImage", function() { return BookImage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookInfo", function() { return BookInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookCard", function() { return BookCard; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _BookImage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BookImage */ "./resources/js/components/BookImage.js");
-/* harmony import */ var _BookInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BookInfo */ "./resources/js/components/BookInfo.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _MyCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MyCard */ "./resources/js/components/MyCard.js");
 
 
 
+function BookImage(props) {
+  var book = props.book;
+  var image;
 
+  if (book.cover) {
+    image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: "img-fluid",
+      src: book.cover,
+      alt: "book_image"
+    });
+  } else {
+    image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: "img-fluid",
+      src: "../img/book.svg",
+      alt: "book_image"
+    });
+  }
+
+  return image;
+}
+BookImage.propTypes = {
+  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
+  col: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
+};
+function BookInfo(props) {
+  var book = props.book;
+  var pub_year = book.pubdate.slice(0, 4) + '年';
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "one-row"
+  }, "\u30BF\u30A4\u30C8\u30EB\uFF1A ", book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "one-row mt-3"
+  }, "\u8457\u8005\uFF1A", book.author), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "one-row mt-3"
+  }, "\u51FA\u7248\u793E\uFF1A", book.publisher), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "one-row mt-3"
+  }, "\u51FA\u7248\u5E74\uFF1A", pub_year), props.children);
+}
+BookInfo.propTypes = {
+  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
+  col: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
+  children: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array
+};
 function BookCard(props) {
   var book = props.book;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "book-card row shadow no-gutters"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookImage__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    book: book
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookInfo__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    book: book
-  }, props.children));
+  console.log(props);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_2__["MyCard"], {
+    image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookImage, {
+      book: book
+    }),
+    body: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookInfo, {
+      book: book
+    }, props.children),
+    addingClass: "book-card"
+  });
 }
 BookCard.propTypes = {
-  book: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object,
-  children: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.array
+  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
+  children: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array
 };
 
 /***/ }),
@@ -86275,6 +86320,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 
+ // TODO: SelectBookCard修正したらいらなくなるので、これとBookInfoを削除する。
 
 function BookInfo(props) {
   var book = props.book;
@@ -88301,8 +88347,6 @@ function Like(props) {
     });
   }
 
-  console.log('--Like---');
-  console.log(isLiked);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_2__["LikeIcon"], {
     uuid: item.uuid,
     isLiked: isLiked,
@@ -88500,6 +88544,44 @@ function logout() {
 
 /***/ }),
 
+/***/ "./resources/js/components/MyCard.js":
+/*!*******************************************!*\
+  !*** ./resources/js/components/MyCard.js ***!
+  \*******************************************/
+/*! exports provided: MyCard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyCard", function() { return MyCard; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+
+
+function MyCard(props) {
+  var className = props.addingClass ? "my-card row shadow no-gutters " + props.addingClass : "my-card row shadow no-gutters";
+  var attr = props.onClick && {
+    onClick: props.onClick
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _extends({
+    className: className
+  }, attr), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-3 image"
+  }, props.image), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col body"
+  }, props.body));
+}
+MyCard.propTypes = {
+  image: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
+  body: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object
+};
+
+/***/ }),
+
 /***/ "./resources/js/components/Notification.js":
 /*!*************************************************!*\
   !*** ./resources/js/components/Notification.js ***!
@@ -88517,6 +88599,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _MyCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MyCard */ "./resources/js/components/MyCard.js");
+
 
 
 
@@ -88616,30 +88700,18 @@ function Notice(props) {
 
 
   if (info) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "card hover mb-3",
-      onClick: function onClick() {
-        return onClickCard();
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "row no-gutters"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "col-2"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
-      src: info.image,
-      alt: "user-image"
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "col-10"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "card-body"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-      className: "card-text"
-    }, info.message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-      className: "card-text"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
-      className: "text-muted"
-    }, timeMessage))))));
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_5__["MyCard"], {
+      image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "img-fluid",
+        src: info.image,
+        alt: "user-image"
+      }),
+      body: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, info.message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+        className: "text-muted"
+      }, timeMessage))),
+      addingClass: "notification-card mb-3",
+      onClick: onClickCard
+    });
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
@@ -88998,7 +89070,7 @@ function PostData() {
         return setConvGenre(e.target.value);
       },
       onChangeRadioButton: onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_7__["BookCard"], {
       book: book
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
       message: message,
@@ -89201,9 +89273,11 @@ function SearchedBook(props) {
     }
   }
 
+  var isSearched = pages_props.location.pathname === '/book';
+  var marginTop = isSearched ? "mt-5" : "";
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-    className: "mt-5"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    className: marginTop
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_2__["BookCard"], {
     book: book
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(PostButton, {
     isLogin: data.isLogin,
@@ -89581,7 +89655,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Subtitle(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
     className: "mb-3",
     id: "subtitle"
   }, props.subtitle);
@@ -89639,7 +89713,7 @@ function UsersExample(props) {
     });
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
     className: "mt-5"
   }, "\u30E6\u30FC\u30B6\u30FC\u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
     className: "table shadow"
@@ -89781,23 +89855,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _MyCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MyCard */ "./resources/js/components/MyCard.js");
+
 
 
 
 function UserImage(props) {
   var image = props.image || '/img/icon.svg';
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "user-image"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "img-fluid",
     src: image,
     alt: "user-image"
-  });
+  }));
 }
 function UserCard(props) {
   var user = props.user;
   var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_1__["PropsContext"]);
 
   function jumpToUserPage() {
-    var user = props.user;
     var path = '/user/profile/' + user.str_id;
     pages_props.history.push({
       pathname: path,
@@ -89807,26 +89884,18 @@ function UserCard(props) {
     });
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card user-card",
-    id: "user-card",
-    "data-id": user.id,
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_3__["MyCard"], {
+    image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
+      image: user.image
+    }),
+    body: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "user-name my-0"
+    }, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "user-id my-0"
+    }, '@' + user.str_id)),
+    addingClass: "user-card",
     onClick: jumpToUserPage
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row no-gutters"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
-    image: user.image
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-10"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-    className: "card-title"
-  }, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "card-text"
-  }, '@' + user.str_id)))));
+  });
 }
 UserImage.propTypes = {
   image: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string

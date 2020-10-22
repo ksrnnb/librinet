@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// TODO: SelectBookCard修正したらいらなくなるので、これとBookInfoを削除する。
 export default function BookInfo(props) {
   const book = props.book;
   const pub_year = book.pubdate.slice(0, 4) + '年';

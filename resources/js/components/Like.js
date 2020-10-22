@@ -35,9 +35,6 @@ export default function Like(props) {
       });
   }
 
-  console.log('--Like---');
-  console.log(isLiked);
-
   return (
     <div>
       <LikeIcon

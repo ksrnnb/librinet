@@ -10942,6 +10942,19 @@ body {
   max-width: 800px;
 }
 
+.my-card {
+  border-radius: 5px;
+}
+
+.my-card .image {
+  padding: 3%;
+}
+
+.my-card .body {
+  padding: 3% 3% 3% 0;
+  overflow: hidden;
+}
+
 .btn-outline-success {
   background-color: white;
 }
@@ -11145,6 +11158,14 @@ input {
   margin: 0px;
 }
 
+.notification-card {
+  background-color: white;
+}
+
+.notification-card:hover {
+  cursor: pointer;
+}
+
 .invalid {
   opacity: 0.5;
 }
@@ -11188,15 +11209,17 @@ input[type=radio] {
 .book-card {
   background-color: #eef5eb;
   border: solid 1px #ebf5e7;
-  border-radius: 5px;
 }
 
-.book-card .book-cover {
-  padding: 3%;
+.book-card:hover {
+  cursor: pointer;
 }
 
-.book-card .book-info {
-  padding: 3% 3% 3% 0;
-  overflow: hidden;
+.user-card {
+  background-color: white;
+}
+
+.user-card .user-id {
+  color: #666666;
 }
 

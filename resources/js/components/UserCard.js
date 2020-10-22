@@ -1,11 +1,16 @@
 import React, { useContext } from 'react';
 import { PropsContext } from './Pages';
 import { PropTypes } from 'prop-types';
+import { MyCard } from './MyCard';
 
 export function UserImage(props) {
   const image = props.image || '/img/icon.svg';
 
-  return <img className="img-fluid" src={image} alt="user-image" />;
+  return (
+    <div className="user-image">
+      <img className="img-fluid" src={image} alt="user-image" />
+    </div>
+  );
 }
 
 export default function UserCard(props) {
@@ -13,7 +18,6 @@ export default function UserCard(props) {
   const pages_props = useContext(PropsContext);
 
   function jumpToUserPage() {
-    const user = props.user;
     const path = '/user/profile/' + user.str_id;
 
     pages_props.history.push({
@@ -23,25 +27,18 @@ export default function UserCard(props) {
   }
 
   return (
-    <div
-      className="card user-card"
-      id="user-card"
-      data-id={user.id}
+    <MyCard
+      image={
+        <UserImage image={user.image} />
+      }
+      body={
+        <>
+          <p className="user-name my-0">{user.name}</p>
+          <p className="user-id my-0">{'@' + user.str_id}</p></>
+      }
+      addingClass="user-card"
       onClick={jumpToUserPage}
-    >
-      <div className="row no-gutters">
-        <div className="col-2">
-          <UserImage image={user.image} />
-        </div>
-        <div className="col-10">
-          <div className="card-body">
-            <h5 className="card-title">{user.name}</h5>
-            <p className="card-text">{'@' + user.str_id}</p>
-          </div>
-          {/* {props.children} */}
-        </div>
-      </div>
-    </div>
+    />
   );
 }
 

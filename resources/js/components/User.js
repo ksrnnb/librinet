@@ -22,7 +22,7 @@ function UsersExample(props) {
 
   return (
     <>
-      <h3 className="mt-5">ユーザー例</h3>
+      <h4 className="mt-5">ユーザー例</h4>
       <table className="table shadow">
         <thead>
           <tr>

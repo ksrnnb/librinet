@@ -30,10 +30,10 @@ export default function BookProfile() {
 
   if (book) {
     return (
-      <div className="row book">
+      <>
         <Subtitle subtitle="本の情報" />
         <SearchedBook book={book} />
-      </div>
+      </>
     );
   } else {
     return <></>;

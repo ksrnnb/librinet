@@ -23,7 +23,7 @@ function UsersExample(props) {
   return (
     <>
       <h3 className="mt-5">ユーザー例</h3>
-      <table className="table">
+      <table className="table shadow">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -111,15 +111,16 @@ export default function User() {
     <>
       <Subtitle subtitle="ユーザーの検索" />
       <label htmlFor="user">
-        <h4 className="mt-5">ユーザーID or ユーザー名</h4>
+        <h4>ユーザーID または ユーザー名を入力してください</h4>
         <Errors errors={errors} />
         <input
+          className="mr-3 py-0"
           type="text"
           id="user"
           name="user"
           onChange={(e) => setInput(e.target.value)}
         />
-        <input type="button" value="検索" onClick={onClickSearch} />
+        <input type="button" className="btn btn-outline-success" value="検索" onClick={onClickSearch} />
       </label>
       <Results users={users} />
       <UsersExample examples={examples} />

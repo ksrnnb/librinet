@@ -10,7 +10,7 @@ const axios = window.axios;
 
 function EditButton(props) {
   return (
-    <button className="btn btn-outline-success" onClick={props.onClick}>
+    <button className="btn btn-outline-success mb-5" onClick={props.onClick}>
       編集する
     </button>
   );

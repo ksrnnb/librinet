@@ -37,7 +37,7 @@ export default function SearchedBook(props) {
           className="btn btn-outline-success mr-3"
           onClick={linkToPost}
         >
-          本の投稿をする
+          投稿する
         </button>
       );
     } else {
@@ -64,7 +64,7 @@ export default function SearchedBook(props) {
   }
 
   return (
-    <div className="row mt-5 book">
+    <div className="mt-5">
       <BookCard book={book}>
         <PostButton isLogin={data.isLogin} onClick={linkToPost} />
         <AddBookButton onClick={linkToAddBookshelf} />

@@ -4,7 +4,7 @@ html {
 
 body {
   font-family: 'M PLUS 1p', sans-serif;
-  background-color: #ebf5e7;
+  background-color: $background_color;
   padding-top: 100px;
   font-size: 1.0rem;
 }
@@ -12,7 +12,15 @@ body {
 #sub-column {
   border-right: solid 1px #cccccc;
 }
-  
+
+#main-column {
+  max-width: 800px;
+}
+
+.btn-outline-success {
+  background-color: white;
+}
+
 .container {
   max-width: 95%;
 }

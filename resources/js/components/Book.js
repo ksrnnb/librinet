@@ -9,8 +9,8 @@ const axios = window.axios;
 function InputPrompt() {
   return (
     <>
-      <h4 className="mt-3 mb-0">13桁のISBNを入力してください</h4>
-      <p>（9784... ハイフン有りでもOK）</p>
+      <h4 className="mb-0">13桁のISBNを入力してください</h4>
+      <p>（※国内の本に限ります。9784...）</p>
     </>
   );
 }
@@ -26,7 +26,7 @@ function ShowExamples() {
   exampleBooks.forEach((title, isbn) => {
     tableRows.push(
       <tr key={isbn}>
-        <td>{isbn}</td>
+        <td scope="row">{isbn}</td>
         <td>{title}</td>
       </tr>
     );
@@ -38,8 +38,8 @@ function ShowExamples() {
 function Example() {
   return (
     <div>
-      <h4 className="pl-3 mt-3">ISBN 例</h4>
-      <table className="table">
+      <h4 className="mt-5">ISBN 例</h4>
+      <table className="table shadow">
         <thead>
           <tr>
             <th scope="col">ISBN</th>
@@ -110,12 +110,10 @@ export default function Book() {
           setErrors(null);
         })
         .catch((error) => {
-          // 本が見つからない場合は404に設定した (BookController)
           if (error.response.status == 404) {
             setErrors(['本が見つかりませんでした']);
           } else {
             // サーバー側のvalidationに引っ掛かった場合など。
-            // JavaScript側のvalidationで十分だと思うけど一応。
             setErrors(['Unknown Error']);
           }
         });
@@ -127,7 +125,9 @@ export default function Book() {
   function validateInputAndReturnIsbn(input) {
     if (input == null) return false;
 
+    // -の削除とスペースの削除
     let isbn = input.replace(/-/g, '');
+    isbn = isbn.replace(/[\x20\u3000]/g, '');
     isbn = isbn.match(/^9784[0-9]{9}$/);
 
     return isbn || false;

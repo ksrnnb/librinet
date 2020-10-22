@@ -6,7 +6,7 @@ export default function BookInfo(props) {
   const pub_year = book.pubdate.slice(0, 4) + '年';
 
   return (
-    <div className={props.col}>
+    <div className="col book-info">
       <p className="one-row">タイトル： {book.title}</p>
       <p className="one-row mt-3">著者：{book.author}</p>
       <p className="one-row mt-3">出版社：{book.publisher}</p>

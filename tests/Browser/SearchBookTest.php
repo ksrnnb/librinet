@@ -74,7 +74,7 @@ class SearchBookTest extends DuskTestCase
                     ->waitFor('#isbn')
                     ->type('#isbn', $isbn)
                     ->press('検索')
-                    ->waitFor('.book')
+                    ->waitFor('.book-card')
                     ->assertSee('Docker/Kubernetes')
                     ->assertDontSee('投稿をする')      // 未認証のため見えない
                     ->assertDontSee('追加する');      // 未認証のため見えない
@@ -91,8 +91,8 @@ class SearchBookTest extends DuskTestCase
                     ->waitFor('#isbn')
                     ->type('#isbn', $this->isbn)
                     ->press('検索')
-                    ->waitFor('.book')
-                    ->press('本の投稿をする')
+                    ->waitFor('.book-card')
+                    ->press('投稿する')
                     ->waitFor('#message')
                     ->assertSee('投稿画面')
                     ->back()
@@ -100,7 +100,7 @@ class SearchBookTest extends DuskTestCase
 
             $browser->type('#isbn', $this->isbn)
                     ->press('検索')
-                    ->waitFor('.book')
+                    ->waitFor('.book-card')
                     ->press('本棚に追加する')
                     ->waitFor('#new-genre')
                     ->assertSee('ジャンル')

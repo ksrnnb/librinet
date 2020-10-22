@@ -1,0 +1,33 @@
+.table {
+  background-color: white;
+
+  thead {
+    th {
+      background-color: $green;
+      color: white;
+    }
+  }
+
+  tbody {
+    tr {
+      &:hover {
+        background-color: $hover_color;
+      }
+    }
+  }
+}
+
+.book-card {
+  background-color: $background_color;
+  border: solid 1px $hover_color;
+  border-radius: 5px;
+
+  .book-cover {
+    padding: 3%;
+  }
+
+  .book-info {
+    padding: 3% 3% 3% 0;
+    overflow: hidden;
+  }
+}

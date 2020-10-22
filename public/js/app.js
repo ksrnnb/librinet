@@ -86044,8 +86044,8 @@ var axios = window.axios;
 
 function InputPrompt() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-    className: "mt-3 mb-0"
-  }, "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\uFF089784... \u30CF\u30A4\u30D5\u30F3\u6709\u308A\u3067\u3082OK\uFF09"));
+    className: "mb-0"
+  }, "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\uFF08\u203B\u56FD\u5185\u306E\u672C\u306B\u9650\u308A\u307E\u3059\u30029784...\uFF09"));
 }
 
 function ShowExamples() {
@@ -86054,16 +86054,18 @@ function ShowExamples() {
   exampleBooks.forEach(function (title, isbn) {
     tableRows.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
       key: isbn
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, isbn), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, title)));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      scope: "row"
+    }, isbn), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, title)));
   });
   return tableRows;
 }
 
 function Example() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-    className: "pl-3 mt-3"
+    className: "mt-5"
   }, "ISBN \u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-    className: "table"
+    className: "table shadow"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
     scope: "col"
   }, "ISBN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
@@ -86129,12 +86131,10 @@ function Book() {
         setBook(book);
         setErrors(null);
       })["catch"](function (error) {
-        // 本が見つからない場合は404に設定した (BookController)
         if (error.response.status == 404) {
           setErrors(['本が見つかりませんでした']);
         } else {
           // サーバー側のvalidationに引っ掛かった場合など。
-          // JavaScript側のvalidationで十分だと思うけど一応。
           setErrors(['Unknown Error']);
         }
       });
@@ -86144,8 +86144,10 @@ function Book() {
   }
 
   function validateInputAndReturnIsbn(input) {
-    if (input == null) return false;
+    if (input == null) return false; // -の削除とスペースの削除
+
     var isbn = input.replace(/-/g, '');
+    isbn = isbn.replace(/[\x20\u3000]/g, '');
     isbn = isbn.match(/^9784[0-9]{9}$/);
     return isbn || false;
   }
@@ -86199,12 +86201,10 @@ __webpack_require__.r(__webpack_exports__);
 function BookCard(props) {
   var book = props.book;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row book-card"
+    className: "book-card row shadow no-gutters"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookImage__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    col: "col-3",
     book: book
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookInfo__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    col: "col-9",
     book: book
   }, props.children));
 }
@@ -86250,10 +86250,8 @@ function BookImage(props) {
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: props.col
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("figure", {
-    className: "mx-2 px-0 mb-0 book"
-  }, image));
+    className: "col-3 book-cover"
+  }, image);
 }
 BookImage.propTypes = {
   book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
@@ -86282,7 +86280,7 @@ function BookInfo(props) {
   var book = props.book;
   var pub_year = book.pubdate.slice(0, 4) + '年';
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: props.col
+    className: "col book-info"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "one-row"
   }, "\u30BF\u30A4\u30C8\u30EB\uFF1A ", book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
@@ -86358,9 +86356,7 @@ function BookProfile() {
   }
 
   if (book) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "row book"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_2__["default"], {
       subtitle: "\u672C\u306E\u60C5\u5831"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchedBook__WEBPACK_IMPORTED_MODULE_3__["default"], {
       book: book
@@ -86993,7 +86989,7 @@ var axios = window.axios;
 
 function EditButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-success",
+    className: "btn btn-outline-success mb-5",
     onClick: props.onClick
   }, "\u7DE8\u96C6\u3059\u308B");
 }
@@ -89185,7 +89181,7 @@ function SearchedBook(props) {
         type: "button",
         className: "btn btn-outline-success mr-3",
         onClick: linkToPost
-      }, "\u672C\u306E\u6295\u7A3F\u3092\u3059\u308B");
+      }, "\u6295\u7A3F\u3059\u308B");
     } else {
       return null;
     }
@@ -89206,7 +89202,7 @@ function SearchedBook(props) {
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-    className: "row mt-5 book"
+    className: "mt-5"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
     book: book
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(PostButton, {
@@ -89586,6 +89582,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function Subtitle(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+    className: "mb-3",
     id: "subtitle"
   }, props.subtitle);
 }
@@ -89645,7 +89642,7 @@ function UsersExample(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
     className: "mt-5"
   }, "\u30E6\u30FC\u30B6\u30FC\u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-    className: "table"
+    className: "table shadow"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
     scope: "col"
   }, "ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
@@ -89734,11 +89731,10 @@ function User() {
     subtitle: "\u30E6\u30FC\u30B6\u30FC\u306E\u691C\u7D22"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "user"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-    className: "mt-5"
-  }, "\u30E6\u30FC\u30B6\u30FCID or \u30E6\u30FC\u30B6\u30FC\u540D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Errors, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "\u30E6\u30FC\u30B6\u30FCID \u307E\u305F\u306F \u30E6\u30FC\u30B6\u30FC\u540D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Errors, {
     errors: errors
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "mr-3 py-0",
     type: "text",
     id: "user",
     name: "user",
@@ -89747,6 +89743,7 @@ function User() {
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "button",
+    className: "btn btn-outline-success",
     value: "\u691C\u7D22",
     onClick: onClickSearch
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Results, {

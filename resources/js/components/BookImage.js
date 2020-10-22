@@ -14,8 +14,8 @@ export default function BookImage(props) {
   }
 
   return (
-    <div className={props.col}>
-      <figure className="mx-2 px-0 mb-0 book">{image}</figure>
+    <div className="col-3 book-cover">
+      {image}
     </div>
   );
 }

@@ -10929,13 +10929,21 @@ html {
 
 body {
   font-family: "M PLUS 1p", sans-serif;
-  background-color: #ebf5e7;
+  background-color: #eef5eb;
   padding-top: 100px;
   font-size: 1rem;
 }
 
 #sub-column {
   border-right: solid 1px #cccccc;
+}
+
+#main-column {
+  max-width: 800px;
+}
+
+.btn-outline-success {
+  background-color: white;
 }
 
 .container {
@@ -11008,10 +11016,6 @@ input {
 
 .hover:hover {
   cursor: pointer;
-}
-
-.feed-chunk {
-  max-width: 800px;
 }
 
 .feed-wrapper {
@@ -11166,5 +11170,33 @@ input[type=checkbox] {
 label,
 input[type=radio] {
   cursor: pointer;
+}
+
+.table {
+  background-color: white;
+}
+
+.table thead th {
+  background-color: #38c172;
+  color: white;
+}
+
+.table tbody tr:hover {
+  background-color: #ebf5e7;
+}
+
+.book-card {
+  background-color: #eef5eb;
+  border: solid 1px #ebf5e7;
+  border-radius: 5px;
+}
+
+.book-card .book-cover {
+  padding: 3%;
+}
+
+.book-card .book-info {
+  padding: 3% 3% 3% 0;
+  overflow: hidden;
 }
 

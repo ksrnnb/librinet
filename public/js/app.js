@@ -86624,7 +86624,6 @@ function RecommendBook(props) {
   var orderedBooks = props.orderedBooks;
   var genres = props.genres;
   var isRecommended = props.isRecommended;
-  console.log(props);
 
   if (orderedBooks) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendButton, {
@@ -86705,8 +86704,7 @@ function Comment() {
           props.history.push('/home');
         } else if (error.response.status === 404) {
           setErrors([error.response.data]);
-        } else {
-          console.log('hoge');
+        } else {// console.log('hoge');
         }
       });
     }
@@ -87383,22 +87381,18 @@ function BookCover(props) {
 
   if (book) {
     var coverUrl = book.cover || '/img/book.svg';
-    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "book-cover-wrapper"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       className: "hover book-cover",
       src: coverUrl,
       alt: "book_image",
       onClick: linkToBookProfile
-    }));
+    });
   } else {
-    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "book-cover-wrapper"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       className: "book-cover invisible",
       src: "/img/book.svg",
       alt: "book_image"
-    }));
+    });
   }
 
   return cover;
@@ -87414,23 +87408,23 @@ function UserImage(props) {
     pages_props.history.push(userUrl);
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "user-image-wrapper"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "hover user-image",
     src: userImageUrl,
     alt: "user-icon",
     onClick: linkToUserProfile
-  }));
+  });
 }
 
 function UserAndMessage(props) {
   var user = props.user;
   var message = props.message;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-inline feed-user-name"
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "user-name-wrapper"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "feed-user-name"
   }, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-inline ml-2 feed-user-id"
+    className: "feed-user-id ml-2"
   }, '@' + user.str_id)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "d-block feed-user-message"
   }, message), props.children);
@@ -87468,24 +87462,34 @@ function Feed(props) {
     viewerId: props.viewerId,
     onClick: props.onClickDelete
   }));
+  var isPost = ('comments' in item);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "feed-wrapper border"
+    className: "feed-wrapper",
+    "data-ispost": isPost
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "feed"
+    className: "feed shadow"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "feed-image"
+    className: "book-cover-wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookCover, {
     book: item.book
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "feed-body-wrapper"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "feed-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "user-image-wrapper"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
     user: item.user
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "feed-message"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserAndMessage, {
     user: item.user,
     message: item.message
-  }, icons))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookInfo, {
+  }, icons))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "book-info-wrapper"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookInfo, {
     item: item
-  }));
+  })))));
 }
 Feed.propTypes = {
   item: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
@@ -87499,6 +87503,9 @@ UserAndMessage.propTypes = {
 };
 Feed.propTypes = {
   linkToComment: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
+};
+UserImage.propTypes = {
+  user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object
 };
 
 /***/ }),
@@ -87989,13 +87996,16 @@ function PostWithComments(props) {
 
   function linkToComment() {
     var url = '/comment/' + post.uuid;
+    window.scroll(0, 0);
     pages_props.history.push({
       pathname: url,
       state: post
     });
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "feed-chunk shadow mb-5"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
     post: post,
     viewerId: props.viewerId,
     onClickDelete: onClickDelete,
@@ -88034,7 +88044,7 @@ function Home() {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-12"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      subtitle: "Home"
+      subtitle: "\u30DB\u30FC\u30E0"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Posts, {
       posts: posts,
       viewerId: user.id
@@ -88046,7 +88056,7 @@ function Home() {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-12"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      subtitle: "Home"
+      subtitle: "\u30DB\u30FC\u30E0"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
       className: "text-danger"
     }, "\u30ED\u30B0\u30A4\u30F3\u3057\u3066\u3044\u307E\u305B\u3093"))));
@@ -88073,17 +88083,20 @@ Post.propTypes = {
 /*!*****************************************!*\
   !*** ./resources/js/components/Icon.js ***!
   \*****************************************/
-/*! exports provided: CommentIcon, BookIcon, Trash */
+/*! exports provided: CommentIcon, LikeIcon, Trash */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommentIcon", function() { return CommentIcon; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookIcon", function() { return BookIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LikeIcon", function() { return LikeIcon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Trash", function() { return Trash; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 function CommentIcon(props) {
@@ -88102,9 +88115,7 @@ function CommentIcon(props) {
       x: "0px",
       y: "0px",
       viewBox: "0 0 32 32",
-      style: {
-        enableBackground: 'new 0 0 32 32'
-      }
+      enableBackground: "new 0 0 32 32"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
       id: "bubble"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
@@ -88119,7 +88130,7 @@ function CommentIcon(props) {
   };
 
   var isPost = ('comments' in item);
-  var className = isPost ? "no-button" : "no-button invisible";
+  var className = isPost ? 'no-button' : 'no-button invisible';
   var button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["OverlayTrigger"], {
     placement: "top",
     overlay: renderTooltip
@@ -88130,7 +88141,7 @@ function CommentIcon(props) {
   }))));
   return button;
 }
-function BookIcon(props) {
+function LikeIcon(props) {
   var uuid = props.uuid;
   var isLiked = props.isLiked;
   var sendLikeRequest = props.sendLikeRequest;
@@ -88139,14 +88150,14 @@ function BookIcon(props) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], props, "\u8AAD\u307F\u305F\u3044\uFF01\uFF08\u3044\u3044\u306D\uFF09");
   };
 
-  function Icon(props) {
+  function Icon() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
       className: "icon",
-      id: "book-icon",
-      "data-uuid": props.uuid,
-      "data-isliked": props.isliked,
+      id: "like-icon",
+      "data-uuid": uuid,
+      "data-isliked": isLiked,
       onClick: function onClick(e) {
-        return props.sendLikeRequest(e.target.dataset.uuid);
+        return sendLikeRequest(e.target.dataset.uuid);
       },
       version: "1.1",
       x: "0px",
@@ -88196,7 +88207,12 @@ function Trash(props) {
     }));
   }
 
-  var className = item.user_id == viewerId ? "no-button" : "no-button invisible";
+  Icon.propTypes = {
+    item: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
+    isPost: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
+    onClick: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
+  };
+  var className = item.user_id == viewerId ? 'no-button' : 'no-button invisible';
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["OverlayTrigger"], {
     placement: "top",
     overlay: renderTooltip
@@ -88206,6 +88222,21 @@ function Trash(props) {
     onClick: props.onClick
   }))));
 }
+CommentIcon.propTypes = {
+  item: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
+  likeToComment: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
+};
+LikeIcon.propTypes = {
+  uuid: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string,
+  isLiked: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
+  sendLikeRequest: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
+};
+Trash.propTypes = {
+  item: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
+  viewerId: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].number,
+  isPost: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
+};
 
 /***/ }),
 
@@ -88246,7 +88277,7 @@ function Like(props) {
   var item = props.item;
   var likes = props.item.likes;
   var viewerId = props.viewerId;
-  var isAlreadyLiked = likes.find(function (like) {
+  var isAlreadyLiked = likes.some(function (like) {
     return like.user_id == viewerId;
   });
 
@@ -88274,7 +88305,9 @@ function Like(props) {
     });
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_2__["BookIcon"], {
+  console.log('--Like---');
+  console.log(isLiked);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_2__["LikeIcon"], {
     uuid: item.uuid,
     isLiked: isLiked,
     sendLikeRequest: sendLikeRequest
@@ -88441,7 +88474,6 @@ function logout() {
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_2__["PropsContext"]);
   var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["SetStateContext"]);
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["DataContext"]);
-  console.log(data);
 
   function linkToLogin() {
     var params = {
@@ -89517,8 +89549,7 @@ function SubColumn(props) {
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "sub-column",
-    className: "border-right"
+    id: "sub-column"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/home"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "\u30DB\u30FC\u30E0")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
@@ -89554,7 +89585,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Subtitle(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, props.subtitle);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+    id: "subtitle"
+  }, props.subtitle);
 }
 Subtitle.propTypes = {
   subtitle: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string
@@ -90334,7 +90367,7 @@ function UserProfile() {
 
   if (showingUser) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      subtitle: "User Profile"
+      subtitle: "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
       user: showingUser
     }), buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {

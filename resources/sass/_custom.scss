@@ -4,132 +4,168 @@
   }
 }
 
+.one-row {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .hover {
   &:hover {
     cursor: pointer;
   }
 }
 
+.feed-chunk {
+  max-width: 800px;
+}
+
 .feed-wrapper {
   background-color: white;
+  border-radius: 5px;
 
-}
+  // コメントの背景
+  &[data-ispost="false"] {
+    background-color:#f8f8f8;
+  }
 
-.feed {
-  height: 150px;
-  padding: 10px 10px 0px 10px;
-  display: flex;
-}
+  .feed {
+    // height: var(--height);
+    display: flex;
+  
+    .book-cover-wrapper {
+      padding: 3%;
+      width: 25%;
 
-.feed-image {
-  height: 150px;
-  display: flex;
+      .book-cover {
+        object-fit: cover;
+        border: solid 1px #eeeeee;
+        width: 100%;
+      }
+    }
+  
+    // ユーザー画像から本のタイトルまで
+    .feed-body-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      flex-direction: column;
+      padding: 3% 3% 3% 0;
 
-  .book-cover-wrapper {
-    height: 90%;
-    width: 110px;
-    object-fit: contain;
+      // ユーザー画像、各アイコンまで
+      .feed-body {
+        flex: 1;
+        display: flex;
+      
+        .user-image-wrapper {
+          vertical-align: top;
+          width: 15%;
+        
+          .user-image {
+            width: 100%;
+          }
+        }
+        
+        .feed-message {
+          flex: 1;
+          width: 85%;
+          overflow: hidden;
+          margin-left: 3%;
 
-    .book-cover {
-      height: 100%;
-      max-width: 100%;
+          // iconを下端に揃える
+          display: flex;
+          flex-direction: column;
+
+          .user-name-wrapper {
+            display: flex;
+            overflow: hidden;
+
+            .feed-user-name {
+              font-weight: bold;
+            }
+            
+            .feed-user-id {
+              @extend .one-row;
+
+              font-weight: normal;
+              color: #666666;
+            }
+          }
+          
+          .feed-user-message {
+            font-size: 0.9rem;
+          }
+          
+          
+          .icon-group {
+            // アイコンを下端に揃える
+            // flex: 1;
+            margin-top: auto;
+            
+            // 以下は各アイコンを揃える
+            display: flex;
+            max-width: 300px;
+            justify-content: space-between;
+            
+            .no-button {
+              background-color: transparent;
+              border: none;
+              outline: none;
+              padding: 0;
+              appearance: none;
+
+              &:hover {
+                cursor: default;
+              }
+            }
+            
+            .icon {
+              width: var(--icon_width);
+              stroke: #cccccc;
+              fill: #cccccc;
+              
+              &:hover {
+                cursor: pointer;
+              }
+            }
+            
+            #comment-icon {
+              &:hover {
+                stroke: $green;
+                fill: $green;
+              }
+            }
+            
+            #like-icon {
+              &[data-isliked="true"] {
+                fill: $green;
+              }
+              
+              &:hover {
+                fill: $green;
+              }
+            }
+            
+            #trash-icon {
+              &:hover {
+                fill: $red;
+              }
+            }
+
+          }
+        }
+      }
+
+      .book-info-wrapper {
+
+        .book-info {
+          @extend .one-row;
+          font-size: 0.9rem;
+          margin: 0px;
+        }
+      }
     }
   }
-
-  .user-image-wrapper {
-    vertical-align: top;
-
-    .user-image {
-      margin-left: 10px;
-      width: 70px;
-    }
-  }
-}
-
-.feed-message {
-  margin-left: 20px;
-  overflow: hidden;
-  flex: 1;
-  // iconを下端に揃える用
-  display: flex;
-  flex-direction: column;
-}
-
-.feed-user-name {
-  font-size: 0.9em;
-  font-weight: bold;
-}
-
-.feed-user-id {
-  font-size: 0.9em;
-  color: #666666;
-}
-
-.feed-user-message {
-
-}
-
-.book-info {
-  @extend .one-row;
-  padding: 10px 10px 0px 10px;
-  margin: 0px;
-}
-
-.no-button {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  padding: 0;
-  appearance: none;
-  &:hover {
-    cursor: default;
-  }
-}
-
-.icon-group {
-  display: flex;
-  max-width: 300px;
-  margin-top: auto;
-  justify-content: space-between;
-}
-
-.icon {
-  width: 24px;
-  stroke: #cccccc;
-  fill: #cccccc;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-#comment-icon {
-  &:hover {
-    stroke: $green;
-    fill: $green;
-  }
-}
-
-#book-icon {
-  &[data-isliked="1"] {
-    fill: $green;
-  }
-
-  &:hover {
-    fill: $green;
-  }
-}
-
-#trash-icon {
-  &:hover {
-    fill: $red;
-  }
-}
-
-.one-row {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .invalid {

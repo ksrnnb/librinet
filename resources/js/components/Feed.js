@@ -31,24 +31,20 @@ function BookCover(props) {
     const coverUrl = book.cover || '/img/book.svg';
 
     cover = (
-      <div className="book-cover-wrapper">
-        <img
-          className="hover book-cover"
-          src={coverUrl}
-          alt="book_image"
-          onClick={linkToBookProfile}
-        />
-      </div>
+      <img
+        className="hover book-cover"
+        src={coverUrl}
+        alt="book_image"
+        onClick={linkToBookProfile}
+      />
     );
   } else {
     cover = (
-      <div className="book-cover-wrapper">
-        <img
-          className="book-cover invisible"
-          src='/img/book.svg'
-          alt="book_image"
-        />
-      </div>
+      <img
+        className="book-cover invisible"
+        src="/img/book.svg"
+        alt="book_image"
+      />
     );
   }
 
@@ -66,14 +62,12 @@ function UserImage(props) {
   }
 
   return (
-    <div className="user-image-wrapper">
-      <img
-        className="hover user-image"
-        src={userImageUrl}
-        alt="user-icon"
-        onClick={linkToUserProfile}
-      />
-    </div>
+    <img
+      className="hover user-image"
+      src={userImageUrl}
+      alt="user-icon"
+      onClick={linkToUserProfile}
+    />
   );
 }
 function UserAndMessage(props) {
@@ -82,9 +76,9 @@ function UserAndMessage(props) {
 
   return (
     <>
-      <div>
-        <p className="d-inline feed-user-name">{user.name}</p>
-        <p className="d-inline ml-2 feed-user-id">{'@' + user.str_id}</p>
+      <div className="user-name-wrapper">
+        <p className="feed-user-name">{user.name}</p>
+        <p className="feed-user-id ml-2">{'@' + user.str_id}</p>
       </div>
       <p className="d-block feed-user-message">{message}</p>
       {props.children}
@@ -102,7 +96,11 @@ function BookInfo(props) {
       </p>
     );
   } else {
-    content = <p className="book-info invisible">dummy message (this message will be hidden)</p>
+    content = (
+      <p className="book-info invisible">
+        dummy message (this message will be hidden)
+      </p>
+    );
   }
 
   return content;
@@ -122,20 +120,30 @@ export default function Feed(props) {
     </div>
   );
 
+  const isPost = 'comments' in item;
+
   return (
-    <div className="feed-wrapper border">
-      <div className="feed">
-        <div className="feed-image">
+    <div className="feed-wrapper" data-ispost={isPost}>
+      <div className="feed shadow">
+        <div className="book-cover-wrapper">
           <BookCover book={item.book} />
-          <UserImage user={item.user} />
         </div>
-        <div className="feed-message">
-          <UserAndMessage user={item.user} message={item.message}>
-            {icons}
-          </UserAndMessage>
+        <div className="feed-body-wrapper">
+          <div className="feed-body">
+            <div className="user-image-wrapper">
+              <UserImage user={item.user} />
+            </div>
+            <div className="feed-message">
+              <UserAndMessage user={item.user} message={item.message}>
+                {icons}
+              </UserAndMessage>
+            </div>
+          </div>
+          <div className="book-info-wrapper">
+            <BookInfo item={item} />
+          </div>
         </div>
-      </div >
-      <BookInfo item={item} />
+      </div>
     </div>
   );
 }
@@ -149,12 +157,13 @@ Feed.propTypes = {
 UserAndMessage.propTypes = {
   user: PropTypes.object,
   message: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 Feed.propTypes = {
   linkToComment: PropTypes.func,
+};
+
+UserImage.propTypes = {
+  user: PropTypes.object,
 };

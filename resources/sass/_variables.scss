@@ -18,4 +18,24 @@ $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
 
-$max_column_width: 800px;
+$max_column_width: 900px;
+
+// font-size
+:root {
+    --base_font_size: 18px;
+    --icon_width: 24px;
+}
+
+@media(max-width: 1100px) {
+    :root {
+        --base_font_size: 16px;
+        --icon_width: 20px;
+    }
+}
+
+@media(max-width: 700px) {
+    :root {
+        --base_font_size: 14px;
+        --icon_width: 16px;
+    }
+}

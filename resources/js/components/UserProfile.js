@@ -261,7 +261,7 @@ export default function UserProfile() {
   if (showingUser) {
     return (
       <>
-        <Subtitle subtitle="User Profile" />
+        <Subtitle subtitle="プロフィール" />
         <UserCard user={showingUser}></UserCard>
         {buttons}
         <FollowNumber

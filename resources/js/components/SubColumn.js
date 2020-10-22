@@ -33,7 +33,7 @@ export default function SubColumn(props) {
   }
 
   return (
-    <div id="sub-column" className="border-right">
+    <div id="sub-column">
       <Link to="/home">
         <h4>ホーム</h4>
       </Link>

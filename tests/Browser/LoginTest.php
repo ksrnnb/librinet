@@ -45,7 +45,8 @@ class LoginTest extends DuskTestCase
             $browser->visit('/login')
                     ->waitFor('#user-id')
                     ->press('ゲスト')
-                    ->waitForText('Home')
+                    ->waitForLocation('/home')
+                    ->waitFor('#subtitle')
                     ->assertSee('ログアウト');
         });
     }

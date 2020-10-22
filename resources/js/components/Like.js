@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { BookIcon } from './Icon';
+import { LikeIcon } from './Icon';
 
 const axios = require('axios');
 
@@ -9,7 +9,7 @@ export default function Like(props) {
   const likes = props.item.likes;
   const viewerId = props.viewerId;
 
-  const isAlreadyLiked = likes.find((like) => {
+  const isAlreadyLiked = likes.some((like) => {
     return like.user_id == viewerId;
   });
 
@@ -35,9 +35,16 @@ export default function Like(props) {
       });
   }
 
+  console.log('--Like---');
+  console.log(isLiked);
+
   return (
     <div>
-      <BookIcon uuid={item.uuid} isLiked={isLiked} sendLikeRequest={sendLikeRequest} />
+      <LikeIcon
+        uuid={item.uuid}
+        isLiked={isLiked}
+        sendLikeRequest={sendLikeRequest}
+      />
       <p className="d-inline count pl-1" data-count={count}>
         {count}
       </p>

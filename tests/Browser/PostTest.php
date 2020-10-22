@@ -111,7 +111,7 @@ class PostTest extends DuskTestCase
                     ->waitFor('.feed')
                     ->assertSee($message)
                     ->visit('/user/profile/' . $this->user->str_id)
-                    ->waitForText('Profile')
+                    ->waitForText('プロフィール')
                     ->assertSee('本がありません');
         });
     }
@@ -126,7 +126,7 @@ class PostTest extends DuskTestCase
             
             $browser->assertSee($message)
                     ->visit('/user/profile/' . $this->user->str_id)
-                    ->waitForText('Profile')
+                    ->waitForText('プロフィール')
                     ->assertDontSee('本がありません');
 
             // 本が追加済みで、ジャンルが選べないのを確認

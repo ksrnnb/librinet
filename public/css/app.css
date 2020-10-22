@@ -1,5 +1,24 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
+:root {
+  --base_font_size: 18px;
+  --icon_width: 24px;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --base_font_size: 16px;
+    --icon_width: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --base_font_size: 14px;
+    --icon_width: 16px;
+  }
+}
+
 /*!
  * Bootstrap v4.5.2 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -10904,11 +10923,19 @@ a.text-dark:focus {
   }
 }
 
+html {
+  font-size: var(--base_font_size);
+}
+
 body {
   font-family: "M PLUS 1p", sans-serif;
-  font-size: 1.1rem;
   background-color: #ebf5e7;
   padding-top: 100px;
+  font-size: 1rem;
+}
+
+#sub-column {
+  border-right: solid 1px #cccccc;
 }
 
 .container {
@@ -10941,7 +10968,7 @@ a:hover {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
-@media (min-width: 800px) {
+@media (min-width: 900px) {
   #sub-column {
     position: fixed;
     width: 250px;
@@ -10957,7 +10984,7 @@ a:hover {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   #sub-column {
     display: none;
   }
@@ -10971,70 +10998,104 @@ input {
   cursor: pointer;
 }
 
+.one-row,
+.feed-wrapper .feed .feed-body-wrapper .book-info-wrapper .book-info,
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .hover:hover {
   cursor: pointer;
 }
 
+.feed-chunk {
+  max-width: 800px;
+}
+
 .feed-wrapper {
   background-color: white;
+  border-radius: 5px;
 }
 
-.feed {
-  height: 150px;
-  padding: 10px 10px 0px 10px;
+.feed-wrapper[data-ispost=false] {
+  background-color: #f8f8f8;
+}
+
+.feed-wrapper .feed {
   display: flex;
 }
 
-.feed-image {
-  height: 150px;
+.feed-wrapper .feed .book-cover-wrapper {
+  padding: 3%;
+  width: 25%;
+}
+
+.feed-wrapper .feed .book-cover-wrapper .book-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: solid 1px #eeeeee;
+  width: 100%;
+}
+
+.feed-wrapper .feed .feed-body-wrapper {
   display: flex;
-}
-
-.feed-image .book-cover-wrapper {
-  height: 90%;
-  width: 110px;
-  -o-object-fit: contain;
-     object-fit: contain;
-}
-
-.feed-image .book-cover-wrapper .book-cover {
-  height: 100%;
-  max-width: 100%;
-}
-
-.feed-image .user-image-wrapper {
-  vertical-align: top;
-}
-
-.feed-image .user-image-wrapper .user-image {
-  margin-left: 10px;
-  width: 70px;
-}
-
-.feed-message {
-  margin-left: 20px;
-  overflow: hidden;
   flex: 1;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 3% 3% 3% 0;
+}
+
+.feed-wrapper .feed .feed-body-wrapper .feed-body {
+  flex: 1;
+  display: flex;
+}
+
+.feed-wrapper .feed .feed-body-wrapper .feed-body .user-image-wrapper {
+  vertical-align: top;
+  width: 15%;
+}
+
+.feed-wrapper .feed .feed-body-wrapper .feed-body .user-image-wrapper .user-image {
+  width: 100%;
+}
+
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message {
+  flex: 1;
+  width: 85%;
+  overflow: hidden;
+  margin-left: 3%;
   display: flex;
   flex-direction: column;
 }
 
-.feed-user-name {
-  font-size: 0.9em;
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper {
+  display: flex;
+  overflow: hidden;
+}
+
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-name {
   font-weight: bold;
 }
 
-.feed-user-id {
-  font-size: 0.9em;
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
+  font-weight: normal;
   color: #666666;
 }
 
-.book-info {
-  padding: 10px 10px 0px 10px;
-  margin: 0px;
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .feed-user-message {
+  font-size: 0.9rem;
 }
 
-.no-button {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group {
+  margin-top: auto;
+  display: flex;
+  max-width: 300px;
+  justify-content: space-between;
+}
+
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .no-button {
   background-color: transparent;
   border: none;
   outline: none;
@@ -11044,49 +11105,40 @@ input {
           appearance: none;
 }
 
-.no-button:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .no-button:hover {
   cursor: default;
 }
 
-.icon-group {
-  display: flex;
-  max-width: 300px;
-  margin-top: auto;
-  justify-content: space-between;
-}
-
-.icon {
-  width: 24px;
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .icon {
+  width: var(--icon_width);
   stroke: #cccccc;
   fill: #cccccc;
 }
 
-.icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .icon:hover {
   cursor: pointer;
 }
 
-#comment-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #comment-icon:hover {
   stroke: #38c172;
   fill: #38c172;
 }
 
-#book-icon[data-isliked="1"] {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #like-icon[data-isliked=true] {
   fill: #38c172;
 }
 
-#book-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #like-icon:hover {
   fill: #38c172;
 }
 
-#trash-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #trash-icon:hover {
   fill: #e3342f;
 }
 
-.one-row,
-.book-info {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.feed-wrapper .feed .feed-body-wrapper .book-info-wrapper .book-info {
+  font-size: 0.9rem;
+  margin: 0px;
 }
 
 .invalid {

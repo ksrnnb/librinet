@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { LikeIcon } from './Icon';
 
 const axios = require('axios');
 
@@ -8,7 +9,7 @@ export default function Like(props) {
   const likes = props.item.likes;
   const viewerId = props.viewerId;
 
-  const isAlreadyLiked = likes.find((like) => {
+  const isAlreadyLiked = likes.some((like) => {
     return like.user_id == viewerId;
   });
 
@@ -28,29 +29,26 @@ export default function Like(props) {
       .post('/api/like', {
         uuid: uuid,
       })
-      .then(() => {})
+      .then(() => { })
       .catch((error) => {
         console.log(error);
       });
   }
 
+  console.log('--Like---');
+  console.log(isLiked);
+
   return (
-    <>
-      <button
-        type="button"
-        className={
-          isLiked ? 'likes btn btn-info' : 'likes btn btn-outline-info'
-        }
-        data-uuid={item.uuid}
-        data-isliked={isLiked ? '1' : '0'}
-        onClick={(e) => sendLikeRequest(e.target.dataset.uuid)}
-      >
-        いいね
-      </button>
-      <p className="d-inline count" data-count={count}>
+    <div>
+      <LikeIcon
+        uuid={item.uuid}
+        isLiked={isLiked}
+        sendLikeRequest={sendLikeRequest}
+      />
+      <p className="d-inline count pl-1" data-count={count}>
         {count}
       </p>
-    </>
+    </div>
   );
 }
 

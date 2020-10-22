@@ -10,8 +10,6 @@ export default function logout() {
   const setState = useContext(SetStateContext);
   const data = useContext(DataContext);
 
-  console.log(data);
-
   function linkToLogin() {
     const params = {
       user: null,

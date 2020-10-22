@@ -85,7 +85,8 @@ class UserPageTest extends DuskTestCase
                     ->type('user-id', $guest->str_id)
                     ->type('password', $this->credential['password'])
                     ->press('Login')
-                    ->waitForText('Home');
+                    ->waitForLocation('/home')
+                    ->waitFor('#subtitle');
 
             // ゲストの場合は編集ボタンが無効
             $browser->visit('/user/profile/guest')

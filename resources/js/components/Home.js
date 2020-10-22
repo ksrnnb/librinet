@@ -67,6 +67,7 @@ export function PostWithComments(props) {
 
   function linkToComment() {
     const url = '/comment/' + post.uuid;
+    window.scroll(0, 0);
     pages_props.history.push({
       pathname: url,
       state: post,
@@ -74,7 +75,7 @@ export function PostWithComments(props) {
   }
 
   return (
-    <>
+    <div className="feed-chunk shadow mb-5">
       <Post
         post={post}
         viewerId={props.viewerId}
@@ -88,7 +89,7 @@ export function PostWithComments(props) {
           onClickDelete={onClickDelete}
         />
       )}
-    </>
+    </div>
   );
 }
 
@@ -117,7 +118,7 @@ export default function Home() {
     return (
       <div className="row">
         <div className="col-12">
-          <Subtitle subtitle="Home" />
+          <Subtitle subtitle="ホーム" />
           <Posts posts={posts} viewerId={user.id} />
         </div>
       </div>
@@ -128,7 +129,7 @@ export default function Home() {
       <>
         <div className="row">
           <div className="col-12">
-            <Subtitle subtitle="Home" />
+            <Subtitle subtitle="ホーム" />
             <p className="text-danger">ログインしていません</p>
           </div>
         </div>

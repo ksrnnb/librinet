@@ -27,8 +27,9 @@ class PostTest extends DuskTestCase
             'password' => config('app.guest_password')
         ];
 
-        // design, docker, wrong ISBN
-        $this->isbn = ['9784839955557', '9784297100339', '9784297100338'];
+        // Linux, docker, wrong ISBN
+        // circleci環境だと、エラー出るので変えてみる。ssh接続して、編集後はOKだった。
+        $this->isbn = ['9784797397642', '9784297100339', '9784297100338'];
         $this->path = '/book/post/' . $this->isbn[0];
     }
 
@@ -111,7 +112,7 @@ class PostTest extends DuskTestCase
                     ->waitFor('.feed')
                     ->assertSee($message)
                     ->visit('/user/profile/' . $this->user->str_id)
-                    ->waitForText('Profile')
+                    ->waitForText('プロフィール')
                     ->assertSee('本がありません');
         });
     }
@@ -126,7 +127,7 @@ class PostTest extends DuskTestCase
             
             $browser->assertSee($message)
                     ->visit('/user/profile/' . $this->user->str_id)
-                    ->waitForText('Profile')
+                    ->waitForText('プロフィール')
                     ->assertDontSee('本がありません');
 
             // 本が追加済みで、ジャンルが選べないのを確認

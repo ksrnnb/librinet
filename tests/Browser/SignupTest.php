@@ -115,7 +115,6 @@ class SignupTest extends DuskTestCase
             
             $browser->type('password', $wrong_password_1)
                     ->type('confirm-password', $wrong_password_2)
-                    ->screenshot('pic')
                     ->press('ユーザー登録')
                     ->assertPresent('.error');
             
@@ -151,7 +150,8 @@ class SignupTest extends DuskTestCase
             $browser = $this->correctInput($browser);
 
             $browser->press('ユーザー登録')
-                    ->waitForText('Home')
+                    ->waitForLocation('/home')
+                    ->waitForText('ホーム')
                     ->assertSee('ログアウト');
         });
     }

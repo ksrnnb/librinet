@@ -62,8 +62,6 @@ function RecommendBook(props) {
   const genres = props.genres;
   const isRecommended = props.isRecommended;
 
-  console.log(props);
-
   if (orderedBooks) {
     return (
       <>
@@ -136,7 +134,7 @@ export default function Comment() {
           } else if (error.response.status === 404) {
             setErrors([error.response.data]);
           } else {
-            console.log('hoge');
+            // console.log('hoge');
           }
         });
     }

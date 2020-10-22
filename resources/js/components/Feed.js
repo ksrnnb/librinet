@@ -3,6 +3,7 @@ import Like from './Like';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext } from './App';
+import { CommentIcon, Trash } from './Icon';
 
 function BookCover(props) {
   const book = props.book;
@@ -30,29 +31,30 @@ function BookCover(props) {
     const coverUrl = book.cover || '/img/book.svg';
 
     cover = (
-      <div className="col-3">
-        <figure className="mx-2 px-0 mb-0 book">
-          <img
-            className="img-fluid hover"
-            src={coverUrl}
-            alt="book_image"
-            onClick={linkToBookProfile}
-          />
-        </figure>
-      </div>
+      <img
+        className="hover book-cover"
+        src={coverUrl}
+        alt="book_image"
+        onClick={linkToBookProfile}
+      />
     );
   } else {
-    cover = <div className="col-3"></div>;
+    cover = (
+      <img
+        className="book-cover invisible"
+        src="/img/book.svg"
+        alt="book_image"
+      />
+    );
   }
 
   return cover;
 }
 
-function UserAndMessage(props) {
+function UserImage(props) {
   const user = props.user;
-  const message = props.message;
-  const userImageUrl = user.image || '/img/icon.svg';
   const pages_props = useContext(PropsContext);
+  const userImageUrl = user.image || '/img/icon.svg';
 
   function linkToUserProfile() {
     const userUrl = '/user/profile/' + user.str_id;
@@ -60,64 +62,28 @@ function UserAndMessage(props) {
   }
 
   return (
-    <div className="col-9">
-      <div className="row">
-        <div className="avator col-2">
-          <img
-            className="img-fluid hover"
-            src={userImageUrl}
-            alt="user-icon"
-            onClick={linkToUserProfile}
-          />
-        </div>
-        <div className="col-10">
-          <p className="h4 d-inline mr-2">{user.name}</p>
-          <p className="d-inline">{'@' + user.str_id}</p>
-          <p className="message">{message}</p>
-          {props.children}
-        </div>
+    <img
+      className="hover user-image"
+      src={userImageUrl}
+      alt="user-icon"
+      onClick={linkToUserProfile}
+    />
+  );
+}
+function UserAndMessage(props) {
+  const user = props.user;
+  const message = props.message;
+
+  return (
+    <>
+      <div className="user-name-wrapper">
+        <p className="feed-user-name">{user.name}</p>
+        <p className="feed-user-id ml-2">{'@' + user.str_id}</p>
       </div>
-    </div>
+      <p className="d-block feed-user-message">{message}</p>
+      {props.children}
+    </>
   );
-}
-
-function CommentButton(props) {
-  const button = (
-    <button
-      type="button"
-      className="btn btn-outline-info"
-      onClick={props.linkToComment}
-    >
-      Comment
-    </button>
-  );
-
-  const isPost = 'comments' in props.item;
-
-  return isPost ? button : null;
-}
-
-function DeleteButton(props) {
-  const item = props.item;
-  const viewerId = props.viewerId;
-  const isPost = 'comments' in props.item;
-
-  let button = null;
-  if (item.user_id == viewerId) {
-    button = (
-      <button
-        className="btn btn-outline-danger"
-        name="delete"
-        onClick={props.onClick}
-        data-uuid={item.uuid}
-        data-ispost={isPost}
-      >
-        削除する
-      </button>
-    );
-  }
-
-  return button;
 }
 
 function BookInfo(props) {
@@ -125,8 +91,14 @@ function BookInfo(props) {
   let content = null;
   if (book) {
     content = (
-      <p className="one-row my-2">
+      <p className="book-info">
         {book.title} （ {book.author} ）
+      </p>
+    );
+  } else {
+    content = (
+      <p className="book-info invisible">
+        dummy message (this message will be hidden)
       </p>
     );
   }
@@ -134,22 +106,44 @@ function BookInfo(props) {
   return content;
 }
 
-// TODO: 高さ固定
 export default function Feed(props) {
   const item = props.item;
+  const icons = (
+    <div className="icon-group">
+      <CommentIcon item={item} linkToComment={props.linkToComment} />
+      <Like item={item} viewerId={props.viewerId} />
+      <Trash
+        item={item}
+        viewerId={props.viewerId}
+        onClick={props.onClickDelete}
+      />
+    </div>
+  );
+
+  const isPost = 'comments' in item;
+
   return (
-    <div className="feed row border py-2">
-      <BookCover book={item.book} />
-      <UserAndMessage user={item.user} message={item.message}>
-        <CommentButton item={item} linkToComment={props.linkToComment} />
-        <Like item={item} viewerId={props.viewerId} />
-        <DeleteButton
-          item={item}
-          viewerId={props.viewerId}
-          onClick={props.onClickDelete}
-        />
-      </UserAndMessage>
-      <BookInfo item={item} />
+    <div className="feed-wrapper" data-ispost={isPost}>
+      <div className="feed shadow">
+        <div className="book-cover-wrapper">
+          <BookCover book={item.book} />
+        </div>
+        <div className="feed-body-wrapper">
+          <div className="feed-body">
+            <div className="user-image-wrapper">
+              <UserImage user={item.user} />
+            </div>
+            <div className="feed-message">
+              <UserAndMessage user={item.user} message={item.message}>
+                {icons}
+              </UserAndMessage>
+            </div>
+          </div>
+          <div className="book-info-wrapper">
+            <BookInfo item={item} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -163,9 +157,13 @@ Feed.propTypes = {
 UserAndMessage.propTypes = {
   user: PropTypes.object,
   message: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 Feed.propTypes = {
   linkToComment: PropTypes.func,
+};
+
+UserImage.propTypes = {
+  user: PropTypes.object,
 };

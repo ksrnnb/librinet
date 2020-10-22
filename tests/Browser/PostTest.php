@@ -74,10 +74,13 @@ class PostTest extends DuskTestCase
         });
     }
 
+    // TODO: circleci環境だと通らない。原因調査。
+    // ブラウザが小さい？
     public function testWithoutGenre()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit($this->path)
+            $browser->maximize()
+                    ->visit($this->path)
                     ->waitFor('#message')
                     ->type('message', 'TEST_MESSAGE')
                     ->press('投稿する')
@@ -85,36 +88,37 @@ class PostTest extends DuskTestCase
                     ->assertPathIs($this->path);
         });
     }
-    // TODO: circleci環境だと通らない。原因調査。
-    // public function testWithoutComment()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $browser->visit($this->path)
-    //                 ->waitFor('#new-genre')
-    //                 ->type('new-genre', 'TEST_GENRE')
-    //                 ->press('投稿する')
-    //                 ->waitFor('.error')
-    //                 ->assertPathIs($this->path);
-    //     });
-    // }
+    public function testWithoutComment()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->maximize()
+                    ->visit($this->path)
+                    ->waitFor('#new-genre')
+                    ->type('new-genre', 'TEST_GENRE')
+                    ->press('投稿する')
+                    ->waitFor('.error')
+                    ->assertPathIs($this->path);
+        });
+    }
 
-    // public function testDontAddToBookshelf()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $message = 'TEST_MESSAGE';
+    public function testDontAddToBookshelf()
+    {
+        $this->browse(function (Browser $browser) {
+            $message = 'TEST_MESSAGE';
 
-    //         $browser->visit($this->path)
-    //                 ->waitFor('#message')
-    //                 ->uncheck('add-book')
-    //                 ->type('message', $message)
-    //                 ->press('投稿する')
-    //                 ->waitFor('.feed')
-    //                 ->assertSee($message)
-    //                 ->visit('/user/profile/' . $this->user->str_id)
-    //                 ->waitForText('プロフィール')
-    //                 ->assertSee('本がありません');
-    //     });
-    // }
+            $browser->maximize()
+                    ->visit($this->path)
+                    ->waitFor('#message')
+                    ->uncheck('add-book')
+                    ->type('message', $message)
+                    ->press('投稿する')
+                    ->waitFor('.feed')
+                    ->assertSee($message)
+                    ->visit('/user/profile/' . $this->user->str_id)
+                    ->waitForText('プロフィール')
+                    ->assertSee('本がありません');
+        });
+    }
 
     public function testAddBookWithNewGenreAndCannotAddAgain()
     {

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
 import Genres from './Genres';
-import BookCard from './BookCard';
+import { BookCard } from './BookCard';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
 const axios = window.axios;

@@ -1,6 +1,6 @@
 import { PropsContext } from './Pages';
 import { DataContext } from './App';
-import BookCard from './BookCard';
+import { BookCard } from './BookCard';
 import React, { useContext } from 'react';
 import { PropTypes } from 'prop-types';
 
@@ -63,8 +63,11 @@ export default function SearchedBook(props) {
     }
   }
 
+  const isSearched = pages_props.location.pathname === '/book';
+  const marginTop = isSearched ? "mt-5" : "";
+
   return (
-    <div className="mt-5">
+    <div className={marginTop}>
       <BookCard book={book}>
         <PostButton isLogin={data.isLogin} onClick={linkToPost} />
         <AddBookButton onClick={linkToAddBookshelf} />

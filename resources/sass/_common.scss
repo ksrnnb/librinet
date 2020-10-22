@@ -17,6 +17,19 @@ body {
   max-width: 800px;
 }
 
+.my-card {
+  border-radius: 5px;
+
+  .image {
+    padding: 3%;
+  }
+
+  .body {
+    padding: 3% 3% 3% 0;
+    overflow: hidden;
+  }
+}
+
 .btn-outline-success {
   background-color: white;
 }

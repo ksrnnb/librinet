@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
 import Genres from './Genres';
-import BookCard from './BookCard';
+import { BookCard } from './BookCard';
 
 const axios = window.axios;
 

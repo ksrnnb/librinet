@@ -168,6 +168,14 @@
   }
 }
 
+.notification-card {
+  background-color: white;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .invalid {
   opacity: 0.5;
 }

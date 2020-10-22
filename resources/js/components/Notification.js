@@ -3,6 +3,7 @@ import { DataContext } from './App';
 import Subtitle from './Subtitle';
 import PropTypes from 'prop-types';
 import { PropsContext } from './Pages';
+import { MyCard } from './MyCard';
 const axios = window.axios;
 
 /**
@@ -104,21 +105,19 @@ function Notice(props) {
   // 通知内容の項目が既に削除されていた場合はnull
   if (info) {
     return (
-      <div className="card hover mb-3" onClick={() => onClickCard()}>
-        <div className="row no-gutters">
-          <div className="col-2">
-            <img className="img-fluid" src={info.image} alt="user-image" />
-          </div>
-          <div className="col-10">
-            <div className="card-body">
-              <p className="card-text">{info.message}</p>
-              <p className="card-text">
-                <small className="text-muted">{timeMessage}</small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <MyCard
+        image={
+          <img className="img-fluid" src={info.image} alt="user-image" />
+        }
+        body={
+          <>
+            <p>{info.message}</p>
+            <p><small className="text-muted">{timeMessage}</small></p>
+          </>
+        }
+        addingClass="notification-card mb-3"
+        onClick={onClickCard}
+      />
     );
   } else {
     return <></>;

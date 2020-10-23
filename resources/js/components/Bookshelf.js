@@ -117,5 +117,8 @@ Bookshelf.propTypes = {
   orderedBooks: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   willEdit: PropTypes.bool,
   user: PropTypes.object,
-  dropdownMenu: PropTypes.object,
+  dropdownMenu: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool, // 無いときはfalseが入ってる
+  ]),
 };

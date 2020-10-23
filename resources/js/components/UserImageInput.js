@@ -108,6 +108,8 @@ export default class UserImageInput extends React.Component {
   }
 
   resize(image) {
+    // TODO: 幅の最適化
+    // console.log([...document.getElementsByClassName('modal-dialog')]);
     const modalWidth = 300;
 
     if (image.width > modalWidth) {
@@ -193,16 +195,23 @@ export default class UserImageInput extends React.Component {
     return (
       <>
         <UserImage image={image} />
-        <label htmlFor="user-image">
-          <input
-            type="file"
-            accept="image/jpeg,image/png"
-            name="user-image"
-            id="user-image"
-            onChange={this.onChangeImage}
-          />
-        </label>
-        <p>(jpeg or png)</p>
+        <div className="text-center">
+          <label
+            htmlFor="user-image-input"
+            id="user-image-label"
+            className="btn btn-outline-success mt-3"
+          >
+            <input
+              type="file"
+              accept="image/jpeg,image/png"
+              name="user-image-input"
+              id="user-image-input"
+              onChange={this.onChangeImage}
+            />
+            Upload
+          </label>
+          {/* <p className="my-0">(jpeg or png)</p> */}
+        </div>
 
         <ModalWindow
           show={show}
@@ -213,6 +222,7 @@ export default class UserImageInput extends React.Component {
             src={src}
             crop={crop}
             keepSelection={true}
+            minWidth={150}
             onChange={(newCrop) => this.setCrop(newCrop)}
           />
         </ModalWindow>

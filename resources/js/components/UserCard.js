@@ -8,7 +8,7 @@ export function UserImage(props) {
 
   return (
     <div className="user-image">
-      <img className="img-fluid" src={image} alt="user-image" />
+      <img className="img-fluid w-100" src={image} alt="user-image" />
     </div>
   );
 }

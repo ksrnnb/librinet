@@ -304,6 +304,6 @@ class User extends Authenticatable
 
         $user->save();
 
-        return true;
+        return $user;
     }
 }

@@ -86274,8 +86274,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function BookImage(props) {
-  console.log('book--image');
-  console.log(props);
   var book = props.book;
   var image;
 
@@ -86594,7 +86592,8 @@ Bookshelf.propTypes = {
   orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array]),
   willEdit: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
   user: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
-  dropdownMenu: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object
+  dropdownMenu: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool // 無いときはfalseが入ってる
+  ])
 };
 
 /***/ }),
@@ -87124,10 +87123,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _UserImageInput__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserImageInput */ "./resources/js/components/UserImageInput.js");
 /* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
-/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _MyCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MyCard */ "./resources/js/components/MyCard.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -87147,54 +87147,53 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var axios = window.axios;
 
 function EditButton(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-outline-success",
     onClick: props.onClick
-  }, "\u7DE8\u96C6\u3059\u308B"));
+  }, "\u7DE8\u96C6\u3059\u308B");
 }
 
 function CancelButton(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-success",
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-outline-secondary mr-2",
     onClick: props.onClick
-  }, "\u30AD\u30E3\u30F3\u30BB\u30EB\u3059\u308B"));
+  }, "\u30AD\u30E3\u30F3\u30BB\u30EB\u3059\u308B");
 }
 
 function DeleteButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
+    className: "mt-5"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-outline-danger",
     onClick: props.onClick
   }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B"));
-}
+} // function SetPasswordButton() {
+//   return (
+//     <div className="col-12">
+//       <button className="btn btn-outline-success">
+//         パスワードを再設定する
+//       </button>
+//     </div>
+//   );
+// }
 
-function SetPasswordButton() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-success"
-  }, "\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u518D\u8A2D\u5B9A\u3059\u308B"));
-}
 
 function UserNameInput(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "user-name",
     className: "d-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30E6\u30FC\u30B6\u30FC\u540D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "h4",
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "my-0"
+  }, "\u30E6\u30FC\u30B6\u30FC\u540D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     id: "user-name",
+    className: "max-w-100",
     name: "user-name",
     value: props.name,
-    onChange: props.onChange,
-    required: true
+    onChange: props.onChange
   }));
 }
 
@@ -87202,20 +87201,21 @@ function UserStrIdInput(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "user-id",
     className: "d-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "h4",
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "my-0"
+  }, "\u30E6\u30FC\u30B6\u30FCID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     id: "user-id",
+    className: "max-w-100",
     name: "user-id",
     value: props.strId,
-    onChange: props.onChange,
-    required: true
+    onChange: props.onChange
   }));
 }
 
 function EditUser() {
-  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]);
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_7__["PropsContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
   var user = data.params.user;
   var params = data.params;
 
@@ -87269,66 +87269,71 @@ function EditUser() {
     });
   }
 
-  function redirectUserProfile(strId) {
-    var path = '/user/profile/' + strId;
+  function redirectUserProfile() {
+    var path = '/user/profile/' + user.str_id;
     props.history.push(path);
   }
 
   if (params != null) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "row"
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row mx-0"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      subtitle: "Edit Profile"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "col-3"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserImageInput__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      image: image,
-      setImage: setImage
+      subtitle: "\u30E6\u30FC\u30B6\u30FC\u306E\u7DE8\u96C6"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_4__["MyCard"], {
+      image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserImageInput__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        image: image,
+        setImage: setImage
+      }),
+      body: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body-wrapper"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        errors: errors
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserNameInput, {
+        name: name,
+        onChange: function onChange(e) {
+          return setName(e.target.value);
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserStrIdInput, {
+        strId: strId,
+        onChange: function onChange(e) {
+          return setStrId(e.target.value);
+        }
+      }))
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "col-9"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      errors: errors
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserNameInput, {
-      name: name,
-      onChange: function onChange(e) {
-        return setName(e.target.value);
-      }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserStrIdInput, {
-      strId: strId,
-      onChange: function onChange(e) {
-        return setStrId(e.target.value);
-      }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
-      onClick: onSubmitEdit
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CancelButton, {
+      className: "row justify-content-end mx-0"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "float-right mt-5"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CancelButton, {
       onClick: redirectUserProfile
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SetPasswordButton, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
+      onClick: onSubmitEdit
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row justify-content-end mx-0"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "float-right"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
       onClick: onSubmitDelete
-    })));
+    }))));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
 }
 CancelButton.propTypes = {
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 DeleteButton.propTypes = {
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 EditButton.propTypes = {
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 UserNameInput.propTypes = {
-  name: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].string,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
+  name: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 UserStrIdInput.propTypes = {
-  strId: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].string,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
+  strId: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 
 /***/ }),
@@ -89723,10 +89728,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Subtitle(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-12 px-0"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
     className: "mb-3",
     id: "subtitle"
-  }, props.subtitle);
+  }, props.subtitle));
 }
 Subtitle.propTypes = {
   subtitle: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string
@@ -89935,7 +89942,7 @@ function UserImage(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "user-image"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "img-fluid",
+    className: "img-fluid w-100",
     src: image,
     alt: "user-image"
   }));
@@ -90129,6 +90136,8 @@ var UserImageInput = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "resize",
     value: function resize(image) {
+      // TODO: 幅の最適化
+      // console.log([...document.getElementsByClassName('modal-dialog')]);
       var modalWidth = 300;
 
       if (image.width > modalWidth) {
@@ -90210,15 +90219,19 @@ var UserImageInput = /*#__PURE__*/function (_React$Component) {
       var show = this.state.show;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_1__["UserImage"], {
         image: image
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "user-image"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "text-center"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "user-image-input",
+        id: "user-image-label",
+        className: "btn btn-outline-success mt-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "file",
         accept: "image/jpeg,image/png",
-        name: "user-image",
-        id: "user-image",
+        name: "user-image-input",
+        id: "user-image-input",
         onChange: this.onChangeImage
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "(jpeg or png)"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
+      }), "Upload")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
         show: show,
         setShow: this.setShow,
         trimming: this.trimming
@@ -90226,6 +90239,7 @@ var UserImageInput = /*#__PURE__*/function (_React$Component) {
         src: src,
         crop: crop,
         keepSelection: true,
+        minWidth: 150,
         onChange: function onChange(newCrop) {
           return _this4.setCrop(newCrop);
         }

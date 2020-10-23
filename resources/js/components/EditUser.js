@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import Subtitle from './Subtitle';
 import UserImageInput from './UserImageInput';
 import Errors from './Errors';
+import { MyCard } from './MyCard';
 import { PropTypes } from 'prop-types';
 import { DataContext, SetStateContext } from './App';
 import { PropsContext } from './Pages';
@@ -10,27 +11,23 @@ const axios = window.axios;
 
 function EditButton(props) {
   return (
-    <div className="col-12">
-      <button className="btn btn-outline-success" onClick={props.onClick}>
-        編集する
-      </button>
-    </div>
+    <button className="btn btn-outline-success" onClick={props.onClick}>
+      編集する
+    </button>
   );
 }
 
 function CancelButton(props) {
   return (
-    <div className="col-12">
-      <button className="btn btn-outline-success" onClick={props.onClick}>
-        キャンセルする
-      </button>
-    </div>
+    <button className="btn btn-outline-secondary mr-2" onClick={props.onClick}>
+      キャンセルする
+    </button>
   );
 }
 
 function DeleteButton(props) {
   return (
-    <div className="col-12">
+    <div className="mt-5">
       <button className="btn btn-outline-danger" onClick={props.onClick}>
         アカウントを削除する
       </button>
@@ -38,27 +35,26 @@ function DeleteButton(props) {
   );
 }
 
-function SetPasswordButton() {
-  return (
-    <div className="col-12">
-      <button className="btn btn-outline-success">
-        パスワードを再設定する
-      </button>
-    </div>
-  );
-}
+// function SetPasswordButton() {
+//   return (
+//     <div className="col-12">
+//       <button className="btn btn-outline-success">
+//         パスワードを再設定する
+//       </button>
+//     </div>
+//   );
+// }
 
 function UserNameInput(props) {
   return (
     <label htmlFor="user-name" className="d-block">
-      <p>ユーザー名</p>
+      <p className="my-0">ユーザー名</p>
       <input
-        className="h4"
         id="user-name"
+        className="max-w-100"
         name="user-name"
         value={props.name}
         onChange={props.onChange}
-        required
       />
     </label>
   );
@@ -67,14 +63,13 @@ function UserNameInput(props) {
 function UserStrIdInput(props) {
   return (
     <label htmlFor="user-id" className="d-block">
-      <p>ID</p>
+      <p className="my-0">ユーザーID</p>
       <input
-        className="h4"
         id="user-id"
+        className="max-w-100"
         name="user-id"
         value={props.strId}
         onChange={props.onChange}
-        required
       />
     </label>
   );
@@ -131,41 +126,47 @@ export default function EditUser() {
       });
   }
 
-  function redirectUserProfile(strId) {
-    const path = '/user/profile/' + strId;
+  function redirectUserProfile() {
+    const path = '/user/profile/' + user.str_id;
     props.history.push(path);
   }
 
   if (params != null) {
     return (
-      <div className="row">
-        <Subtitle subtitle="Edit Profile" />
-        <div className="row">
-          <div className="col-3">
-            <UserImageInput image={image} setImage={setImage} />
-            {/* TODO: validation error */}
-          </div>
-
-          <div className="col-9">
-            <Errors errors={errors} />
-            <UserNameInput
-              name={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <UserStrIdInput
-              strId={strId}
-              onChange={(e) => setStrId(e.target.value)}
-            />
+      <>
+        <div className="row mx-0">
+          <Subtitle subtitle="ユーザーの編集" />
+          <MyCard
+            image={<UserImageInput image={image} setImage={setImage} />}
+            body={
+              <div className="card-body-wrapper">
+                <Errors errors={errors} />
+                <UserNameInput
+                  name={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <UserStrIdInput
+                  strId={strId}
+                  onChange={(e) => setStrId(e.target.value)}
+                />
+              </div>
+            }
+          />
+        </div>
+        <div className="row justify-content-end mx-0">
+          <div className="float-right mt-5">
+            <CancelButton onClick={redirectUserProfile} />
+            <EditButton onClick={onSubmitEdit} />
           </div>
         </div>
-        <div className="row">
-          <EditButton onClick={onSubmitEdit} />
-          <CancelButton onClick={redirectUserProfile} />
-          {/* TODO: メールは？ */}
-          <SetPasswordButton />
-          <DeleteButton onClick={onSubmitDelete} />
+        {/* TODO: メールは？ */}
+        {/* <SetPasswordButton /> */}
+        <div className="row justify-content-end mx-0">
+          <div className="float-right">
+            <DeleteButton onClick={onSubmitDelete} />
+          </div>
         </div>
-      </div>
+      </>
     );
   } else {
     return <></>;

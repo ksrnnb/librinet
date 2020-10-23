@@ -10943,6 +10943,7 @@ body {
 }
 
 .my-card {
+  width: 100%;
   background-color: white;
   border-radius: 5px;
 }
@@ -10961,6 +10962,10 @@ body {
 }
 
 .btn-outline-danger {
+  background-color: white;
+}
+
+.btn-outline-secondary {
   background-color: white;
 }
 
@@ -11040,6 +11045,10 @@ input {
 .hover-link:hover {
   cursor: pointer;
   text-decoration: underline;
+}
+
+.max-w-100 {
+  max-width: 100%;
 }
 
 .book-icon {
@@ -11270,5 +11279,17 @@ input[type=radio] {
 
 .user-card .user-id {
   color: #666666;
+}
+
+.card-body-wrapper {
+  margin-left: 20px;
+}
+
+#user-image-label {
+  width: 100%;
+}
+
+#user-image-label #user-image-input {
+  display: none;
 }
 

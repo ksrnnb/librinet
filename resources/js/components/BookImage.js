@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function BookImage(props) {
-  console.log('book--image');
-  console.log(props);
   const book = props.book;
   let image;
 

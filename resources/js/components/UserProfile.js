@@ -214,6 +214,7 @@ export default function UserProfile() {
 
   function onClickFollowers(e) {
     const url = props.match.url + e.target.dataset.link;
+    window.scroll(0, 0);
     props.history.push(url);
   }
 
@@ -243,11 +244,13 @@ export default function UserProfile() {
 
   function redirectToDeleteBook(strId) {
     const path = '/book/delete/' + strId;
+    window.scroll(0, 0);
     props.history.push(path);
   }
 
   function redirectToEditGenre(strId) {
     const path = '/genre/edit/' + strId;
+    window.scroll(0, 0);
     props.history.push(path);
   }
 
@@ -258,7 +261,6 @@ export default function UserProfile() {
   if (typeof user !== 'undefined') {
     buttons = (
       <>
-        {/* TODO:ここ修正が必要 */}
         <EditUserButton user={showingUser} viewerStrId={user.str_id} />
         <FollowButton
           user={showingUser}

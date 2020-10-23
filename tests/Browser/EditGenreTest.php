@@ -66,10 +66,10 @@ class EditGenreTest extends DuskTestCase
                     ->press('.dropdown-toggle')
                     ->press('ジャンルを編集する');
             
-            $ini_genre = $browser->attribute('.genres', 'value');
+            $ini_genre = $browser->attribute('.genre', 'value');
             $new_genre = 'TEST-GENRE';
 
-            $browser->type('.genres', $new_genre)
+            $browser->type('genre', $new_genre)
                     ->scrollIntoView('.btn-outline-success')
                     ->press('編集する')
                     ->waitForText('フォロー')

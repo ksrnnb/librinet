@@ -56,7 +56,8 @@ function Books(props) {
     if (willEdit) {
       genre = (
         <input
-          className="mb-3 genres"
+          className="my-3 genre"
+          name="genre"
           defaultValue={genres[genreId]}
           data-id={genreId}
         />
@@ -64,14 +65,14 @@ function Books(props) {
     } else {
       genre = (
         <div className="genre-name-wrapper">
-          <h3 className="mt-3 genre-name" data-id={genreId}>
+          <h4 className="mt-3 genre-name" data-id={genreId}>
             {genres[genreId]}
-          </h3>
-          <h3 className="mt-3 gear-icon-wrapper">
+          </h4>
+          <h4 className="mt-3 gear-icon-wrapper">
             {isFirstLoop && dropdownMenu && (
               <GearIcon dropdownMenu={dropdownMenu} />
             )}
-          </h3>
+          </h4>
         </div>
       );
     }

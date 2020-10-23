@@ -10,7 +10,7 @@ const axios = window.axios;
 
 function EditButton(props) {
   return (
-    <button className="btn btn-outline-success mb-5" onClick={props.onClick}>
+    <button className="btn btn-outline-success my-5" onClick={props.onClick}>
       編集する
     </button>
   );
@@ -34,6 +34,7 @@ export default function EditGenre() {
       .then((response) => {
         setState.params(response.data);
         const path = '/user/profile/' + params.user.str_id;
+        window.scroll(0, 0);
         props.history.push(path);
       })
       .catch((error) => {
@@ -55,7 +56,7 @@ export default function EditGenre() {
   return (
     <>
       <Subtitle subtitle="ジャンルの編集" />
-      <UserCard user={params.user} />
+      <UserCard user={params.user} noLink={true} />
       <Bookshelf
         user={params.user}
         orderedBooks={params.user.ordered_books}

@@ -86539,17 +86539,18 @@ function Books(props) {
 
     if (willEdit) {
       genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        className: "mb-3 genres",
+        className: "my-3 genre",
+        name: "genre",
         defaultValue: genres[genreId],
         "data-id": genreId
       });
     } else {
       genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "genre-name-wrapper"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
         className: "mt-3 genre-name",
         "data-id": genreId
-      }, genres[genreId]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      }, genres[genreId]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
         className: "mt-3 gear-icon-wrapper"
       }, isFirstLoop && dropdownMenu && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_2__["GearIcon"], {
         dropdownMenu: dropdownMenu
@@ -87052,7 +87053,7 @@ var axios = window.axios;
 
 function EditButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-success mb-5",
+    className: "btn btn-outline-success my-5",
     onClick: props.onClick
   }, "\u7DE8\u96C6\u3059\u308B");
 }
@@ -87072,6 +87073,7 @@ function EditGenre() {
     }).then(function (response) {
       setState.params(response.data);
       var path = '/user/profile/' + params.user.str_id;
+      window.scroll(0, 0);
       props.history.push(path);
     })["catch"](function (error) {
       console.log(error);
@@ -87092,7 +87094,8 @@ function EditGenre() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
     subtitle: "\u30B8\u30E3\u30F3\u30EB\u306E\u7DE8\u96C6"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    user: params.user
+    user: params.user,
+    noLink: true
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
     user: params.user,
     orderedBooks: params.user.ordered_books,
@@ -90475,6 +90478,7 @@ function UserProfile() {
 
   function onClickFollowers(e) {
     var url = props.match.url + e.target.dataset.link;
+    window.scroll(0, 0);
     props.history.push(url);
   }
 
@@ -90502,11 +90506,13 @@ function UserProfile() {
 
   function redirectToDeleteBook(strId) {
     var path = '/book/delete/' + strId;
+    window.scroll(0, 0);
     props.history.push(path);
   }
 
   function redirectToEditGenre(strId) {
     var path = '/genre/edit/' + strId;
+    window.scroll(0, 0);
     props.history.push(path);
   }
 

@@ -29,7 +29,7 @@ export default function Like(props) {
       .post('/api/like', {
         uuid: uuid,
       })
-      .then(() => { })
+      .then(() => {})
       .catch((error) => {
         console.log(error);
       });

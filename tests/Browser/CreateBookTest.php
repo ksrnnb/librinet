@@ -85,7 +85,7 @@ class CreateBookTest extends DuskTestCase
                     ->waitFor('#new-genre')
                     ->type('new-genre', 'TEST_GENRE')
                     ->press('本棚に追加する')
-                    ->waitFor('#user-card')
+                    ->waitFor('.user-card')
                     ->assertSee('本棚');
 
             $path = '/book/add/' . $this->isbn[1];
@@ -95,7 +95,7 @@ class CreateBookTest extends DuskTestCase
                     ->waitFor('#new-genre')
                     ->check('#conventional')
                     ->press('本棚に追加する')
-                    ->waitFor('#user-card')
+                    ->waitFor('.user-card')
                     ->assertSee('本棚');
         });
     }

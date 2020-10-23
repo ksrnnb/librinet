@@ -26,18 +26,21 @@ export default function UserCard(props) {
     });
   }
 
+  const attr = props.noLink
+    ? { addingClass: 'user-card' }
+    : { onClick: jumpToUserPage, addingClass: 'user-card hover' };
+
   return (
     <MyCard
-      image={
-        <UserImage image={user.image} />
-      }
+      image={<UserImage image={user.image} />}
       body={
         <>
-          <p className="user-name my-0">{user.name}</p>
-          <p className="user-id my-0">{'@' + user.str_id}</p></>
+          <p className="user-name my-0 one-row">{user.name}</p>
+          <p className="user-id my-0 one-row">{'@' + user.str_id}</p>
+          {props.children}
+        </>
       }
-      addingClass="user-card"
-      onClick={jumpToUserPage}
+      {...attr}
     />
   );
 }
@@ -49,4 +52,6 @@ UserImage.propTypes = {
 UserCard.propTypes = {
   user: PropTypes.object,
   UserImage: PropTypes.string,
+  noLink: PropTypes.bool,
+  children: PropTypes.array,
 };

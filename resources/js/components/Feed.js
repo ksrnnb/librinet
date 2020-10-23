@@ -3,7 +3,7 @@ import Like from './Like';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext } from './App';
-import { CommentIcon, Trash } from './Icon';
+import { BookIcon, CommentIcon, Trash } from './Icon';
 
 function BookCover(props) {
   const book = props.book;
@@ -28,24 +28,24 @@ function BookCover(props) {
 
   let cover = null;
   if (book) {
-    const coverUrl = book.cover || '/img/book.svg';
-
-    cover = (
-      <img
-        className="hover book-cover"
-        src={coverUrl}
-        alt="book_image"
-        onClick={linkToBookProfile}
-      />
-    );
+    if (book.cover) {
+      cover = (
+        <img
+          className="hover book-cover"
+          src={book.cover}
+          alt="book_image"
+          onClick={linkToBookProfile}
+        />
+      );
+    } else {
+      cover = (
+        <div className="hover no-book-cover" onClick={linkToBookProfile}>
+          <BookIcon />
+        </div>
+      );
+    }
   } else {
-    cover = (
-      <img
-        className="book-cover invisible"
-        src="/img/book.svg"
-        alt="book_image"
-      />
-    );
+    cover = <img className="book-cover invisible" alt="book_image" />;
   }
 
   return cover;

@@ -16,12 +16,3 @@
     }
   }
 }
-
-.book-card {
-  background-color: $background_color;
-  border: solid 1px $hover_color;
-
-  &:hover {
-    cursor: pointer;
-  }
-}

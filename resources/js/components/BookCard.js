@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MyCard } from './MyCard';
+import { BookIcon } from './Icon';
 
 export function BookImage(props) {
   const book = props.book;
@@ -9,9 +10,7 @@ export function BookImage(props) {
   if (book.cover) {
     image = <img className="img-fluid" src={book.cover} alt="book_image" />;
   } else {
-    image = (
-      <img className="img-fluid" src="../img/book.svg" alt="book_image" />
-    );
+    image = <BookIcon />;
   }
 
   return image;
@@ -43,19 +42,13 @@ BookInfo.propTypes = {
   children: PropTypes.array,
 };
 
-
 export function BookCard(props) {
   const book = props.book;
-  console.log(props);
 
   return (
     <MyCard
       image={<BookImage book={book} />}
-      body={
-        <BookInfo book={book}>
-          {props.children}
-        </BookInfo>
-      }
+      body={<BookInfo book={book}>{props.children}</BookInfo>}
       addingClass="book-card"
     />
   );

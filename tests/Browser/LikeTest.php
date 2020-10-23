@@ -50,15 +50,15 @@ class LikeTest extends DuskTestCase
             $browser = $this->login($browser);
 
             $browser->waitFor('.feed')
-                    ->assertDataAttribute('#like-icon', 'isliked', 'false')
-                    ->press('#like-icon')
-                    ->assertDataAttribute('#like-icon', 'isliked', 'true');
+                    ->assertDataAttribute('.like-icon', 'isliked', 'false')
+                    ->press('.like-icon')
+                    ->assertDataAttribute('.like-icon', 'isliked', 'true');
 
             $browser->refresh()
                     ->waitFor('.feed')
-                    ->assertDataAttribute('#like-icon', 'isliked', 'true')
-                    ->press('#like-icon')
-                    ->assertDataAttribute('#like-icon', 'isliked', 'false');
+                    ->assertDataAttribute('.like-icon', 'isliked', 'true')
+                    ->press('.like-icon')
+                    ->assertDataAttribute('.like-icon', 'isliked', 'false');
         });
     }
 }

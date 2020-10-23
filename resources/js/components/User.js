@@ -120,7 +120,12 @@ export default function User() {
           name="user"
           onChange={(e) => setInput(e.target.value)}
         />
-        <input type="button" className="btn btn-outline-success" value="検索" onClick={onClickSearch} />
+        <input
+          type="button"
+          className="btn btn-outline-success"
+          value="検索"
+          onClick={onClickSearch}
+        />
       </label>
       <Results users={users} />
       <UsersExample examples={examples} />

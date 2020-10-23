@@ -62,7 +62,8 @@ class EditGenreTest extends DuskTestCase
             $this->createBook();
 
             $browser->visit($this->path)
-                    ->waitForText('Follow')
+                    ->waitForText('フォロー')
+                    ->press('.dropdown-toggle')
                     ->press('ジャンルを編集する');
             
             $ini_genre = $browser->attribute('.genres', 'value');
@@ -71,7 +72,7 @@ class EditGenreTest extends DuskTestCase
             $browser->type('.genres', $new_genre)
                     ->scrollIntoView('.btn-outline-success')
                     ->press('編集する')
-                    ->waitForText('Follow')
+                    ->waitForText('フォロー')
                     ->assertSee($new_genre);
         });
     }
@@ -82,14 +83,15 @@ class EditGenreTest extends DuskTestCase
             $this->createBook();
 
             $browser->visit($this->path)
-                    ->waitForText('Follow')
+                    ->waitForText('フォロー')
+                    ->press('.dropdown-toggle')
                     ->press('本を削除する')
                     ->waitFor('.select-book-card')
                     ->press('削除する')
                     ->waitForDialog()
                     ->assertDialogOpened('本が選択されていません')
                     ->acceptDialog()
-                    ->assertDontSee('Follow');
+                    ->assertDontSee('フォロー');
         });
     }
 
@@ -99,12 +101,13 @@ class EditGenreTest extends DuskTestCase
             $this->createBook();
 
             $browser->visit($this->path)
-                    ->waitForText('Follow')
+                    ->waitForText('フォロー')
+                    ->press('.dropdown-toggle')
                     ->press('本を削除する')
                     ->waitFor('.select-book-card')
                     ->click('.select-book-card')
                     ->press('削除する')
-                    ->waitForText('Follow')
+                    ->waitForText('フォロー')
                     ->assertSee('本がありません');
         });
     }

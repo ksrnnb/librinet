@@ -10943,6 +10943,7 @@ body {
 }
 
 .my-card {
+  background-color: white;
   border-radius: 5px;
 }
 
@@ -10956,6 +10957,10 @@ body {
 }
 
 .btn-outline-success {
+  background-color: white;
+}
+
+.btn-outline-danger {
   background-color: white;
 }
 
@@ -11015,10 +11020,6 @@ input {
   font-size: 1.2rem;
 }
 
-.user-card:hover {
-  cursor: pointer;
-}
-
 .one-row,
 .feed-wrapper .feed .feed-body-wrapper .book-info-wrapper .book-info,
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
@@ -11029,6 +11030,69 @@ input {
 
 .hover:hover {
   cursor: pointer;
+}
+
+.hover-link {
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+.hover-link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.book-icon {
+  fill: var(--dark);
+  width: 100%;
+  padding: 0 10px;
+  background-color: white;
+}
+
+.genre .book-icon {
+  padding: 20px 10px !important;
+}
+
+.dropdown .no-button:hover {
+  cursor: pointer !important;
+}
+
+.dropdown .dropdown-item {
+  padding: 10px 10px;
+}
+
+.dropdown .dropdown-item:active {
+  background-color: var(--light);
+  color: black;
+  border: none;
+  outline: none;
+}
+
+.no-button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+.no-button:hover {
+  cursor: default;
+}
+
+.genre-name-wrapper {
+  display: flex;
+}
+
+.genre-name-wrapper .gear-icon-wrapper {
+  flex: 1;
+  text-align: right;
+}
+
+.genre-name-wrapper .gear-icon-wrapper .gear-icon {
+  width: var(--icon_width);
 }
 
 .feed-wrapper {
@@ -11053,6 +11117,12 @@ input {
   -o-object-fit: cover;
      object-fit: cover;
   border: solid 1px #eeeeee;
+  width: 100%;
+}
+
+.feed-wrapper .feed .book-cover-wrapper .no-book-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
   width: 100%;
 }
 
@@ -11094,11 +11164,13 @@ input {
 
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-name {
   font-weight: bold;
+  margin-bottom: 0;
 }
 
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
   font-weight: normal;
-  color: #666666;
+  color: var(--gray);
+  margin-bottom: 0;
 }
 
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .feed-user-message {
@@ -11112,20 +11184,6 @@ input {
   justify-content: space-between;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .no-button {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  padding: 0;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-}
-
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .no-button:hover {
-  cursor: default;
-}
-
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .icon {
   width: var(--icon_width);
   stroke: #cccccc;
@@ -11136,20 +11194,20 @@ input {
   cursor: pointer;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #comment-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .comment-icon:hover {
   stroke: #38c172;
   fill: #38c172;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #like-icon[data-isliked=true] {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .like-icon[data-isliked=true] {
   fill: #38c172;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #like-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .like-icon:hover {
   fill: #38c172;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group #trash-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .trash-icon:hover {
   fill: #e3342f;
 }
 
@@ -11204,15 +11262,6 @@ input[type=radio] {
 
 .table tbody tr:hover {
   background-color: #ebf5e7;
-}
-
-.book-card {
-  background-color: #eef5eb;
-  border: solid 1px #ebf5e7;
-}
-
-.book-card:hover {
-  cursor: pointer;
 }
 
 .user-card {

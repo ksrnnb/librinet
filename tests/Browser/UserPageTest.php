@@ -35,8 +35,7 @@ class UserPageTest extends DuskTestCase
             $browser->visit($this->path)
                     ->waitFor('.user-card')
                     ->assertSee($this->user->name)
-                    ->assertDontSee('編集する')
-                    ->assertDontSee('削除する');
+                    ->assertMissing('.dropdown-toggle');
         });
     }
 
@@ -46,11 +45,10 @@ class UserPageTest extends DuskTestCase
 
             $browser = $this->login($browser);
 
-            // 本がないので、本を削除するボタンは表示されない
+            // 本がないので、ボタンは表示されない
             $browser->visit($this->path)
                     ->waitFor('.user-card')
-                    ->assertSee('編集する')
-                    ->assertDontSee('削除する');
+                    ->assertMissing('.dropdown-toggle');
         });
     }
 
@@ -67,7 +65,8 @@ class UserPageTest extends DuskTestCase
 
             $browser->visit($this->path)
                     ->waitFor('.user-card')
-                    ->assertSee('削除する');
+                    ->press('.dropdown-toggle')
+                    ->assertSee('本を削除する');
         });
     }
 

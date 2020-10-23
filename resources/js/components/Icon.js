@@ -9,8 +9,7 @@ export function CommentIcon(props) {
   function Icon() {
     return (
       <svg
-        className="icon"
-        id="comment-icon"
+        className="icon comment-icon"
         onClick={linkToComment}
         data-toggle="tooltip"
         data-placement="top"
@@ -62,14 +61,13 @@ export function LikeIcon(props) {
   const sendLikeRequest = props.sendLikeRequest;
 
   const renderTooltip = (props) => (
-    <Tooltip {...props}>読みたい！（いいね）</Tooltip>
+    <Tooltip {...props}>いいね（読みたい！）</Tooltip>
   );
 
   function Icon() {
     return (
       <svg
-        className="icon"
-        id="like-icon"
+        className="icon like-icon"
         data-uuid={uuid}
         data-isliked={isLiked}
         onClick={(e) => sendLikeRequest(e.target.dataset.uuid)}
@@ -112,8 +110,7 @@ export function Trash(props) {
   function Icon(props) {
     return (
       <svg
-        className="icon"
-        id="trash-icon"
+        className="icon trash-icon"
         name="delete"
         onClick={props.onClick}
         data-uuid={item.uuid}
@@ -149,6 +146,67 @@ export function Trash(props) {
   );
 }
 
+export function GearIcon(props) {
+  const dropdownMenu = props.dropdownMenu;
+
+  const icon = (
+    <svg
+      version="1.1"
+      fill="#000"
+      className="icon gear-icon"
+      x="0px"
+      y="0px"
+      viewBox="0 0 100 100"
+      enableBackground="new 0 0 100 100"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M95.525,52.728c-5.582-1.496-6.847-14.585-2.268-17.228  c1.501-0.87,2.665-2.104,3.434-3.527c-1.191-4.343-5.255-10.6-7.548-13.383c-1.676-0.078-3.39,0.305-4.95,1.206  c-4.995,2.886-15.321-4.833-13.783-10.578c0.481-1.795,0.227-3.972-0.165-5.244c-2.839-1.468-9.562-3.443-14.555-3.932  c-1.076,0.783-2.308,2.676-2.788,4.483c-1.629,6.075-14.52,6.958-17.285,2.17c-0.923-1.6-2.623-3.09-3.798-3.58  c-3.23,0.979-10.249,5.048-13.088,7.397c0.196,1.664,0.234,3.597,1.188,5.247c2.763,4.789-4.72,15.438-10.629,13.855  c-1.944-0.52-3.984-0.372-5.648,0.313C2.271,32.963,0.196,40.97,0,44.2c0.392,0.881,2.729,2.428,4.598,2.928  c8.043,2.156,8.106,13.951,2.279,17.315c-1.646,0.951-3.056,2.271-3.643,3.936c0.979,3.132,4.913,10.018,7.458,12.955  c1.664,0.195,3.597-0.232,5.248-1.187c5.204-3.007,15.612,4.064,13.853,10.631c-0.457,1.709-0.204,3.507,0.089,5.27  c3.916,1.664,11,4.005,14.916,3.907c1.272-1.175,2.057-2.812,2.504-4.483c1.54-5.748,14.253-7.582,17.257-2.378  c0.839,1.455,2.014,2.836,3.384,3.619c4.111-1.175,11.338-5.219,13.788-7.764c0.096-1.859-0.604-3.412-1.474-4.922  c-3.247-5.619,4.338-15.458,10.575-13.786c1.708,0.456,3.568,0.302,5.135-0.089c1.37-3.427,3.642-9.549,4.032-14.639  C98.629,53.947,97.329,53.212,95.525,52.728z M76.521,56.525c-3.807,14.217-18.417,22.651-32.632,18.843  c-14.213-3.81-22.647-18.423-18.839-32.639c3.808-14.216,18.418-22.651,32.631-18.842C71.895,27.696,80.33,42.307,76.521,56.525z"
+      />
+    </svg>
+  );
+
+  return (
+    <div className="dropdown">
+      <button
+        className="no-button dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        {icon}
+      </button>
+      <div
+        className="dropdown-menu dropdown-menu-right"
+        aria-labelledby="dropdownMenu2"
+      >
+        {dropdownMenu}
+      </div>
+    </div>
+  );
+}
+
+export function BookIcon() {
+  return (
+    <svg
+      className="book-icon"
+      version="1.1"
+      x="0px"
+      y="0px"
+      viewBox="0 0 512 512"
+      enableBackground="new 0 0 512 512"
+    >
+      <path
+        d="M464,64v416H80c-17.672,0-32-14.313-32-32s14.328-32,32-32h352V0H80C44.656,0,16,28.656,16,64v384c0,35.344,28.656,64,64,64
+    h416V64H464z M80,128V96V32h320v352H80V128z M336,96H144V64h192V96z M272,160H144v-32h128V160z M208,224h-64v-32h64V224z"
+      />
+    </svg>
+  );
+}
+
 CommentIcon.propTypes = {
   item: PropTypes.object,
   likeToComment: PropTypes.func,
@@ -158,6 +216,10 @@ LikeIcon.propTypes = {
   uuid: PropTypes.string,
   isLiked: PropTypes.bool,
   sendLikeRequest: PropTypes.func,
+};
+
+GearIcon.propTypes = {
+  dropdownMenu: PropTypes.object,
 };
 
 Trash.propTypes = {

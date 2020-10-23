@@ -40,10 +40,10 @@ class FollowTest extends DuskTestCase
 
             // フォローした後、フォロワーが1人増えるのを確認
             $browser->visit($this->target_path)
-                    ->waitFor('.user-card')
+                    ->waitForText('フォロワー：0')
                     ->assertSee('フォローする')
                     ->press('フォローする')
-                    ->waitForText('Follower: 1')
+                    ->waitForText('フォロワー：1')
                     ->assertDataAttribute('#follow', 'count', '0')
                     ->assertDataAttribute('#follower', 'count', '1');
 
@@ -55,10 +55,10 @@ class FollowTest extends DuskTestCase
                     
             // フォローを外して、フォロワーが減るのを確認
             $browser->visit($this->target_path)
-                    ->waitFor('.user-card')
+                    ->waitForText('フォロワー：1')
                     ->assertSee('フォロー中')
                     ->press('フォロー中')
-                    ->waitForText('Follower: 0')
+                    ->waitForText('フォロワー：0')
                     ->assertDataAttribute('#follow', 'count', '0')
                     ->assertDataAttribute('#follower', 'count', '0');
 

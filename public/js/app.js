@@ -86195,6 +86195,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _MyCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MyCard */ "./resources/js/components/MyCard.js");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.js");
+
 
 
 
@@ -86209,11 +86211,7 @@ function BookImage(props) {
       alt: "book_image"
     });
   } else {
-    image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
-      src: "../img/book.svg",
-      alt: "book_image"
-    });
+    image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_3__["BookIcon"], null);
   }
 
   return image;
@@ -86242,7 +86240,6 @@ BookInfo.propTypes = {
 };
 function BookCard(props) {
   var book = props.book;
-  console.log(props);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_2__["MyCard"], {
     image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BookImage, {
       book: book
@@ -86277,6 +86274,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function BookImage(props) {
+  console.log('book--image');
+  console.log(props);
   var book = props.book;
   var image;
 
@@ -86289,7 +86288,7 @@ function BookImage(props) {
   } else {
     image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       className: "img-fluid",
-      src: "../img/book.svg",
+      src: "/img/book.svg",
       alt: "book_image"
     });
   }
@@ -86299,8 +86298,7 @@ function BookImage(props) {
   }, image);
 }
 BookImage.propTypes = {
-  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
-  col: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
+  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object
 };
 
 /***/ }),
@@ -86429,6 +86427,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.js");
+
 
 
 
@@ -86445,18 +86445,22 @@ function BooksElement(props) {
   var books = props.books;
   var booksElement = books.map(function (book) {
     var url = '/book/profile/' + book.isbn;
-    var src = book.cover || 'img/book.svg';
+    var src = book.cover;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-3",
       key: book.isbn
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid w-100 hover",
-      src: src,
-      alt: "book-cover",
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "hover",
       onClick: function onClick() {
         return linkToBookProfile(book, url);
       }
-    }));
+    }, src ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: "img-fluid",
+      src: src,
+      alt: "book-cover"
+    }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_3__["BookIcon"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "one-row"
+    }, book.title)));
   });
   return booksElement;
 }
@@ -86479,16 +86483,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _BooksElement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BooksElement */ "./resources/js/components/BooksElement.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+
 
 
 
 
 
 function Message(props) {
-  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_3__["PropsContext"]);
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
   var isSelf = props.user.str_id === pages_props.match.params.strId;
 
   if (isSelf) {
@@ -86525,26 +86531,35 @@ function NoBook(props) {
 function Books(props) {
   var genres = props.genres;
   var orderedBooks = props.orderedBooks;
-  var books = Object.keys(orderedBooks).map(function (genreId) {
+  var iterator = Object.keys(orderedBooks);
+  var dropdownMenu = props.dropdownMenu;
+  var books = iterator.map(function (genreId) {
     var genre;
     var books = orderedBooks[genreId];
     var willEdit = props.willEdit;
+    var isFirstLoop = iterator.indexOf(genreId) === 0;
 
     if (willEdit) {
       genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        className: "mb-5 genres",
+        className: "mb-3 genres",
         defaultValue: genres[genreId],
         "data-id": genreId
       });
     } else {
-      genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-        className: "mt-5",
+      genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "genre-name-wrapper"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "mt-3 genre-name",
         "data-id": genreId
-      }, genres[genreId]);
+      }, genres[genreId]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "mt-3 gear-icon-wrapper"
+      }, isFirstLoop && dropdownMenu && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_2__["GearIcon"], {
+        dropdownMenu: dropdownMenu
+      })));
     }
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "row",
+      className: "row genre",
       key: genreId
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "col-12"
@@ -86558,8 +86573,9 @@ function Books(props) {
 function Bookshelf(props) {
   var genres = props.genres;
   var orderedBooks = props.orderedBooks;
+  var dropdownMenu = props.dropdownMenu;
   var willEdit = props.willEdit ? props.willEdit : false;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
     className: "mt-5 mb-0",
     key: "bookshelf"
   }, "\u672C\u68DA"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NoBook, {
@@ -86568,15 +86584,17 @@ function Bookshelf(props) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Books, {
     genres: genres,
     orderedBooks: orderedBooks,
-    willEdit: willEdit
+    willEdit: willEdit,
+    dropdownMenu: dropdownMenu
   }));
 }
 Bookshelf.propTypes = {
-  genres: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array // 本が空の場合はarray
+  genres: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array // 本が空の場合はarray
   ]),
-  orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array]),
-  willEdit: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
-  user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object
+  orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array]),
+  willEdit: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
+  user: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
+  dropdownMenu: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object
 };
 
 /***/ }),
@@ -87422,17 +87440,22 @@ function BookCover(props) {
   var cover = null;
 
   if (book) {
-    var coverUrl = book.cover || '/img/book.svg';
-    cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "hover book-cover",
-      src: coverUrl,
-      alt: "book_image",
-      onClick: linkToBookProfile
-    });
+    if (book.cover) {
+      cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "hover book-cover",
+        src: book.cover,
+        alt: "book_image",
+        onClick: linkToBookProfile
+      });
+    } else {
+      cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "hover no-book-cover",
+        onClick: linkToBookProfile
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_5__["BookIcon"], null));
+    }
   } else {
     cover = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       className: "book-cover invisible",
-      src: "/img/book.svg",
       alt: "book_image"
     });
   }
@@ -88125,7 +88148,7 @@ Post.propTypes = {
 /*!*****************************************!*\
   !*** ./resources/js/components/Icon.js ***!
   \*****************************************/
-/*! exports provided: CommentIcon, LikeIcon, Trash */
+/*! exports provided: CommentIcon, LikeIcon, Trash, GearIcon, BookIcon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -88133,6 +88156,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommentIcon", function() { return CommentIcon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LikeIcon", function() { return LikeIcon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Trash", function() { return Trash; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GearIcon", function() { return GearIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookIcon", function() { return BookIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
@@ -88147,8 +88172,7 @@ function CommentIcon(props) {
 
   function Icon() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
-      className: "icon",
-      id: "comment-icon",
+      className: "icon comment-icon",
       onClick: linkToComment,
       "data-toggle": "tooltip",
       "data-placement": "top",
@@ -88189,13 +88213,12 @@ function LikeIcon(props) {
   var sendLikeRequest = props.sendLikeRequest;
 
   var renderTooltip = function renderTooltip(props) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], props, "\u8AAD\u307F\u305F\u3044\uFF01\uFF08\u3044\u3044\u306D\uFF09");
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], props, "\u3044\u3044\u306D\uFF08\u8AAD\u307F\u305F\u3044\uFF01\uFF09");
   };
 
   function Icon() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
-      className: "icon",
-      id: "like-icon",
+      className: "icon like-icon",
       "data-uuid": uuid,
       "data-isliked": isLiked,
       onClick: function onClick(e) {
@@ -88233,8 +88256,7 @@ function Trash(props) {
 
   function Icon(props) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
-      className: "icon",
-      id: "trash-icon",
+      className: "icon trash-icon",
       name: "delete",
       onClick: props.onClick,
       "data-uuid": item.uuid,
@@ -88264,6 +88286,47 @@ function Trash(props) {
     onClick: props.onClick
   }))));
 }
+function GearIcon(props) {
+  var dropdownMenu = props.dropdownMenu;
+  var icon = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
+    version: "1.1",
+    fill: "#000",
+    className: "icon gear-icon",
+    x: "0px",
+    y: "0px",
+    viewBox: "0 0 100 100",
+    enableBackground: "new 0 0 100 100"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M95.525,52.728c-5.582-1.496-6.847-14.585-2.268-17.228  c1.501-0.87,2.665-2.104,3.434-3.527c-1.191-4.343-5.255-10.6-7.548-13.383c-1.676-0.078-3.39,0.305-4.95,1.206  c-4.995,2.886-15.321-4.833-13.783-10.578c0.481-1.795,0.227-3.972-0.165-5.244c-2.839-1.468-9.562-3.443-14.555-3.932  c-1.076,0.783-2.308,2.676-2.788,4.483c-1.629,6.075-14.52,6.958-17.285,2.17c-0.923-1.6-2.623-3.09-3.798-3.58  c-3.23,0.979-10.249,5.048-13.088,7.397c0.196,1.664,0.234,3.597,1.188,5.247c2.763,4.789-4.72,15.438-10.629,13.855  c-1.944-0.52-3.984-0.372-5.648,0.313C2.271,32.963,0.196,40.97,0,44.2c0.392,0.881,2.729,2.428,4.598,2.928  c8.043,2.156,8.106,13.951,2.279,17.315c-1.646,0.951-3.056,2.271-3.643,3.936c0.979,3.132,4.913,10.018,7.458,12.955  c1.664,0.195,3.597-0.232,5.248-1.187c5.204-3.007,15.612,4.064,13.853,10.631c-0.457,1.709-0.204,3.507,0.089,5.27  c3.916,1.664,11,4.005,14.916,3.907c1.272-1.175,2.057-2.812,2.504-4.483c1.54-5.748,14.253-7.582,17.257-2.378  c0.839,1.455,2.014,2.836,3.384,3.619c4.111-1.175,11.338-5.219,13.788-7.764c0.096-1.859-0.604-3.412-1.474-4.922  c-3.247-5.619,4.338-15.458,10.575-13.786c1.708,0.456,3.568,0.302,5.135-0.089c1.37-3.427,3.642-9.549,4.032-14.639  C98.629,53.947,97.329,53.212,95.525,52.728z M76.521,56.525c-3.807,14.217-18.417,22.651-32.632,18.843  c-14.213-3.81-22.647-18.423-18.839-32.639c3.808-14.216,18.418-22.651,32.631-18.842C71.895,27.696,80.33,42.307,76.521,56.525z"
+  }));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "dropdown"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "no-button dropdown-toggle",
+    type: "button",
+    id: "dropdownMenu2",
+    "data-toggle": "dropdown",
+    "aria-haspopup": "true",
+    "aria-expanded": "false"
+  }, icon), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "dropdown-menu dropdown-menu-right",
+    "aria-labelledby": "dropdownMenu2"
+  }, dropdownMenu));
+}
+function BookIcon() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
+    className: "book-icon",
+    version: "1.1",
+    x: "0px",
+    y: "0px",
+    viewBox: "0 0 512 512",
+    enableBackground: "new 0 0 512 512"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
+    d: "M464,64v416H80c-17.672,0-32-14.313-32-32s14.328-32,32-32h352V0H80C44.656,0,16,28.656,16,64v384c0,35.344,28.656,64,64,64 h416V64H464z M80,128V96V32h320v352H80V128z M336,96H144V64h192V96z M272,160H144v-32h128V160z M208,224h-64v-32h64V224z"
+  }));
+}
 CommentIcon.propTypes = {
   item: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
   likeToComment: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
@@ -88272,6 +88335,9 @@ LikeIcon.propTypes = {
   uuid: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string,
   isLiked: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
   sendLikeRequest: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
+};
+GearIcon.propTypes = {
+  dropdownMenu: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object
 };
 Trash.propTypes = {
   item: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
@@ -88563,7 +88629,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 function MyCard(props) {
-  var className = props.addingClass ? "my-card row shadow no-gutters " + props.addingClass : "my-card row shadow no-gutters";
+  var className = props.addingClass ? 'my-card row shadow no-gutters ' + props.addingClass : 'my-card row shadow no-gutters';
   var attr = props.onClick && {
     onClick: props.onClick
   };
@@ -88577,7 +88643,9 @@ function MyCard(props) {
 }
 MyCard.propTypes = {
   image: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
-  body: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object
+  body: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
+  addingClass: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
 };
 
 /***/ }),
@@ -89274,7 +89342,7 @@ function SearchedBook(props) {
   }
 
   var isSearched = pages_props.location.pathname === '/book';
-  var marginTop = isSearched ? "mt-5" : "";
+  var marginTop = isSearched ? 'mt-5' : '';
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
     className: marginTop
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_2__["BookCard"], {
@@ -89856,6 +89924,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _MyCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MyCard */ "./resources/js/components/MyCard.js");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -89884,25 +89954,31 @@ function UserCard(props) {
     });
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_3__["MyCard"], {
+  var attr = props.noLink ? {
+    addingClass: 'user-card'
+  } : {
+    onClick: jumpToUserPage,
+    addingClass: 'user-card hover'
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_3__["MyCard"], _extends({
     image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
       image: user.image
     }),
     body: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-      className: "user-name my-0"
+      className: "user-name my-0 one-row"
     }, user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-      className: "user-id my-0"
-    }, '@' + user.str_id)),
-    addingClass: "user-card",
-    onClick: jumpToUserPage
-  });
+      className: "user-id my-0 one-row"
+    }, '@' + user.str_id), props.children)
+  }, attr));
 }
 UserImage.propTypes = {
   image: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string
 };
 UserCard.propTypes = {
   user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
-  UserImage: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string
+  UserImage: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string,
+  noLink: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
+  children: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array
 };
 
 /***/ }),
@@ -90217,26 +90293,31 @@ var axios = window.axios;
 function EditUserButton(props) {
   var user = props.user;
   var viewerStrId = props.viewerStrId;
+  var pages_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
+
+  function linkToEditUser() {
+    pages_props.history.push('/user/edit/' + user.str_id);
+  }
+
   var EditUserButton; // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
 
   if (user.str_id !== viewerStrId) {
-    EditUserButton = null; // 表示しているユーザーが、閲覧者自身の場合
+    EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null); // 表示しているユーザーが、閲覧者自身の場合
   } else {
     // ゲストの場合
     if (user.str_id === 'guest') {
-      EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         className: "btn btn-outline-success",
         disabled: true
       }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        className: "text-danger"
+        className: "text-danger mb-0"
       }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306F\u7DE8\u96C6\u3067\u304D\u307E\u305B\u3093")); // ゲスト以外の場合
     } else {
-      EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: '/user/edit/' + user.str_id
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "btn btn-outline-success"
+        className: "btn btn-outline-success d-block",
+        onClick: linkToEditUser
       }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B"));
     }
   }
@@ -90272,18 +90353,19 @@ function FollowButton(props) {
 function FollowNumber(props) {
   var follows = props.follows.length;
   var followers = props.followers.length;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "mt-3 mb-0",
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "hover-link my-3",
     id: "follow",
     "data-link": "/follows",
     "data-count": follows,
     onClick: props.onClick
-  }, "Follow: ", follows), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, "\u30D5\u30A9\u30ED\u30FC\uFF1A", follows), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "hover-link ml-4 my-3",
     id: "follower",
     "data-link": "/followers",
     "data-count": followers,
     onClick: props.onClick
-  }, "Follower: ", followers));
+  }, "\u30D5\u30A9\u30ED\u30EF\u30FC\uFF1A", followers));
 }
 
 function EditBookshelfButton(props) {
@@ -90295,17 +90377,15 @@ function EditBookshelfButton(props) {
     var strId = props.user.str_id;
 
     if (canEdit && isNotEmpty) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-6"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit",
-        className: "btn btn-outline-success",
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "dropdown-item",
+        type: "button",
         onClick: function onClick() {
           props.redirectToEditGenre(strId);
         }
       }, "\u30B8\u30E3\u30F3\u30EB\u3092\u7DE8\u96C6\u3059\u308B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit",
-        className: "btn btn-outline-danger",
+        className: "dropdown-item",
+        type: "button",
         onClick: function onClick() {
           props.redirectToDeleteBook(strId);
         }
@@ -90431,25 +90511,35 @@ function UserProfile() {
     }));
   }
 
+  var dropdownMenu = false;
+
   if (showingUser) {
+    if (user) {
+      if (user.str_id === showingUser.str_id) {
+        dropdownMenu = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditBookshelfButton, {
+          user: showingUser,
+          books: showingUser.books,
+          viewerUser: user,
+          redirectToDeleteBook: redirectToDeleteBook,
+          redirectToEditGenre: redirectToEditGenre
+        });
+      }
+    }
+
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
       subtitle: "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      user: showingUser
-    }), buttons, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
+      user: showingUser,
+      noLink: true
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
       follows: showingUser.followings,
       followers: showingUser.followers,
       onClick: onClickFollowers
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditBookshelfButton, {
-      user: showingUser,
-      books: showingUser.books,
-      viewerUser: user,
-      redirectToDeleteBook: redirectToDeleteBook,
-      redirectToEditGenre: redirectToEditGenre
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), buttons), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
       user: showingUser,
       genres: showingUser.genres,
-      orderedBooks: showingUser.ordered_books
+      orderedBooks: showingUser.ordered_books,
+      dropdownMenu: dropdownMenu
     }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);

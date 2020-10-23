@@ -11,32 +11,43 @@ const axios = window.axios;
 function EditUserButton(props) {
   const user = props.user;
   const viewerStrId = props.viewerStrId;
+  const pages_props = useContext(PropsContext);
+
+  function linkToEditUser() {
+    pages_props.history.push('/user/edit/' + user.str_id);
+  }
 
   let EditUserButton;
   // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
   if (user.str_id !== viewerStrId) {
-    EditUserButton = null;
+    EditUserButton = <></>;
 
     // 表示しているユーザーが、閲覧者自身の場合
   } else {
     // ゲストの場合
     if (user.str_id === 'guest') {
       EditUserButton = (
-        <>
+        <div>
           <button type="button" className="btn btn-outline-success" disabled>
             ユーザー情報を編集する
           </button>
-          <p className="text-danger">注意：ゲストユーザーは編集できません</p>
-        </>
+          <p className="text-danger mb-0">
+            注意：ゲストユーザーは編集できません
+          </p>
+        </div>
       );
       // ゲスト以外の場合
     } else {
       EditUserButton = (
-        <a href={'/user/edit/' + user.str_id}>
-          <button type="button" className="btn btn-outline-success">
+        <div>
+          <button
+            type="button"
+            className="btn btn-outline-success d-block"
+            onClick={linkToEditUser}
+          >
             ユーザー情報を編集する
           </button>
-        </a>
+        </div>
       );
     }
   }
@@ -75,23 +86,24 @@ function FollowNumber(props) {
   const followers = props.followers.length;
   return (
     <>
-      <button
-        className="mt-3 mb-0"
+      <p
+        className="hover-link my-3"
         id="follow"
         data-link="/follows"
         data-count={follows}
         onClick={props.onClick}
       >
-        Follow: {follows}
-      </button>
-      <button
+        フォロー：{follows}
+      </p>
+      <p
+        className="hover-link ml-4 my-3"
         id="follower"
         data-link="/followers"
         data-count={followers}
         onClick={props.onClick}
       >
-        Follower: {followers}
-      </button>
+        フォロワー：{followers}
+      </p>
     </>
   );
 }
@@ -107,10 +119,10 @@ function EditBookshelfButton(props) {
 
     if (canEdit && isNotEmpty) {
       return (
-        <div className="col-6">
+        <>
           <button
-            type="submit"
-            className="btn btn-outline-success"
+            className="dropdown-item"
+            type="button"
             onClick={() => {
               props.redirectToEditGenre(strId);
             }}
@@ -118,15 +130,15 @@ function EditBookshelfButton(props) {
             ジャンルを編集する
           </button>
           <button
-            type="submit"
-            className="btn btn-outline-danger"
+            className="dropdown-item"
+            type="button"
             onClick={() => {
               props.redirectToDeleteBook(strId);
             }}
           >
             本を削除する
           </button>
-        </div>
+        </>
       );
     }
   }
@@ -258,28 +270,38 @@ export default function UserProfile() {
     );
   }
 
+  let dropdownMenu = false;
   if (showingUser) {
+    if (user) {
+      if (user.str_id === showingUser.str_id) {
+        dropdownMenu = (
+          <EditBookshelfButton
+            user={showingUser}
+            books={showingUser.books}
+            viewerUser={user}
+            redirectToDeleteBook={redirectToDeleteBook}
+            redirectToEditGenre={redirectToEditGenre}
+          />
+        );
+      }
+    }
+
     return (
       <>
         <Subtitle subtitle="プロフィール" />
-        <UserCard user={showingUser}></UserCard>
-        {buttons}
-        <FollowNumber
-          follows={showingUser.followings}
-          followers={showingUser.followers}
-          onClick={onClickFollowers}
-        />
-        <EditBookshelfButton
-          user={showingUser}
-          books={showingUser.books}
-          viewerUser={user}
-          redirectToDeleteBook={redirectToDeleteBook}
-          redirectToEditGenre={redirectToEditGenre}
-        />
+        <UserCard user={showingUser} noLink={true}>
+          <FollowNumber
+            follows={showingUser.followings}
+            followers={showingUser.followers}
+            onClick={onClickFollowers}
+          />
+          {buttons}
+        </UserCard>
         <Bookshelf
           user={showingUser}
           genres={showingUser.genres}
           orderedBooks={showingUser.ordered_books}
+          dropdownMenu={dropdownMenu}
         />
       </>
     );

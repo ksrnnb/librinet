@@ -64,7 +64,7 @@ export default function SearchedBook(props) {
   }
 
   const isSearched = pages_props.location.pathname === '/book';
-  const marginTop = isSearched ? "mt-5" : "";
+  const marginTop = isSearched ? 'mt-5' : '';
 
   return (
     <div className={marginTop}>

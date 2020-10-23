@@ -106,13 +106,13 @@ function Notice(props) {
   if (info) {
     return (
       <MyCard
-        image={
-          <img className="img-fluid" src={info.image} alt="user-image" />
-        }
+        image={<img className="img-fluid" src={info.image} alt="user-image" />}
         body={
           <>
             <p>{info.message}</p>
-            <p><small className="text-muted">{timeMessage}</small></p>
+            <p>
+              <small className="text-muted">{timeMessage}</small>
+            </p>
           </>
         }
         addingClass="notification-card mb-3"

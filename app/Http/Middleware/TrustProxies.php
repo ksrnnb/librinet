@@ -22,6 +22,14 @@ class TrustProxies extends Middleware
      *
      * @var int
      */
-    // protected $headers = Request::HEADER_X_FORWARDED_ALL;
-    protected $headers = Request::HEADER_X_FORWARDED_AWS_ELB;
+    protected $headers;
+
+    public function __construct()
+    {
+        if (config('app.env') === 'production') {
+            $this->headers = Request::HEADER_X_FORWARDED_AWS_ELB;
+        } else {
+            $this->headers = Request::HEADER_X_FORWARDED_ALL;
+        }
+    }
 }

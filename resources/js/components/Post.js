@@ -16,12 +16,12 @@ function AddToBookshelf(props) {
   let className, isDisabled, message, value;
 
   if (book.isInBookshelf) {
-    className = 'invalid';
+    className = 'invalid mb-0';
     isDisabled = true;
     message = <p>(本棚に追加済みです)</p>;
     value = '0';
   } else {
-    className = '';
+    className = 'mb-0';
     isDisabled = false;
     message = null;
     value = '1';
@@ -29,6 +29,7 @@ function AddToBookshelf(props) {
 
   return (
     <>
+      <h4>本棚への追加</h4>
       <label className={className} htmlFor="add-book">
         <input
           type="checkbox"
@@ -39,7 +40,7 @@ function AddToBookshelf(props) {
           disabled={isDisabled}
           onChange={props.onChange}
         />
-        本棚に追加
+        <h5 className="d-inline-block ml-2 mb-0">本棚に追加して投稿する</h5>
       </label>
       {message}
     </>
@@ -49,19 +50,23 @@ function AddToBookshelf(props) {
 function Post(props) {
   return (
     <>
-      <label htmlFor="message">
-        <p className="mt-4">投稿メッセージ</p>
+      <label htmlFor="message" className="d-block">
+        <h4 className="mt-5">投稿メッセージ</h4>
         <textarea
           name="message"
           id="message"
-          cols="30"
-          rows="10"
+          maxLength={100}
+          placeholder="100文字以内で入力してください"
           onChange={props.onChange}
           value={props.message}
           required
         />
       </label>
-      <button className="d-block" id="submit-button" onClick={props.onSubmit}>
+      <button
+        className="btn btn-outline-success d-block my-5"
+        id="submit-button"
+        onClick={props.onSubmit}
+      >
         投稿する
       </button>
     </>
@@ -244,7 +249,7 @@ export default function PostData() {
           onChangeConvGenre={(e) => setConvGenre(e.target.value)}
           onChangeRadioButton={onChangeRadioButton}
         />
-        <p>本の情報</p>
+        <h4 className="mt-5">本の情報</h4>
         <BookCard book={book} />
         <Post
           message={message}

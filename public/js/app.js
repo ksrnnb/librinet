@@ -85916,7 +85916,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var axios = window.axios;
 var DataContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_1__["createContext"])();
-var SetStateContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_1__["createContext"])();
+var SetStateContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_1__["createContext"])(); // TODO: フッターが欲しい
 
 function App() {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
@@ -86062,7 +86062,9 @@ function ShowExamples() {
 }
 
 function Example() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "mb-5"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
     className: "mt-5"
   }, "ISBN \u4F8B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
     className: "table shadow"
@@ -86080,6 +86082,7 @@ function UserInput(props) {
     type: "text",
     id: "isbn",
     name: "isbn",
+    maxLength: 13,
     onChange: props.onChange,
     required: true
   });
@@ -86147,7 +86150,7 @@ function Book() {
     if (input == null) return false; // -の削除とスペースの削除
 
     var isbn = input.replace(/-/g, '');
-    isbn = isbn.replace(/[\x20\u3000]/g, '');
+    isbn = isbn.trim();
     isbn = isbn.match(/^9784[0-9]{9}$/);
     return isbn || false;
   }
@@ -87641,7 +87644,9 @@ function NewGenre(props) {
   //   disabled = true;
   // }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30B8\u30E3\u30F3\u30EB\u306E\u9078\u629E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-5"
+  }, "\u30B8\u30E3\u30F3\u30EB\u306E\u9078\u629E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "new"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "radio",
@@ -87651,13 +87656,17 @@ function NewGenre(props) {
     checked: isChecked,
     onChange: props.onChangeRadioButton,
     disabled: disabled
-  }), "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+    className: "d-inline-block ml-2 mb-0"
+  }, "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: "d-block",
     htmlFor: "new-genre"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
     name: "new-genre",
     id: "new-genre",
+    maxLength: 16,
+    placeholder: "16\u6587\u5B57\u4EE5\u5185\u3067\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044",
     value: newGenre,
     disabled: disabled,
     onClick: props.onClickNewGenre,
@@ -87694,7 +87703,9 @@ function ConventionalGenre(props) {
       checked: isChecked,
       disabled: disabled,
       onChange: props.onChangeRadioButton
-    }), "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+      className: "ml-2 mt-3 mb-0 d-inline-block"
+    }, "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
       name: "genre_id",
       className: "d-block",
       id: "genre_id",
@@ -88739,18 +88750,18 @@ function AddToBookshelf(props) {
   var className, isDisabled, message, value;
 
   if (book.isInBookshelf) {
-    className = 'invalid';
+    className = 'invalid mb-0';
     isDisabled = true;
     message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "(\u672C\u68DA\u306B\u8FFD\u52A0\u6E08\u307F\u3067\u3059)");
     value = '0';
   } else {
-    className = '';
+    className = 'mb-0';
     isDisabled = false;
     message = null;
     value = '1';
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "\u672C\u68DA\u3078\u306E\u8FFD\u52A0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: className,
     htmlFor: "add-book"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -88761,24 +88772,27 @@ function AddToBookshelf(props) {
     checked: isChecked,
     disabled: isDisabled,
     onChange: props.onChange
-  }), "\u672C\u68DA\u306B\u8FFD\u52A0"), message);
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+    className: "d-inline-block ml-2 mb-0"
+  }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3057\u3066\u6295\u7A3F\u3059\u308B")), message);
 }
 
 function Post(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "message"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "mt-4"
+    htmlFor: "message",
+    className: "d-block"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "mt-5"
   }, "\u6295\u7A3F\u30E1\u30C3\u30BB\u30FC\u30B8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
     name: "message",
     id: "message",
-    cols: "30",
-    rows: "10",
+    maxLength: 100,
+    placeholder: "100\u6587\u5B57\u4EE5\u5185\u3067\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044",
     onChange: props.onChange,
     value: props.message,
     required: true
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "d-block",
+    className: "btn btn-outline-success d-block my-5",
     id: "submit-button",
     onClick: props.onSubmit
   }, "\u6295\u7A3F\u3059\u308B"));
@@ -88974,7 +88988,9 @@ function PostData() {
         return setConvGenre(e.target.value);
       },
       onChangeRadioButton: onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_7__["BookCard"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+      className: "mt-5"
+    }, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_7__["BookCard"], {
       book: book
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
       message: message,

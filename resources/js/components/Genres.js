@@ -54,7 +54,7 @@ function NewGenre(props) {
 
   return (
     <>
-      <p>ジャンルの選択</p>
+      <h4 className="mt-5">ジャンルの選択</h4>
       <label htmlFor="new">
         <input
           type="radio"
@@ -65,13 +65,15 @@ function NewGenre(props) {
           onChange={props.onChangeRadioButton}
           disabled={disabled}
         />
-        新しいジャンルを入力
+        <h5 className="d-inline-block ml-2 mb-0">新しいジャンルを入力</h5>
       </label>
       <label className="d-block" htmlFor="new-genre">
         <input
           type="text"
           name="new-genre"
           id="new-genre"
+          maxLength={16}
+          placeholder="16文字以内で入力してください"
           value={newGenre}
           disabled={disabled}
           onClick={props.onClickNewGenre}
@@ -116,7 +118,9 @@ function ConventionalGenre(props) {
             disabled={disabled}
             onChange={props.onChangeRadioButton}
           />
-          既存のジャンルから選択
+          <h5 className="ml-2 mt-3 mb-0 d-inline-block">
+            既存のジャンルから選択
+          </h5>
         </label>
         <select
           name="genre_id"

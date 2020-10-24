@@ -37,7 +37,7 @@ function ShowExamples() {
 
 function Example() {
   return (
-    <div>
+    <div className="mb-5">
       <h4 className="mt-5">ISBN 例</h4>
       <table className="table shadow">
         <thead>
@@ -62,6 +62,7 @@ function UserInput(props) {
       type="text"
       id="isbn"
       name="isbn"
+      maxLength={13}
       onChange={props.onChange}
       required
     />
@@ -127,7 +128,7 @@ export default function Book() {
 
     // -の削除とスペースの削除
     let isbn = input.replace(/-/g, '');
-    isbn = isbn.replace(/[\x20\u3000]/g, '');
+    isbn = isbn.trim();
     isbn = isbn.match(/^9784[0-9]{9}$/);
 
     return isbn || false;

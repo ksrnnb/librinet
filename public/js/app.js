@@ -85666,9 +85666,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
 /* harmony import */ var _Genres__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Genres */ "./resources/js/components/Genres.js");
-/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
-/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components */ "./resources/js/components/Components.js");
+/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -85688,11 +85689,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var axios = window.axios;
 function AddBook() {
-  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]);
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]); // ログインしていない場合はページ遷移
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_7__["DataContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_7__["SetStateContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]); // ログインしていない場合はページ遷移
 
   if (!data.params.user) {
     props.history.push('/home');
@@ -85755,12 +85757,17 @@ function AddBook() {
     }
 
     function getBookData() {
-      //TODO: 本棚に追加済みの場合の処理
       axios.post('/api/book', {
         isbn: isbn
       }).then(function (response) {
-        var book = response.data;
-        setData(book);
+        var hasBook = response.data.isInBookshelf;
+
+        if (hasBook) {
+          setErrors(['既に本棚に追加済みです']);
+        } else {
+          var _book = response.data;
+          setData(_book);
+        }
       })["catch"](function (error) {
         // ISBNが違う場合 404
         if (error.response.status === 404) {
@@ -85821,7 +85828,7 @@ function AddBook() {
     var errors = [];
 
     if (params.is_new_genre && params.new_genre == '') {
-      errors.push('No Input Error in new Genre!');
+      errors.push('ジャンル名が入力されていません');
     }
 
     return errors;
@@ -85864,14 +85871,20 @@ function AddBook() {
         return setConvGenre(e.target.value);
       },
       onChangeRadioButton: onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_4__["BookCard"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_4__["Caption"], {
+      content: "\u672C\u306E\u60C5\u5831"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_5__["BookCard"], {
       book: book
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "btn btn-outline-success",
-      onClick: submitBook
-    }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B"));
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_4__["ButtonWithMargin"], {
+      onClick: submitBook,
+      content: "\u672C\u68DA\u306B\u8FFD\u52A0\u3059\u308B"
+    }));
   } else {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      subtitle: "\u672C\u68DA\u306B\u8FFD\u52A0"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      errors: errors
+    }));
   }
 }
 
@@ -86537,6 +86550,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
 /* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
+/* harmony import */ var _Components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Components */ "./resources/js/components/Components.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -86556,63 +86570,60 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var axios = window.axios;
 
-function GenreForm(props) {
-  var orderedBooks = props.orderedBooks;
-  var genres = props.genres;
-
-  if (orderedBooks) {
-    var options = Object.keys(orderedBooks).map(function (genreId) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
-        label: genres[genreId],
-        key: genreId
-      }, orderedBooks[genreId].map(function (book) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-          value: book.id,
-          key: book.id
-        }, book.title);
-      }));
-    });
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-      name: "book_id",
-      id: "select-book",
-      disabled: !props.isRecommended,
-      onChange: function onChange(e) {
-        props.setBookId(e.target.value);
-      }
-    }, options);
-  }
-}
-
-function RecommendButton(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "recommend",
-    className: "mt-5 d-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "checkbox",
-    name: "recommend",
-    id: "recommend",
-    checked: props.isRecommended,
-    onChange: props.onChange
-  }), "\u672C\u3082\u304A\u3059\u3059\u3081\u3059\u308B");
-}
+var axios = window.axios; // function GenreForm(props) {
+//   const orderedBooks = props.orderedBooks;
+//   const genres = props.genres;
+//   if (orderedBooks) {
+//     const options = Object.keys(orderedBooks).map((genreId) => {
+//       return (
+//         <optgroup label={genres[genreId]} key={genreId}>
+//           {orderedBooks[genreId].map((book) => {
+//             return (
+//               <option value={book.id} key={book.id}>
+//                 {book.title}
+//               </option>
+//             );
+//           })}
+//         </optgroup>
+//       );
+//     });
+//     return (
+//       <select
+//         name="book_id"
+//         id="select-book"
+//         disabled={!props.isRecommended}
+//         onChange={(e) => {
+//           props.setBookId(e.target.value);
+//         }}
+//       >
+//         {options}
+//       </select>
+//     );
+//   }
+// }
 
 function RecommendBook(props) {
-  // TODO: 本のお勧めが表示されない
   var orderedBooks = props.orderedBooks;
   var genres = props.genres;
   var isRecommended = props.isRecommended;
+  var onChange = props.onChange;
+  var hasBook = !Array.isArray(orderedBooks);
 
-  if (orderedBooks) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RecommendButton, {
-      isChecked: isRecommended,
-      onChange: props.onChange
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(GenreForm, {
+  if (hasBook) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_7__["InputWithCheck"], {
+      name: "recommend",
+      type: "checkbox",
+      checked: isRecommended,
+      onChange: onChange,
+      content: "\u672C\u3082\u304A\u3059\u3059\u3081\u3059\u308B"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_7__["GroupedSelectBox"], {
       genres: genres,
       orderedBooks: orderedBooks,
-      isRecommended: isRecommended,
-      setBookId: props.setBookId
+      disabled: !isRecommended,
+      onChange: function onChange(e) {
+        props.setBookId(e.target.value);
+      }
     }));
   }
 
@@ -86620,20 +86631,14 @@ function RecommendBook(props) {
 }
 
 function CommentForm(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "message"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "mt-5"
-  }, "Comment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-    id: "message",
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_7__["MyTextarea"], {
     name: "message",
-    cols: "30",
-    rows: "10",
-    onChange: props.onChange
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-success d-block",
-    onClick: props.onClick
-  }, "\u30B3\u30E1\u30F3\u30C8\u3059\u308B"));
+    onChange: props.onChange,
+    content: "\u30B3\u30E1\u30F3\u30C8\u30E1\u30C3\u30BB\u30FC\u30B8"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_7__["ButtonWithMargin"], {
+    onClick: props.onClick,
+    content: "\u30B3\u30E1\u30F3\u30C8\u3059\u308B"
+  }));
 }
 
 function Comment() {
@@ -86752,12 +86757,8 @@ function Comment() {
     });
   }
 }
-RecommendButton.propTypes = {
-  isRecommended: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
-};
 RecommendBook.propTypes = {
-  orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
+  orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object]),
   genres: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].array, prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object]),
   isRecommended: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func,
@@ -86766,6 +86767,174 @@ RecommendBook.propTypes = {
 CommentForm.propTypes = {
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func,
   onClick: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/Components.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/Components.js ***!
+  \***********************************************/
+/*! exports provided: InputWithCheck, Caption, MyTextarea, SelectBox, GroupedSelectBox, ButtonWithMargin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InputWithCheck", function() { return InputWithCheck; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Caption", function() { return Caption; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyTextarea", function() { return MyTextarea; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectBox", function() { return SelectBox; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroupedSelectBox", function() { return GroupedSelectBox; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonWithMargin", function() { return ButtonWithMargin; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function InputWithCheck(props) {
+  var name = props.name,
+      type = props.type,
+      value = props.value,
+      checked = props.checked,
+      disabled = props.disabled,
+      onChange = props.onChange,
+      content = props.content;
+  var invalid = disabled ? 'invalid' : '';
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    className: "mb-0",
+    htmlFor: name
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: type,
+    name: name,
+    id: name,
+    value: value,
+    checked: checked,
+    disabled: disabled,
+    onChange: onChange
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+    className: "d-inline-block  ml-2 mb-0 ".concat(invalid)
+  }, content));
+}
+InputWithCheck.propTypes = {
+  type: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  name: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  id: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  value: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  checked: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].bool,
+  disabled: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].bool,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func,
+  content: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string
+};
+function Caption(props) {
+  var margin = props.isTop ? '' : 'mt-5';
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: margin
+  }, props.content);
+}
+Caption.propTypes = {
+  isTop: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].bool,
+  content: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string
+};
+function MyTextarea(props) {
+  var name = props.name,
+      content = props.content,
+      onChange = props.onChange;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: name,
+    className: "d-block"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Caption, {
+    content: content
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    name: name,
+    id: name,
+    maxLength: 100,
+    placeholder: "100\u6587\u5B57\u4EE5\u5185\u3067\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044",
+    onChange: onChange
+  }));
+}
+MyTextarea.propTypes = {
+  name: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  content: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func
+};
+function SelectBox(props) {
+  var myObject = props.object;
+  var name = props.name,
+      disabled = props.disabled,
+      value = props.value,
+      onClick = props.onClick,
+      onChange = props.onChange;
+  var options = Object.keys(myObject).map(function (key) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+      value: key,
+      key: key,
+      name: name
+    }, myObject[key]);
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    name: name,
+    id: name,
+    disabled: disabled,
+    value: value,
+    onClick: onClick,
+    onChange: onChange
+  }, options);
+}
+SelectBox.propTypes = {
+  object: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].object,
+  name: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  id: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  disabled: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].bool,
+  value: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func
+};
+function GroupedSelectBox(props) {
+  var orderedBooks = props.orderedBooks,
+      genres = props.genres,
+      disabled = props.disabled,
+      onChange = props.onChange;
+  var options = Object.keys(orderedBooks).map(function (genreId) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
+      label: genres[genreId],
+      key: genreId
+    }, orderedBooks[genreId].map(function (book) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: book.id,
+        key: book.id
+      }, book.title);
+    }));
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    id: "select-book",
+    disabled: disabled,
+    onChange: onChange
+  }, options);
+}
+GroupedSelectBox.propTypes = {
+  orderedBooks: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].object,
+  genres: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].object,
+  disabled: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].bool,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func
+};
+function ButtonWithMargin(props) {
+  var id = props.id,
+      onClick = props.onClick,
+      content = props.content;
+  var type = props.type || 'success'; // デフォルトはsuccess
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-outline-".concat(type, " d-block my-5"),
+    id: id,
+    onClick: onClick
+  }, content);
+}
+ButtonWithMargin.propTypes = {
+  id: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  content: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func,
+  type: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string
 };
 
 /***/ }),
@@ -87309,8 +87478,8 @@ function Errors(props) {
 
   if (errors) {
     var errorElement = errors.map(function (error) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        className: "error text-danger",
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "error text-danger mb-5",
         key: error
       }, error);
     });
@@ -87596,19 +87765,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Components */ "./resources/js/components/Components.js");
+
 
 
 function Genres(props) {
   var canSelectGenre = props.isChecked;
   var newGenre = props.newGenre;
-  var divClass;
-
-  if (canSelectGenre) {
-    divClass = '';
-  } else {
-    divClass = 'invalid';
-  }
-
+  var divClass = canSelectGenre ? '' : 'invalid';
   var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: divClass
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewGenre, {
@@ -87639,26 +87803,19 @@ function NewGenre(props) {
   var canSelectGenre = props.canSelectGenre;
   var newGenre = props.newGenre;
   var disabled = !canSelectGenre;
-  var isChecked = props.isNewGenre; // もし選択されてなかったら強制的にdisable?
-  // if (!isNewGenre) {
-  //   disabled = true;
-  // }
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-    className: "mt-5"
-  }, "\u30B8\u30E3\u30F3\u30EB\u306E\u9078\u629E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "new"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  var isChecked = props.isNewGenre;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["Caption"], {
+    isTop: true,
+    content: "\u30B8\u30E3\u30F3\u30EB\u306E\u9078\u629E"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["InputWithCheck"], {
     type: "radio",
-    name: "genre",
-    id: "new",
+    name: "new",
     value: "new",
     checked: isChecked,
+    disabled: disabled,
     onChange: props.onChangeRadioButton,
-    disabled: disabled
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-    className: "d-inline-block ml-2 mb-0"
-  }, "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    content: "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: "d-block",
     htmlFor: "new-genre"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -87677,43 +87834,27 @@ function NewGenre(props) {
 function ConventionalGenre(props) {
   var canSelectGenre = props.canSelectGenre;
   var disabled = !canSelectGenre;
-  var isChecked = !props.isNewGenre; // もし選択されてなかったら強制的にdisable?
-  // if (isNewGenre) {
-  //   disabled = true;
-  // }
-
+  var isChecked = !props.isNewGenre;
   var genres = props.genres;
   var genresExist = Object.keys(genres).length;
 
   if (genresExist) {
-    var genreElements = Object.keys(genres).map(function (id) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: id,
-        key: id,
-        name: "genre_id"
-      }, genres[id]);
-    });
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-      htmlFor: "conventional"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["InputWithCheck"], {
       type: "radio",
-      name: "genre",
-      id: "conventional",
+      name: "conventional",
       value: "conventional",
       checked: isChecked,
       disabled: disabled,
-      onChange: props.onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-      className: "ml-2 mt-3 mb-0 d-inline-block"
-    }, "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      onChange: props.onChangeRadioButton,
+      content: "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["SelectBox"], {
       name: "genre_id",
-      className: "d-block",
-      id: "genre_id",
       disabled: disabled,
       value: props.convGenre,
       onClick: props.onClickConvGenre,
-      onChange: props.onChangeConvGenre
-    }, genreElements));
+      onChange: props.onChangeConvGenre,
+      object: genres
+    }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
@@ -88716,12 +88857,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
-/* harmony import */ var _Genres__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Genres */ "./resources/js/components/Genres.js");
-/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
+/* harmony import */ var _Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components */ "./resources/js/components/Components.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+/* harmony import */ var _Genres__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Genres */ "./resources/js/components/Genres.js");
+/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -88742,66 +88884,57 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var axios = window.axios;
 
 function AddToBookshelf(props) {
   var book = props.book;
   var isChecked = props.isChecked;
-  var className, isDisabled, message, value;
+  var isDisabled, message, value;
 
   if (book.isInBookshelf) {
-    className = 'invalid mb-0';
     isDisabled = true;
-    message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "(\u672C\u68DA\u306B\u8FFD\u52A0\u6E08\u307F\u3067\u3059)");
+    message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "mb-0"
+    }, "(\u672C\u68DA\u306B\u8FFD\u52A0\u6E08\u307F\u3067\u3059)");
     value = '0';
   } else {
-    className = 'mb-0';
     isDisabled = false;
     message = null;
     value = '1';
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "\u672C\u68DA\u3078\u306E\u8FFD\u52A0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    className: className,
-    htmlFor: "add-book"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "mb-5"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["Caption"], {
+    isTop: true,
+    content: "\u672C\u68DA\u3078\u306E\u8FFD\u52A0"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["InputWithCheck"], {
     type: "checkbox",
     name: "add-book",
-    id: "add-book",
     value: value,
     checked: isChecked,
     disabled: isDisabled,
-    onChange: props.onChange
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-    className: "d-inline-block ml-2 mb-0"
-  }, "\u672C\u68DA\u306B\u8FFD\u52A0\u3057\u3066\u6295\u7A3F\u3059\u308B")), message);
+    onChange: props.onChange,
+    content: "\u672C\u68DA\u306B\u8FFD\u52A0\u3057\u3066\u6295\u7A3F\u3059\u308B"
+  }), message);
 }
 
 function Post(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "message",
-    className: "d-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-    className: "mt-5"
-  }, "\u6295\u7A3F\u30E1\u30C3\u30BB\u30FC\u30B8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["MyTextarea"], {
     name: "message",
-    id: "message",
-    maxLength: 100,
-    placeholder: "100\u6587\u5B57\u4EE5\u5185\u3067\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044",
-    onChange: props.onChange,
-    value: props.message,
-    required: true
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-success d-block my-5",
-    id: "submit-button",
-    onClick: props.onSubmit
-  }, "\u6295\u7A3F\u3059\u308B"));
+    content: "\u6295\u7A3F\u30E1\u30C3\u30BB\u30FC\u30B8",
+    onChange: props.onChange
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["ButtonWithMargin"], {
+    onClick: props.onSubmit,
+    content: "\u6295\u7A3F\u3059\u308B"
+  }));
 }
 
 function PostData() {
-  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["DataContext"]);
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_5__["SetStateContext"]);
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]); // ログインしていない場合はページ遷移
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]); // ログインしていない場合はページ遷移
 
   if (!data.params.user) {
     props.history.push('/home');
@@ -88853,7 +88986,6 @@ function PostData() {
     book ? setData(book) : getBookData();
 
     function getBookData() {
-      //TODO: 本棚に追加済みの場合の処理
       axios.post('/api/book', {
         isbn: isbn
       }).then(function (response) {
@@ -88970,7 +89102,7 @@ function PostData() {
       onChange: function onChange() {
         return setIsChecked(!isChecked);
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Genres__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Genres__WEBPACK_IMPORTED_MODULE_7__["default"], {
       book: book,
       isChecked: isChecked,
       isNewGenre: isNewGenre,
@@ -88988,9 +89120,9 @@ function PostData() {
         return setConvGenre(e.target.value);
       },
       onChangeRadioButton: onChangeRadioButton
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-      className: "mt-5"
-    }, "\u672C\u306E\u60C5\u5831"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_7__["BookCard"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["Caption"], {
+      content: "\u672C\u306E\u60C5\u5831"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_8__["BookCard"], {
       book: book
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
       message: message,
@@ -89006,14 +89138,14 @@ function PostData() {
   }
 }
 AddToBookshelf.propTypes = {
-  isChecked: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].bool,
-  book: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
+  isChecked: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].bool,
+  book: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].object,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
 };
 Post.propTypes = {
-  message: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].string,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func,
-  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].func
+  message: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].string,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func,
+  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
 };
 
 /***/ }),

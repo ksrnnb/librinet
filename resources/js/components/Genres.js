@@ -1,16 +1,11 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { Caption, InputWithCheck, SelectBox } from './Components';
 
 export default function Genres(props) {
   const canSelectGenre = props.isChecked;
   const newGenre = props.newGenre;
-  let divClass;
-
-  if (canSelectGenre) {
-    divClass = '';
-  } else {
-    divClass = 'invalid';
-  }
+  const divClass = canSelectGenre ? '' : 'invalid';
 
   const element = (
     <div className={divClass}>
@@ -47,26 +42,19 @@ function NewGenre(props) {
   let disabled = !canSelectGenre;
 
   const isChecked = props.isNewGenre;
-  // もし選択されてなかったら強制的にdisable?
-  // if (!isNewGenre) {
-  //   disabled = true;
-  // }
 
   return (
     <>
-      <h4 className="mt-5">ジャンルの選択</h4>
-      <label htmlFor="new">
-        <input
-          type="radio"
-          name="genre"
-          id="new"
-          value="new"
-          checked={isChecked}
-          onChange={props.onChangeRadioButton}
-          disabled={disabled}
-        />
-        <h5 className="d-inline-block ml-2 mb-0">新しいジャンルを入力</h5>
-      </label>
+      <Caption isTop={true} content="ジャンルの選択" />
+      <InputWithCheck
+        type="radio"
+        name="new"
+        value="new"
+        checked={isChecked}
+        disabled={disabled}
+        onChange={props.onChangeRadioButton}
+        content="新しいジャンルを入力"
+      />
       <label className="d-block" htmlFor="new-genre">
         <input
           type="text"
@@ -89,50 +77,29 @@ function ConventionalGenre(props) {
   let disabled = !canSelectGenre;
 
   const isChecked = !props.isNewGenre;
-  // もし選択されてなかったら強制的にdisable?
-  // if (isNewGenre) {
-  //   disabled = true;
-  // }
-
   const genres = props.genres;
   const genresExist = Object.keys(genres).length;
 
   if (genresExist) {
-    const genreElements = Object.keys(genres).map((id) => {
-      return (
-        <option value={id} key={id} name="genre_id">
-          {genres[id]}
-        </option>
-      );
-    });
-
     return (
       <>
-        <label htmlFor="conventional">
-          <input
-            type="radio"
-            name="genre"
-            id="conventional"
-            value="conventional"
-            checked={isChecked}
-            disabled={disabled}
-            onChange={props.onChangeRadioButton}
-          />
-          <h5 className="ml-2 mt-3 mb-0 d-inline-block">
-            既存のジャンルから選択
-          </h5>
-        </label>
-        <select
+        <InputWithCheck
+          type="radio"
+          name="conventional"
+          value="conventional"
+          checked={isChecked}
+          disabled={disabled}
+          onChange={props.onChangeRadioButton}
+          content="既存のジャンルから選択"
+        />
+        <SelectBox
           name="genre_id"
-          className="d-block"
-          id="genre_id"
           disabled={disabled}
           value={props.convGenre}
           onClick={props.onClickConvGenre}
           onChange={props.onChangeConvGenre}
-        >
-          {genreElements}
-        </select>
+          object={genres}
+        />
       </>
     );
   } else {

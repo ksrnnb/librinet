@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
+import {
+  ButtonWithMargin,
+  Caption,
+  InputWithCheck,
+  MyTextarea,
+} from './Components';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
@@ -13,62 +19,44 @@ function AddToBookshelf(props) {
   const book = props.book;
   const isChecked = props.isChecked;
 
-  let className, isDisabled, message, value;
+  let isDisabled, message, value;
 
   if (book.isInBookshelf) {
-    className = 'invalid mb-0';
     isDisabled = true;
-    message = <p>(本棚に追加済みです)</p>;
+    message = <p className="mb-0">(本棚に追加済みです)</p>;
     value = '0';
   } else {
-    className = 'mb-0';
     isDisabled = false;
     message = null;
     value = '1';
   }
 
   return (
-    <>
-      <h4>本棚への追加</h4>
-      <label className={className} htmlFor="add-book">
-        <input
-          type="checkbox"
-          name="add-book"
-          id="add-book"
-          value={value}
-          checked={isChecked}
-          disabled={isDisabled}
-          onChange={props.onChange}
-        />
-        <h5 className="d-inline-block ml-2 mb-0">本棚に追加して投稿する</h5>
-      </label>
+    <div className="mb-5">
+      <Caption isTop={true} content="本棚への追加" />
+      <InputWithCheck
+        type="checkbox"
+        name="add-book"
+        value={value}
+        checked={isChecked}
+        disabled={isDisabled}
+        onChange={props.onChange}
+        content="本棚に追加して投稿する"
+      />
       {message}
-    </>
+    </div>
   );
 }
 
 function Post(props) {
   return (
     <>
-      <label htmlFor="message" className="d-block">
-        <h4 className="mt-5">投稿メッセージ</h4>
-        <textarea
-          name="message"
-          id="message"
-          maxLength={100}
-          placeholder="100文字以内で入力してください"
-          onChange={props.onChange}
-          value={props.message}
-          required
-        />
-      </label>
-      <button
-        className="btn btn-outline-success d-block my-5"
-        id="submit-button"
-        onClick={props.onSubmit}
-      >
-        投稿する
-      </button>
+      <MyTextarea
+        name="message"
+        content="投稿メッセージ"
+        onChange={props.onChange}
+      />
+      <ButtonWithMargin onClick={props.onSubmit} content="投稿する" />
     </>
   );
 }
@@ -104,7 +92,6 @@ export default function PostData() {
     book ? setData(book) : getBookData();
 
     function getBookData() {
-      //TODO: 本棚に追加済みの場合の処理
       axios
         .post('/api/book', {
           isbn: isbn,
@@ -249,7 +236,7 @@ export default function PostData() {
           onChangeConvGenre={(e) => setConvGenre(e.target.value)}
           onChangeRadioButton={onChangeRadioButton}
         />
-        <h4 className="mt-5">本の情報</h4>
+        <Caption content="本の情報" />
         <BookCard book={book} />
         <Post
           message={message}

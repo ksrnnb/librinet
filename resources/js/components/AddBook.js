@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
 import Genres from './Genres';
+import { ButtonWithMargin, Caption } from './Components';
 import { BookCard } from './BookCard';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
@@ -56,14 +57,18 @@ export default function AddBook() {
     }
 
     function getBookData() {
-      //TODO: 本棚に追加済みの場合の処理
       axios
         .post('/api/book', {
           isbn: isbn,
         })
         .then((response) => {
-          const book = response.data;
-          setData(book);
+          const hasBook = response.data.isInBookshelf;
+          if (hasBook) {
+            setErrors(['既に本棚に追加済みです']);
+          } else {
+            const book = response.data;
+            setData(book);
+          }
         })
         .catch((error) => {
           // ISBNが違う場合 404
@@ -133,7 +138,7 @@ export default function AddBook() {
     const errors = [];
 
     if (params.is_new_genre && params.new_genre == '') {
-      errors.push('No Input Error in new Genre!');
+      errors.push('ジャンル名が入力されていません');
     }
 
     return errors;
@@ -171,14 +176,17 @@ export default function AddBook() {
           onChangeConvGenre={(e) => setConvGenre(e.target.value)}
           onChangeRadioButton={onChangeRadioButton}
         />
-        <p>本の情報</p>
+        <Caption content="本の情報" />
         <BookCard book={book} />
-        <button className="btn btn-outline-success" onClick={submitBook}>
-          本棚に追加する
-        </button>
+        <ButtonWithMargin onClick={submitBook} content="本棚に追加する" />
       </>
     );
   } else {
-    return <></>;
+    return (
+      <>
+        <Subtitle subtitle="本棚に追加" />
+        <Errors errors={errors} />
+      </>
+    );
   }
 }

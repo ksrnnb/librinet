@@ -9,7 +9,7 @@ orbs:
   aws-cli: circleci/aws-cli@1.3.0
 
 jobs:
-  test_and_code_check:
+  build:
     docker:
       # Specify the version you desire here
       - image: circleci/php:7.4-node-browsers
@@ -109,7 +109,7 @@ jobs:
 workflows:
   build_and_push_image:
     jobs:
-      - test_and_code_check
+      - build
       - update_ecs_service:
           requires:
             - build

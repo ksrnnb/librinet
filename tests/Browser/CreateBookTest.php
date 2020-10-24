@@ -15,6 +15,7 @@ class CreateBookTest extends DuskTestCase
     protected $user;
     protected $credential;
     protected $isbn;
+    protected $hasSetUp = false;
 
     protected function setUp(): void
     {
@@ -54,7 +55,7 @@ class CreateBookTest extends DuskTestCase
                     ->waitForDialog()
                     ->assertDialogOpened('本が見つかりません')
                     ->acceptDialog()
-                    ->assertDontSee('本棚に追加');
+                    ->assertSee('本棚に追加');
 
             // ISBNでない場合
             $browser->visit($path . 'test_wrong_link')

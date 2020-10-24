@@ -5,72 +5,72 @@ import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
 import Errors from './Errors';
+import {
+  ButtonWithMargin,
+  GroupedSelectBox,
+  InputWithCheck,
+  MyTextarea,
+} from './Components';
 
 const axios = window.axios;
 
-function GenreForm(props) {
-  const orderedBooks = props.orderedBooks;
-  const genres = props.genres;
-  if (orderedBooks) {
-    const options = Object.keys(orderedBooks).map((genreId) => {
-      return (
-        <optgroup label={genres[genreId]} key={genreId}>
-          {orderedBooks[genreId].map((book) => {
-            return (
-              <option value={book.id} key={book.id}>
-                {book.title}
-              </option>
-            );
-          })}
-        </optgroup>
-      );
-    });
+// function GenreForm(props) {
+//   const orderedBooks = props.orderedBooks;
+//   const genres = props.genres;
+//   if (orderedBooks) {
+//     const options = Object.keys(orderedBooks).map((genreId) => {
+//       return (
+//         <optgroup label={genres[genreId]} key={genreId}>
+//           {orderedBooks[genreId].map((book) => {
+//             return (
+//               <option value={book.id} key={book.id}>
+//                 {book.title}
+//               </option>
+//             );
+//           })}
+//         </optgroup>
+//       );
+//     });
 
-    return (
-      <select
-        name="book_id"
-        id="select-book"
-        disabled={!props.isRecommended}
-        onChange={(e) => {
-          props.setBookId(e.target.value);
-        }}
-      >
-        {options}
-      </select>
-    );
-  }
-}
-
-function RecommendButton(props) {
-  return (
-    <label htmlFor="recommend" className="mt-5 d-block">
-      <input
-        type="checkbox"
-        name="recommend"
-        id="recommend"
-        checked={props.isRecommended}
-        onChange={props.onChange}
-      />
-      本もおすすめする
-    </label>
-  );
-}
+//     return (
+//       <select
+//         name="book_id"
+//         id="select-book"
+//         disabled={!props.isRecommended}
+//         onChange={(e) => {
+//           props.setBookId(e.target.value);
+//         }}
+//       >
+//         {options}
+//       </select>
+//     );
+//   }
+// }
 
 function RecommendBook(props) {
-  // TODO: 本のお勧めが表示されない
   const orderedBooks = props.orderedBooks;
   const genres = props.genres;
   const isRecommended = props.isRecommended;
+  const onChange = props.onChange;
+  const hasBook = !Array.isArray(orderedBooks);
 
-  if (orderedBooks) {
+  if (hasBook) {
     return (
       <>
-        <RecommendButton isChecked={isRecommended} onChange={props.onChange} />
-        <GenreForm
+        <InputWithCheck
+          name="recommend"
+          type="checkbox"
+          checked={isRecommended}
+          onChange={onChange}
+          content="本もおすすめする"
+        />
+        <GroupedSelectBox
           genres={genres}
           orderedBooks={orderedBooks}
-          isRecommended={isRecommended}
-          setBookId={props.setBookId}
+          disabled={!isRecommended}
+          onChange={(e) => {
+            props.setBookId(e.target.value);
+          }}
         />
       </>
     );
@@ -81,22 +81,12 @@ function RecommendBook(props) {
 function CommentForm(props) {
   return (
     <>
-      <label htmlFor="message">
-        <p className="mt-5">Comment</p>
-        <textarea
-          id="message"
-          name="message"
-          cols="30"
-          rows="10"
-          onChange={props.onChange}
-        />
-      </label>
-      <button
-        className="btn btn-outline-success d-block"
-        onClick={props.onClick}
-      >
-        コメントする
-      </button>
+      <MyTextarea
+        name="message"
+        onChange={props.onChange}
+        content="コメントメッセージ"
+      />
+      <ButtonWithMargin onClick={props.onClick} content="コメントする" />
     </>
   );
 }
@@ -206,13 +196,8 @@ export default function Comment() {
   }
 }
 
-RecommendButton.propTypes = {
-  isRecommended: PropTypes.bool,
-  onChange: PropTypes.func,
-};
-
 RecommendBook.propTypes = {
-  orderedBooks: PropTypes.object,
+  orderedBooks: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   genres: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   isRecommended: PropTypes.bool,
   onChange: PropTypes.func,

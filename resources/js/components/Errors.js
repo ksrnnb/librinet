@@ -5,9 +5,9 @@ export default function Errors(props) {
   if (errors) {
     const errorElement = errors.map((error) => {
       return (
-        <p className="error text-danger" key={error}>
+        <h5 className="error text-danger mb-5" key={error}>
           {error}
-        </p>
+        </h5>
       );
     });
 

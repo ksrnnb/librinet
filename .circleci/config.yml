@@ -93,6 +93,8 @@ jobs:
       # ビルド結果を通知
       - slack/status
 
+  # 以下のupdate-serviceを参照。 aws-cli/configureはバージョン古いので、aws-cli/setupを使用。
+  # https://circleci.com/developer/orbs/orb/circleci/aws-ecs
   update_ecs_service:
     docker:
       - image: 'circleci/python:3.7.1'

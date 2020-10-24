@@ -58,13 +58,13 @@ function Results(props) {
             検索結果
           </h2>
 
-          <UserCard user={user} props={props.props} />
+          <UserCard user={user} props={props.props} useLink={true} />
         </div>
       );
     } else {
       return (
         <div className="mt-3" key={user.id}>
-          <UserCard user={user} />
+          <UserCard user={user} useLink={true} />
         </div>
       );
     }

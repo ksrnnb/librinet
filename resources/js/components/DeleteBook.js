@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Subtitle from './Subtitle';
 import UserCard from './UserCard';
-import SelectBookCard from './SelectBookCard';
-import Functions from './Functions';
+import { BookCard } from './BookCard';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
@@ -10,14 +9,45 @@ import { DataContext, SetStateContext } from './App';
 const axios = window.axios;
 
 function Books(props) {
+  const deleteList = props.deleteList;
+
+  function onClick(e) {
+    // クリックすると、子要素、孫要素がevent.targetに入っているので、目的のdivまで上に遡る
+    function getCard(node) {
+      const parentNode = node.parentNode;
+      if (parentNode.classList.contains('delete-book-card')) {
+        return parentNode;
+      } else {
+        return getCard(parentNode);
+      }
+    }
+
+    const id = Number(getCard(e.target).dataset.id);
+    const hasId = deleteList.includes(id);
+    let newList;
+
+    if (hasId) {
+      newList = deleteList.filter((value) => value !== id);
+    } else {
+      newList = deleteList.slice();
+      newList.push(id);
+    }
+
+    props.setDeleteList(newList);
+  }
+
   const books = props.books.map((book) => {
-    const label = 'book' + book.id;
+    const willDelete = deleteList.includes(book.id);
     return (
-      <label className="d-block" htmlFor={label} key={book.id}>
-        <SelectBookCard book={book}>
-          <input type="checkbox" name={label} id={label} data-id={book.id} />
-        </SelectBookCard>
-      </label>
+      <div
+        className="delete-book-card mb-3"
+        data-id={book.id}
+        data-willdelete={willDelete}
+        key={book.id}
+        onClick={onClick}
+      >
+        <BookCard book={book} />
+      </div>
     );
   });
 
@@ -30,8 +60,12 @@ function DeleteBooks(props) {
   const Bookshelf = Object.keys(orderedBooks).map((genre_id) => {
     return (
       <div key={genre_id}>
-        <h2 className="mt-5">{genres[genre_id]}</h2>
-        <Books books={orderedBooks[genre_id]} />
+        <h4 className="mt-5">{genres[genre_id]}</h4>
+        <Books
+          books={orderedBooks[genre_id]}
+          deleteList={props.deleteList}
+          setDeleteList={props.setDeleteList}
+        />
       </div>
     );
   });
@@ -41,7 +75,10 @@ function DeleteBooks(props) {
 
 function DeleteButton(props) {
   return (
-    <button className="btn btn-outline-danger d-block" onClick={props.onClick}>
+    <button
+      className="btn btn-outline-danger d-block my-5"
+      onClick={props.onClick}
+    >
       削除する
     </button>
   );
@@ -51,55 +88,26 @@ export default function DeleteBook() {
   const props = useContext(PropsContext);
   const params = useContext(DataContext).params;
   const setState = useContext(SetStateContext);
+  const [deleteList, setDeleteList] = useState([]);
 
-  function getIdsAndSubmit() {
-    const inputs = [...document.getElementsByTagName('input')];
-
-    const ids = [];
-    inputs.forEach((input) => {
-      const bookId = input.dataset.id;
-      const willDelete = input.checked;
-
-      if (willDelete) {
-        ids.push(bookId);
-      }
-    });
-    onSubmitDelete(ids);
-  }
-
-  function deleteBooks(ids) {
-    const books = params.user.books;
-    const deletedBooks = Functions.unsetBooks(ids, books);
-    params.user.books = deletedBooks;
-    setState.params(params);
-  }
-
-  function deleteOrderedBooks(ids) {
-    const orderedBooks = params.user.ordered_books;
-    const deletedOrderedBooks = Functions.unsetOrderedBooks(ids, orderedBooks);
-    params.user.ordered_books = deletedOrderedBooks;
-    setState.params(params);
-  }
-
-  function redirectUserProfile(ids) {
-    deleteBooks(ids);
-    deleteOrderedBooks(ids);
+  function redirectUserProfile() {
     const strId = props.match.params.strId;
     const path = '/user/profile/' + strId;
-
+    window.scroll(0, 0);
     props.history.push(path);
   }
 
-  function onSubmitDelete(ids) {
+  function onSubmitDelete() {
     const path = '/api/book';
 
-    if (ids.length) {
+    if (deleteList.length) {
       axios
         .delete(path, {
-          data: { ids: ids },
+          data: { ids: deleteList },
         })
-        .then(() => {
-          redirectUserProfile(ids);
+        .then((response) => {
+          setState.params(response.data);
+          redirectUserProfile();
         })
         .catch((error) => {
           console.log(error);
@@ -113,11 +121,14 @@ export default function DeleteBook() {
     <>
       <Subtitle subtitle="本の削除" />
       <UserCard user={params.user} />
+      <h4 className="text-danger mt-5">削除したい本を選択してください</h4>
       <DeleteBooks
         orderedBooks={params.user.ordered_books}
         genres={params.user.genres}
+        deleteList={deleteList}
+        setDeleteList={setDeleteList}
       />
-      <DeleteButton onClick={getIdsAndSubmit} />
+      <DeleteButton onClick={onSubmitDelete} />
     </>
   );
 }

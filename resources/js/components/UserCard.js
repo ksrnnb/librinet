@@ -26,9 +26,9 @@ export default function UserCard(props) {
     });
   }
 
-  const attr = props.noLink
-    ? { addingClass: 'user-card' }
-    : { onClick: jumpToUserPage, addingClass: 'user-card hover' };
+  const attr = props.useLink
+    ? { onClick: jumpToUserPage, addingClass: 'user-card hover' }
+    : { addingClass: 'user-card' };
 
   return (
     <MyCard
@@ -52,6 +52,6 @@ UserImage.propTypes = {
 UserCard.propTypes = {
   user: PropTypes.object,
   UserImage: PropTypes.string,
-  noLink: PropTypes.bool,
+  useLink: PropTypes.bool,
   children: PropTypes.array,
 };

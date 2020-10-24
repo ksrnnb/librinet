@@ -35,7 +35,7 @@ export default function Followers() {
         {users.map((user) => {
           return (
             <div className="mt-2" key={user.id}>
-              <UserCard user={user} />
+              <UserCard user={user} useLink={true} />
             </div>
           );
         })}

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Book;
 use App\Genre;
+use App\User;
 
 class BookController extends Controller
 {
@@ -34,7 +35,7 @@ class BookController extends Controller
         return response()->json($book);
     }
 
-     /*
+    /**
     *   @param $request->input():
     *       _token    => string,
     *       isbn      => string,
@@ -47,9 +48,8 @@ class BookController extends Controller
     *       new_genre => "input genre name" (the case selecting new genre)
     *       genre_id  => integer (the case selecting conventional genre)
     *
-    *   @return view
+    *   @return array
     */
-
     // TODO: validation Bookcreaterequest?
     public function create(Request $request)
     {
@@ -90,8 +90,11 @@ class BookController extends Controller
     {
         $ids = $request->ids;
 
-        Book::destroy($ids);
+        $user = Auth::user();
+        Book::deleteBooks($ids, $user);
 
-        return response('has deleted', 200);
+        $params = User::getParamsForApp($user->str_id);
+
+        return response()->json($params);
     }
 }

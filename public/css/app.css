@@ -11273,6 +11273,19 @@ input[type=radio] {
   background-color: #ebf5e7;
 }
 
+.delete-book-card:hover {
+  cursor: pointer;
+}
+
+.delete-book-card:hover .book-card {
+  background-color: #FEE2E0 !important;
+}
+
+.delete-book-card[data-willdelete=true] .book-card {
+  border: solid 3px var(--danger);
+  background-color: #FEE2E0 !important;
+}
+
 .user-card {
   background-color: white;
 }

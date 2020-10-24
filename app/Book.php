@@ -93,11 +93,8 @@ class Book extends Model
         return $book;
     }
 
-    public static function deleteBooks($books_ids, $user)
+    public static function deleteBooks($ids, $user)
     {
-        // 選択した本のIDだけ取得
-        $ids = array_map('\App\Book::selectedIds', $books_ids);
-
         $books = Book::with(['post' => function ($query) use ($user) {
             $query->where('user_id', $user->id);
         }])->get();
@@ -220,13 +217,6 @@ class Book extends Model
         $isIsbn = (bool) preg_match('/^9784[0-9]{9}$/', $isbn);
 
         return $isIsbn;
-    }
-
-    public static function selectedIds($books_id)
-    {
-        $delimiter = '-';
-
-        return explode($delimiter, $books_id)[1];
     }
 
     public function registerPost($message = '')

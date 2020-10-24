@@ -12,12 +12,16 @@ class TrustProxies extends Middleware
      *
      * @var array|string|null
      */
-    protected $proxies;
+
+     // ALB経由の場合はipアドレスが動的に変わるのでワイルドカードを指定
+     // https://readouble.com/laravel/7.x/ja/requests.html#configuring-trusted-proxies
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
      *
      * @var int
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    // protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers = Request::HEADER_X_FORWARDED_AWS_ELB;
 }

@@ -110,12 +110,17 @@ function FollowNumber(props) {
 
 function EditBookshelfButton(props) {
   const hasLoaded = 'books' in props;
-
+  console.log(props);
   // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
   if (hasLoaded && props.viewerUser) {
     const canEdit = props.user.id == props.viewerUser.id;
-    const isNotEmpty = props.books.length;
     const strId = props.user.str_id;
+
+    const books = props.books;
+    // 本棚に追加したあとは、配列ではなくてObjectだったので、対応。
+    const isNotEmpty = Array.isArray(books)
+      ? books.length
+      : Object.keys(books).length;
 
     if (canEdit && isNotEmpty) {
       return (
@@ -288,10 +293,12 @@ export default function UserProfile() {
       }
     }
 
+    console.log(dropdownMenu);
+
     return (
       <>
         <Subtitle subtitle="プロフィール" />
-        <UserCard user={showingUser} noLink={true}>
+        <UserCard user={showingUser}>
           <FollowNumber
             follows={showingUser.followings}
             followers={showingUser.followers}

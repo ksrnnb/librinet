@@ -16,3 +16,21 @@
     }
   }
 }
+
+.delete-book-card {
+  &:hover {
+    cursor: pointer;
+
+    .book-card {
+      background-color:#FEE2E0 !important;
+    }
+  }
+
+  // book-cardは要る？
+  &[data-willdelete="true"] {
+    .book-card {
+      border: solid 3px var(--danger);
+      background-color:#FEE2E0 !important;
+    }
+  }
+}

@@ -86257,90 +86257,6 @@ BookCard.propTypes = {
 
 /***/ }),
 
-/***/ "./resources/js/components/BookImage.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/BookImage.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BookImage; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-
-
-function BookImage(props) {
-  var book = props.book;
-  var image;
-
-  if (book.cover) {
-    image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
-      src: book.cover,
-      alt: "book_image"
-    });
-  } else {
-    image = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-      className: "img-fluid",
-      src: "/img/book.svg",
-      alt: "book_image"
-    });
-  }
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-3 book-cover"
-  }, image);
-}
-BookImage.propTypes = {
-  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/BookInfo.js":
-/*!*********************************************!*\
-  !*** ./resources/js/components/BookInfo.js ***!
-  \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BookInfo; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-
- // TODO: SelectBookCard修正したらいらなくなるので、これとBookInfoを削除する。
-
-function BookInfo(props) {
-  var book = props.book;
-  var pub_year = book.pubdate.slice(0, 4) + '年';
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col book-info"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "one-row"
-  }, "\u30BF\u30A4\u30C8\u30EB\uFF1A ", book.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "one-row mt-3"
-  }, "\u8457\u8005\uFF1A", book.author), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "one-row mt-3"
-  }, "\u51FA\u7248\u793E\uFF1A", book.publisher), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "one-row mt-3"
-  }, "\u51FA\u7248\u5E74\uFF1A", pub_year), props.children);
-}
-BookInfo.propTypes = {
-  book: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
-  col: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
-  children: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array
-};
-
-/***/ }),
-
 /***/ "./resources/js/components/BookProfile.js":
 /*!************************************************!*\
   !*** ./resources/js/components/BookProfile.js ***!
@@ -86865,24 +86781,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _UserCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserCard */ "./resources/js/components/UserCard.js");
-/* harmony import */ var _SelectBookCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SelectBookCard */ "./resources/js/components/SelectBookCard.js");
-/* harmony import */ var _Functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Functions */ "./resources/js/components/Functions.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+/* harmony import */ var _BookCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BookCard */ "./resources/js/components/BookCard.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Pages__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pages */ "./resources/js/components/Pages.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -86894,20 +86808,47 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var axios = window.axios;
 
 function Books(props) {
+  var deleteList = props.deleteList;
+
+  function onClick(e) {
+    // クリックすると、子要素、孫要素がevent.targetに入っているので、目的のdivまで上に遡る
+    function getCard(node) {
+      var parentNode = node.parentNode;
+
+      if (parentNode.classList.contains('delete-book-card')) {
+        return parentNode;
+      } else {
+        return getCard(parentNode);
+      }
+    }
+
+    var id = Number(getCard(e.target).dataset.id);
+    var hasId = deleteList.includes(id);
+    var newList;
+
+    if (hasId) {
+      newList = deleteList.filter(function (value) {
+        return value !== id;
+      });
+    } else {
+      newList = deleteList.slice();
+      newList.push(id);
+    }
+
+    props.setDeleteList(newList);
+  }
+
   var books = props.books.map(function (book) {
-    var label = 'book' + book.id;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-      className: "d-block",
-      htmlFor: label,
-      key: book.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SelectBookCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    var willDelete = deleteList.includes(book.id);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "delete-book-card mb-3",
+      "data-id": book.id,
+      "data-willdelete": willDelete,
+      key: book.id,
+      onClick: onClick
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_3__["BookCard"], {
       book: book
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "checkbox",
-      name: label,
-      id: label,
-      "data-id": book.id
-    })));
+    }));
   });
   return books;
 }
@@ -86918,10 +86859,12 @@ function DeleteBooks(props) {
   var Bookshelf = Object.keys(orderedBooks).map(function (genre_id) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: genre_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
       className: "mt-5"
     }, genres[genre_id]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Books, {
-      books: orderedBooks[genre_id]
+      books: orderedBooks[genre_id],
+      deleteList: props.deleteList,
+      setDeleteList: props.setDeleteList
     }));
   });
   return Bookshelf;
@@ -86929,63 +86872,39 @@ function DeleteBooks(props) {
 
 function DeleteButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-outline-danger d-block",
+    className: "btn btn-outline-danger d-block my-5",
     onClick: props.onClick
   }, "\u524A\u9664\u3059\u308B");
 }
 
 function DeleteBook() {
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
-  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_7__["DataContext"]).params;
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_7__["SetStateContext"]);
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Pages__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
+  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]).params;
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["SetStateContext"]);
 
-  function getIdsAndSubmit() {
-    var inputs = _toConsumableArray(document.getElementsByTagName('input'));
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      deleteList = _useState2[0],
+      setDeleteList = _useState2[1];
 
-    var ids = [];
-    inputs.forEach(function (input) {
-      var bookId = input.dataset.id;
-      var willDelete = input.checked;
-
-      if (willDelete) {
-        ids.push(bookId);
-      }
-    });
-    onSubmitDelete(ids);
-  }
-
-  function deleteBooks(ids) {
-    var books = params.user.books;
-    var deletedBooks = _Functions__WEBPACK_IMPORTED_MODULE_4__["default"].unsetBooks(ids, books);
-    params.user.books = deletedBooks;
-    setState.params(params);
-  }
-
-  function deleteOrderedBooks(ids) {
-    var orderedBooks = params.user.ordered_books;
-    var deletedOrderedBooks = _Functions__WEBPACK_IMPORTED_MODULE_4__["default"].unsetOrderedBooks(ids, orderedBooks);
-    params.user.ordered_books = deletedOrderedBooks;
-    setState.params(params);
-  }
-
-  function redirectUserProfile(ids) {
-    deleteBooks(ids);
-    deleteOrderedBooks(ids);
+  function redirectUserProfile() {
     var strId = props.match.params.strId;
     var path = '/user/profile/' + strId;
+    window.scroll(0, 0);
     props.history.push(path);
   }
 
-  function onSubmitDelete(ids) {
+  function onSubmitDelete() {
     var path = '/api/book';
 
-    if (ids.length) {
+    if (deleteList.length) {
       axios["delete"](path, {
         data: {
-          ids: ids
+          ids: deleteList
         }
-      }).then(function () {
-        redirectUserProfile(ids);
+      }).then(function (response) {
+        setState.params(response.data);
+        redirectUserProfile();
       })["catch"](function (error) {
         console.log(error);
       });
@@ -86998,15 +86917,19 @@ function DeleteBook() {
     subtitle: "\u672C\u306E\u524A\u9664"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
     user: params.user
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteBooks, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "text-danger mt-5"
+  }, "\u524A\u9664\u3057\u305F\u3044\u672C\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteBooks, {
     orderedBooks: params.user.ordered_books,
-    genres: params.user.genres
+    genres: params.user.genres,
+    deleteList: deleteList,
+    setDeleteList: setDeleteList
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
-    onClick: getIdsAndSubmit
+    onClick: onSubmitDelete
   }));
 }
 DeleteButton.propTypes = {
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
 };
 
 /***/ }),
@@ -87094,8 +87017,7 @@ function EditGenre() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
     subtitle: "\u30B8\u30E3\u30F3\u30EB\u306E\u7DE8\u96C6"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    user: params.user,
-    noLink: true
+    user: params.user
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bookshelf__WEBPACK_IMPORTED_MODULE_3__["default"], {
     user: params.user,
     orderedBooks: params.user.ordered_books,
@@ -87646,108 +87568,14 @@ function Followers() {
         className: "mt-2",
         key: user.id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        user: user
+        user: user,
+        useLink: true
       }));
     }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
 }
-
-/***/ }),
-
-/***/ "./resources/js/components/Functions.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/Functions.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Functions; });
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Functions = /*#__PURE__*/function () {
-  function Functions() {
-    _classCallCheck(this, Functions);
-  }
-
-  _createClass(Functions, null, [{
-    key: "unsetBooks",
-
-    /*
-     *   @param ids [bookId, bookId, ...]
-     *            will delete ids
-     *
-     *   @param books [book, book, ...]
-     *           before delete
-     *
-     *   @return books [book, book, ...]
-     *           deleted books
-     */
-    value: function unsetBooks(ids, books) {
-      ids.forEach(function (id) {
-        if (Array.isArray(books)) {
-          var index = books.findIndex(function (book) {
-            return book.id == id;
-          }); // みつからない場合の戻り値は-1
-
-          var isFound = index !== -1;
-
-          if (isFound) {
-            books.splice(index, 1);
-          } // 1冊の場合、booksはobject
-
-        } else {
-          var book = books;
-
-          if (book.id == id) {
-            return [];
-          }
-        }
-      });
-      return books;
-    }
-    /*
-     *   @param ids [id, id, ...]
-     *   @param orderedBooks {genreId: [book ,book, ....], genreId: [...]}
-     *
-     *   @return newGenreBooks (after deleted)
-     */
-
-  }, {
-    key: "unsetOrderedBooks",
-    value: function unsetOrderedBooks(ids, orderedBooks) {
-      var _this = this;
-
-      var newOrderedBooks = new Object();
-      Object.keys(orderedBooks).forEach(function (genreId) {
-        var books = orderedBooks[genreId];
-        books = _this.unsetBooks(ids, books);
-
-        if (books.length) {
-          newOrderedBooks[genreId] = books;
-        }
-      }); // もし空のオブジェクトなら、空の配列を返す。
-      // Laravelから送られるとき、データがない場合は空の配列なので合わせる。
-
-      if (Object.keys(newOrderedBooks).length === 0) {
-        return [];
-      }
-
-      return newOrderedBooks;
-    }
-  }]);
-
-  return Functions;
-}();
-
-
 
 /***/ }),
 
@@ -89369,47 +89197,6 @@ SearchedBook.propTypes = {
 
 /***/ }),
 
-/***/ "./resources/js/components/SelectBookCard.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/SelectBookCard.js ***!
-  \***************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SelectBookCard; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _BookImage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BookImage */ "./resources/js/components/BookImage.js");
-/* harmony import */ var _BookInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BookInfo */ "./resources/js/components/BookInfo.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-
-function SelectBookCard(props) {
-  var book = props.book;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row select-book-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-1"
-  }, props.children), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookImage__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    col: "col-3",
-    book: book
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BookInfo__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    col: "col-8",
-    book: book
-  }));
-}
-SelectBookCard.propTypes = {
-  book: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].object,
-  children: prop_types__WEBPACK_IMPORTED_MODULE_3__["PropTypes"].element
-};
-
-/***/ }),
-
 /***/ "./resources/js/components/Signup.js":
 /*!*******************************************!*\
   !*** ./resources/js/components/Signup.js ***!
@@ -89823,14 +89610,16 @@ function Results(props) {
         key: "results"
       }, "\u691C\u7D22\u7D50\u679C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
         user: user,
-        props: props.props
+        props: props.props,
+        useLink: true
       }));
     } else {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "mt-3",
         key: user.id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        user: user
+        user: user,
+        useLink: true
       }));
     }
   });
@@ -89964,11 +89753,11 @@ function UserCard(props) {
     });
   }
 
-  var attr = props.noLink ? {
-    addingClass: 'user-card'
-  } : {
+  var attr = props.useLink ? {
     onClick: jumpToUserPage,
     addingClass: 'user-card hover'
+  } : {
+    addingClass: 'user-card'
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MyCard__WEBPACK_IMPORTED_MODULE_3__["MyCard"], _extends({
     image: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserImage, {
@@ -89987,7 +89776,7 @@ UserImage.propTypes = {
 UserCard.propTypes = {
   user: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].object,
   UserImage: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].string,
-  noLink: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
+  useLink: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
   children: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].array
 };
 
@@ -90386,12 +90175,15 @@ function FollowNumber(props) {
 }
 
 function EditBookshelfButton(props) {
-  var hasLoaded = ('books' in props); // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
+  var hasLoaded = ('books' in props);
+  console.log(props); // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
 
   if (hasLoaded && props.viewerUser) {
     var canEdit = props.user.id == props.viewerUser.id;
-    var isNotEmpty = props.books.length;
     var strId = props.user.str_id;
+    var books = props.books; // 本棚に追加したあとは、配列ではなくてObjectだったので、対応。
+
+    var isNotEmpty = Array.isArray(books) ? books.length : Object.keys(books).length;
 
     if (canEdit && isNotEmpty) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -90546,11 +90338,11 @@ function UserProfile() {
       }
     }
 
+    console.log(dropdownMenu);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
       subtitle: "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      user: showingUser,
-      noLink: true
+      user: showingUser
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(FollowNumber, {
       follows: showingUser.followings,
       followers: showingUser.followers,

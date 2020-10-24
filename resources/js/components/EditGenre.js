@@ -56,7 +56,7 @@ export default function EditGenre() {
   return (
     <>
       <Subtitle subtitle="ジャンルの編集" />
-      <UserCard user={params.user} noLink={true} />
+      <UserCard user={params.user} />
       <Bookshelf
         user={params.user}
         orderedBooks={params.user.ordered_books}

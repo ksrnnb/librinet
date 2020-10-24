@@ -10934,6 +10934,10 @@ body {
   font-size: 1rem;
 }
 
+.container {
+  max-width: 95%;
+}
+
 #sub-column {
   border-right: solid 1px #cccccc;
 }
@@ -10969,8 +10973,38 @@ body {
   background-color: white;
 }
 
-.container {
-  max-width: 95%;
+label {
+  cursor: pointer;
+  width: 100%;
+}
+
+input,
+textarea,
+select {
+  font-size: 1.2rem;
+  padding: 5px;
+}
+
+input[type=checkbox] {
+  cursor: pointer;
+  transform: scale(1.3);
+}
+
+input[type=radio] {
+  cursor: pointer;
+  transform: scale(1.3);
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  max-width: 400px;
+  height: 180px;
+}
+
+select {
+  width: 100%;
+  max-width: 400px;
 }
 
 .navbar-brand {
@@ -11019,10 +11053,6 @@ a:hover {
   #sub-column {
     display: none;
   }
-}
-
-input {
-  font-size: 1.2rem;
 }
 
 .one-row,
@@ -11250,16 +11280,6 @@ input {
           user-select: none;
 }
 
-label,
-input[type=checkbox] {
-  cursor: pointer;
-}
-
-label,
-input[type=radio] {
-  cursor: pointer;
-}
-
 .table {
   background-color: white;
 }
@@ -11284,6 +11304,11 @@ input[type=radio] {
 .delete-book-card[data-willdelete=true] .book-card {
   border: solid 3px var(--danger);
   background-color: #FEE2E0 !important;
+}
+
+#new-genre {
+  width: 100%;
+  max-width: 400px;
 }
 
 .user-card {

@@ -10,6 +10,7 @@ const axios = window.axios;
 export const DataContext = createContext();
 export const SetStateContext = createContext();
 
+// TODO: フッターが欲しい
 function App() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [isLogin, setIsLogin] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { DataContext, SetStateContext } from './App';
-import { NoImageCard, Caption } from './Components';
+import { NoImageCard } from './Components';
 import { PropsContext } from './Pages';
 import Subtitle from './Subtitle';
 
@@ -44,7 +44,6 @@ export default function logout() {
           ログアウト
         </button>
       </NoImageCard>
-
     </>
   );
 }

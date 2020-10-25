@@ -15,7 +15,7 @@ class TrustProxies extends Middleware
 
      // ALB経由の場合はipアドレスが動的に変わるのでワイルドカードを指定
      // https://readouble.com/laravel/7.x/ja/requests.html#configuring-trusted-proxies
-    protected $proxies = '*';
+    protected $proxies = '**';
 
     /**
      * The headers that should be used to detect proxies.

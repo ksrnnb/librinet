@@ -86,7 +86,11 @@ function CommentForm(props) {
         onChange={props.onChange}
         content="コメントメッセージ"
       />
-      <MyButton onClick={props.onClick} content="コメントする" withMargin={true}/>
+      <MyButton
+        onClick={props.onClick}
+        content="コメントする"
+        withMargin={true}
+      />
     </>
   );
 }

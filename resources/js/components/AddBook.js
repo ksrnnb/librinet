@@ -178,7 +178,11 @@ export default function AddBook() {
         />
         <Caption content="本の情報" />
         <BookCard book={book} />
-        <MyButton onClick={submitBook} content="本棚に追加する" withMargin={true}/>
+        <MyButton
+          onClick={submitBook}
+          content="本棚に追加する"
+          withMargin={true}
+        />
       </>
     );
   } else {

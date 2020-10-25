@@ -63,16 +63,11 @@ export default function SearchedBook(props) {
     }
   }
 
-  const isSearched = pages_props.location.pathname === '/book';
-  const marginTop = isSearched ? 'mt-5' : '';
-
   return (
-    <div className={marginTop}>
-      <BookCard book={book}>
-        <PostButton isLogin={data.isLogin} onClick={linkToPost} />
-        <AddBookButton onClick={linkToAddBookshelf} />
-      </BookCard>
-    </div>
+    <BookCard book={book}>
+      <PostButton isLogin={data.isLogin} onClick={linkToPost} />
+      <AddBookButton onClick={linkToAddBookshelf} />
+    </BookCard>
   );
 }
 

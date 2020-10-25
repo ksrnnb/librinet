@@ -108,6 +108,9 @@ jobs:
           cluster-name: '${MY_APP_PREFIX}-cluster'
           container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=latest'
 
+      # 結果を通知
+      - slack/status
+
 workflows:
   build_and_push_image:
     jobs:

@@ -3,6 +3,7 @@ import Subtitle from './Subtitle';
 import UserCard from './UserCard';
 import { DataContext } from './App';
 import { PropTypes } from 'prop-types';
+import { SearchForm, Caption, NoImageCard } from './Components';
 
 const axios = window.axios;
 
@@ -22,7 +23,7 @@ function UsersExample(props) {
 
   return (
     <>
-      <h4 className="mt-5">ユーザー例</h4>
+      <Caption content="ユーザー例" />
       <table className="table shadow">
         <thead>
           <tr>
@@ -54,10 +55,7 @@ function Results(props) {
     if (i === 0) {
       return (
         <div className="results mt-3" key={user.id}>
-          <h2 className="mt-5" key="results">
-            検索結果
-          </h2>
-
+          <Caption content="検索結果" />
           <UserCard user={user} props={props.props} useLink={true} />
         </div>
       );
@@ -110,23 +108,17 @@ export default function User() {
   return (
     <>
       <Subtitle subtitle="ユーザーの検索" />
-      <label htmlFor="user">
-        <h4>ユーザーID または ユーザー名を入力してください</h4>
-        <Errors errors={errors} />
-        <input
-          className="mr-3 py-0"
-          type="text"
-          id="user"
+      <Errors errors={errors} />
+      <Caption isTop={true} content="検索フォーム" />
+      <NoImageCard>
+        <SearchForm
           name="user"
           onChange={(e) => setInput(e.target.value)}
-        />
-        <input
-          type="button"
-          className="btn btn-outline-success"
-          value="検索"
           onClick={onClickSearch}
+          content="ユーザーID または ユーザー名を入力してください"
+          maxLength={16}
         />
-      </label>
+      </NoImageCard>
       <Results users={users} />
       <UsersExample examples={examples} />
     </>

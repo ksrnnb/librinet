@@ -4,34 +4,9 @@ import Subtitle from './Subtitle';
 import React, { useContext, useEffect, useState } from 'react';
 import Errors from './Errors';
 import { PropTypes } from 'prop-types';
+import { TextInput, MyButton, NoImageCard } from './Components';
 
 const axios = window.axios;
-
-function Label(props) {
-  const label = props.label;
-  const name = props.name;
-  const value = props.value;
-  const onChange = props.onChange;
-
-  const isPassword = name === 'password' || name === 'confirm-password';
-  const attr = isPassword
-    ? { type: 'password', autoComplete: 'new-password' }
-    : { autoComplete: 'on' };
-
-  return (
-    <label htmlFor={name} className="d-block">
-      {label}
-      <input
-        {...attr}
-        name={name}
-        id={name}
-        className="d-block"
-        value={value}
-        onChange={onChange}
-      />
-    </label>
-  );
-}
 
 export default function Signup() {
   const [userName, setUserName] = useState('');
@@ -129,61 +104,58 @@ export default function Signup() {
   return (
     <>
       <Subtitle subtitle="ユーザーの登録" />
-      <div className="d-block row">
-        <div className="col-12">
-          <Errors errors={errors} />
-          <form>
-            <Label
-              label="ユーザー名"
-              name="user-name"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+      <Errors errors={errors} />
+      <NoImageCard margin="mb-5">
+        <form>
+          <TextInput
+            name="user-name"
+            content="ユーザー名"
+            placeholder="~16文字"
+            maxLength={16}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <TextInput
+            name="user-id"
+            content="ユーザーID"
+            placeholder="英数字 4~16文字"
+            maxLength={16}
+            onChange={(e) => setStrId(e.target.value)}
+          />
+          <TextInput
+            name="email"
+            content="メールアドレス"
+            placeholder="有効なメールアドレス"
+            autoComplete="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextInput
+            type="password"
+            name="password"
+            content="パスワード"
+            placeholder="英数字記号 6文字以上"
+            autoComplete="new-password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextInput
+            type="password"
+            name="confirm-password"
+            content="パスワード（再確認）"
+            placeholder="英数字記号 6文字以上"
+            autoComplete="new-password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <div className="mt-5">
+            <MyButton
+              id="normal-login"
+              onClick={onClickSignup}
+              content="ユーザー登録"
             />
-            <Label
-              label="ユーザーID (英数字4文字以上)"
-              name="user-id"
-              value={strId}
-              onChange={(e) => setStrId(e.target.value)}
-            />
-            <Label
-              label="メールアドレス"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Label
-              label="パスワード（英数字6文字以上）"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Label
-              label="パスワード（再確認）"
-              name="confirm-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </form>
-          <button
-            type="button"
-            id="normal-login"
-            className="btn btn-outline-success d-block"
-            onClick={onClickSignup}
-          >
-            ユーザー登録
-          </button>
-        </div>
-      </div>
+          </div>
+        </form>
+      </NoImageCard>
     </>
   );
 }
-
-Label.propTypes = {
-  label: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
 
 Errors.propTypes = {
   errors: PropTypes.array,

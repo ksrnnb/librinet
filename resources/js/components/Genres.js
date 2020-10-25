@@ -1,6 +1,12 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Caption, TextInput, InputWithCheck, SelectBox, NoImageCard } from './Components';
+import {
+  Caption,
+  TextInput,
+  InputWithCheck,
+  SelectBox,
+  NoImageCard,
+} from './Components';
 
 export default function Genres(props) {
   const canSelectGenre = props.isChecked;
@@ -60,7 +66,7 @@ function NewGenre(props) {
         name="new-genre"
         attr={{
           maxLength: 16,
-          placeholder: "16文字以内で入力してください",
+          placeholder: '16文字以内で入力してください',
           disabled: disabled,
           onChange: props.onChange,
           onClick: props.onClickNewGenre,

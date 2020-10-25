@@ -69,31 +69,33 @@ export default function Login() {
           <li>ユーザー名、ユーザーIDの編集</li>
           <li>ユーザーの削除</li>
         </ul>
-        <MyButton
-          onClick={guestLogin}
-          content="ゲストユーザーでログイン"
-        />
+        <MyButton onClick={guestLogin} content="ゲストユーザーでログイン" />
       </NoImageCard>
 
-      <NoImageCard margin="mt-5">
-        <Caption isTop={true} content="ユーザー情報の入力（通常のユーザーでログイン）" />
-        <TextInput
-          name="user-id"
-          content="ユーザーID"
-          onChange={(e) => setStrId(e.target.value)}
+      <NoImageCard margin="my-5">
+        <Caption
+          isTop={true}
+          content="ユーザー情報の入力（通常のユーザーでログイン）"
         />
-        <TextInput
-          type="password"
-          name="password"
-          content="パスワード"
-          autoComplete="off"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <MyButton
-          id="normal-login"
-          onClick={normalUserLogin}
-          content="通常のユーザーでログイン"
-        />
+        <form>
+          <TextInput
+            name="user-id"
+            content="ユーザーID"
+            onChange={(e) => setStrId(e.target.value)}
+          />
+          <TextInput
+            type="password"
+            name="password"
+            content="パスワード"
+            autoComplete="off"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <MyButton
+            id="normal-login"
+            onClick={normalUserLogin}
+            content="通常のユーザーでログイン"
+          />
+        </form>
       </NoImageCard>
     </>
   );

@@ -53,7 +53,7 @@ function Books(props) {
     const books = orderedBooks[genreId];
     const willEdit = props.willEdit;
     const isFirstLoop = iterator.indexOf(genreId) === 0;
-    const margin = isFirstLoop ? "" : "mt-3";
+    const margin = isFirstLoop ? '' : 'mt-3';
 
     if (willEdit) {
       genre = (
@@ -108,7 +108,6 @@ export default function Bookshelf(props) {
           willEdit={willEdit}
           dropdownMenu={dropdownMenu}
         />
-
       </NoImageCard>
     </>
   );

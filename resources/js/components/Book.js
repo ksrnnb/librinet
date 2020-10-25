@@ -2,18 +2,9 @@ import React, { useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
 import SearchedBook from './SearchedBook';
-import PropTypes from 'prop-types';
+import { SearchForm, Caption, NoImageCard } from './Components';
 
 const axios = window.axios;
-
-function InputPrompt() {
-  return (
-    <>
-      <h4 className="mb-0">13桁のISBNを入力してください</h4>
-      <p>（※国内の本に限ります。9784...）</p>
-    </>
-  );
-}
 
 function ShowExamples() {
   const exampleBooks = new Map([
@@ -51,33 +42,6 @@ function Example() {
         </tbody>
       </table>
     </div>
-  );
-}
-
-function UserInput(props) {
-  // 微妙に上下にpadding/marginがあるので省く
-  return (
-    <input
-      className="mr-3 py-0"
-      type="text"
-      id="isbn"
-      name="isbn"
-      maxLength={13}
-      onChange={props.onChange}
-      required
-    />
-  );
-}
-
-function Button(props) {
-  return (
-    <input
-      type="button"
-      className="btn btn-outline-success"
-      onClick={props.onClick}
-      id="search"
-      value="検索"
-    />
   );
 }
 
@@ -138,22 +102,24 @@ export default function Book() {
     <div>
       <Subtitle subtitle="本の検索" />
       <Errors errors={errors} />
-      <label htmlFor="isbn">
-        <InputPrompt />
-        <UserInput onChange={(e) => setInput(e.target.value)} />
-        <Button onClick={sendPost} />
-      </label>
-      {book && <SearchedBook book={book} />}
+      <Caption isTop={true} content="検索フォーム" />
+      <NoImageCard>
+        <SearchForm
+          name="isbn"
+          content="13桁のISBNを入力してください"
+          subMessage="（※国内の本に限ります。9784...）"
+          maxLength={13}
+          onChange={(e) => setInput(e.target.value)}
+          onClick={sendPost}
+        />
+      </NoImageCard>
+      {book && (
+        <>
+          <Caption content="検索結果" />
+          <SearchedBook book={book} />
+        </>
+      )}
       <Example />
     </div>
   );
 }
-
-// === validation ===
-UserInput.propTypes = {
-  onChange: PropTypes.func,
-};
-
-Button.propTypes = {
-  onClick: PropTypes.func,
-};

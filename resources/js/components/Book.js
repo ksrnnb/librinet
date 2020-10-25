@@ -137,9 +137,9 @@ export default function Book() {
   return (
     <div>
       <Subtitle subtitle="本の検索" />
+      <Errors errors={errors} />
       <label htmlFor="isbn">
         <InputPrompt />
-        <Errors errors={errors} />
         <UserInput onChange={(e) => setInput(e.target.value)} />
         <Button onClick={sendPost} />
       </label>

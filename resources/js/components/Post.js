@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
 import {
-  ButtonWithMargin,
+  MyButton,
   Caption,
   InputWithCheck,
   MyTextarea,
+  NoImageCard,
 } from './Components';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
@@ -34,16 +35,18 @@ function AddToBookshelf(props) {
   return (
     <div className="mb-5">
       <Caption isTop={true} content="本棚への追加" />
-      <InputWithCheck
-        type="checkbox"
-        name="add-book"
-        value={value}
-        checked={isChecked}
-        disabled={isDisabled}
-        onChange={props.onChange}
-        content="本棚に追加して投稿する"
-      />
-      {message}
+      <NoImageCard>
+        <InputWithCheck
+          type="checkbox"
+          name="add-book"
+          value={value}
+          checked={isChecked}
+          disabled={isDisabled}
+          onChange={props.onChange}
+          content="本棚に追加して投稿する"
+        />
+        {message}
+      </NoImageCard>
     </div>
   );
 }
@@ -56,7 +59,7 @@ function Post(props) {
         content="投稿メッセージ"
         onChange={props.onChange}
       />
-      <ButtonWithMargin onClick={props.onSubmit} content="投稿する" />
+      <MyButton onClick={props.onSubmit} content="投稿する" withMargin={true} />
     </>
   );
 }

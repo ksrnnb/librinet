@@ -22,7 +22,7 @@ abstract class DuskTestCase extends BaseTestCase
                 ->waitFor('#user-id')
                 ->type('user-id', $str_id)
                 ->type('password', $password)
-                ->press('Login')
+                ->press('#normal-login')
                 ->waitForLocation('/home')
                 ->waitFor('#subtitle');
 

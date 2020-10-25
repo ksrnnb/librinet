@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { DataContext, SetStateContext } from './App';
+import { NoImageCard, Caption } from './Components';
 import { PropsContext } from './Pages';
 import Subtitle from './Subtitle';
 
@@ -36,10 +37,14 @@ export default function logout() {
 
   return (
     <>
-      <Subtitle subtitle="Logout" />
-      <button className="btn btn-outline-danger" onClick={onClickLogout}>
-        Log out
-      </button>
+      <Subtitle subtitle="ログアウト" />
+      <NoImageCard>
+        <p>ログアウトしますか？</p>
+        <button className="btn btn-outline-danger" onClick={onClickLogout}>
+          ログアウト
+        </button>
+      </NoImageCard>
+
     </>
   );
 }

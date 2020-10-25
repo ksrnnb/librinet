@@ -306,12 +306,14 @@ export default function UserProfile() {
           />
           {buttons}
         </UserCard>
-        <Bookshelf
-          user={showingUser}
-          genres={showingUser.genres}
-          orderedBooks={showingUser.ordered_books}
-          dropdownMenu={dropdownMenu}
-        />
+        <div className="mb-5">
+          <Bookshelf
+            user={showingUser}
+            genres={showingUser.genres}
+            orderedBooks={showingUser.ordered_books}
+            dropdownMenu={dropdownMenu}
+          />
+        </div>
       </>
     );
   } else {

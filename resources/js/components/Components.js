@@ -46,13 +46,15 @@ export function MyTextarea(props) {
   return (
     <label htmlFor={name} className="d-block">
       <Caption content={content} />
-      <textarea
-        name={name}
-        id={name}
-        maxLength={100}
-        placeholder="100文字以内で入力してください"
-        onChange={onChange}
-      />
+      <NoImageCard>
+        <textarea
+          name={name}
+          id={name}
+          maxLength={100}
+          placeholder="100文字以内で入力してください"
+          onChange={onChange}
+        />
+      </NoImageCard>
     </label>
   );
 }
@@ -79,6 +81,7 @@ export function SelectBox(props) {
     <select
       name={name}
       id={name}
+      className="w-adjust"
       disabled={disabled}
       value={value}
       onClick={onClick}
@@ -130,13 +133,14 @@ GroupedSelectBox.propTypes = {
   onChange: PropTypes.func,
 };
 
-export function ButtonWithMargin(props) {
+export function MyButton(props) {
   const { id, onClick, content } = props;
   const type = props.type || 'success'; // デフォルトはsuccess
+  const margin = props.withMargin ? "my-5" : "";
 
   return (
     <button
-      className={`btn btn-outline-${type} d-block my-5`}
+      className={`btn btn-outline-${type} d-block ${margin}`}
       id={id}
       onClick={onClick}
     >
@@ -145,9 +149,77 @@ export function ButtonWithMargin(props) {
   );
 }
 
-ButtonWithMargin.propTypes = {
+MyButton.propTypes = {
   id: PropTypes.string,
   content: PropTypes.string,
   onClick: PropTypes.func,
   type: PropTypes.string,
 };
+
+export function TextInput(props) {
+  const { name, autoComplete, onChange, content, attr } = props;
+  const type = props.type || "text";
+  return (
+    <label htmlFor={name} className="d-block">
+      <h5>{content}</h5>
+      <input
+        type={type}
+        name={name}
+        id={name}
+        autoComplete={autoComplete}
+        className="d-block w-adjust"
+        onChange={onChange}
+        {...attr}
+      />
+    </label>
+  );
+}
+
+TextInput.propTypes = {
+  name: PropTypes.string,
+  autoComplete: PropTypes.string,
+  onChange: PropTypes.func,
+  content: PropTypes.string,
+  attr: PropTypes.object
+};
+
+export function NoImageCard(props) {
+  const { bgColor, margin } = props;
+
+  return (
+    <div className={`shadow p-4 my-card ${bgColor} ${margin}`}>
+      {props.children}
+    </div>
+  );
+}
+
+NoImageCard.propTypes = {
+  bgColor: PropTypes.string,
+  margin: PropTypes.string,
+}
+
+// export function SearchForm(props) {
+
+//   return (
+//     <label htmlFor={name}>
+//       <h5>{content}</h5>
+//       <p>{subMessage}</p>
+//       <input
+//         className="mr-3 py-0"
+//         type="text"
+//         id={name}
+//         name={name}
+//         maxLength={13}
+//         onChange={props.onChange}
+//       />
+//       <button
+//         type="button"
+//         id="search"
+//         className="btn btn-outline-success"
+//         onClick={props.onClick}
+//       >
+//         検索
+//       </button>
+//     </label >
+//   );
+// }

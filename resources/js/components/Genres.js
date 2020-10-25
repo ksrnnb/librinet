@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Caption, InputWithCheck, SelectBox } from './Components';
+import { Caption, TextInput, InputWithCheck, SelectBox, NoImageCard } from './Components';
 
 export default function Genres(props) {
   const canSelectGenre = props.isChecked;
@@ -9,23 +9,26 @@ export default function Genres(props) {
 
   const element = (
     <div className={divClass}>
-      <NewGenre
-        canSelectGenre={canSelectGenre}
-        isNewGenre={props.isNewGenre}
-        newGenre={newGenre}
-        onClickNewGenre={props.onClickNewGenre}
-        onChange={props.onChangeNewGenre}
-        onChangeRadioButton={props.onChangeRadioButton}
-      />
-      <ConventionalGenre
-        canSelectGenre={canSelectGenre}
-        genres={props.genres}
-        convGenre={props.convGenre}
-        isNewGenre={props.isNewGenre}
-        onChangeConvGenre={props.onChangeConvGenre}
-        onClickConvGenre={props.onClickConvGenre}
-        onChangeRadioButton={props.onChangeRadioButton}
-      />
+      <Caption isTop={true} content="ジャンルの選択" />
+      <NoImageCard>
+        <NewGenre
+          canSelectGenre={canSelectGenre}
+          isNewGenre={props.isNewGenre}
+          newGenre={newGenre}
+          onClickNewGenre={props.onClickNewGenre}
+          onChange={props.onChangeNewGenre}
+          onChangeRadioButton={props.onChangeRadioButton}
+        />
+        <ConventionalGenre
+          canSelectGenre={canSelectGenre}
+          genres={props.genres}
+          convGenre={props.convGenre}
+          isNewGenre={props.isNewGenre}
+          onChangeConvGenre={props.onChangeConvGenre}
+          onClickConvGenre={props.onClickConvGenre}
+          onChangeRadioButton={props.onChangeRadioButton}
+        />
+      </NoImageCard>
     </div>
   );
 
@@ -38,14 +41,12 @@ export default function Genres(props) {
 
 function NewGenre(props) {
   const canSelectGenre = props.canSelectGenre;
-  const newGenre = props.newGenre;
   let disabled = !canSelectGenre;
 
   const isChecked = props.isNewGenre;
 
   return (
     <>
-      <Caption isTop={true} content="ジャンルの選択" />
       <InputWithCheck
         type="radio"
         name="new"
@@ -55,19 +56,16 @@ function NewGenre(props) {
         onChange={props.onChangeRadioButton}
         content="新しいジャンルを入力"
       />
-      <label className="d-block" htmlFor="new-genre">
-        <input
-          type="text"
-          name="new-genre"
-          id="new-genre"
-          maxLength={16}
-          placeholder="16文字以内で入力してください"
-          value={newGenre}
-          disabled={disabled}
-          onClick={props.onClickNewGenre}
-          onChange={props.onChange}
-        />
-      </label>
+      <TextInput
+        name="new-genre"
+        attr={{
+          maxLength: 16,
+          placeholder: "16文字以内で入力してください",
+          disabled: disabled,
+          onChange: props.onChange,
+          onClick: props.onClickNewGenre,
+        }}
+      />
     </>
   );
 }

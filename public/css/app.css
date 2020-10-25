@@ -10995,16 +10995,15 @@ input[type=radio] {
   transform: scale(1.3);
 }
 
+.w-adjust,
 textarea {
-  resize: none;
   width: 100%;
   max-width: 400px;
-  height: 180px;
 }
 
-select {
-  width: 100%;
-  max-width: 400px;
+textarea {
+  resize: none;
+  height: 180px;
 }
 
 .navbar-brand {
@@ -11063,6 +11062,10 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+.light-orange {
+  background-color: #f3d8c6;
+}
+
 .hover:hover {
   cursor: pointer;
 }
@@ -11101,10 +11104,14 @@ a:hover {
 }
 
 .dropdown .dropdown-item:active {
-  background-color: var(--light);
+  background-color: #eef5eb;
   color: black;
   border: none;
   outline: none;
+}
+
+.dropdown .dropdown-item:hover {
+  background-color: #eef5eb;
 }
 
 .no-button {
@@ -11290,7 +11297,7 @@ a:hover {
 }
 
 .table tbody tr:hover {
-  background-color: #ebf5e7;
+  background-color: #eef5eb;
 }
 
 .delete-book-card:hover {
@@ -11304,11 +11311,6 @@ a:hover {
 .delete-book-card[data-willdelete=true] .book-card {
   border: solid 3px var(--danger);
   background-color: #FEE2E0 !important;
-}
-
-#new-genre {
-  width: 100%;
-  max-width: 400px;
 }
 
 .user-card {

@@ -3,6 +3,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+ 
+.light-orange {
+  background-color: #f3d8c6;
+}
 
 .hover {
   &:hover {
@@ -51,14 +55,14 @@
   .dropdown-item {
     padding: 10px 10px;
     &:active {
-      background-color: var(--light);
+      background-color: $hover_color;
       color: black;
       border: none;
       outline: none;
     }
-    // &:hover {
-    //   background-color: $hover_color;
-    // }
+    &:hover {
+      background-color: $hover_color;
+    }
   }
 }
 

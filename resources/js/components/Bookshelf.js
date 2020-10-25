@@ -3,6 +3,7 @@ import BooksElement from './BooksElement';
 import { GearIcon } from './Icon';
 import { PropTypes } from 'prop-types';
 import { PropsContext } from './Pages';
+import { NoImageCard, Caption } from './Components';
 
 function Message(props) {
   const pages_props = useContext(PropsContext);
@@ -52,11 +53,12 @@ function Books(props) {
     const books = orderedBooks[genreId];
     const willEdit = props.willEdit;
     const isFirstLoop = iterator.indexOf(genreId) === 0;
+    const margin = isFirstLoop ? "" : "mt-3";
 
     if (willEdit) {
       genre = (
         <input
-          className="my-3 genre"
+          className={`${margin} mb-3 genre`}
           name="genre"
           defaultValue={genres[genreId]}
           data-id={genreId}
@@ -65,10 +67,10 @@ function Books(props) {
     } else {
       genre = (
         <div className="genre-name-wrapper">
-          <h4 className="mt-3 genre-name" data-id={genreId}>
+          <h4 className={`${margin} genre-name`} data-id={genreId}>
             {genres[genreId]}
           </h4>
-          <h4 className="mt-3 gear-icon-wrapper">
+          <h4 className={`${margin} gear-icon-wrapper`}>
             {isFirstLoop && dropdownMenu && (
               <GearIcon dropdownMenu={dropdownMenu} />
             )}
@@ -96,16 +98,18 @@ export default function Bookshelf(props) {
 
   return (
     <>
-      <h3 className="mt-5 mb-0" key="bookshelf">
-        本棚
-      </h3>
-      <NoBook user={props.user} orderedBooks={orderedBooks} />
-      <Books
-        genres={genres}
-        orderedBooks={orderedBooks}
-        willEdit={willEdit}
-        dropdownMenu={dropdownMenu}
-      />
+      <Caption content="本棚" />
+
+      <NoImageCard>
+        <NoBook user={props.user} orderedBooks={orderedBooks} />
+        <Books
+          genres={genres}
+          orderedBooks={orderedBooks}
+          willEdit={willEdit}
+          dropdownMenu={dropdownMenu}
+        />
+
+      </NoImageCard>
     </>
   );
 }

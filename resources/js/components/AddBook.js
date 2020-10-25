@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from './Subtitle';
 import Errors from './Errors';
 import Genres from './Genres';
-import { ButtonWithMargin, Caption } from './Components';
+import { MyButton, Caption } from './Components';
 import { BookCard } from './BookCard';
 import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
@@ -178,7 +178,7 @@ export default function AddBook() {
         />
         <Caption content="本の情報" />
         <BookCard book={book} />
-        <ButtonWithMargin onClick={submitBook} content="本棚に追加する" />
+        <MyButton onClick={submitBook} content="本棚に追加する" withMargin={true}/>
       </>
     );
   } else {

@@ -6,7 +6,7 @@ import { PropsContext } from './Pages';
 import { DataContext, SetStateContext } from './App';
 import Errors from './Errors';
 import {
-  ButtonWithMargin,
+  MyButton,
   GroupedSelectBox,
   InputWithCheck,
   MyTextarea,
@@ -86,7 +86,7 @@ function CommentForm(props) {
         onChange={props.onChange}
         content="コメントメッセージ"
       />
-      <ButtonWithMargin onClick={props.onClick} content="コメントする" />
+      <MyButton onClick={props.onClick} content="コメントする" withMargin={true}/>
     </>
   );
 }

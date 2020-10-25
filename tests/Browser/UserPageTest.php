@@ -83,7 +83,7 @@ class UserPageTest extends DuskTestCase
                     ->waitFor('#user-id')
                     ->type('user-id', $guest->str_id)
                     ->type('password', $this->credential['password'])
-                    ->press('Login')
+                    ->press('ログイン')
                     ->waitForLocation('/home')
                     ->waitFor('#subtitle');
 

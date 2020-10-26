@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueStrId;
 use App\Rules\IsBase64Image;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +30,8 @@ class EditUserRequest extends FormRequest
         return [
             'user.id' => 'integer',
             'user.name' => ['min:1, max:32'],
-            'user.str_id' => ['min:4', 'max:32', 'unique:users'],
+            // userでデータを受け取ってるからuniqueは使えない
+            'user.str_id' => ['min:4', 'max:32', new UniqueStrId()],
             // 'user.email' => 'email address',
             'user.image' => ['nullable', new IsBase64Image()],
         ];

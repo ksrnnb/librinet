@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import Like from './Like';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from './Pages';
-import { DataContext } from './App';
+import { PropsContext } from './MainColumn';
+import { DataContext } from '../views/App';
 import { BookIcon, CommentIcon, Trash } from './Icon';
+import { MyLink } from '../functions/MyLink';
 
 function BookCover(props) {
   const book = props.book;
-  const pages_props = useContext(PropsContext);
+  const main_props = useContext(PropsContext);
   const data = useContext(DataContext);
 
   function linkToBookProfile() {
@@ -18,12 +19,7 @@ function BookCover(props) {
     const hasBook = isbnMatchedBook.filter((book) => book.isInBookshelf).length;
 
     book.isInBookshelf = hasBook;
-
-    const path = '/book/profile/' + book.isbn;
-    pages_props.history.push({
-      pathname: path,
-      state: book,
-    });
+    MyLink.bookProfile(main_props, book);
   }
 
   let cover = null;
@@ -53,20 +49,15 @@ function BookCover(props) {
 
 function UserImage(props) {
   const user = props.user;
-  const pages_props = useContext(PropsContext);
+  const main_props = useContext(PropsContext);
   const userImageUrl = user.image || '/img/icon.svg';
-
-  function linkToUserProfile() {
-    const userUrl = '/user/profile/' + user.str_id;
-    pages_props.history.push(userUrl);
-  }
 
   return (
     <img
       className="hover user-image"
       src={userImageUrl}
       alt="user-icon"
-      onClick={linkToUserProfile}
+      onClick={() => MyLink.userProfile(main_props, user.str_id)}
     />
   );
 }

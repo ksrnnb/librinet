@@ -1,20 +1,20 @@
-import AddBook from './AddBook';
-import Book from './Book';
-import BookProfile from './BookProfile';
-import Comment from './Comment';
-import ErrorPage from './ErrorPage';
-import Home from './Home';
-import Login from './Login';
-import Logout from './Logout';
-import UserProfile from './UserProfile';
-import PostData from './Post';
-import User from './User';
-import Followers from './Followers';
-import EditGenre from './EditGenre';
-import EditUser from './EditUser';
-import DeleteBook from './DeleteBook';
-import Signup from './Signup';
-import Notification from './Notification';
+import AddBook from '../views/AddBook';
+import Book from '../views/Book';
+import BookProfile from '../views/BookProfile';
+import Comment from '../views/Comment';
+import ErrorPage from '../views/ErrorPage';
+import Home from '../views/Home';
+import Login from '../views/Login';
+import Logout from '../views/Logout';
+import UserProfile from '../views/UserProfile';
+import PostData from '../views/Post';
+import User from '../views/User';
+import Followers from '../views/Followers';
+import EditGenre from '../views/EditGenre';
+import EditUser from '../views/EditUser';
+import DeleteBook from '../views/DeleteBook';
+import Signup from '../views/Signup';
+import Notification from '../views/Notification';
 
 export const routingList = [
   {

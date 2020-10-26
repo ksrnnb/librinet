@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { PropsContext } from './Pages';
+import { PropsContext } from './MainColumn';
 import { PropTypes } from 'prop-types';
 import { MyCard } from './MyCard';
+import { MyLink } from '../functions/MyLink';
 
 export function UserImage(props) {
   const image = props.image || '/img/icon.svg';
@@ -15,19 +16,13 @@ export function UserImage(props) {
 
 export default function UserCard(props) {
   const user = props.user;
-  const pages_props = useContext(PropsContext);
-
-  function jumpToUserPage() {
-    const path = '/user/profile/' + user.str_id;
-
-    pages_props.history.push({
-      pathname: path,
-      state: { user: user },
-    });
-  }
+  const main_props = useContext(PropsContext);
 
   const attr = props.useLink
-    ? { onClick: jumpToUserPage, addingClass: 'user-card hover' }
+    ? {
+      onClick: () => MyLink.userProfile(main_props, user.str_id, user),
+      addingClass: 'user-card hover',
+    }
     : { addingClass: 'user-card' };
 
   return (

@@ -15,7 +15,7 @@ export function InputWithCheck(props) {
         disabled={disabled}
         onChange={onChange}
       />
-      <h5 className={`d-inline-block  ml-2 mb-0 ${invalid}`}>{content}</h5>
+      <h5 className={`d-inline-block ml-2 mb-0 ${invalid}`}>{content}</h5>
     </label>
   );
 }
@@ -211,33 +211,38 @@ export function NoImageCard(props) {
 NoImageCard.propTypes = {
   bgColor: PropTypes.string,
   margin: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
 };
 
 export function SearchForm(props) {
   const { name, content, subMessage, maxLength, onChange, onClick } = props;
 
   return (
-    <label htmlFor={name}>
-      <h5>{content}</h5>
-      <p>{subMessage}</p>
-      <input
-        className="mr-3 py-0"
-        type="text"
-        id={name}
-        name={name}
-        maxLength={maxLength}
-        onChange={onChange}
-      />
-      <button
-        type="button"
-        id="search"
-        className="btn btn-outline-success"
-        onClick={onClick}
-      >
-        検索
+    <NoImageCard>
+      <label htmlFor={name}>
+        <h5>{content}</h5>
+        <p>{subMessage}</p>
+        <input
+          className="mr-3 py-0"
+          type="text"
+          id={name}
+          name={name}
+          maxLength={maxLength}
+          onChange={onChange}
+        />
+        <button
+          type="button"
+          id="search"
+          className="btn btn-outline-success"
+          onClick={onClick}
+        >
+          検索
       </button>
-    </label>
+      </label>
+    </NoImageCard>
   );
 }
 

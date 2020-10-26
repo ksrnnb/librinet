@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import BooksElement from './BooksElement';
 import { GearIcon } from './Icon';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from './Pages';
+import { PropsContext } from './MainColumn';
 import { NoImageCard, Caption } from './Components';
 
 function Message(props) {
-  const pages_props = useContext(PropsContext);
-  const isSelf = props.user.str_id === pages_props.match.params.strId;
+  const main_props = useContext(PropsContext);
+  const isSelf = props.user.str_id === main_props.match.params.strId;
 
   if (isSelf) {
     return (
@@ -99,7 +99,6 @@ export default function Bookshelf(props) {
   return (
     <>
       <Caption content="本棚" />
-
       <NoImageCard>
         <NoBook user={props.user} orderedBooks={orderedBooks} />
         <Books

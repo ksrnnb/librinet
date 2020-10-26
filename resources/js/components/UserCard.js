@@ -18,11 +18,10 @@ export default function UserCard(props) {
   const user = props.user;
   const main_props = useContext(PropsContext);
 
+  const userLink = () => MyLink.userProfile(main_props, user.str_id, user);
+
   const attr = props.useLink
-    ? {
-      onClick: () => MyLink.userProfile(main_props, user.str_id, user),
-      addingClass: 'user-card hover',
-    }
+    ? { onClick: userLink, addingClass: 'user-card hover' }
     : { addingClass: 'user-card' };
 
   return (

@@ -87272,10 +87272,13 @@ function UserImage(props) {
 function UserCard(props) {
   var user = props.user;
   var main_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_MainColumn__WEBPACK_IMPORTED_MODULE_1__["PropsContext"]);
+
+  var userLink = function userLink() {
+    return _functions_MyLink__WEBPACK_IMPORTED_MODULE_4__["MyLink"].userProfile(main_props, user.str_id, user);
+  };
+
   var attr = props.useLink ? {
-    onClick: function onClick() {
-      return _functions_MyLink__WEBPACK_IMPORTED_MODULE_4__["MyLink"].userProfile(main_props, user.str_id, user);
-    },
+    onClick: userLink,
     addingClass: 'user-card hover'
   } : {
     addingClass: 'user-card'

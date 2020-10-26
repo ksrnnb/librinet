@@ -211,10 +211,7 @@ export function NoImageCard(props) {
 NoImageCard.propTypes = {
   bgColor: PropTypes.string,
   margin: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export function SearchForm(props) {
@@ -240,7 +237,7 @@ export function SearchForm(props) {
           onClick={onClick}
         >
           検索
-      </button>
+        </button>
       </label>
     </NoImageCard>
   );

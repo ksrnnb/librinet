@@ -12,12 +12,15 @@ export default function BooksElement(props) {
 
     return (
       <div className="col-3" key={book.isbn}>
-        <div className="hover" onClick={() => MyLink.bookProfile(main_props, book)}>
+        <div
+          className="hover"
+          onClick={() => MyLink.bookProfile(main_props, book)}
+        >
           {src ? (
             <img className="img-fluid" src={src} alt="book-cover" />
           ) : (
-              <BookIcon />
-            )}
+            <BookIcon />
+          )}
           <p className="one-row">{book.title}</p>
         </div>
       </div>

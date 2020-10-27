@@ -9,7 +9,7 @@ import {
   NoImageCard,
 } from '../components/Components';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { DataContext, SetStateContext } from './App';
 import Genres from '../components/Genres';
 import { BookCard } from '../components/BookCard';

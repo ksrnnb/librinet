@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { DataContext } from './App';
 import Subtitle from '../components/Subtitle';
 import PropTypes from 'prop-types';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { MyCard } from '../components/MyCard';
 import { MyLink } from '../functions/MyLink';
 const axios = window.axios;
@@ -100,7 +100,9 @@ function Notice(props) {
   if (info) {
     return (
       <MyCard
-        image={<img className="img-fluid w-100" src={info.image} alt="user-image" />}
+        image={
+          <img className="img-fluid w-100" src={info.image} alt="user-image" />
+        }
         body={
           <>
             <p>{info.message}</p>

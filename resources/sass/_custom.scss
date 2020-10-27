@@ -1,3 +1,70 @@
+.top {
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+
+.top-content {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  .top-wrapper {
+    padding-top: var(--title_pt);
+    text-align: left;
+    color: white;
+  
+    .title {
+      font-size: 2.5rem;
+      padding-bottom: 3.0rem;
+    }
+
+    .title-message {
+      font-size: 1.5rem;
+      padding-bottom: 3.0rem;
+    }
+
+    button {
+      font-size: 1.3rem;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .btn-success{
+      margin-bottom: 5.0rem;
+    }
+
+    .btn-outline-info {
+      background-color: white;
+      margin-bottom: 1.0rem;
+
+      &:hover {
+        color: white;
+        background-color: #6cb2eb;
+        border-color: #6cb2eb;
+      }
+    }
+  }
+}
+
+
+.top-1 {
+  @extend .top;
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
+}
+
+.top-2 {
+  @extend .top;
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-2.jpg");
+}
+
+.top-3 {
+  @extend .top;
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-3.jpg");
+}
+
+
 .one-row {
   white-space: nowrap;
   overflow: hidden;
@@ -22,10 +89,6 @@
     cursor: pointer;
     text-decoration: underline;
   }
-}
-
-.max-w-100 {
-  max-width: 100%;
 }
 
 // フィードやbook-card内の表紙がない本
@@ -77,11 +140,6 @@
     cursor: default;
   }
 }
-
-// TODO: 効いてない
-// .dropdown {
-//   letter-spacing: -3px;
-// }
 
 .genre-name-wrapper {
   display: flex;

@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { DataContext, SetStateContext } from './App';
 import { NoImageCard } from '../components/Components';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
+import { MyLink } from '../functions/MyLink';
 
 const axios = window.axios;
 
@@ -11,7 +12,7 @@ export default function logout() {
   const setState = useContext(SetStateContext);
   const data = useContext(DataContext);
 
-  function linkToLogin() {
+  function linkToTop() {
     const params = {
       user: null,
       following_posts: [],
@@ -20,15 +21,14 @@ export default function logout() {
 
     setState.params(params);
     setState.isLogin(false);
-
-    props.history.push('/login');
+    MyLink.top(props);
   }
 
   function onClickLogout() {
     axios
       .post('/api/logout')
       .then(() => {
-        linkToLogin();
+        linkToTop();
       })
       .catch((error) => {
         console.log(error);

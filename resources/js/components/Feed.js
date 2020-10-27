@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Like from './Like';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from './MainColumn';
+import { PropsContext } from './MyRouter';
 import { DataContext } from '../views/App';
 import { BookIcon, CommentIcon, Trash } from './Icon';
 import { MyLink } from '../functions/MyLink';

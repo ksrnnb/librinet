@@ -42,8 +42,8 @@ class CommentTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             // URL入力する場合
             $browser->visit($this->path)
-                    ->waitForLocation('/home')
-                    ->assertSee('ログイン');
+                    ->waitForLocation('/')
+                    ->assertSee('シェア');
         });
     }
 

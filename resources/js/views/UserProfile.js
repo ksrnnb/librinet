@@ -3,7 +3,7 @@ import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
 import { DataContext } from './App';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { PropTypes } from 'prop-types';
 import { MyLink } from '../functions/MyLink';
 
@@ -269,7 +269,9 @@ export default function UserProfile() {
           <FollowNumber
             follows={showingUser.followings}
             followers={showingUser.followers}
-            onClick={(e) => MyLink.followers(props, showingUser, e.target.dataset.link)}
+            onClick={(e) =>
+              MyLink.followers(props, showingUser, e.target.dataset.link)
+            }
           />
           {buttons}
         </UserCard>

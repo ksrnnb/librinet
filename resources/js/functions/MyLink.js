@@ -1,4 +1,8 @@
 export class MyLink {
+  static top(props) {
+    window.scroll(0, 0);
+    props.history.push('/');
+  }
 
   static home(props) {
     window.scroll(0, 0);
@@ -10,6 +14,11 @@ export class MyLink {
     props.history.push('/login');
   }
 
+  static signup(props) {
+    window.scroll(0, 0);
+    props.history.push('/signup');
+  }
+
   static userProfile(props, strId, user) {
     const path = '/user/profile/' + strId;
     window.scroll(0, 0);
@@ -18,7 +27,7 @@ export class MyLink {
         pathname: path,
         state: {
           user: user,
-        }
+        },
       });
     } else {
       props.history.push(path);
@@ -78,9 +87,9 @@ export class MyLink {
   }
 
   /**
-   * @param {object} props 
-   * @param {object} user 
-   * @param {string} link (follows or followers) 
+   * @param {object} props
+   * @param {object} user
+   * @param {string} link (follows or followers)
    */
   static followers(props, user, link) {
     const path = '/user/profile/' + user.str_id + link;

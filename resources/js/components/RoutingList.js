@@ -15,8 +15,15 @@ import EditUser from '../views/EditUser';
 import DeleteBook from '../views/DeleteBook';
 import Signup from '../views/Signup';
 import Notification from '../views/Notification';
+import TopPage from '../views/TopPage';
 
 export const routingList = [
+  {
+    isExact: true,
+    path: '/',
+    component: TopPage,
+  },
+
   {
     path: '/home',
     component: Home,

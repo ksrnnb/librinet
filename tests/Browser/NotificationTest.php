@@ -58,9 +58,8 @@ class NotificationTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/notification')
-                    ->waitForLocation('/home')
-                    ->waitFor('#subtitle')
-                    ->assertPathIs('/home');
+                    ->waitForLocation('/')
+                    ->assertSee('シェア');
         });
     }
 

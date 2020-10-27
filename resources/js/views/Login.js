@@ -1,10 +1,34 @@
 import React, { useContext, useState } from 'react';
 import { SetStateContext } from './App';
-import { MyButton, Caption, TextInput, NoImageCard } from '../components/Components';
-import { PropsContext } from '../components/MainColumn';
+import {
+  MyButton,
+  Caption,
+  TextInput,
+  NoImageCard,
+} from '../components/Components';
+import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import { MyLink } from '../functions/MyLink';
 const axios = window.axios;
+
+export function guestLogin(afterLogin) {
+  axios
+    .get('/sanctum/csrf-cookie')
+    .then(() => {
+      axios
+        .post('/api/guest/login')
+        .then((response) => {
+          const user = response.data;
+          afterLogin(user);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch(() => {
+      alert('Error happened.');
+    });
+}
 
 export default function Login() {
   const [strId, setStrId] = useState('');
@@ -16,25 +40,6 @@ export default function Login() {
     setState.params(user);
     setState.isLogin(true);
     MyLink.home(props);
-  }
-
-  function guestLogin() {
-    axios
-      .get('/sanctum/csrf-cookie')
-      .then(() => {
-        axios
-          .post('/api/guest/login')
-          .then((response) => {
-            const user = response.data;
-            afterLogin(user);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch(() => {
-        alert('Error happened.');
-      });
   }
 
   function normalUserLogin() {
@@ -69,7 +74,10 @@ export default function Login() {
           <li>ユーザー名、ユーザーIDの編集</li>
           <li>ユーザーの削除</li>
         </ul>
-        <MyButton onClick={guestLogin} content="ゲストユーザーでログイン" />
+        <MyButton
+          onClick={() => guestLogin(afterLogin)}
+          content="ゲストユーザーでログイン"
+        />
       </NoImageCard>
 
       <NoImageCard margin="my-5">

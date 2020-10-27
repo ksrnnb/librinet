@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import BooksElement from './BooksElement';
 import { GearIcon } from './Icon';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from './MainColumn';
+import { PropsContext } from './MyRouter';
 import { NoImageCard, Caption } from './Components';
 
 function Message(props) {

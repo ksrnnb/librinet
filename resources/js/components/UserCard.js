@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { PropsContext } from './MainColumn';
+import { PropsContext } from './MyRouter';
 import { PropTypes } from 'prop-types';
 import { MyCard } from './MyCard';
 import { MyLink } from '../functions/MyLink';

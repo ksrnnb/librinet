@@ -51,5 +51,5 @@ export default function SubColumn(props) {
 }
 
 SubColumn.propTypes = {
-  userUrl: PropTypes.string,
+  userUrl: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };

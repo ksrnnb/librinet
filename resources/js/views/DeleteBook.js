@@ -3,7 +3,7 @@ import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import { BookCard } from '../components/BookCard';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { DataContext, SetStateContext } from './App';
 import { MyLink } from '../functions/MyLink';
 

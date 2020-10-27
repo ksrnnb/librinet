@@ -50,8 +50,8 @@ class PostTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit($this->path)
-                    ->waitForLocation('/home')
-                    ->assertSee('ログイン');
+                    ->waitForLocation('/')
+                    ->assertSee('シェア');
         });
     }
 

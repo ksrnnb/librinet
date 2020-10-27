@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Subtitle from '../components/Subtitle';
 import Errors from '../components/Errors';
 import SearchedBook from '../components/SearchedBook';
-import { SearchForm, Caption, NoImageCard } from '../components/Components';
+import { SearchForm, Caption } from '../components/Components';
 
 const axios = window.axios;
 

@@ -20,6 +20,8 @@
     "no-unused-vars": 1,
     // 正規表現中のエスケープ。パスワードチェックの部分でerrorになってしまうのでwarningに設定。
     "no-useless-escape": 1,
+    // bootstrap.jsがerrorにならないようにwarningに設定
+    "no-empty": 1,
     // propsの未validation-> warning
     "react/prop-types": 1,
     "prettier/prettier": [

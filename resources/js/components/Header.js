@@ -76,9 +76,9 @@ export default function Header(props) {
   return (
     <header>
       <nav className="navbar fixed-top bg-success">
-        <a className="navbar-brand" href="/home">
-          {document.title}
-        </a>
+        <span className="navbar-brand">
+          <Link to="/">{document.title}</Link>
+        </span>
         {hamburger}
       </nav>
     </header>

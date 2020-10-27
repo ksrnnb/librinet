@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from './MainColumn';
+import { PropsContext } from './MyRouter';
 import { BookIcon } from './Icon';
 import { MyLink } from '../functions/MyLink';
 

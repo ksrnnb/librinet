@@ -37,8 +37,8 @@ class CreateBookTest extends DuskTestCase
             $path = '/book/add/' . $this->isbn[0];
 
             $browser->visit($path)
-                    ->waitForLocation('/home')
-                    ->assertSee('ログイン');
+                    ->waitForLocation('/')
+                    ->assertSee('シェア');
         });
     }
 

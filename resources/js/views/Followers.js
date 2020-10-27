@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 

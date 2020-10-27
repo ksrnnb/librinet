@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import { DataContext } from './App';
-import { SearchForm, Caption, NoImageCard } from '../components/Components';
+import { SearchForm, Caption } from '../components/Components';
 import { PropTypes } from 'prop-types';
 
 const axios = window.axios;

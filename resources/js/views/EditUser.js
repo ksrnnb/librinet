@@ -5,7 +5,7 @@ import Errors from '../components/Errors';
 import { MyCard } from '../components/MyCard';
 import { PropTypes } from 'prop-types';
 import { DataContext, SetStateContext } from './App';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 
 const axios = window.axios;
@@ -52,7 +52,7 @@ function UserNameInput(props) {
       <p className="my-0">ユーザー名</p>
       <input
         id="user-name"
-        className="max-w-100"
+        className="mw-100"
         name="user-name"
         value={props.name}
         onChange={props.onChange}
@@ -67,7 +67,7 @@ function UserStrIdInput(props) {
       <p className="my-0">ユーザーID</p>
       <input
         id="user-id"
-        className="max-w-100"
+        className="mw-100"
         name="user-id"
         value={props.strId}
         onChange={props.onChange}
@@ -102,7 +102,7 @@ export default function EditUser() {
       .then(() => {
         params.user = user;
         setState.params(params);
-        redirectUserProfile(user.str_id);
+        MyLink.userProfile(props, user.str_id);
       })
       .catch((error) => {
         const errors = Object.values(error.response.data.errors);
@@ -151,7 +151,9 @@ export default function EditUser() {
         </div>
         <div className="row justify-content-end mx-0">
           <div className="float-right mt-5">
-            <CancelButton onClick={() => MyLink.userProfile(props, user.str_id)} />
+            <CancelButton
+              onClick={() => MyLink.userProfile(props, user.str_id)}
+            />
             <EditButton onClick={onSubmitEdit} />
           </div>
         </div>

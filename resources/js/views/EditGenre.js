@@ -4,7 +4,7 @@ import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
 import { PropTypes } from 'prop-types';
 import { DataContext, SetStateContext } from './App';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 
 const axios = window.axios;

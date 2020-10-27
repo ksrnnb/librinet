@@ -4,7 +4,7 @@ import Errors from '../components/Errors';
 import Genres from '../components/Genres';
 import { MyButton, Caption } from '../components/Components';
 import { BookCard } from '../components/BookCard';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { DataContext, SetStateContext } from './App';
 import { MyLink } from '../functions/MyLink';
 const axios = window.axios;

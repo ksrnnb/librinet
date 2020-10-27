@@ -1,8 +1,7 @@
 import Header from '../components/Header';
 import React, { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { MainColumn } from '../components/MainColumn';
-import SubColumn from '../components/SubColumn';
+import { MyRouter } from '../components/MyRouter';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -10,7 +9,6 @@ const axios = window.axios;
 export const DataContext = createContext();
 export const SetStateContext = createContext();
 
-// TODO: フッターが欲しい
 function App() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -26,6 +24,7 @@ function App() {
         // response.data
         // {params: {user, following_posts, examples} }
         const data = response.data;
+        // console.log(data);
         setParams(data);
         setHasLoaded(true);
         data.user && setIsLogin(true);
@@ -55,17 +54,12 @@ function App() {
   }
 
   if (hasLoaded) {
-    console.log('---state data ----');
-    console.log(data);
     return (
       <DataContext.Provider value={data}>
         <SetStateContext.Provider value={setState}>
           <Router>
-            <div className="container">
-              <Header userUrl={url} />
-              <SubColumn userUrl={url} params={params} />
-              <MainColumn />
-            </div>
+            <Header userUrl={url} />
+            <MyRouter />
           </Router>
         </SetStateContext.Provider>
       </DataContext.Provider>
@@ -74,12 +68,10 @@ function App() {
     // 読み込み中の処理
     return (
       <Router>
-        <div className="container">
-          <Header userUrl={url} />
-          <div className="text-center mt-5">
-            <div className="spinner-border text-success" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
+        <Header userUrl={url} />
+        <div id="spinner-wrapper" className="text-center">
+          <div className="spinner-border text-success" role="status">
+            <span className="sr-only">Loading...</span>
           </div>
         </div>
       </Router>

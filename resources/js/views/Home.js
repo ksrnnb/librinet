@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Subtitle from '../components/Subtitle';
 import Feed from '../components/Feed';
 import { DataContext, SetStateContext } from './App';
 import { PropTypes } from 'prop-types';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 
 const axios = window.axios;
@@ -102,7 +102,15 @@ function Posts(props) {
 
 export default function Home() {
   const data = useContext(DataContext);
+  const props = useContext(PropsContext);
   const user = data.params.user;
+
+  // 未ログインの場合はTopへ
+  useEffect(() => {
+    if (typeof user === 'undefined') {
+      MyLink.top(props);
+    }
+  }, []);
 
   if (user) {
     const posts = data.params.following_posts;
@@ -116,17 +124,7 @@ export default function Home() {
       </div>
     );
   } else {
-    // TODO 未ログインの処理
-    return (
-      <>
-        <div className="row">
-          <div className="col-12">
-            <Subtitle subtitle="ホーム" />
-            <p className="text-danger">ログインしていません</p>
-          </div>
-        </div>
-      </>
-    );
+    return <></>;
   }
 }
 

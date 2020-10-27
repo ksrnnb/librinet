@@ -3,6 +3,9 @@
 :root {
   --base_font_size: 18px;
   --icon_width: 24px;
+  --title_pt: 200px;
+  --title_pl: 20px;
+  --title_pr: 0px;
 }
 
 @media (max-width: 1100px) {
@@ -16,6 +19,14 @@
   :root {
     --base_font_size: 14px;
     --icon_width: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  :root {
+    --title_pt: 100px;
+    --title_pl: 10px;
+    --title_pr: 10px;
   }
 }
 
@@ -10930,8 +10941,15 @@ html {
 body {
   font-family: "M PLUS 1p", sans-serif;
   background-color: #eef5eb;
-  padding-top: 100px;
   font-size: 1rem;
+}
+
+#column-wrapper {
+  padding-top: 120px;
+}
+
+#spinner-wrapper {
+  margin-top: 120px;
 }
 
 .container {
@@ -10940,6 +10958,14 @@ body {
 
 #sub-column {
   border-right: solid 1px #cccccc;
+}
+
+#sub-column a {
+  color: black;
+}
+
+#sub-column a:hover {
+  color: #38c172;
 }
 
 #main-column {
@@ -11006,21 +11032,13 @@ textarea {
   height: 180px;
 }
 
-.navbar-brand {
+.navbar-brand a {
   font-size: 1.6rem;
   color: white;
 }
 
-.navbar-brand:hover {
+.navbar-brand a:hover {
   color: white;
-}
-
-a {
-  color: black;
-}
-
-a:hover {
-  color: black;
   text-decoration: none;
 }
 
@@ -11054,6 +11072,71 @@ a:hover {
   }
 }
 
+.top,
+.top-3,
+.top-2,
+.top-1 {
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+
+.top-content {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.top-content .top-wrapper {
+  padding-top: var(--title_pt);
+  text-align: left;
+  color: white;
+}
+
+.top-content .top-wrapper .title {
+  font-size: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+.top-content .top-wrapper .title-message {
+  font-size: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+.top-content .top-wrapper button {
+  font-size: 1.3rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.top-content .top-wrapper .btn-success {
+  margin-bottom: 5rem;
+}
+
+.top-content .top-wrapper .btn-outline-info {
+  background-color: white;
+  margin-bottom: 1rem;
+}
+
+.top-content .top-wrapper .btn-outline-info:hover {
+  color: white;
+  background-color: #6cb2eb;
+  border-color: #6cb2eb;
+}
+
+.top-1 {
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
+}
+
+.top-2 {
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-2.jpg");
+}
+
+.top-3 {
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-3.jpg");
+}
+
 .one-row,
 .feed-wrapper .feed .feed-body-wrapper .book-info-wrapper .book-info,
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
@@ -11078,10 +11161,6 @@ a:hover {
 .hover-link:hover {
   cursor: pointer;
   text-decoration: underline;
-}
-
-.max-w-100 {
-  max-width: 100%;
 }
 
 .book-icon {

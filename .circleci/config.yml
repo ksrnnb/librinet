@@ -88,7 +88,7 @@ jobs:
 
       - run:
           name: JavaScript Code Check
-          command: ./node_modules/.bin/eslint --fix ./resources/js/components
+          command: ./node_modules/.bin/eslint --fix ./resources/js/
 
       # ビルド結果を通知
       - slack/notify:
@@ -100,7 +100,7 @@ jobs:
           template: success_tagged_deploy
 
 workflows:
-  build_and_push_image:
+  build_test_and_deploy:
     jobs:
       - build
       - aws-ecr/build-and-push-image:

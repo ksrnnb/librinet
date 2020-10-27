@@ -1,5 +1,5 @@
 import { DataContext, SetStateContext } from './App';
-import { PropsContext } from '../components/MainColumn';
+import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import Errors from '../components/Errors';
 import { TextInput, MyButton, NoImageCard } from '../components/Components';

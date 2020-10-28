@@ -11072,77 +11072,16 @@ textarea {
   }
 }
 
-.top,
-.top-3,
-.top-2,
-.top-1 {
-  background-attachment: fixed;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100vh;
-}
-
-.top-content {
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-.top-content .top-wrapper {
-  padding-top: var(--title_pt);
-  text-align: left;
-  color: white;
-}
-
-.top-content .top-wrapper .title {
-  font-size: 2.5rem;
-  padding-bottom: 3rem;
-}
-
-.top-content .top-wrapper .title-message {
-  font-size: 1.5rem;
-  padding-bottom: 3rem;
-}
-
-.top-content .top-wrapper button {
-  font-size: 1.3rem;
-  max-width: 500px;
-  width: 100%;
-}
-
-.top-content .top-wrapper .btn-success {
-  margin-bottom: 5rem;
-}
-
-.top-content .top-wrapper .btn-outline-info {
-  background-color: white;
-  margin-bottom: 1rem;
-}
-
-.top-content .top-wrapper .btn-outline-info:hover {
-  color: white;
-  background-color: #6cb2eb;
-  border-color: #6cb2eb;
-}
-
-.top-1 {
-  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
-}
-
-.top-2 {
-  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-2.jpg");
-}
-
-.top-3 {
-  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-3.jpg");
-}
-
 .one-row,
 .feed-wrapper .feed .feed-body-wrapper .book-info-wrapper .book-info,
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.search-input {
+  max-width: 70%;
 }
 
 .light-orange {
@@ -11341,6 +11280,16 @@ textarea {
   margin: 0px;
 }
 
+.book-card button {
+  font-size: 0.8rem;
+}
+
+.book-card .sub-caption {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
 .notification-card {
   background-color: white;
 }
@@ -11410,5 +11359,60 @@ textarea {
 
 #user-image-label #user-image-input {
   display: none;
+}
+
+.top,
+.top-content,
+.top-1 {
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.top-1 {
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
+}
+
+.top-content {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.top-content .top-wrapper {
+  padding-top: var(--title_pt);
+  text-align: left;
+  color: white;
+}
+
+.top-content .top-wrapper .title {
+  font-size: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+.top-content .top-wrapper .title-message {
+  font-size: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+.top-content .top-wrapper button {
+  font-size: 1.3rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.top-content .top-wrapper .btn-success {
+  margin-bottom: 5rem;
+}
+
+.top-content .top-wrapper .btn-outline-info {
+  background-color: white;
+  margin-bottom: 1rem;
+}
+
+.top-content .top-wrapper .btn-outline-info:hover {
+  color: white;
+  background-color: #6cb2eb;
+  border-color: #6cb2eb;
 }
 

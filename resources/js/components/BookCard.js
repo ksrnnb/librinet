@@ -27,10 +27,14 @@ export function BookInfo(props) {
 
   return (
     <>
-      <p className="one-row">タイトル： {book.title}</p>
-      <p className="one-row mt-3">著者：{book.author}</p>
-      <p className="one-row mt-3">出版社：{book.publisher}</p>
-      <p className="one-row mt-3">出版年：{pub_year}</p>
+      <p className="sub-caption">タイトル</p>
+      <p>{book.title}</p>
+      <p className="sub-caption">著者</p>
+      <p>{book.author}</p>
+      <p className="sub-caption">出版社</p>
+      <p>{book.publisher}</p>
+      <p className="sub-caption">出版年</p>
+      <p>{pub_year}</p>
       {props.children}
     </>
   );

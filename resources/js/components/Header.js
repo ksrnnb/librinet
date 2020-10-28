@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
+import { DataContext } from '../views/App';
 
 function closeNav() {
   const button = document.getElementsByClassName('navbar-toggler')[0];
@@ -11,31 +12,97 @@ function closeNav() {
   navbarDiv.classList.remove('show');
 }
 
-export default function Header(props) {
-  let profileAndLogoutLink = null;
-  if (props.userUrl) {
-    profileAndLogoutLink = (
+LinkGroup.propTypes = {
+  user: PropTypes.object,
+};
+
+function LinkGroup(props) {
+  const user = props.user;
+  if (typeof user === 'undefined') {
+    return (
       <>
         <li className="nav-item">
-          <Link className="nav-link" to="/notification" onClick={closeNav}>
-            通知
+          <Link className="nav-link" to="/home" onClick={closeNav}>
+            ホーム
           </Link>
         </li>
+
         <li className="nav-item">
-          <Link className="nav-link" to={props.userUrl} onClick={closeNav}>
-            プロフィール
+          <Link className="nav-link" to="/book" onClick={closeNav}>
+            本を検索する
           </Link>
         </li>
+
         <li className="nav-item">
-          <Link className="nav-link" to="/logout" onClick={closeNav}>
-            ログアウト
+          <Link className="nav-link" to="/user" onClick={closeNav}>
+            ユーザーを検索する
+          </Link>
+        </li>
+
+        <li className="nav-item">
+          <Link className="nav-link" to="signup" onClick={closeNav}>
+            ユーザー登録
+          </Link>
+        </li>
+
+        <li className="nav-item">
+          <Link className="nav-link" to="login" onClick={closeNav}>
+            ログイン
           </Link>
         </li>
       </>
     );
   }
 
-  const hamburger = (
+  return (
+    <>
+      <li className="nav-item">
+        <Link className="nav-link" to="/home" onClick={closeNav}>
+          ホーム
+        </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link className="nav-link" to="/book" onClick={closeNav}>
+          本を検索する
+        </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link className="nav-link" to="/user" onClick={closeNav}>
+          ユーザーを検索する
+        </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link className="nav-link" to="/notification" onClick={closeNav}>
+          通知
+        </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link
+          className="nav-link"
+          to={'/user/profile/' + user.str_id}
+          onClick={closeNav}
+        >
+          プロフィール
+        </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link className="nav-link" to="/logout" onClick={closeNav}>
+          ログアウト
+        </Link>
+      </li>
+    </>
+  );
+}
+
+function Hamburger() {
+  const data = useContext(DataContext);
+
+  return (
     <>
       <button
         id="humburger"
@@ -52,34 +119,21 @@ export default function Header(props) {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link className="nav-link" to="/home" onClick={closeNav}>
-              ホーム
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/book" onClick={closeNav}>
-              本を検索する
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/user/search" onClick={closeNav}>
-              ユーザーを検索する
-            </Link>
-          </li>
-          {profileAndLogoutLink}
+          {data && <LinkGroup user={data.params.user} />}
         </ul>
       </div>
     </>
   );
+}
 
+export default function Header() {
   return (
     <header>
       <nav className="navbar fixed-top bg-success">
         <span className="navbar-brand">
           <Link to="/">{document.title}</Link>
         </span>
-        {hamburger}
+        <Hamburger />
       </nav>
     </header>
   );

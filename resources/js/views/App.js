@@ -68,7 +68,7 @@ function App() {
     // 読み込み中の処理
     return (
       <Router>
-        <Header userUrl={url} />
+        <Header />
         <div id="spinner-wrapper" className="text-center">
           <div className="spinner-border text-success" role="status">
             <span className="sr-only">Loading...</span>

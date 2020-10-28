@@ -1,34 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { PropTypes } from 'prop-types';
+import { DataContext } from '../views/App';
 
-export default function SubColumn(props) {
-  const userUrl = props.userUrl;
-  let profileAndLoginLogoutLink = null;
-  if (userUrl) {
-    profileAndLoginLogoutLink = (
-      <>
-        <Link to="/notification">
-          <h4 className="mt-4">通知</h4>
+export default function SubColumn() {
+  const data = useContext(DataContext);
+  const user = data.params.user;
+
+  if (typeof user === 'undefined') {
+    return (
+      <div id="sub-column">
+        <Link to="/home">
+          <h4>ホーム</h4>
         </Link>
-        <Link to={userUrl}>
-          <h4 className="mt-4">プロフィール</h4>
+
+        <Link to="/book">
+          <h4 className="mt-4">本を検索する</h4>
         </Link>
-        <Link to="/logout">
-          <h4 className="mt-4">ログアウト</h4>
+
+        <Link to="/user">
+          <h4 className="mt-4">ユーザーを検索する</h4>
         </Link>
-      </>
-    );
-  } else {
-    profileAndLoginLogoutLink = (
-      <>
+
         <Link to="signup">
           <h4 className="mt-4">ユーザー登録</h4>
         </Link>
         <Link to="login">
           <h4 className="mt-4">ログイン</h4>
         </Link>
-      </>
+      </div>
     );
   }
 
@@ -45,11 +44,18 @@ export default function SubColumn(props) {
       <Link to="/user">
         <h4 className="mt-4">ユーザーを検索する</h4>
       </Link>
-      {profileAndLoginLogoutLink}
+
+      <Link to="/notification">
+        <h4 className="mt-4">通知</h4>
+      </Link>
+
+      <Link to={'/user/profile/' + user.str_id}>
+        <h4 className="mt-4">プロフィール</h4>
+      </Link>
+
+      <Link to="/logout">
+        <h4 className="mt-4">ログアウト</h4>
+      </Link>
     </div>
   );
 }
-
-SubColumn.propTypes = {
-  userUrl: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-};

@@ -25,7 +25,7 @@ export default function TopPage() {
     <>
       <div className="top-1">
         <div className="top-content">
-          <div className="container top-wrapper h-100">
+          <div className="container top-wrapper">
             <p className="title">リブリーネット</p>
             <p className="title-message">
               あなたの読んだ本をシェアしましょう！
@@ -44,12 +44,14 @@ export default function TopPage() {
             >
               ユーザー登録
             </button>
-            <button
-              className="btn btn-outline-info d-block"
-              onClick={() => MyLink.login(props)}
-            >
-              通常のユーザーでログイン
-            </button>
+            <div className="pb-5">
+              <button
+                className="btn btn-outline-info d-block"
+                onClick={() => MyLink.login(props)}
+              >
+                通常のユーザーでログイン
+              </button>
+            </div>
           </div>
         </div>
       </div>

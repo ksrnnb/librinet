@@ -88,6 +88,8 @@ class EditGenreTest extends DuskTestCase
                     ->press('本を削除する')
                     ->waitFor('.delete-book-card')
                     ->press('削除する')
+                    ->waitForText('削除しますか')
+                    ->press('はい')
                     ->waitForDialog()
                     ->assertDialogOpened('本が選択されていません')
                     ->acceptDialog()
@@ -107,6 +109,8 @@ class EditGenreTest extends DuskTestCase
                     ->waitFor('.delete-book-card')
                     ->click('.delete-book-card')
                     ->press('削除する')
+                    ->waitForText('削除しますか')
+                    ->press('はい')
                     ->waitForText('フォロー')
                     ->assertSee('本がありません');
         });

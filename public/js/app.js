@@ -86057,6 +86057,7 @@ function GroupedSelectBox(props) {
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     id: "select-book",
+    className: "mw-100",
     disabled: disabled,
     onChange: onChange
   }, options);
@@ -86669,10 +86670,6 @@ function CommentIcon(props) {
   function Icon() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
       className: "icon comment-icon",
-      onClick: linkToComment,
-      "data-toggle": "tooltip",
-      "data-placement": "top",
-      title: "Tooltip on top",
       version: "1.1",
       x: "0px",
       y: "0px",
@@ -86692,19 +86689,17 @@ function CommentIcon(props) {
   };
 
   var isPost = ('comments' in item);
-  var className = isPost ? 'no-button' : 'no-button invisible';
+  var className = isPost ? 'no-button comment-btn' : 'no-button invisible';
   var button = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["OverlayTrigger"], {
     placement: "top",
     overlay: renderTooltip
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: className
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Icon, {
+    className: className,
     onClick: linkToComment
-  }))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Icon, null))));
   return button;
 }
 function LikeIcon(props) {
-  var uuid = props.uuid;
   var isLiked = props.isLiked;
   var sendLikeRequest = props.sendLikeRequest;
 
@@ -86715,11 +86710,6 @@ function LikeIcon(props) {
   function Icon() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
       className: "icon like-icon",
-      "data-uuid": uuid,
-      "data-isliked": isLiked,
-      onClick: function onClick(e) {
-        return sendLikeRequest(e.target.dataset.uuid);
-      },
       version: "1.1",
       x: "0px",
       y: "0px",
@@ -86734,12 +86724,10 @@ function LikeIcon(props) {
     placement: "top",
     overlay: renderTooltip
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "no-button"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Icon, {
-    uuid: uuid,
-    isliked: isLiked ? '1' : 0,
-    sendLikeRequest: sendLikeRequest
-  }))));
+    className: "no-button like-btn",
+    "data-isliked": isLiked,
+    onClick: sendLikeRequest
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Icon, null))));
 }
 function Trash(props) {
   var item = props.item;
@@ -86750,13 +86738,10 @@ function Trash(props) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], props, "\u524A\u9664\u3059\u308B");
   };
 
-  function Icon(props) {
+  function Icon() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
       className: "icon trash-icon",
       name: "delete",
-      onClick: props.onClick,
-      "data-uuid": item.uuid,
-      "data-ispost": isPost,
       version: "1.1",
       x: "0px",
       y: "0px",
@@ -86772,15 +86757,16 @@ function Trash(props) {
     isPost: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].bool,
     onClick: prop_types__WEBPACK_IMPORTED_MODULE_2__["PropTypes"].func
   };
-  var className = item.user_id == viewerId ? 'no-button' : 'no-button invisible';
+  var className = item.user_id == viewerId ? 'no-button trash-btn' : 'no-button invisible trash-btn';
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["OverlayTrigger"], {
     placement: "top",
     overlay: renderTooltip
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: className
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Icon, {
-    onClick: props.onClick
-  }))));
+    className: className,
+    onClick: props.onClick,
+    "data-uuid": item.uuid,
+    "data-ispost": isPost
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Icon, null))));
 }
 function GearIcon(props) {
   var dropdownMenu = props.dropdownMenu;
@@ -86897,20 +86883,19 @@ function Like(props) {
   // 未いいねの場合はundefined
 
 
-  function sendLikeRequest(uuid) {
+  function sendLikeRequest() {
     // さきに値を変える
     var delta = isLiked ? -1 : +1;
     setIsLiked(!isLiked);
     setCount(count + delta);
     axios.post('/api/like', {
-      uuid: uuid
+      uuid: item.uuid
     }).then(function () {})["catch"](function (error) {
       console.log(error);
     });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_2__["LikeIcon"], {
-    uuid: item.uuid,
     isLiked: isLiked,
     sendLikeRequest: sendLikeRequest
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
@@ -88413,7 +88398,9 @@ function RecommendBook(props) {
   var hasBook = !Array.isArray(orderedBooks);
 
   if (hasBook) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_7__["InputWithCheck"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_7__["Caption"], {
+      content: "\u304A\u3059\u3059\u3081"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_7__["NoImageCard"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_7__["InputWithCheck"], {
       name: "recommend",
       type: "checkbox",
       checked: isRecommended,
@@ -88426,7 +88413,7 @@ function RecommendBook(props) {
       onChange: function onChange(e) {
         props.setBookId(e.target.value);
       }
-    }));
+    })));
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
@@ -88594,6 +88581,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App */ "./resources/js/views/App.js");
 /* harmony import */ var _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../functions/MyLink */ "./resources/js/functions/MyLink.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -88605,6 +88593,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -88686,6 +88675,33 @@ function DeleteButton(props) {
   }, "\u524A\u9664\u3059\u308B");
 }
 
+function ModalWindow(props) {
+  var show = props.show,
+      handleClose = props.handleClose,
+      onSubmitDelete = props.onSubmitDelete;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Modal"], {
+    show: show,
+    onHide: handleClose,
+    backdrop: "static",
+    keyboard: false,
+    "aria-labelledby": "contained-modal-title-vcenter",
+    centered: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Modal"].Header, {
+    closeButton: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Modal"].Title, null, "\u672C\u306E\u524A\u9664")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Modal"].Body, null, "\u9078\u629E\u3057\u305F\u672C\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Button"], {
+    variant: "secondary",
+    onClick: handleClose
+  }, "\u30AD\u30E3\u30F3\u30BB\u30EB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["Button"], {
+    variant: "primary",
+    onClick: onSubmitDelete
+  }, "\u306F\u3044"))));
+}
+
+ModalWindow.propTypes = {
+  show: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].bool,
+  handleClose: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func,
+  onSubmitDelete: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func
+};
 function DeleteBook() {
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
   var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_6__["DataContext"]).params;
@@ -88695,6 +88711,11 @@ function DeleteBook() {
       _useState2 = _slicedToArray(_useState, 2),
       deleteList = _useState2[0],
       setDeleteList = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      show = _useState4[0],
+      setShow = _useState4[1];
 
   function redirectUserProfile() {
     var strId = props.match.params.strId;
@@ -88732,7 +88753,15 @@ function DeleteBook() {
     deleteList: deleteList,
     setDeleteList: setDeleteList
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
-    onClick: onSubmitDelete
+    onClick: function onClick() {
+      return setShow(true);
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
+    show: show,
+    handleClose: function handleClose() {
+      return setShow(false);
+    },
+    onSubmitDelete: onSubmitDelete
   }));
 }
 DeleteButton.propTypes = {
@@ -89188,6 +89217,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 /* harmony import */ var _functions_MyLink__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../functions/MyLink */ "./resources/js/functions/MyLink.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -89220,45 +89263,22 @@ function Comments(props) {
 }
 
 function PostWithComments(props) {
-  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
   var main_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
-  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
-  var post = props.post;
-
-  function onClickDelete(e) {
-    var uuid = e.target.dataset.uuid; // 文字列の'false'はtrueになってしまうので以下のように判定
-
-    var isPost = e.target.dataset.ispost === 'true' ? true : false;
-    var path = isPost ? '/api/post' : '/api/comment'; // TODO: 本当に消しますか？って出したい
-
-    axios["delete"](path, {
-      data: {
-        uuid: uuid
-      }
-    }).then(function (response) {
-      var following_posts = response.data;
-      var params = data.params;
-      params.following_posts = following_posts;
-      setState.params(params);
-      _functions_MyLink__WEBPACK_IMPORTED_MODULE_6__["MyLink"].home(main_props);
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  }
-
+  var post = props.post,
+      handleShow = props.handleShow;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "feed-chunk shadow mb-5"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Post, {
     post: post,
     viewerId: props.viewerId,
-    onClickDelete: onClickDelete,
+    onClickDelete: handleShow,
     linkToComment: function linkToComment() {
       return _functions_MyLink__WEBPACK_IMPORTED_MODULE_6__["MyLink"].comment(main_props, post);
     }
   }), post.comments.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Comments, {
     comments: post.comments,
     viewerId: props.viewerId,
-    onClickDelete: onClickDelete
+    onClickDelete: handleShow
   }));
 }
 
@@ -89269,6 +89289,7 @@ function Posts(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PostWithComments, {
         post: post,
         viewerId: props.viewerId,
+        handleShow: props.handleShow,
         key: post.id
       });
     });
@@ -89278,10 +89299,84 @@ function Posts(props) {
   }
 }
 
+function ModalWindow(props) {
+  var show = props.show,
+      handleClose = props.handleClose,
+      uuid = props.uuid,
+      isPost = props.isPost;
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
+  var main_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
+
+  var deleteFeed = function deleteFeed() {
+    // isPostは文字列できているので注意。
+    var path = isPost === 'true' ? '/api/post' : '/api/comment';
+    axios["delete"](path, {
+      data: {
+        uuid: uuid
+      }
+    }).then(function (response) {
+      var following_posts = response.data;
+      var params = data.params;
+      params.following_posts = following_posts;
+      setState.params(params);
+      handleClose();
+      _functions_MyLink__WEBPACK_IMPORTED_MODULE_6__["MyLink"].home(main_props);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Modal"], {
+    show: show,
+    onHide: handleClose,
+    backdrop: "static",
+    keyboard: false,
+    "aria-labelledby": "contained-modal-title-vcenter",
+    centered: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Modal"].Header, {
+    closeButton: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Modal"].Title, null, "\u6295\u7A3F\u306E\u524A\u9664")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Modal"].Body, null, "\u9078\u629E\u3057\u305F\u6295\u7A3F\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Button"], {
+    variant: "secondary",
+    onClick: handleClose
+  }, "\u30AD\u30E3\u30F3\u30BB\u30EB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["Button"], {
+    variant: "primary",
+    onClick: deleteFeed
+  }, "\u306F\u3044"))));
+}
+
 function Home() {
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
-  var user = data.params.user; // 未ログインの場合はTopへ
+  var user = data.params.user;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      show = _useState2[0],
+      setShow = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isPost = _useState4[0],
+      setIsPost = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      uuid = _useState6[0],
+      setUuid = _useState6[1];
+
+  var handleClose = function handleClose() {
+    setShow(false);
+    setIsPost(null);
+    setUuid(null);
+  };
+
+  var handleShow = function handleShow(e) {
+    setShow(true);
+    setIsPost(e.target.dataset.ispost);
+    setUuid(e.target.dataset.uuid);
+  }; // 未ログインの場合はTopへ
+
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (typeof user === 'undefined') {
@@ -89299,7 +89394,13 @@ function Home() {
       subtitle: "\u30DB\u30FC\u30E0"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Posts, {
       posts: posts,
-      viewerId: user.id
+      viewerId: user.id,
+      handleShow: handleShow
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
+      show: show,
+      handleClose: handleClose,
+      uuid: uuid,
+      isPost: isPost
     })));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
@@ -89311,7 +89412,14 @@ Posts.propTypes = {
 };
 PostWithComments.propTypes = {
   post: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].object,
+  handleShow: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func,
   viewerId: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].number
+};
+ModalWindow.propTypes = {
+  show: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].bool,
+  handleClose: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].func,
+  uuid: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].string,
+  isPost: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].string
 };
 Post.propTypes = {
   post: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].object,

@@ -46,10 +46,12 @@ class DeleteCommentTest extends DuskTestCase
                             ->waitFor('.feed')
                             ->assertSee($this->message);
         
-                    $comment_delete_button_selector = '.feed-wrapper:last-child .trash-icon';
+                    $comment_delete_button_selector = '.feed-wrapper:last-child .trash-btn';
                     
                     // 削除後はコメントがみえないことを確認
                     $browser->press($comment_delete_button_selector)
+                            ->waitForText('削除しますか')
+                            ->press('はい')
                             ->waitUntilMissingText($this->message)
                             ->assertDontSee($this->message);
 

@@ -10,6 +10,8 @@ import {
   GroupedSelectBox,
   InputWithCheck,
   MyTextarea,
+  NoImageCard,
+  Caption,
 } from '../components/Components';
 import { MyLink } from '../functions/MyLink';
 
@@ -25,21 +27,24 @@ function RecommendBook(props) {
   if (hasBook) {
     return (
       <>
-        <InputWithCheck
-          name="recommend"
-          type="checkbox"
-          checked={isRecommended}
-          onChange={onChange}
-          content="本もおすすめする"
-        />
-        <GroupedSelectBox
-          genres={genres}
-          orderedBooks={orderedBooks}
-          disabled={!isRecommended}
-          onChange={(e) => {
-            props.setBookId(e.target.value);
-          }}
-        />
+        <Caption content="おすすめ" />
+        <NoImageCard>
+          <InputWithCheck
+            name="recommend"
+            type="checkbox"
+            checked={isRecommended}
+            onChange={onChange}
+            content="本もおすすめする"
+          />
+          <GroupedSelectBox
+            genres={genres}
+            orderedBooks={orderedBooks}
+            disabled={!isRecommended}
+            onChange={(e) => {
+              props.setBookId(e.target.value);
+            }}
+          />
+        </NoImageCard>
       </>
     );
   }

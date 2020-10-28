@@ -10,10 +10,6 @@ export function CommentIcon(props) {
     return (
       <svg
         className="icon comment-icon"
-        onClick={linkToComment}
-        data-toggle="tooltip"
-        data-placement="top"
-        title="Tooltip on top"
         version="1.1"
         x="0px"
         y="0px"
@@ -41,12 +37,12 @@ export function CommentIcon(props) {
   const renderTooltip = (props) => <Tooltip {...props}>コメント</Tooltip>;
 
   const isPost = 'comments' in item;
-  const className = isPost ? 'no-button' : 'no-button invisible';
+  const className = isPost ? 'no-button comment-btn' : 'no-button invisible';
   const button = (
     <>
       <OverlayTrigger placement="top" overlay={renderTooltip}>
-        <button className={className}>
-          <Icon onClick={linkToComment} />
+        <button className={className} onClick={linkToComment}>
+          <Icon />
         </button>
       </OverlayTrigger>
     </>
@@ -56,7 +52,6 @@ export function CommentIcon(props) {
 }
 
 export function LikeIcon(props) {
-  const uuid = props.uuid;
   const isLiked = props.isLiked;
   const sendLikeRequest = props.sendLikeRequest;
 
@@ -68,9 +63,6 @@ export function LikeIcon(props) {
     return (
       <svg
         className="icon like-icon"
-        data-uuid={uuid}
-        data-isliked={isLiked}
-        onClick={(e) => sendLikeRequest(e.target.dataset.uuid)}
         version="1.1"
         x="0px"
         y="0px"
@@ -88,12 +80,12 @@ export function LikeIcon(props) {
   return (
     <>
       <OverlayTrigger placement="top" overlay={renderTooltip}>
-        <button className="no-button">
-          <Icon
-            uuid={uuid}
-            isliked={isLiked ? '1' : 0}
-            sendLikeRequest={sendLikeRequest}
-          />
+        <button
+          className="no-button like-btn"
+          data-isliked={isLiked}
+          onClick={sendLikeRequest}
+        >
+          <Icon />
         </button>
       </OverlayTrigger>
     </>
@@ -107,14 +99,11 @@ export function Trash(props) {
 
   const renderTooltip = (props) => <Tooltip {...props}>削除する</Tooltip>;
 
-  function Icon(props) {
+  function Icon() {
     return (
       <svg
         className="icon trash-icon"
         name="delete"
-        onClick={props.onClick}
-        data-uuid={item.uuid}
-        data-ispost={isPost}
         version="1.1"
         x="0px"
         y="0px"
@@ -133,13 +122,20 @@ export function Trash(props) {
   };
 
   const className =
-    item.user_id == viewerId ? 'no-button' : 'no-button invisible';
+    item.user_id == viewerId
+      ? 'no-button trash-btn'
+      : 'no-button invisible trash-btn';
 
   return (
     <>
       <OverlayTrigger placement="top" overlay={renderTooltip}>
-        <button className={className}>
-          <Icon onClick={props.onClick} />
+        <button
+          className={className}
+          onClick={props.onClick}
+          data-uuid={item.uuid}
+          data-ispost={isPost}
+        >
+          <Icon />
         </button>
       </OverlayTrigger>
     </>

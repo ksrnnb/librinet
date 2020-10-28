@@ -54,7 +54,7 @@ class CommentTest extends DuskTestCase
 
             $browser->visit('/home')
                     ->waitFor('.feed')
-                    ->press('.comment-icon')
+                    ->press('.comment-btn')
                     ->assertSee('コメントする');
         });
     }

@@ -48,7 +48,9 @@ class DeletePostTest extends DuskTestCase
             // 投稿の削除。コメントも見えない状態。
             $browser->visit('/home')
                     ->waitFor('.feed')
-                    ->press('.trash-icon')
+                    ->press('.trash-btn')
+                    ->waitForText('削除しますか')
+                    ->press('はい')
                     ->waitUntilMissing('.feed')
                     ->refresh()
                     ->waitFor('#subtitle')

@@ -210,7 +210,6 @@ export default class UserImageInput extends React.Component {
             />
             Upload
           </label>
-          {/* <p className="my-0">(jpeg or png)</p> */}
         </div>
 
         <ModalWindow

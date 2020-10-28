@@ -120,7 +120,12 @@ export function GroupedSelectBox(props) {
   });
 
   return (
-    <select id="select-book" disabled={disabled} onChange={onChange}>
+    <select
+      id="select-book"
+      className="mw-100"
+      disabled={disabled}
+      onChange={onChange}
+    >
       {options}
     </select>
   );

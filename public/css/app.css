@@ -11142,10 +11142,6 @@ textarea {
           appearance: none;
 }
 
-.no-button:hover {
-  cursor: default;
-}
-
 .genre-name-wrapper {
   display: flex;
 }
@@ -11252,26 +11248,23 @@ textarea {
   width: var(--icon_width);
   stroke: #cccccc;
   fill: #cccccc;
+  pointer-events: none;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .icon:hover {
-  cursor: pointer;
-}
-
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .comment-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .comment-btn:hover .comment-icon {
   stroke: #38c172;
   fill: #38c172;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .like-icon[data-isliked=true] {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .like-btn[data-isliked=true] .like-icon {
   fill: #38c172;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .like-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .like-btn:hover .like-icon {
   fill: #38c172;
 }
 
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .trash-icon:hover {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .icon-group .trash-btn:hover .trash-icon {
   fill: #e3342f;
 }
 

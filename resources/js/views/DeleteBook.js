@@ -6,6 +6,7 @@ import { PropTypes } from 'prop-types';
 import { PropsContext } from '../components/MyRouter';
 import { DataContext, SetStateContext } from './App';
 import { MyLink } from '../functions/MyLink';
+import { Modal, Button } from 'react-bootstrap';
 
 const axios = window.axios;
 
@@ -85,11 +86,48 @@ function DeleteButton(props) {
   );
 }
 
+function ModalWindow(props) {
+  const { show, handleClose, onSubmitDelete } = props;
+
+  return (
+    <>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>本の削除</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>選択した本を削除しますか？</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            キャンセル
+          </Button>
+          <Button variant="primary" onClick={onSubmitDelete}>
+            はい
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
+ModalWindow.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  onSubmitDelete: PropTypes.func,
+};
+
 export default function DeleteBook() {
   const props = useContext(PropsContext);
   const params = useContext(DataContext).params;
   const setState = useContext(SetStateContext);
   const [deleteList, setDeleteList] = useState([]);
+  const [show, setShow] = useState(false);
 
   function redirectUserProfile() {
     const strId = props.match.params.strId;
@@ -127,7 +165,12 @@ export default function DeleteBook() {
         deleteList={deleteList}
         setDeleteList={setDeleteList}
       />
-      <DeleteButton onClick={onSubmitDelete} />
+      <DeleteButton onClick={() => setShow(true)} />
+      <ModalWindow
+        show={show}
+        handleClose={() => setShow(false)}
+        onSubmitDelete={onSubmitDelete}
+      />
     </>
   );
 }

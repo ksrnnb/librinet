@@ -19,7 +19,7 @@ export default function Like(props) {
   // 既にいいね済みの場合は、自分（みている側）のユーザーID
   // 未いいねの場合はundefined
 
-  function sendLikeRequest(uuid) {
+  function sendLikeRequest() {
     // さきに値を変える
     const delta = isLiked ? -1 : +1;
     setIsLiked(!isLiked);
@@ -27,7 +27,7 @@ export default function Like(props) {
 
     axios
       .post('/api/like', {
-        uuid: uuid,
+        uuid: item.uuid,
       })
       .then(() => {})
       .catch((error) => {
@@ -37,11 +37,7 @@ export default function Like(props) {
 
   return (
     <div>
-      <LikeIcon
-        uuid={item.uuid}
-        isLiked={isLiked}
-        sendLikeRequest={sendLikeRequest}
-      />
+      <LikeIcon isLiked={isLiked} sendLikeRequest={sendLikeRequest} />
       <p className="d-inline count pl-1" data-count={count}>
         {count}
       </p>

@@ -87156,9 +87156,9 @@ function SearchedBook(props) {
   var isInBookshelf = book.isInBookshelf;
 
   function PostButton() {
-    var isLogin = data.isLogin;
+    var user = data.params.user;
 
-    if (isLogin) {
+    if (user) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
         type: "button",
         className: "btn btn-outline-success mr-3",
@@ -87172,9 +87172,9 @@ function SearchedBook(props) {
   }
 
   function AddBookButton() {
-    var isLogin = data.isLogin;
+    var user = data.params.user;
 
-    if (isLogin && !isInBookshelf) {
+    if (user && !isInBookshelf) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
         type: "button",
         className: "btn btn-outline-success",
@@ -87189,9 +87189,7 @@ function SearchedBook(props) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_BookCard__WEBPACK_IMPORTED_MODULE_2__["BookCard"], {
     book: book
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(PostButton, {
-    isLogin: data.isLogin
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(AddBookButton, null));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(PostButton, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(AddBookButton, null));
 }
 SearchedBook.propTypes = {
   book: prop_types__WEBPACK_IMPORTED_MODULE_4__["PropTypes"].object,
@@ -88085,15 +88083,10 @@ function App() {
       hasLoaded = _useState2[0],
       setHasLoaded = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      isLogin = _useState4[0],
-      setIsLogin = _useState4[1];
-
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
-      _useState6 = _slicedToArray(_useState5, 2),
-      params = _useState6[0],
-      setParams = _useState6[1];
+      params = _useState4[0],
+      setParams = _useState4[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(setUp, []);
 
@@ -88106,7 +88099,6 @@ function App() {
 
       setParams(data);
       setHasLoaded(true);
-      data.user && setIsLogin(true);
     })["catch"](function (error) {
       console.log(error);
       alert('error happened getting auth user');
@@ -88115,12 +88107,10 @@ function App() {
 
   var data = {
     hasLoaded: hasLoaded,
-    isLogin: isLogin,
     params: params
   };
   var setState = {
-    params: setParams,
-    isLogin: setIsLogin
+    params: setParams
   };
   var user = null;
   var url = null;
@@ -88545,7 +88535,7 @@ function Comment() {
     var user = params.user;
     var viewerId = user.id;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      subtitle: "Comment Page"
+      subtitle: "\u30B3\u30E1\u30F3\u30C8"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home__WEBPACK_IMPORTED_MODULE_2__["PostWithComments"], {
       post: item,
       viewerId: viewerId
@@ -89397,7 +89387,6 @@ function Login() {
 
   function afterLogin(user) {
     setState.params(user);
-    setState.isLogin(true);
     _functions_MyLink__WEBPACK_IMPORTED_MODULE_5__["MyLink"].home(props);
   }
 
@@ -89493,7 +89482,6 @@ function logout() {
       examples: data.params.examples
     };
     setState.params(params);
-    setState.isLogin(false);
     _functions_MyLink__WEBPACK_IMPORTED_MODULE_5__["MyLink"].top(props);
   }
 
@@ -90059,10 +90047,10 @@ function Signup() {
       setErrors = _useState12[1];
 
   var props = Object(react__WEBPACK_IMPORTED_MODULE_5__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_1__["PropsContext"]);
-  var isLogin = Object(react__WEBPACK_IMPORTED_MODULE_5__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_0__["DataContext"]).isLogin;
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_5__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_0__["DataContext"]);
   var setState = Object(react__WEBPACK_IMPORTED_MODULE_5__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_0__["SetStateContext"]);
   Object(react__WEBPACK_IMPORTED_MODULE_5__["useEffect"])(function () {
-    isLogin && _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].home(props);
+    data.params.user && _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].home(props);
   }, []);
 
   function onClickSignup() {
@@ -90079,7 +90067,6 @@ function Signup() {
         }).then(function (response) {
           var params = response.data;
           setState.params(params);
-          setState.isLogin(true);
           _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].home(props);
         })["catch"](function (error) {
           console.log('--error----');
@@ -90227,14 +90214,12 @@ function TopPage() {
 
   function afterLogin(user) {
     setState.params(user);
-    setState.isLogin(true);
     _functions_MyLink__WEBPACK_IMPORTED_MODULE_2__["MyLink"].home(props);
   }
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     // ログイン済みの場合は/homeへ
-    // stateが更新されるタイミングがバラバラになってるため、両方確認。
-    (data.isLogin || data.params.user) && _functions_MyLink__WEBPACK_IMPORTED_MODULE_2__["MyLink"].home(props);
+    data.params.user && _functions_MyLink__WEBPACK_IMPORTED_MODULE_2__["MyLink"].home(props);
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "top-1"

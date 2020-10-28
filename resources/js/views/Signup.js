@@ -17,11 +17,11 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
   const props = useContext(PropsContext);
-  const isLogin = useContext(DataContext).isLogin;
+  const data = useContext(DataContext);
   const setState = useContext(SetStateContext);
 
   useEffect(() => {
-    isLogin && MyLink.home(props);
+    data.params.user && MyLink.home(props);
   }, []);
 
   function onClickSignup() {
@@ -42,7 +42,6 @@ export default function Signup() {
             .then((response) => {
               const params = response.data;
               setState.params(params);
-              setState.isLogin(true);
               MyLink.home(props);
             })
             .catch((error) => {

@@ -11,7 +11,6 @@ export const SetStateContext = createContext();
 
 function App() {
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
   const [params, setParams] = useState(null);
 
   useEffect(setUp, []);
@@ -27,7 +26,6 @@ function App() {
         // console.log(data);
         setParams(data);
         setHasLoaded(true);
-        data.user && setIsLogin(true);
       })
       .catch((error) => {
         console.log(error);
@@ -37,12 +35,11 @@ function App() {
 
   const data = {
     hasLoaded: hasLoaded,
-    isLogin: isLogin,
     params: params,
   };
+
   const setState = {
     params: setParams,
-    isLogin: setIsLogin,
   };
 
   let user = null;

@@ -11,14 +11,12 @@ export default function TopPage() {
 
   function afterLogin(user) {
     setState.params(user);
-    setState.isLogin(true);
     MyLink.home(props);
   }
 
   useEffect(() => {
     // ログイン済みの場合は/homeへ
-    // stateが更新されるタイミングがバラバラになってるため、両方確認。
-    (data.isLogin || data.params.user) && MyLink.home(props);
+    data.params.user && MyLink.home(props);
   }, []);
 
   return (

@@ -13,9 +13,9 @@ export default function SearchedBook(props) {
   const isInBookshelf = book.isInBookshelf;
 
   function PostButton() {
-    const isLogin = data.isLogin;
+    const user = data.params.user;
 
-    if (isLogin) {
+    if (user) {
       return (
         <button
           type="button"
@@ -31,9 +31,9 @@ export default function SearchedBook(props) {
   }
 
   function AddBookButton() {
-    const isLogin = data.isLogin;
+    const user = data.params.user;
 
-    if (isLogin && !isInBookshelf) {
+    if (user && !isInBookshelf) {
       return (
         <button
           type="button"
@@ -50,7 +50,7 @@ export default function SearchedBook(props) {
 
   return (
     <BookCard book={book}>
-      <PostButton isLogin={data.isLogin} />
+      <PostButton />
       <AddBookButton />
     </BookCard>
   );

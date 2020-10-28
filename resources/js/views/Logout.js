@@ -20,7 +20,6 @@ export default function logout() {
     };
 
     setState.params(params);
-    setState.isLogin(false);
     MyLink.top(props);
   }
 

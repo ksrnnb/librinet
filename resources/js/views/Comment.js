@@ -146,7 +146,7 @@ export default function Comment() {
     const viewerId = user.id;
     return (
       <>
-        <Subtitle subtitle="Comment Page" />
+        <Subtitle subtitle="コメント" />
         <PostWithComments post={item} viewerId={viewerId} />
         <RecommendBook
           orderedBooks={user.ordered_books}

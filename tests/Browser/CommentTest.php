@@ -97,7 +97,7 @@ class CommentTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit($this->path)
-                    ->waitFor('#message')
+                    ->waitForText('コメント')
                     ->check('recommend')
                     ->type('message', 'test_comment_with_book')
                     ->press('コメントする')

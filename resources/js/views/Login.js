@@ -38,7 +38,6 @@ export default function Login() {
 
   function afterLogin(user) {
     setState.params(user);
-    setState.isLogin(true);
     MyLink.home(props);
   }
 

@@ -14,7 +14,7 @@ export default function logout() {
 
   function linkToTop() {
     const params = {
-      user: null,
+      user: undefined,
       following_posts: [],
       examples: data.params.examples,
     };

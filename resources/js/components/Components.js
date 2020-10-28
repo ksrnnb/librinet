@@ -223,7 +223,7 @@ export function SearchForm(props) {
         <h5>{content}</h5>
         <p>{subMessage}</p>
         <input
-          className="mr-3 py-0"
+          className="mr-3 py-0 d-inline-block search-input"
           type="text"
           id={name}
           name={name}

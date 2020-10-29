@@ -3,7 +3,7 @@
 :root {
   --base_font_size: 18px;
   --icon_width: 24px;
-  --title_pt: 200px;
+  --title_pt: 130px;
   --title_pl: 20px;
   --title_pr: 0px;
 }
@@ -11355,7 +11355,8 @@ textarea {
 }
 
 .top,
-.top-content,
+.top-3,
+.top-2,
 .top-1 {
   background-attachment: fixed;
   background-position: center center;
@@ -11364,11 +11365,29 @@ textarea {
   min-height: 100vh;
 }
 
+.carousel-wrapper {
+  position: relative;
+}
+
 .top-1 {
   background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
 }
 
+.top-2 {
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-2.jpg");
+}
+
+.top-3 {
+  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-3.jpg");
+}
+
 .top-content {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
 }
 
@@ -11379,13 +11398,13 @@ textarea {
 }
 
 .top-content .top-wrapper .title {
-  font-size: 2.5rem;
-  padding-bottom: 3rem;
+  font-size: 2.2rem;
+  padding-bottom: 2rem;
 }
 
 .top-content .top-wrapper .title-message {
   font-size: 1.5rem;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 }
 
 .top-content .top-wrapper button {

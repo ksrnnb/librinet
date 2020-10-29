@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es6": true,
-    "amd": true
+    "amd": true,
+    "jquery": true
     // amd: define()とrequire()
   },
   "extends": [

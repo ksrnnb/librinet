@@ -90,7 +90,8 @@ export default function TopPage() {
     setHeight($('#top-content').height());
 
     // window幅が変わった時も高さを調整。
-    $(window).resize(() => {
+    // .resize()は非推奨らしい
+    $(window).on('resize', () => {
       const height = $('#top-content').height();
       setHeight(height);
     });

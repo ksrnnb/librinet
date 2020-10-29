@@ -88902,6 +88902,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -88928,51 +88930,51 @@ function CancelButton(props) {
 }
 
 function DeleteButton(props) {
+  var attr = props.isGuest ? {
+    disabled: true
+  } : {};
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "mt-5"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", _extends({
     className: "btn btn-outline-danger",
     onClick: props.onClick
-  }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B"));
-} // function SetPasswordButton() {
-//   return (
-//     <div className="col-12">
-//       <button className="btn btn-outline-success">
-//         パスワードを再設定する
-//       </button>
-//     </div>
-//   );
-// }
-
+  }, attr), "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B"));
+}
 
 function UserNameInput(props) {
+  var attr = props.isGuest ? {
+    disabled: true
+  } : {};
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "user-name",
     className: "d-block"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "my-0"
-  }, "\u30E6\u30FC\u30B6\u30FC\u540D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, "\u30E6\u30FC\u30B6\u30FC\u540D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", _extends({
     id: "user-name",
     className: "mw-100",
     name: "user-name",
     value: props.name,
     onChange: props.onChange
-  }));
+  }, attr)));
 }
 
 function UserStrIdInput(props) {
+  var attr = props.isGuest ? {
+    disabled: true
+  } : {};
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "user-id",
     className: "d-block"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "my-0"
-  }, "\u30E6\u30FC\u30B6\u30FCID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, "\u30E6\u30FC\u30B6\u30FCID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", _extends({
     id: "user-id",
     className: "mw-100",
     name: "user-id",
     value: props.strId,
     onChange: props.onChange
-  }));
+  }, attr)));
 }
 
 function EditUser() {
@@ -89032,6 +89034,8 @@ function EditUser() {
     });
   }
 
+  var isGuest = props.match.params.strId === 'guest';
+
   if (params != null) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "row mx-0"
@@ -89048,15 +89052,19 @@ function EditUser() {
         errors: errors
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserNameInput, {
         name: name,
+        isGuest: isGuest,
         onChange: function onChange(e) {
           return setName(e.target.value);
         }
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserStrIdInput, {
         strId: strId,
+        isGuest: isGuest,
         onChange: function onChange(e) {
           return setStrId(e.target.value);
         }
-      }))
+      }), isGuest && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "text-danger mb-0"
+      }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306E\u540D\u524D\u3068ID\u306F\u7DE8\u96C6\u3067\u304D\u307E\u305B\u3093"))
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "row justify-content-end mx-0"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -89072,8 +89080,15 @@ function EditUser() {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "float-right"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
+      isGuest: isGuest,
       onClick: onSubmitDelete
-    }))));
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row justify-content-end mx-0"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "float-right"
+    }, isGuest && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      className: "text-danger mb-0"
+    }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u306F\u524A\u9664\u3067\u304D\u307E\u305B\u3093"))));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
@@ -89082,18 +89097,21 @@ CancelButton.propTypes = {
   onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 DeleteButton.propTypes = {
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
+  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].book
 };
 EditButton.propTypes = {
   onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 UserNameInput.propTypes = {
   name: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
+  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].book
 };
 UserStrIdInput.propTypes = {
   strId: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
-  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
+  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].book
 };
 
 /***/ }),
@@ -90424,8 +90442,9 @@ function TopPage() {
     }); // top-contentはabsoluteを指定しており、親要素に高さが反映されないので、ここで取得して反映。
 
     setHeight($('#top-content').height()); // window幅が変わった時も高さを調整。
+    // .resize()は非推奨らしい
 
-    $(window).resize(function () {
+    $(window).on('resize', function () {
       var height = $('#top-content').height();
       setHeight(height);
     });
@@ -90665,13 +90684,23 @@ function EditUserButton(props) {
   } else {
     // ゲストの場合
     if (user.str_id === 'guest') {
+      // EditUserButton = (
+      //   <div>
+      //     <button type="button" className="btn btn-outline-success" disabled>
+      //       ユーザー情報を編集する
+      //     </button>
+      //     <p className="text-danger mb-0">
+      //       注意：ゲストユーザーは編集できません
+      //     </p>
+      //   </div>
+      // );
       EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "btn btn-outline-success",
-        disabled: true
-      }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        className: "text-danger mb-0"
-      }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306F\u7DE8\u96C6\u3067\u304D\u307E\u305B\u3093")); // ゲスト以外の場合
+        className: "btn btn-outline-success d-block",
+        onClick: function onClick() {
+          return _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].editUser(main_props, user.str_id);
+        }
+      }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B")); // ゲスト以外の場合
     } else {
       EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
@@ -90838,8 +90867,7 @@ function UserProfile() {
     });
   }
 
-  var buttons = null; // TODO: たぶんダメだから修正
-  // ログインしている場合はボタンを表示
+  var buttons = null; // ログインしている場合はボタンを表示
 
   if (typeof user !== 'undefined') {
     buttons = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditUserButton, {

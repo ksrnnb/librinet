@@ -87,11 +87,13 @@ class UserPageTest extends DuskTestCase
                     ->waitForLocation('/home')
                     ->waitFor('#subtitle');
 
-            // ゲストの場合は編集ボタンが無効
-            $browser->visit('/user/profile/guest')
-                    ->waitFor('.user-card')
+            // ゲストの場合は名前とIDが編集できない
+            $browser->visit('/user/edit/guest')
+                    ->waitFor('#user-name')
                     ->assertSee('編集できません')
-                    ->assertAttribute('.btn-outline-success', 'disabled', 'true');
+                    ->assertSee('削除できません')
+                    ->assertAttribute('#user-name', 'disabled', 'true')
+                    ->assertAttribute('#user-id', 'disabled', 'true');
         });
     }
 }

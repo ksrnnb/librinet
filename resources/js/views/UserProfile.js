@@ -23,14 +23,25 @@ function EditUserButton(props) {
   } else {
     // ゲストの場合
     if (user.str_id === 'guest') {
+      // EditUserButton = (
+      //   <div>
+      //     <button type="button" className="btn btn-outline-success" disabled>
+      //       ユーザー情報を編集する
+      //     </button>
+      //     <p className="text-danger mb-0">
+      //       注意：ゲストユーザーは編集できません
+      //     </p>
+      //   </div>
+      // );
       EditUserButton = (
         <div>
-          <button type="button" className="btn btn-outline-success" disabled>
+          <button
+            type="button"
+            className="btn btn-outline-success d-block"
+            onClick={() => MyLink.editUser(main_props, user.str_id)}
+          >
             ユーザー情報を編集する
           </button>
-          <p className="text-danger mb-0">
-            注意：ゲストユーザーは編集できません
-          </p>
         </div>
       );
       // ゲスト以外の場合
@@ -232,7 +243,6 @@ export default function UserProfile() {
 
   let buttons = null;
 
-  // TODO: たぶんダメだから修正
   // ログインしている場合はボタンを表示
   if (typeof user !== 'undefined') {
     buttons = (

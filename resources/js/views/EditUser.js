@@ -85,7 +85,7 @@ export default function EditUser() {
   const [errors, setErrors] = useState([]);
   const [name, setName] = useState(user.name);
   const [strId, setStrId] = useState(user.str_id);
-  const [image, setImage] = useState(user.image ? user.image : null);
+  const [image, setImage] = useState(user.image || null);
 
   function onSubmitEdit() {
     const path = '/api/user/edit';
@@ -165,8 +165,6 @@ export default function EditUser() {
             <EditButton onClick={onSubmitEdit} />
           </div>
         </div>
-        {/* TODO: メールは？ */}
-        {/* <SetPasswordButton /> */}
         <div className="row justify-content-end mx-0">
           <div className="float-right">
             <DeleteButton isGuest={isGuest} onClick={onSubmitDelete} />
@@ -194,7 +192,7 @@ CancelButton.propTypes = {
 
 DeleteButton.propTypes = {
   onClick: PropTypes.func,
-  isGuest: PropTypes.book,
+  isGuest: PropTypes.bool,
 };
 
 EditButton.propTypes = {
@@ -204,11 +202,11 @@ EditButton.propTypes = {
 UserNameInput.propTypes = {
   name: PropTypes.string,
   onChange: PropTypes.func,
-  isGuest: PropTypes.book,
+  isGuest: PropTypes.bool,
 };
 
 UserStrIdInput.propTypes = {
   strId: PropTypes.string,
   onChange: PropTypes.func,
-  isGuest: PropTypes.book,
+  isGuest: PropTypes.bool,
 };

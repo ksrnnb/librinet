@@ -87379,27 +87379,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_5__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -87438,190 +87428,140 @@ function ModalWindow(props) {
   }, "OK"))));
 }
 
-var UserImageInput = /*#__PURE__*/function (_React$Component) {
-  _inherits(UserImageInput, _React$Component);
+function UserImageInput(props) {
+  var minSize = 150;
+  var initialCrop = {
+    aspect: 1,
+    unit: '%'
+  };
 
-  var _super = _createSuper(UserImageInput);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(initialCrop),
+      _useState2 = _slicedToArray(_useState, 2),
+      crop = _useState2[0],
+      setCrop = _useState2[1];
 
-  function UserImageInput(props) {
-    var _this;
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      show = _useState4[0],
+      setShow = _useState4[1];
 
-    _classCallCheck(this, UserImageInput);
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      src = _useState6[0],
+      setSrc = _useState6[1];
 
-    _this = _super.call(this, props); // props.setStateImage();
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      uploadedImage = _useState8[0],
+      setUploadedImage = _useState8[1];
 
-    _this.state = {
-      src: null,
-      show: false,
-      crop: {
-        aspect: 1,
-        unit: '%'
+  var image = props.image,
+      setImage = props.setImage;
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    // モーダル表示中に画面のサイズを変更した場合の処理。
+    window.addEventListener('resize', function () {
+      var modal = document.getElementsByClassName('ReactCrop');
+
+      if (modal[0]) {
+        var height = modal[0].clientHeight;
+        var width = modal[0].clientWidth;
+        var max = height > width ? width : height; // 初期化。トリミング開始位置を左上に。サイズも最大の大きさに
+
+        crop.x = 0;
+        crop.y = 0;
+        crop.maxWidth = max;
+        crop.maxHeight = max;
+        setCrop(crop);
       }
-    };
-    _this.onChangeImage = _this.onChangeImage.bind(_assertThisInitialized(_this));
-    _this.setCrop = _this.setCrop.bind(_assertThisInitialized(_this));
-    _this.setShow = _this.setShow.bind(_assertThisInitialized(_this));
-    _this.readImage = _this.readImage.bind(_assertThisInitialized(_this));
-    _this.resize = _this.resize.bind(_assertThisInitialized(_this));
-    _this.trimming = _this.trimming.bind(_assertThisInitialized(_this));
-    return _this;
+    });
+  }, []);
+
+  function trimming() {
+    // モーダルウィンドウ中の画像の大きさを取得
+    var modal = document.getElementsByClassName('ReactCrop');
+    var height = modal[0].clientHeight;
+    var width = modal[0].clientWidth; // 以下は公式通り
+    // https://github.com/DominicTobias/react-image-crop
+
+    var canvas = document.createElement('canvas');
+    var scaleX = uploadedImage.naturalWidth / width;
+    var scaleY = uploadedImage.naturalHeight / height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(uploadedImage, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height); // src -> data:image/jpeg;base64........
+
+    var contentType = uploadedImage.src.split(';')[0].split(':')[1];
+    var trimmedSrc = canvas.toDataURL(contentType);
+    setShow(false);
+    setCrop(initialCrop);
+    setImage(trimmedSrc);
   }
 
-  _createClass(UserImageInput, [{
-    key: "trimming",
-    value: function trimming() {
-      this.setShow(false);
-      var crop = this.state.crop;
-      var image = this.resizedImage;
-      var canvas = document.createElement('canvas');
-      var scaleX = image.naturalWidth / image.width;
-      var scaleY = image.naturalHeight / image.height;
-      canvas.width = crop.width;
-      canvas.height = crop.height;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
-      var contentType = image.src.split(';')[0].split(':')[1];
-      var trimmedSrc = canvas.toDataURL(contentType); // TODO: 閉じるときに、アニメーションになる時とならないときがある。bootstrap側の問題？
+  function onChangeImage(e) {
+    var reader = new FileReader();
+    var file = e.target.files[0]; // 値を初期化しないと、
+    // もう一回画像をしようとしてキャンセルするとonChangeが発火するけど画像は無い、っていう状態になる。
 
-      this.setShow(false);
-      this.props.setImage(trimmedSrc);
+    e.target.value = null;
+    reader.readAsDataURL(file);
+
+    reader.onload = function () {
+      readImage(reader.result);
+    };
+  }
+
+  function readImage(src) {
+    var image = new Image();
+    image.src = src;
+
+    image.onload = function () {
+      var aspect = image.height / image.width;
+      aspect > 1 ? crop.width = minSize : crop.height = minSize;
+      setShow(true);
+      setCrop(crop);
+      setSrc(src);
+      setUploadedImage(image);
+    };
+  }
+
+  function mySetShow(isShown) {
+    setShow(isShown); // 閉じるときは初期化する。
+
+    !isShown && setCrop(initialCrop);
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_1__["UserImage"], {
+    image: image
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "text-center"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "user-image-input",
+    id: "user-image-label",
+    className: "btn btn-outline-success mt-3"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "file",
+    accept: "image/jpeg,image/png",
+    name: "user-image-input",
+    id: "user-image-input",
+    onChange: onChangeImage
+  }), "Upload")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
+    show: show,
+    setShow: mySetShow,
+    trimming: trimming
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_image_crop__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    src: src,
+    crop: crop,
+    keepSelection: true,
+    minWidth: minSize,
+    minHeight: minSize,
+    onChange: function onChange(newCrop) {
+      return setCrop(newCrop);
     }
-  }, {
-    key: "onChangeImage",
-    value: function onChangeImage(e) {
-      var _this2 = this;
-
-      var reader = new FileReader();
-      var file = e.target.files[0]; // 値を初期化しないと、
-      // もう一回画像をしようとしてキャンセルするとonChangeが発火するけど画像は無い、っていう状態になる。
-
-      e.target.value = null;
-      reader.readAsDataURL(file);
-
-      reader.onload = function () {
-        _this2.readImage(reader.result);
-      };
-    }
-  }, {
-    key: "resize",
-    value: function resize(image) {
-      // TODO: 幅の最適化
-      // console.log([...document.getElementsByClassName('modal-dialog')]);
-      var modalWidth = 300;
-
-      if (image.width > modalWidth) {
-        var scale = modalWidth / image.width;
-        image.width = modalWidth;
-        image.height = image.height * scale;
-      }
-
-      this.resizedImage = image;
-      return image;
-    }
-  }, {
-    key: "readImage",
-    value: function readImage(src) {
-      var _this3 = this;
-
-      var image = new Image();
-      image.src = src;
-
-      image.onload = function () {
-        var aspect = image.height / image.width;
-        var crop = _this3.state.crop;
-
-        if (aspect > 1) {
-          crop.width = 100;
-        } else {
-          crop.height = 100;
-        } // Canvasを利用して、リサイズしたImageをBase64形式にする。
-
-
-        var resizedImage = _this3.resize(image);
-
-        var canvas = document.createElement('canvas');
-        canvas.width = _this3.resizedImage.width;
-        canvas.height = _this3.resizedImage.height;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(resizedImage, 0, 0, resizedImage.width, resizedImage.height); // src -> data:image/jpeg;base64........
-
-        var contentType = src.split(';')[0].split(':')[1];
-        var resizedSrc = canvas.toDataURL(contentType); // ctx.clearRect(0, 0, resizedImage.width, resizedImage.height);
-
-        _this3.setState({
-          src: resizedSrc,
-          crop: crop,
-          show: true
-        });
-      };
-    }
-  }, {
-    key: "setShow",
-    value: function setShow(isShown) {
-      this.setState({
-        show: isShown
-      }); // 閉じるときは初期化する。
-
-      if (!isShown) {
-        var crop = {
-          aspect: 1,
-          unit: '%'
-        };
-        this.setCrop(crop);
-      }
-    }
-  }, {
-    key: "setCrop",
-    value: function setCrop(newCrop) {
-      this.setState({
-        crop: newCrop
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this4 = this;
-
-      var image = this.props.image;
-      var src = this.state.src;
-      var crop = this.state.crop;
-      var show = this.state.show;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserCard__WEBPACK_IMPORTED_MODULE_1__["UserImage"], {
-        image: image
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "text-center"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "user-image-input",
-        id: "user-image-label",
-        className: "btn btn-outline-success mt-3"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "file",
-        accept: "image/jpeg,image/png",
-        name: "user-image-input",
-        id: "user-image-input",
-        onChange: this.onChangeImage
-      }), "Upload")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
-        show: show,
-        setShow: this.setShow,
-        trimming: this.trimming
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_image_crop__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        src: src,
-        crop: crop,
-        keepSelection: true,
-        minWidth: 150,
-        onChange: function onChange(newCrop) {
-          return _this4.setCrop(newCrop);
-        }
-      })));
-    }
-  }]);
-
-  return UserImageInput;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-
+  })));
+}
 UserImageInput.propTypes = {
-  image: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
+  image: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string, prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].object]),
   setImage: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
 };
 ModalWindow.propTypes = {
@@ -88999,7 +88939,7 @@ function EditUser() {
       strId = _useState6[0],
       setStrId = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(user.image ? user.image : null),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(user.image || null),
       _useState8 = _slicedToArray(_useState7, 2),
       image = _useState8[0],
       setImage = _useState8[1];
@@ -89098,7 +89038,7 @@ CancelButton.propTypes = {
 };
 DeleteButton.propTypes = {
   onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
-  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].book
+  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].bool
 };
 EditButton.propTypes = {
   onClick: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
@@ -89106,12 +89046,12 @@ EditButton.propTypes = {
 UserNameInput.propTypes = {
   name: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
-  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].book
+  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].bool
 };
 UserStrIdInput.propTypes = {
   strId: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
-  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].book
+  isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].bool
 };
 
 /***/ }),
@@ -90676,43 +90616,20 @@ var axios = window.axios;
 function EditUserButton(props) {
   var user = props.user;
   var viewerStrId = props.viewerStrId;
-  var main_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
-  var EditUserButton; // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
+  var main_props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]); // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
 
   if (user.str_id !== viewerStrId) {
-    EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null); // 表示しているユーザーが、閲覧者自身の場合
-  } else {
-    // ゲストの場合
-    if (user.str_id === 'guest') {
-      // EditUserButton = (
-      //   <div>
-      //     <button type="button" className="btn btn-outline-success" disabled>
-      //       ユーザー情報を編集する
-      //     </button>
-      //     <p className="text-danger mb-0">
-      //       注意：ゲストユーザーは編集できません
-      //     </p>
-      //   </div>
-      // );
-      EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        className: "btn btn-outline-success d-block",
-        onClick: function onClick() {
-          return _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].editUser(main_props, user.str_id);
-        }
-      }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B")); // ゲスト以外の場合
-    } else {
-      EditUserButton = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        className: "btn btn-outline-success d-block",
-        onClick: function onClick() {
-          return _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].editUser(main_props, user.str_id);
-        }
-      }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B"));
-    }
-  }
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
+  } // 表示しているユーザーが、閲覧者自身の場合
 
-  return EditUserButton;
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-outline-success d-block",
+    onClick: function onClick() {
+      return _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].editUser(main_props, user.str_id);
+    }
+  }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B"));
 }
 
 function FollowButton(props) {
@@ -90916,6 +90833,10 @@ function UserProfile() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
 }
+EditUserButton.propTypes = {
+  user: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].object,
+  viewerStrId: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].number
+};
 FollowNumber.propTypes = {
   follows: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].array,
   followers: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].array,

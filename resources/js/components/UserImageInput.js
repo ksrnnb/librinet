@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserImage } from './UserCard';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -40,42 +40,58 @@ function ModalWindow(props) {
   );
 }
 
-export default class UserImageInput extends React.Component {
-  constructor(props) {
-    super(props);
+export default function UserImageInput(props) {
+  const minSize = 150;
+  const initialCrop = {
+    aspect: 1,
+    unit: '%',
+  };
 
-    // props.setStateImage();
-    this.state = {
-      src: null,
-      show: false,
-      crop: {
-        aspect: 1,
-        unit: '%',
-      },
-    };
+  const [crop, setCrop] = useState(initialCrop);
+  const [show, setShow] = useState(false);
+  const [src, setSrc] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const { image, setImage } = props;
 
-    this.onChangeImage = this.onChangeImage.bind(this);
-    this.setCrop = this.setCrop.bind(this);
-    this.setShow = this.setShow.bind(this);
-    this.readImage = this.readImage.bind(this);
-    this.resize = this.resize.bind(this);
-    this.trimming = this.trimming.bind(this);
-  }
+  useEffect(() => {
+    // モーダル表示中に画面のサイズを変更した場合の処理。
+    window.addEventListener('resize', () => {
+      const modal = document.getElementsByClassName('ReactCrop');
 
-  trimming() {
-    this.setShow(false);
-    const crop = this.state.crop;
-    const image = this.resizedImage;
+      if (modal[0]) {
+        const height = modal[0].clientHeight;
+        const width = modal[0].clientWidth;
 
+        const max = height > width ? width : height;
+
+        // 初期化。トリミング開始位置を左上に。サイズも最大の大きさに
+        crop.x = 0;
+        crop.y = 0;
+        crop.maxWidth = max;
+        crop.maxHeight = max;
+
+        setCrop(crop);
+      }
+    });
+  }, []);
+
+  function trimming() {
+    // モーダルウィンドウ中の画像の大きさを取得
+    const modal = document.getElementsByClassName('ReactCrop');
+    const height = modal[0].clientHeight;
+    const width = modal[0].clientWidth;
+
+    // 以下は公式通り
+    // https://github.com/DominicTobias/react-image-crop
     const canvas = document.createElement('canvas');
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
+    const scaleX = uploadedImage.naturalWidth / width;
+    const scaleY = uploadedImage.naturalHeight / height;
     canvas.width = crop.width;
     canvas.height = crop.height;
     const ctx = canvas.getContext('2d');
 
     ctx.drawImage(
-      image,
+      uploadedImage,
       crop.x * scaleX,
       crop.y * scaleY,
       crop.width * scaleX,
@@ -86,15 +102,16 @@ export default class UserImageInput extends React.Component {
       crop.height
     );
 
-    const contentType = image.src.split(';')[0].split(':')[1];
+    // src -> data:image/jpeg;base64........
+    const contentType = uploadedImage.src.split(';')[0].split(':')[1];
     const trimmedSrc = canvas.toDataURL(contentType);
 
-    // TODO: 閉じるときに、アニメーションになる時とならないときがある。bootstrap側の問題？
-    this.setShow(false);
-    this.props.setImage(trimmedSrc);
+    setShow(false);
+    setCrop(initialCrop);
+    setImage(trimmedSrc);
   }
 
-  onChangeImage(e) {
+  function onChangeImage(e) {
     const reader = new FileReader();
     const file = e.target.files[0];
     // 値を初期化しないと、
@@ -103,135 +120,67 @@ export default class UserImageInput extends React.Component {
     reader.readAsDataURL(file);
 
     reader.onload = () => {
-      this.readImage(reader.result);
+      readImage(reader.result);
     };
   }
 
-  resize(image) {
-    // TODO: 幅の最適化
-    // console.log([...document.getElementsByClassName('modal-dialog')]);
-    const modalWidth = 300;
-
-    if (image.width > modalWidth) {
-      const scale = modalWidth / image.width;
-      image.width = modalWidth;
-      image.height = image.height * scale;
-    }
-
-    this.resizedImage = image;
-
-    return image;
-  }
-
-  readImage(src) {
+  function readImage(src) {
     const image = new Image();
     image.src = src;
     image.onload = () => {
       const aspect = image.height / image.width;
-      const crop = this.state.crop;
+      aspect > 1 ? (crop.width = minSize) : (crop.height = minSize);
 
-      if (aspect > 1) {
-        crop.width = 100;
-      } else {
-        crop.height = 100;
-      }
-
-      // Canvasを利用して、リサイズしたImageをBase64形式にする。
-      const resizedImage = this.resize(image);
-
-      const canvas = document.createElement('canvas');
-      canvas.width = this.resizedImage.width;
-      canvas.height = this.resizedImage.height;
-
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(
-        resizedImage,
-        0,
-        0,
-        resizedImage.width,
-        resizedImage.height
-      );
-
-      // src -> data:image/jpeg;base64........
-      const contentType = src.split(';')[0].split(':')[1];
-      const resizedSrc = canvas.toDataURL(contentType);
-      // ctx.clearRect(0, 0, resizedImage.width, resizedImage.height);
-
-      this.setState({
-        src: resizedSrc,
-        crop: crop,
-        show: true,
-      });
+      setShow(true);
+      setCrop(crop);
+      setSrc(src);
+      setUploadedImage(image);
     };
   }
 
-  setShow(isShown) {
-    this.setState({
-      show: isShown,
-    });
+  function mySetShow(isShown) {
+    setShow(isShown);
 
     // 閉じるときは初期化する。
-    if (!isShown) {
-      const crop = {
-        aspect: 1,
-        unit: '%',
-      };
-
-      this.setCrop(crop);
-    }
+    !isShown && setCrop(initialCrop);
   }
 
-  setCrop(newCrop) {
-    this.setState({
-      crop: newCrop,
-    });
-  }
-
-  render() {
-    const image = this.props.image;
-    const src = this.state.src;
-    const crop = this.state.crop;
-    const show = this.state.show;
-    return (
-      <>
-        <UserImage image={image} />
-        <div className="text-center">
-          <label
-            htmlFor="user-image-input"
-            id="user-image-label"
-            className="btn btn-outline-success mt-3"
-          >
-            <input
-              type="file"
-              accept="image/jpeg,image/png"
-              name="user-image-input"
-              id="user-image-input"
-              onChange={this.onChangeImage}
-            />
-            Upload
-          </label>
-        </div>
-
-        <ModalWindow
-          show={show}
-          setShow={this.setShow}
-          trimming={this.trimming}
+  return (
+    <>
+      <UserImage image={image} />
+      <div className="text-center">
+        <label
+          htmlFor="user-image-input"
+          id="user-image-label"
+          className="btn btn-outline-success mt-3"
         >
-          <ReactCrop
-            src={src}
-            crop={crop}
-            keepSelection={true}
-            minWidth={150}
-            onChange={(newCrop) => this.setCrop(newCrop)}
+          <input
+            type="file"
+            accept="image/jpeg,image/png"
+            name="user-image-input"
+            id="user-image-input"
+            onChange={onChangeImage}
           />
-        </ModalWindow>
-      </>
-    );
-  }
+          Upload
+        </label>
+      </div>
+
+      <ModalWindow show={show} setShow={mySetShow} trimming={trimming}>
+        <ReactCrop
+          src={src}
+          crop={crop}
+          keepSelection={true}
+          minWidth={minSize}
+          minHeight={minSize}
+          onChange={(newCrop) => setCrop(newCrop)}
+        />
+      </ModalWindow>
+    </>
+  );
 }
 
 UserImageInput.propTypes = {
-  image: PropTypes.string,
+  image: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   setImage: PropTypes.func,
 };
 

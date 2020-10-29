@@ -14,53 +14,22 @@ function EditUserButton(props) {
   const viewerStrId = props.viewerStrId;
   const main_props = useContext(PropsContext);
 
-  let EditUserButton;
   // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
   if (user.str_id !== viewerStrId) {
-    EditUserButton = <></>;
-
-    // 表示しているユーザーが、閲覧者自身の場合
-  } else {
-    // ゲストの場合
-    if (user.str_id === 'guest') {
-      // EditUserButton = (
-      //   <div>
-      //     <button type="button" className="btn btn-outline-success" disabled>
-      //       ユーザー情報を編集する
-      //     </button>
-      //     <p className="text-danger mb-0">
-      //       注意：ゲストユーザーは編集できません
-      //     </p>
-      //   </div>
-      // );
-      EditUserButton = (
-        <div>
-          <button
-            type="button"
-            className="btn btn-outline-success d-block"
-            onClick={() => MyLink.editUser(main_props, user.str_id)}
-          >
-            ユーザー情報を編集する
-          </button>
-        </div>
-      );
-      // ゲスト以外の場合
-    } else {
-      EditUserButton = (
-        <div>
-          <button
-            type="button"
-            className="btn btn-outline-success d-block"
-            onClick={() => MyLink.editUser(main_props, user.str_id)}
-          >
-            ユーザー情報を編集する
-          </button>
-        </div>
-      );
-    }
+    return <></>;
   }
-
-  return EditUserButton;
+  // 表示しているユーザーが、閲覧者自身の場合
+  return (
+    <div>
+      <button
+        type="button"
+        className="btn btn-outline-success d-block"
+        onClick={() => MyLink.editUser(main_props, user.str_id)}
+      >
+        ユーザー情報を編集する
+      </button>
+    </div>
+  );
 }
 
 function FollowButton(props) {
@@ -299,6 +268,11 @@ export default function UserProfile() {
     return <></>;
   }
 }
+
+EditUserButton.propTypes = {
+  user: PropTypes.object,
+  viewerStrId: PropTypes.number,
+};
 
 FollowNumber.propTypes = {
   follows: PropTypes.array,

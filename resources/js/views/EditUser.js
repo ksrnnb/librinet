@@ -27,26 +27,22 @@ function CancelButton(props) {
 }
 
 function DeleteButton(props) {
+  const attr = props.isGuest ? { disabled: true } : {};
   return (
     <div className="mt-5">
-      <button className="btn btn-outline-danger" onClick={props.onClick}>
+      <button
+        className="btn btn-outline-danger"
+        onClick={props.onClick}
+        {...attr}
+      >
         アカウントを削除する
       </button>
     </div>
   );
 }
 
-// function SetPasswordButton() {
-//   return (
-//     <div className="col-12">
-//       <button className="btn btn-outline-success">
-//         パスワードを再設定する
-//       </button>
-//     </div>
-//   );
-// }
-
 function UserNameInput(props) {
+  const attr = props.isGuest ? { disabled: true } : {};
   return (
     <label htmlFor="user-name" className="d-block">
       <p className="my-0">ユーザー名</p>
@@ -56,12 +52,14 @@ function UserNameInput(props) {
         name="user-name"
         value={props.name}
         onChange={props.onChange}
+        {...attr}
       />
     </label>
   );
 }
 
 function UserStrIdInput(props) {
+  const attr = props.isGuest ? { disabled: true } : {};
   return (
     <label htmlFor="user-id" className="d-block">
       <p className="my-0">ユーザーID</p>
@@ -71,6 +69,7 @@ function UserStrIdInput(props) {
         name="user-id"
         value={props.strId}
         onChange={props.onChange}
+        {...attr}
       />
     </label>
   );
@@ -127,6 +126,8 @@ export default function EditUser() {
       });
   }
 
+  const isGuest = props.match.params.strId === 'guest';
+
   if (params != null) {
     return (
       <>
@@ -139,12 +140,19 @@ export default function EditUser() {
                 <Errors errors={errors} />
                 <UserNameInput
                   name={name}
+                  isGuest={isGuest}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <UserStrIdInput
                   strId={strId}
+                  isGuest={isGuest}
                   onChange={(e) => setStrId(e.target.value)}
                 />
+                {isGuest && (
+                  <p className="text-danger mb-0">
+                    注意：ゲストユーザーの名前とIDは編集できません
+                  </p>
+                )}
               </div>
             }
           />
@@ -161,7 +169,16 @@ export default function EditUser() {
         {/* <SetPasswordButton /> */}
         <div className="row justify-content-end mx-0">
           <div className="float-right">
-            <DeleteButton onClick={onSubmitDelete} />
+            <DeleteButton isGuest={isGuest} onClick={onSubmitDelete} />
+          </div>
+        </div>
+        <div className="row justify-content-end mx-0">
+          <div className="float-right">
+            {isGuest && (
+              <p className="text-danger mb-0">
+                注意：ゲストユーザは削除できません
+              </p>
+            )}
           </div>
         </div>
       </>
@@ -177,6 +194,7 @@ CancelButton.propTypes = {
 
 DeleteButton.propTypes = {
   onClick: PropTypes.func,
+  isGuest: PropTypes.book,
 };
 
 EditButton.propTypes = {
@@ -186,9 +204,11 @@ EditButton.propTypes = {
 UserNameInput.propTypes = {
   name: PropTypes.string,
   onChange: PropTypes.func,
+  isGuest: PropTypes.book,
 };
 
 UserStrIdInput.propTypes = {
   strId: PropTypes.string,
   onChange: PropTypes.func,
+  isGuest: PropTypes.book,
 };

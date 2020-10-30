@@ -88767,9 +88767,7 @@ function EditGenre() {
   function onSubmitNewGenres() {
     var newGenres = getNewGenresFromInputs();
     var path = '/api/genre/edit';
-    var userId = params.user.id;
     axios.post(path, {
-      userId: userId,
       newGenres: newGenres
     }).then(function (response) {
       setState.params(response.data);
@@ -88966,9 +88964,9 @@ function EditUser() {
     axios["delete"](path, {
       data: user
     }).then(function () {
-      params.user = {};
+      params.user = undefined;
       setState.params(params);
-      _functions_MyLink__WEBPACK_IMPORTED_MODULE_8__["MyLink"].home(props);
+      _functions_MyLink__WEBPACK_IMPORTED_MODULE_8__["MyLink"].top(props);
     })["catch"](function (error) {
       console.log(error);
     });
@@ -89281,6 +89279,7 @@ function ModalWindow(props) {
       handleClose();
       _functions_MyLink__WEBPACK_IMPORTED_MODULE_6__["MyLink"].home(main_props);
     })["catch"](function (error) {
+      // TODO: ユーザーが異なる場合の処理（403, forbidden）
       console.log(error);
     });
   };
@@ -90835,7 +90834,7 @@ function UserProfile() {
 }
 EditUserButton.propTypes = {
   user: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].object,
-  viewerStrId: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].number
+  viewerStrId: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].string
 };
 FollowNumber.propTypes = {
   follows: prop_types__WEBPACK_IMPORTED_MODULE_6__["PropTypes"].array,

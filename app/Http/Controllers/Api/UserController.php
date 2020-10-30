@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\SearchUserRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\User;
 use App\Book;
 use App\Post;
@@ -51,11 +52,12 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    // TODO: validation
     public function edit(EditUserRequest $request)
     {
-        $validated = $request->validated();
+        // $validated = $request->validated();
         $params = $request->input('user');
+        
+        Gate::authorize('edit-user', $params['id']);
         
         // helper
         $params = extract_user_params($params);
@@ -72,13 +74,10 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
+        Gate::authorize('delete-user', $request->id);
         $user = Auth::user();
 
-        if ($request->id == $user->id) {
-            $user->delete();
-            return response('deleted', 200);
-        } else {
-            return bad_request();
-        }
+        $user->delete();
+        return response('deleted', 200);
     }
 }

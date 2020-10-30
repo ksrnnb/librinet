@@ -25,11 +25,9 @@ export default function EditGenre() {
   function onSubmitNewGenres() {
     const newGenres = getNewGenresFromInputs();
     const path = '/api/genre/edit';
-    const userId = params.user.id;
 
     axios
       .post(path, {
-        userId: userId,
         newGenres: newGenres,
       })
       .then((response) => {

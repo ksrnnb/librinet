@@ -7,6 +7,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\Book;
 use App\User;
+use App\Genre;
 
 class DeletePostTest extends DuskTestCase
 {
@@ -30,6 +31,9 @@ class DeletePostTest extends DuskTestCase
         $this->post = $this->user->books()
                                  ->save(factory(Book::class)->make())
                                  ->registerPost('test_post_message');
+
+        // ジャンルを作成しておかないと削除時にエラーが出る。
+        Genre::create(['name' => 'test_genre']);
 
         $this->post->createComment($user_id = $this->user->id, $message = 'test_comment_message');
         $this->path = '/comment/' . $this->post->uuid;

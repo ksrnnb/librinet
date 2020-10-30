@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 use App\Book;
 use App\Post;
 use App\User;
@@ -27,6 +28,8 @@ class PostController extends Controller
     // TODO: PostRequestつかう？
     public function create(Request $request)
     {
+        Gate::authorize('create-book');
+
         // $isIsbn = Book::isIsbn($isbn);
         $user = Auth::user();
 
@@ -45,11 +48,15 @@ class PostController extends Controller
 
     public function delete(Request $request)
     {
-        // DELETE methodのため、プロパティに入ってる
-        $uuid = $request->uuid;
+        // DELETE methodのため、uuidは$requestのプロパティに直で入ってる
+        $post = Post::where('uuid', $request->uuid)->first();
 
-        // app/helper.php
-        $posts = delete_feed_and_get_new_feed($uuid, 'post');
+        // ここで認可の処理。異なる場合はuser idが異なる場合はここで処理が止まって403エラーを返す。
+        Gate::authorize('delete-post', $post);
+
+        $post->delete();
+
+        $posts = Post::getPostsOfFollowingUsers(Auth::user());
 
         return response($posts);
     }

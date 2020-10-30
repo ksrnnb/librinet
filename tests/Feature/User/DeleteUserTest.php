@@ -48,7 +48,7 @@ class DeleteUserTest extends TestCase
         $user = $this->user->toArray();
         
         $this->delete($this->delete_path, $user)
-             ->assertStatus(400);
+             ->assertStatus(403);
     }
 
     public function testCanDeleteUser()

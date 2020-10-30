@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class Book extends Model
@@ -102,6 +103,8 @@ class Book extends Model
         foreach ($ids as $id) {
             $book = $books->where('id', $id)->first();
 
+            Gate::authorize('delete-book', $book);
+            
             $RelatesPost = $book->post instanceof Post;
 
             if ($RelatesPost) {

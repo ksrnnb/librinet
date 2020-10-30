@@ -271,7 +271,7 @@ export default function UserProfile() {
 
 EditUserButton.propTypes = {
   user: PropTypes.object,
-  viewerStrId: PropTypes.number,
+  viewerStrId: PropTypes.string,
 };
 
 FollowNumber.propTypes = {

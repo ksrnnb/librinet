@@ -117,9 +117,9 @@ export default function EditUser() {
         data: user,
       })
       .then(() => {
-        params.user = {};
+        params.user = undefined;
         setState.params(params);
-        MyLink.home(props);
+        MyLink.top(props);
       })
       .catch((error) => {
         console.log(error);

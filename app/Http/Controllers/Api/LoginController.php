@@ -20,7 +20,7 @@ class LoginController extends Controller
     {
         
         $str_id = $request->input('strId');
-        $password = $request->input('password');      //TODO:ここは暫定
+        $password = $request->input('password');
         
         $credentials = compact('str_id', 'password');
         

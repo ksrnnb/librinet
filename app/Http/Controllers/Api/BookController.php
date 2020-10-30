@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Book;
 use App\Genre;
 use App\User;
@@ -53,6 +54,8 @@ class BookController extends Controller
     // TODO: validation Bookcreaterequest?
     public function create(Request $request)
     {
+        Gate::authorize('create-book');
+
         $form = collect($request->input());
         $user = Auth::user();
         $form = $form->merge([
@@ -89,8 +92,8 @@ class BookController extends Controller
     public function delete(Request $request)
     {
         $ids = $request->ids;
-
         $user = Auth::user();
+        // deleteBooksメソッドの中でGateを利用して認可の処理をしている。
         Book::deleteBooks($ids, $user);
 
         $params = User::getParamsForApp($user->str_id);

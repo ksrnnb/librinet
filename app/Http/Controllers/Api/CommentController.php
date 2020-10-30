@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 use App\Post;
 use App\User;
 use App\Comment;
@@ -67,6 +68,8 @@ class CommentController extends Controller
 
     public function create(Request $request)
     {
+        Gate::authorize('create-comment');
+
         // TODO: validation
         // return response()->json($request->input());
         $form = $request->input();
@@ -97,10 +100,14 @@ class CommentController extends Controller
     public function delete(Request $request)
     {
         // DELETE methodのため、プロパティに入ってる
-        $uuid = $request->uuid;
+        $comment = Comment::where('uuid', $request->uuid)->first();
 
-        // app/helper.php
-        $posts = delete_feed_and_get_new_feed($uuid, 'comment');
+        // ユーザーIDの確認
+        Gate::authorize('delete-comment', $comment);
+
+        $comment->delete();
+
+        $posts = Post::getPostsOfFollowingUsers(Auth::user());
 
         return response($posts);
     }

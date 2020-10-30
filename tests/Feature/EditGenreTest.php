@@ -35,9 +35,12 @@ class GenreEditTest extends TestCase
             $this->book = $this->user
                                ->books()
                                ->save(factory(Book::class)->make());
-            $genre = factory(Genre::class)->create();
+                               
+            Genre::create(['name' => 'initial_genre']);
+
+            $genre_id = $this->book->genre_id;
             $this->genre = [
-                $genre->id => 'New_Genre_Name',
+                $genre_id => 'New_Genre_Name',
             ];
         }
     }
@@ -45,7 +48,7 @@ class GenreEditTest extends TestCase
     public function testCannotEditWhenIsNotAuthenticated()
     {
         $params = [
-            'userId' => $this->user->id,
+            // 'userId' => $this->user->id,
             'newGenres' => $this->genre,
         ];
 
@@ -57,7 +60,6 @@ class GenreEditTest extends TestCase
     {
         $this->authenticate();
         $params = [
-            'userId' => $this->user->id,
             'newGenres' => $this->genre,
         ];
 
@@ -72,7 +74,6 @@ class GenreEditTest extends TestCase
 
         // empty string
         $params = [
-            'userId' => $this->user->id,
             'newGenres' => '',
         ];
 
@@ -81,7 +82,6 @@ class GenreEditTest extends TestCase
 
         // emtpy array
         $params = [
-            'userId' => $this->user->id,
             'newGenres' => [],
         ];
 
@@ -90,7 +90,6 @@ class GenreEditTest extends TestCase
 
         // emtpy array
         $params = [
-            'userId' => $this->user->id,
             'newGenres' => [1 => ''],
         ];
 
@@ -98,17 +97,17 @@ class GenreEditTest extends TestCase
              ->assertStatus(400);
     }
 
-    public function testDifferentUserCannotUpdate()
-    {
-        $this->authenticate();
+    // public function testDifferentUserCannotUpdate()
+    // {
+    //     $this->authenticate();
 
-        // different user
-        $params = [
-            'userId' => $this->user->id + 1,
-            'newGenres' => $this->genre,
-        ];
+    //     // different user
+    //     $params = [
+    //         'userId' => $this->user->id + 1,
+    //         'newGenres' => $this->genre,
+    //     ];
 
-        $this->post($this->edit_path, $params)
-             ->assertStatus(400);
-    }
+    //     $this->post($this->edit_path, $params)
+    //          ->assertStatus(400);
+    // }
 }

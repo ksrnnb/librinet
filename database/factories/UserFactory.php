@@ -24,8 +24,15 @@ $factory->define(User::class, function (Faker $faker) {
         'str_id' => $faker->unique()->regexify('[a-zA-Z0-9]{6,10}'),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        // 'image' => asset('img/icon.svg'),    <- このやり方だと、localhost/img/icon.svgになってしまう
         'password' => Hash::make(config('app.guest_password')),
         'remember_token' => Str::random(10),
     ];
 });
+
+$users = UserSeeder::$users;
+
+foreach ($users as $state => $user) {
+    $factory->state(User::class, $state, function ($faker) use ($user) {
+        return $user;
+    });
+}

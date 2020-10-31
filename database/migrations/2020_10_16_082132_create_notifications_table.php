@@ -19,6 +19,7 @@ class CreateNotificationsTable extends Migration
             $table->integer('comment_id')->nullable();
             $table->integer('like_id')->nullable();
             $table->integer('follower_id')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

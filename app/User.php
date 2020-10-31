@@ -263,21 +263,6 @@ class User extends Authenticatable
         return $params;
     }
 
-    public static function returnParamsForGuestUser()
-    {
-        $params = [
-            'str_id' => 'guest',
-            'name' => 'ゲスト',
-            'email' => 'guest@guest.com',
-            'email_verified_at' => now(),
-            'image' => '/img/icon_green.svg',
-            'password' => Hash::make(config('app.guest_password')),
-            'remember_token' => Str::random(10),
-        ];
-        
-        return $params;
-    }
-
     /*
         return boolean (user has book or not)
     */

@@ -59,7 +59,7 @@ class UserPageTest extends DuskTestCase
             // 本とジャンルを追加してからユーザーページに移動する。
             $this->user->books()
                        ->save(factory(Book::class)->make());
-            factory(Genre::class)->create(
+            Genre::create(
                 ['name' => 'TEST_GENRE']
             );
 

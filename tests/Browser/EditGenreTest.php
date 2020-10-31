@@ -34,13 +34,13 @@ class EditGenreTest extends DuskTestCase
 
     public function createBook()
     {
-        $this->book = $this->user
-                           ->books()
-                           ->save(factory(Book::class)->make());
-
-        $this->genre = factory(Genre::class)->create(
+        $genre = Genre::create(
             ['name' => 'TEST_GENRE']
         );
+
+        $this->user
+             ->books()
+             ->save(factory(Book::class)->make());
     }
 
     public function testCannotAccessEditPageWithoutAuth()

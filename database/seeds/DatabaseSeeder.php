@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             GenreSeeder::class,     //  Genre
-            UserSeeder::class,      //  User, Book, Post
+            UserSeeder::class,      //  User
+            BookSeeder::class,      //  Book, Post
             FollowerSeeder::class,  //  Follower
             CommentSeeder::class,   //  Comment
             LikeSeeder::class,      //  Like

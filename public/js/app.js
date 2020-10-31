@@ -85864,7 +85864,7 @@ function Books(props) {
       genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "genre-name-wrapper"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-        className: "".concat(margin, " genre-name"),
+        className: "".concat(margin, " genre-name font-weight-bold"),
         "data-id": genreId
       }, genres[genreId]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
         className: "".concat(margin, " gear-icon-wrapper")
@@ -88201,9 +88201,9 @@ function Book() {
     content: "\u691C\u7D22\u30D5\u30A9\u30FC\u30E0"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["SearchForm"], {
     name: "isbn",
-    content: "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044",
-    subMessage: "\uFF08\u203B\u56FD\u5185\u306E\u672C\u306B\u9650\u308A\u307E\u3059\u30029784...\uFF09",
-    maxLength: 13,
+    content: "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF089784...\uFF09",
+    subMessage: "\uFF08\u203B\u4E00\u90E8\u672C\u304C\u898B\u3064\u304B\u3089\u306A\u3044\u5834\u5408\u3084\u3001\u8868\u7D19\u304C\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\uFF09" // maxLength={13}
+    ,
     onChange: function onChange(e) {
       return setInput(e.target.value);
     },

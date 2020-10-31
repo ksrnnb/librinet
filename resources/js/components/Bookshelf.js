@@ -67,7 +67,10 @@ function Books(props) {
     } else {
       genre = (
         <div className="genre-name-wrapper">
-          <h4 className={`${margin} genre-name`} data-id={genreId}>
+          <h4
+            className={`${margin} genre-name font-weight-bold`}
+            data-id={genreId}
+          >
             {genres[genreId]}
           </h4>
           <h4 className={`${margin} gear-icon-wrapper`}>

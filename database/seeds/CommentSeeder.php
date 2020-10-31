@@ -2,9 +2,65 @@
 
 use Illuminate\Database\Seeder;
 use App\Book;
+use App\Post;
+use App\User;
 
 class CommentSeeder extends Seeder
 {
+
+    /**
+     * [ post_id => [ user_id => message ], ... ]
+     */
+    public $posts = [
+        // こころ
+        8 => [
+            // 吾輩は猫である
+            [
+                'user_id' => 3,
+                'message' => '定番ですが、『吾輩は猫である』もいいですよね。',
+                'isbn'    => '9784101010014',
+            ],
+
+            // 坊っちゃん
+            [
+                'user_id' => 4,
+                'message' => '愛媛県民として読んでおきたい一冊。',
+                'isbn'    => '9784101010038',
+            ],
+
+        ],
+        
+        // SQLの基礎
+        13 => [
+            // 達人に学ぶDB設計
+            [
+                'user_id' => 2,
+                'message' => '次はこの本がお勧めです！',
+                'isbn'    => '9784798124704',
+            ],
+        ],
+
+        // 天然発酵
+        17 => [
+            [
+                'user_id' => 1,
+                'message' => '他にも良い発酵食品ありますか？',
+            ],
+            
+            [
+                'user_id' => 3,
+                'message' => 'ザワークラウトはキャベツを塩漬けするだけなので、作りやすくて良いですよ！',
+            ],
+        ],
+
+        // カレー
+        20 => [
+            [
+                'user_id' => 1,
+                'message' => 'スパイスカレーいいですね、自分も挑戦してみたいです！',
+            ],
+        ],
+    ];
 
     /**
      * Run the database seeds.
@@ -13,45 +69,22 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        //  2人からコメント
-        $post = App\Post::find(1);
-        $messages = [
-            2 => '私も読みました！',
-            3 => 'いいね！',
-        ];
-        foreach ($messages as $id => $message) {
-            $post->createComment($user_id = $id, $message = $message);
+        $posts = $this->posts;
+
+        foreach ($posts as $post_id => $post) {
+            foreach ($post as $params) {
+                $user = User::find($params['user_id']);
+                $has_isbn = isset($params['isbn']);
+              
+                if ($has_isbn) {
+                    $book_array = Book::getBookParams($params['isbn']);
+                    $book = $user->books()->create($book_array);
+                }
+
+                $book_id = $has_isbn ? $book->id : null;
+                $target_post = Post::find($post_id);
+                $target_post->createComment($user->id, $params['message'], $book_id);
+            }
         }
-
-        //  違う投稿に3人からコメント
-        $post = App\Post::find(8);
-        $messages = [
-            ['id' => 1, 'message' => '私も読みました！'],
-            ['id' => 3, 'message' => 'いいね！'],
-            ['id' => 5, 'message' => '最高！'],
-        ];
-
-        foreach ($messages as $item) {
-            $post->createComment($user_id = $item['id'], $message = $item['message']);
-        }
-        
-        // 本をおすすめするコメント
-        $book = Book::fetchBook('9784798052588');
-
-        $phpBook = Book::create([
-            'isbn' => $book->isbn,          //  Laravel入門
-            'title' => $book->title,
-            'author' => $book->author,
-            'cover' => $book->cover,
-            'publisher' => $book->publisher,
-            'pubdate' => $book->pubdate,
-            'user_id' => 4,                 //  とりあえず4
-            'genre_id' => 1,                //  1: IT (GenreSeederで作成する)
-            'isInBookshelf' => 0,
-        ]);
-
-        $id = 4;
-        $message = 'この本はどうでしょうか？';
-        $post->createComment($user_id = $id, $message = $message, $book_id = $phpBook->id);
     }
 }

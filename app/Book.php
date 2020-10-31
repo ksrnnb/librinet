@@ -138,6 +138,31 @@ class Book extends Model
         }
     }
 
+    /**
+     * シーディング処理で主に使う。isbnとジャンルIDから、createに必要な配列を返す。
+     * @param $isbn     本のISBN
+     *        $genre_id ジャンルID
+     *        $is_in_bookshelf 本に入れるかどうか
+     * @return $params 本の情報が入った配列を返す
+     */
+    public static function getBookParams(string $isbn, int $genre_id = null, bool $is_in_bookshelf = false): array
+    {
+        $book = Book::fetchBook($isbn);
+
+        $params = [
+            'isbn'          => $isbn,
+            'title'         => $book->title,
+            'author'        => $book->author,
+            'cover'         => $book->cover,
+            'publisher'     => $book->publisher,
+            'pubdate'       => $book->pubdate,
+            'genre_id'      => $genre_id,
+            'isInBookshelf' => $is_in_bookshelf,    //  true: 自分の本棚
+        ];
+
+        return $params;
+    }
+
     /*
         @param $books:
         booksが属するgenresのgenre_idとnameの配列を返す
@@ -282,24 +307,6 @@ class Book extends Model
         }
         $genres = Book::extractGenres($user->books);
         $params = ['genres' => $genres, 'book' => $book];
-
-        return $params;
-    }
-
-    public static function getBookParams($isbn, $genre_id = 1, $has_book = true)
-    {
-        $book = Book::fetchBook($isbn);
-
-        $params = [
-            'isbn'          => $isbn,
-            'title'         => $book->title,
-            'author'        => $book->author,
-            'cover'         => $book->cover,
-            'publisher'     => $book->publisher,
-            'pubdate'       => $book->pubdate,
-            'genre_id'      => $genre_id,         //     1: IT (GenreSeederで作成する)
-            'isInBookshelf' => $has_book,    //  true: 自分の本棚
-        ];
 
         return $params;
     }

@@ -1,9 +1,20 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Genre;
 
 class GenreSeeder extends Seeder
 {
+    public $genres = [
+        ['name' => 'SF'],
+        ['name' => '文学'],
+        ['name' => 'IT'],
+        ['name' => '健康と料理'],
+        ['name' => '漫画'],
+        ['name' => '自己啓発'],
+        ['name' => '英語'],
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -11,8 +22,8 @@ class GenreSeeder extends Seeder
      */
     public function run()
     {
-        App\Genre::create(['name' => 'IT']);
-        App\Genre::create(['name' => 'SF']);
-        App\Genre::create(['name' => '自己啓発']);
+        foreach ($this->genres as $genre) {
+            Genre::create($genre);
+        }
     }
 }

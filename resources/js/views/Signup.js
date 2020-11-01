@@ -45,7 +45,6 @@ export default function Signup() {
               MyLink.home(props);
             })
             .catch((error) => {
-              console.log('--error----');
               console.log(error);
               // validation errorの場合
               if (error.response.status === 422) {

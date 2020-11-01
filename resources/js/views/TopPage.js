@@ -45,32 +45,38 @@ Content.propTypes = {
 };
 
 function MyCarousel(props) {
-  const { height, afterLogin } = props;
+  const { active, height, afterLogin } = props;
   const attr = height > 0 ? { style: { minHeight: height } } : {};
-  if (props)
-    return (
-      <div className="carousel slide carousel-fade" data-ride="carousel">
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <div className="top-1" {...attr}></div>
-          </div>
-          <div className="carousel-item">
-            <div className="top-2" {...attr}></div>
-          </div>
-          <div className="carousel-item">
-            <div className="top-3" {...attr}></div>
-          </div>
+  return (
+    <div className="carousel slide carousel-fade" data-ride="carousel">
+      <div className="carousel-inner">
+        <div className="carousel-item active">
+          <div className="top-1" {...attr}></div>
         </div>
-        <Content afterLogin={afterLogin} />
+        <div className={`carousel-item ${active}`}>
+          <div className="top-2" {...attr}></div>
+        </div>
+        <div className={`carousel-item ${active}`}>
+          <div className="top-3" {...attr}></div>
+        </div>
       </div>
-    );
+      <Content afterLogin={afterLogin} />
+    </div>
+  );
 }
+
+MyCarousel.propTypes = {
+  active: PropTypes.string,
+  height: PropTypes.string,
+  afterLogin: PropTypes.func,
+};
 
 export default function TopPage() {
   const props = useContext(PropsContext);
   const setState = useContext(SetStateContext);
   const data = useContext(DataContext);
   const [height, setHeight] = useState(0);
+  const [active, setActive] = useState('active');
 
   function afterLogin(user) {
     setState.params(user);
@@ -95,11 +101,14 @@ export default function TopPage() {
       const height = $('#top-content').height();
       setHeight(height);
     });
+
+    // はじめは2枚目以降もactiveにしておくことで、画像を読み込ませとく。
+    setActive('');
   }, []);
 
   return (
     <div className="carousel-wrapper">
-      <MyCarousel height={height} afterLogin={afterLogin} />
+      <MyCarousel active={active} height={height} afterLogin={afterLogin} />
     </div>
   );
 }

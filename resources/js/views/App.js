@@ -23,7 +23,6 @@ function App() {
         // response.data
         // {params: {user, following_posts, examples} }
         const data = response.data;
-        // console.log(data);
         setParams(data);
         setHasLoaded(true);
       })

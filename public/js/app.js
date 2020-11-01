@@ -85811,12 +85811,13 @@ function Message(props) {
   var isSelf = props.user.str_id === main_props.match.params.strId;
 
   if (isSelf) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u68DA\u306B\u672C\u3092\u8FFD\u52A0\u3057\u307E\u3057\u3087\u3046\uFF01"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-      href: "/book"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u672C\u68DA\u306B\u672C\u3092\u8FFD\u52A0\u3057\u307E\u3057\u3087\u3046\uFF01"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "button",
-      className: "btn btn-outline-success"
-    }, "\u672C\u3092\u63A2\u3059")));
+      className: "btn btn-outline-success",
+      onClick: function onClick() {
+        return main_props.history.push('/book');
+      }
+    }, "\u672C\u3092\u63A2\u3059"));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
@@ -86845,6 +86846,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.js");
+/* harmony import */ var _views_App__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../views/App */ "./resources/js/views/App.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -86861,12 +86863,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 function Like(props) {
   var item = props.item;
   var likes = props.item.likes;
   var viewerId = props.viewerId;
+  var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_views_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_views_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
   var isAlreadyLiked = likes.some(function (like) {
     return like.user_id == viewerId;
   });
@@ -86879,18 +86884,64 @@ function Like(props) {
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(isAlreadyLiked),
       _useState4 = _slicedToArray(_useState3, 2),
       isLiked = _useState4[0],
-      setIsLiked = _useState4[1]; // 既にいいね済みの場合は、自分（みている側）のユーザーID
-  // 未いいねの場合はundefined
+      setIsLiked = _useState4[1]; // params.following_postのlikeを更新する
 
+
+  function updateLike() {
+    // post_idを持ってなければPost、持ってたらコメント！
+    var isPost = item.post_id == null;
+    var likes = item.likes;
+    var newLikes;
+
+    if (isLiked) {
+      newLikes = likes.filter(function (like) {
+        return like.user_id !== viewerId;
+      });
+    } else {
+      // ダミーのlikeを作成
+      var like = {
+        id: 0,
+        user_id: viewerId,
+        post_id: isPost ? item.id : item.post_id,
+        comemnt_id: isPost ? null : item.id
+      };
+      likes.push(like);
+      newLikes = likes.slice();
+    }
+
+    var posts = data.params.following_posts;
+    var postId = item.post_id || item.id; // postsがオブジェクトなので、いったんキーの配列をつくって、
+    // PostのIDが一致するIndexを取得
+
+    var pIndex = Object.keys(posts).find(function (key) {
+      return posts[key].id == postId;
+    }); // postの場合はそのまま更新するだけ
+
+    if (isPost) {
+      posts[pIndex].likes = newLikes; // commentの場合はindex取得して、更新する。
+    } else {
+      var comments = posts[pIndex].comments;
+      var cIndex = comments.findIndex(function (comment) {
+        return comment.id == item.id;
+      });
+      posts[pIndex].comments[cIndex].likes = newLikes;
+    } // paramsを取得してstateを更新
+
+
+    var params = data.params;
+    params.following_posts = posts;
+    setState.params(params);
+  }
 
   function sendLikeRequest() {
     // さきに値を変える
     var delta = isLiked ? -1 : +1;
     setIsLiked(!isLiked);
     setCount(count + delta);
+    updateLike();
     axios.post('/api/like', {
       uuid: item.uuid
-    }).then(function () {})["catch"](function (error) {
+    })["catch"](function (error) {
       console.log(error);
     });
   }
@@ -88020,8 +88071,7 @@ function App() {
       // TODO: Loginしていないときは？
       // response.data
       // {params: {user, following_posts, examples} }
-      var data = response.data; // console.log(data);
-
+      var data = response.data;
       setParams(data);
       setHasLoaded(true);
     })["catch"](function (error) {
@@ -88202,7 +88252,7 @@ function Book() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["SearchForm"], {
     name: "isbn",
     content: "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF089784...\uFF09",
-    subMessage: "\uFF08\u203B\u4E00\u90E8\u672C\u304C\u898B\u3064\u304B\u3089\u306A\u3044\u5834\u5408\u3084\u3001\u8868\u7D19\u304C\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\uFF09" // maxLength={13}
+    subMessage: "\uFF08\u203B\u4E00\u90E8\u672C\u304C\u898B\u3064\u304B\u3089\u306A\u3044\u5834\u5408\u3084\u3001\u8868\u7D19\u304C\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\uFF09" // maxLength={13}
     ,
     onChange: function onChange(e) {
       return setInput(e.target.value);
@@ -88419,7 +88469,8 @@ function Comment() {
         } else if (error.response.status === 404) {
           // コメントがみつからないとき
           setErrors([error.response.data]);
-        } else {// console.log('hoge');
+        } else {
+          _functions_MyLink__WEBPACK_IMPORTED_MODULE_8__["MyLink"].error(props);
         }
       });
     }
@@ -90134,7 +90185,6 @@ function Signup() {
           setState.params(params);
           _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].home(props);
         })["catch"](function (error) {
-          console.log('--error----');
           console.log(error); // validation errorの場合
 
           if (error.response.status === 422) {
@@ -90327,14 +90377,15 @@ Content.propTypes = {
 };
 
 function MyCarousel(props) {
-  var height = props.height,
+  var active = props.active,
+      height = props.height,
       afterLogin = props.afterLogin;
   var attr = height > 0 ? {
     style: {
       minHeight: height
     }
   } : {};
-  if (props) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "carousel slide carousel-fade",
     "data-ride": "carousel"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -90344,11 +90395,11 @@ function MyCarousel(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _extends({
     className: "top-1"
   }, attr))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "carousel-item"
+    className: "carousel-item ".concat(active)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _extends({
     className: "top-2"
   }, attr))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "carousel-item"
+    className: "carousel-item ".concat(active)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _extends({
     className: "top-3"
   }, attr)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Content, {
@@ -90356,6 +90407,11 @@ function MyCarousel(props) {
   }));
 }
 
+MyCarousel.propTypes = {
+  active: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
+  height: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].string,
+  afterLogin: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
+};
 function TopPage() {
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_1__["PropsContext"]);
   var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["SetStateContext"]);
@@ -90365,6 +90421,11 @@ function TopPage() {
       _useState2 = _slicedToArray(_useState, 2),
       height = _useState2[0],
       setHeight = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('active'),
+      _useState4 = _slicedToArray(_useState3, 2),
+      active = _useState4[0],
+      setActive = _useState4[1];
 
   function afterLogin(user) {
     setState.params(user);
@@ -90386,11 +90447,14 @@ function TopPage() {
     $(window).on('resize', function () {
       var height = $('#top-content').height();
       setHeight(height);
-    });
+    }); // はじめは2枚目以降もactiveにしておくことで、画像を読み込ませとく。
+
+    setActive('');
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "carousel-wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(MyCarousel, {
+    active: active,
     height: height,
     afterLogin: afterLogin
   }));
@@ -90717,21 +90781,24 @@ function UserProfile() {
       setShowingUser = _useState4[1];
 
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]);
-  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_4__["DataContext"]).params.user;
+  var params = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_4__["DataContext"]).params;
+  var user = params.user;
+  var queryStrId = props.match.params.strId;
+  var locationState = props.location.state;
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_4__["SetStateContext"]);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     setup();
-  }, []);
+  }, [queryStrId]);
 
   function setup() {
+    // 自分のページから、他のユーザーのページに戻ろうとするときに初期化が必要。
+    setShowingUser(null);
+
     function setUserData(user) {
       setShowingUser(user);
       setIsFollowing(followCheck(user));
-    }
+    } // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
 
-    var locationState = props.location.state;
-    var queryStrId = props.match.params.strId; // const isSearched = locationState && (locationState.user.str_id === queryStrId);
-    // TODO: ユーザー検索などでプロフィールページに来た後に、profileをクリックすると自分が表示されない。
-    // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
 
     if (locationState) {
       var locationUser = locationState.user;
@@ -90739,7 +90806,7 @@ function UserProfile() {
     } else if (user && user.str_id === queryStrId) {
       setUserData(user); // URLを入力してきた場合
     } else {
-      var path = '/api/user/profile/' + props.match.params.strId;
+      var path = '/api/user/profile/' + queryStrId;
       axios.get(path).then(function (response) {
         var user = response.data;
         setUserData(user);
@@ -90768,16 +90835,36 @@ function UserProfile() {
   }
 
   function onSubmitFollow() {
+    var followers = showingUser.followers;
+    var followings = user.followings; // フォロー済みの場合はfilterで削除
+
+    if (isFollowing) {
+      followers = followers.filter(function (follower) {
+        return follower.follower_id != user.id;
+      });
+      followings = followings.filter(function (following) {
+        return following.follow_id != showingUser.id;
+      }); // フォローしてない場合はpushでダミーを追加
+    } else {
+      var newFollower = {
+        id: 0,
+        follow_id: showingUser.id,
+        follower_id: user.id
+      };
+      followers.push(newFollower);
+      followings.push(newFollower);
+    }
+
+    var newShowingUser = Object.assign({}, showingUser);
+    newShowingUser.followers = followers;
+    setShowingUser(newShowingUser);
+    params.user.followings = followings;
+    setState.params(params);
     var path = '/api/follow';
     axios.post(path, {
       targetId: showingUser.id,
       isFollowing: isFollowing,
       viewerId: user.id
-    }).then(function (response) {
-      showingUser.followers = response.data;
-      setShowingUser(showingUser); // location.stateを利用しているためここも更新が必要。
-
-      _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].userProfile(props, showingUser.str_id, showingUser);
     })["catch"](function (error) {
       console.log(error);
     });

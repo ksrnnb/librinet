@@ -6,11 +6,31 @@ use App\User;
 class UserSeeder extends Seeder
 {
     public static $users = [
-        'shogo'  => ['name' => 'しょーご', 'image' => null],
-        'shinji' => ['name' => 'しんじ' , 'image' => null],
-        'eri'    => ['name' => 'えり'   , 'image' => null],
-        'yui'    => ['name' => 'ゆい'   , 'image' => null],
-        'guest'  => ['name' => 'ゲスト' , 'image' => null, 'str_id' => 'guest'],
+        'shogo'  => [
+            'name' => 'しょーご',
+            'image' => '/img/shogo.jpeg'
+        ],
+
+        'shinji' => [
+            'name' => 'しんじ',
+            'image' => '/img/shinji.jpeg'
+        ],
+
+        'eri'    => [
+            'name' => 'えり',
+            'image' => '/img/eri.jpeg'
+        ],
+
+        'yui'    => [
+            'name' => 'ゆい',
+            'image' => '/img/yui.jpeg'
+        ],
+
+        'guest'  => [
+            'name' => 'ゲスト',
+            'image' => null,
+            'str_id' => 'guest'
+        ],
     ];
 
     public function registerBookAndPost($user, $state, $message)

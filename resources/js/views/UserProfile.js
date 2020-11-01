@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
-import { DataContext } from './App';
+import { DataContext, SetStateContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { PropTypes } from 'prop-types';
 import { MyLink } from '../functions/MyLink';
@@ -129,23 +129,25 @@ export default function UserProfile() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [showingUser, setShowingUser] = useState(null);
   const props = useContext(PropsContext);
-  const user = useContext(DataContext).params.user;
+  const params = useContext(DataContext).params;
+  const user = params.user;
+  const queryStrId = props.match.params.strId;
+  const locationState = props.location.state;
+  const setState = useContext(SetStateContext);
 
   useEffect(() => {
     setup();
-  }, []);
+  }, [queryStrId]);
 
   function setup() {
+    // 自分のページから、他のユーザーのページに戻ろうとするときに初期化が必要。
+    setShowingUser(null);
+
     function setUserData(user) {
       setShowingUser(user);
       setIsFollowing(followCheck(user));
     }
 
-    const locationState = props.location.state;
-    const queryStrId = props.match.params.strId;
-    // const isSearched = locationState && (locationState.user.str_id === queryStrId);
-
-    // TODO: ユーザー検索などでプロフィールページに来た後に、profileをクリックすると自分が表示されない。
     // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
     if (locationState) {
       const locationUser = locationState.user;
@@ -157,7 +159,7 @@ export default function UserProfile() {
 
       // URLを入力してきた場合
     } else {
-      const path = '/api/user/profile/' + props.match.params.strId;
+      const path = '/api/user/profile/' + queryStrId;
       axios
         .get(path)
         .then((response) => {
@@ -191,19 +193,43 @@ export default function UserProfile() {
   }
 
   function onSubmitFollow() {
+    let followers = showingUser.followers;
+    let followings = user.followings;
+
+    // フォロー済みの場合はfilterで削除
+    if (isFollowing) {
+      followers = followers.filter((follower) => {
+        return follower.follower_id != user.id;
+      });
+      followings = followings.filter((following) => {
+        return following.follow_id != showingUser.id;
+      });
+
+      // フォローしてない場合はpushでダミーを追加
+    } else {
+      const newFollower = {
+        id: 0,
+        follow_id: showingUser.id,
+        follower_id: user.id,
+      };
+
+      followers.push(newFollower);
+      followings.push(newFollower);
+    }
+
+    const newShowingUser = Object.assign({}, showingUser);
+    newShowingUser.followers = followers;
+    setShowingUser(newShowingUser);
+
+    params.user.followings = followings;
+    setState.params(params);
+
     const path = '/api/follow';
     axios
       .post(path, {
         targetId: showingUser.id,
         isFollowing: isFollowing,
         viewerId: user.id,
-      })
-      .then((response) => {
-        showingUser.followers = response.data;
-        setShowingUser(showingUser);
-
-        // location.stateを利用しているためここも更新が必要。
-        MyLink.userProfile(props, showingUser.str_id, showingUser);
       })
       .catch((error) => {
         console.log(error);

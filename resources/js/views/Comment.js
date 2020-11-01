@@ -102,7 +102,7 @@ export default function Comment() {
             // コメントがみつからないとき
             setErrors([error.response.data]);
           } else {
-            // console.log('hoge');
+            MyLink.error(props);
           }
         });
     }

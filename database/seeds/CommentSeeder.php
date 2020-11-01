@@ -34,7 +34,7 @@ class CommentSeeder extends Seeder
         13 => [
             // 達人に学ぶDB設計
             [
-                'user_id' => 2,
+                'user_id' => 4,
                 'message' => '次はこの本がお勧めです！',
                 'isbn'    => '9784798124704',
             ],

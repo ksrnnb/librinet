@@ -13,11 +13,13 @@ function Message(props) {
     return (
       <>
         <p>本棚に本を追加しましょう！</p>
-        <a href="/book">
-          <button type="button" className="btn btn-outline-success">
-            本を探す
-          </button>
-        </a>
+        <button
+          type="button"
+          className="btn btn-outline-success"
+          onClick={() => main_props.history.push('/book')}
+        >
+          本を探す
+        </button>
       </>
     );
   } else {

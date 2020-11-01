@@ -106,7 +106,7 @@ export default function Book() {
       <SearchForm
         name="isbn"
         content="13桁のISBNを入力してください（9784...）"
-        subMessage="（※一部本が見つからない場合や、表紙がない場合があります。）"
+        subMessage="（※一部本が見つからない場合や、表紙がない場合があります）"
         // maxLength={13}
         onChange={(e) => setInput(e.target.value)}
         onClick={sendPost}

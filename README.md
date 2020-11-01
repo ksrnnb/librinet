@@ -30,7 +30,8 @@ https://librinet.jp/
 ### 投稿機能
 - 本に関する投稿
 - 投稿の削除
-- 投稿に対するコメント、いいね機能（非同期）
+- 投稿に対するコメント
+- 投稿に対するいいね機能（非同期）
 
 ### コメント機能
 - 投稿に対してコメントが可能
@@ -44,7 +45,7 @@ https://librinet.jp/
 - ユーザーページからフォロー、フォロワーの一覧表示へのリンク
 
 ### SPA
-- react-router-domを用いてアプリケーションをSPA化。
+- react-router-domを用いてアプリケーションをSPA化（一部ページは待ち時間が生じます）
 - SPA認証にはLaravel Sanctumを利用。
 
 ## 使用技術
@@ -81,7 +82,7 @@ https://librinet.jp/
 - Laravel Sanctum
 
 ## インフラ構成
-AWSで下記の環境を**Terraformで構築**しています。（作成した環境のGitHubは[こちら](https://github.com/ksrnnb/terraform-environment)になります）
+AWSで下記の環境をTerraformで構築しています。（作成した環境のGitHubは[こちら](https://github.com/ksrnnb/terraform-environment)になります）
 - CircleCIのテストに合格すると、ECR/ECSに自動でデプロイ
 - 2台のEC2インスタンスをマルチAZとなるように配置
 - RDSはマルチAZ配置なし

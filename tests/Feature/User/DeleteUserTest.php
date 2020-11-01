@@ -11,33 +11,28 @@ class DeleteUserTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $delete_path;
+    protected $path = '/api/user';
     protected $user;
-    protected $has_setup = false;
+    protected $credential = false;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->user = factory(User::class)->create();
 
-        if (! $this->has_setup) {
-            $this->has_setup = true;
-            $this->delete_path = '/api/user';
-            $this->user = factory(User::class)->create();
-    
-            $this->credential = [
-                'strId' => $this->user->str_id,
-                'password' => config('app.guest_password')
-            ];
-        }
+        $this->credential = [
+            'strId' => $this->user->str_id,
+            'password' => config('app.guest_password')
+        ];
     }
 
     public function testCannotDeleteWhenIsNotAuthenticated()
     {
         $user = $this->user->toArray();
         
-        $response = $this->delete($this->delete_path, $user);
+        $response = $this->delete($this->path, $user);
 
-        $this->delete($this->delete_path, $user)
+        $this->delete($this->path, $user)
              ->assertStatus(302);
     }
 
@@ -47,7 +42,7 @@ class DeleteUserTest extends TestCase
         $this->user->id = $this->user->id + 1;
         $user = $this->user->toArray();
         
-        $this->delete($this->delete_path, $user)
+        $this->delete($this->path, $user)
              ->assertStatus(403);
     }
 
@@ -56,7 +51,7 @@ class DeleteUserTest extends TestCase
         $this->authenticate();
         $user = $this->user->toArray();
 
-        $this->delete($this->delete_path, $user)
+        $this->delete($this->path, $user)
              ->assertStatus(200)
              ->assertSee('deleted');
     }

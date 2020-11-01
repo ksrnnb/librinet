@@ -38,7 +38,6 @@ class BookController extends Controller
 
     /**
     *   @param $request->input():
-    *       _token    => string,
     *       isbn      => string,
     *       title     => string,
     *       author    => string,
@@ -47,8 +46,7 @@ class BookController extends Controller
     *       pubdate   => string,
     *       genre     => "new" or "conventional",
     *       new_genre => "input genre name" (the case selecting new genre)
-    *       genre_id  => integer (the case selecting conventional genre)
-    *
+    *       genre_id  => int (the case selecting conventional genre)
     *   @return array
     */
     // TODO: validation Bookcreaterequest?

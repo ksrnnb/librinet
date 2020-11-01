@@ -36,7 +36,10 @@ class Book extends Model
 
         if ($doesnt_exist_genre_id) {
             // 削除した本のジャンルが、1冊もない場合
-            Genre::find($genre_id)->delete();
+            $genre = Genre::find($genre_id);
+            if ($genre) {
+                $genre->delete();
+            }
         }
     }
 
@@ -237,15 +240,15 @@ class Book extends Model
     }
 
     // 13桁のISBNかどうかをチェックする
-    public static function isIsbn(string $isbn): bool
-    {
-        $isbn = preg_replace('/-/', '', $isbn);
+    // public static function isIsbn(string $isbn): bool
+    // {
+    //     $isbn = preg_replace('/-/', '', $isbn);
         
-        // 返り値は一致すれば1, 一致しない場合は0, errorの場合はFALSE
-        $isIsbn = (bool) preg_match('/^9784[0-9]{9}$/', $isbn);
+    //     // 返り値は一致すれば1, 一致しない場合は0, errorの場合はFALSE
+    //     $isIsbn = (bool) preg_match('/^9784[0-9]{9}$/', $isbn);
 
-        return $isIsbn;
-    }
+    //     return $isIsbn;
+    // }
 
     public function registerPost($message = '')
     {
@@ -258,56 +261,56 @@ class Book extends Model
         return $post;
     }
 
-    public static function returnBookInfoOrRedirect($isbn, $user, $model)
-    {
-        $is_not_isbn = ! Book::isIsbn($isbn);
+    // public static function returnBookInfoOrRedirect($isbn, $user, $model)
+    // {
+    //     $is_not_isbn = ! Book::isIsbn($isbn);
 
-        if ($is_not_isbn) {
-            // ISBN以外の値をURLに直接入力しない限り、ここにこない。
-            abort('404');
-        }
+    //     if ($is_not_isbn) {
+    //         // ISBN以外の値をURLに直接入力しない限り、ここにこない。
+    //         abort('404');
+    //     }
         
-        if ($user == null) {
-            // トップページへ飛ばす
-            return redirect('/');
-        }
+    //     if ($user == null) {
+    //         // トップページへ飛ばす
+    //         return redirect('/');
+    //     }
 
-        $books = Book::where('isbn', $isbn)
-                     ->where('user_id', $user->id)
-                     ->get();
+    //     $books = Book::where('isbn', $isbn)
+    //                  ->where('user_id', $user->id)
+    //                  ->get();
 
-        $exists_books_in_db = $books->isNotEmpty();
+    //     $exists_books_in_db = $books->isNotEmpty();
 
-        if ($exists_books_in_db) {
-            $is_in_bookshelf = $books->contains('isInBookshelf', true);
+    //     if ($exists_books_in_db) {
+    //         $is_in_bookshelf = $books->contains('isInBookshelf', true);
 
-            if ($is_in_bookshelf) {
-                if ($model == 'book') {
-                    // 本棚に本があったら、このページには来れない。
-                    abort('400');
-                } elseif ($model == 'post') {
-                    // 本棚に本がある場合に、その本を投稿する
-                    $book = $books->where('isInBookshelf', true)->first();
-                }
-            } else {
-                // 本棚に本がない場合
-                $book = $books->first();
-            }
-        // データベースにない場合
-        } else {
-            $book = Book::fetchBook($isbn);
+    //         if ($is_in_bookshelf) {
+    //             if ($model == 'book') {
+    //                 // 本棚に本があったら、このページには来れない。
+    //                 abort('400');
+    //             } elseif ($model == 'post') {
+    //                 // 本棚に本がある場合に、その本を投稿する
+    //                 $book = $books->where('isInBookshelf', true)->first();
+    //             }
+    //         } else {
+    //             // 本棚に本がない場合
+    //             $book = $books->first();
+    //         }
+    //     // データベースにない場合
+    //     } else {
+    //         $book = Book::fetchBook($isbn);
 
-            if ($book != null) {
-                // 本がISBNでみつけられたら
-                $book->isInBookshelf = false;
-            } else {
-                // 追加ボタンからきているからISBNで必ずみつかるはず
-                abort('400');
-            }
-        }
-        $genres = Book::extractGenres($user->books);
-        $params = ['genres' => $genres, 'book' => $book];
+    //         if ($book != null) {
+    //             // 本がISBNでみつけられたら
+    //             $book->isInBookshelf = false;
+    //         } else {
+    //             // 追加ボタンからきているからISBNで必ずみつかるはず
+    //             abort('400');
+    //         }
+    //     }
+    //     $genres = Book::extractGenres($user->books);
+    //     $params = ['genres' => $genres, 'book' => $book];
 
-        return $params;
-    }
+    //     return $params;
+    // }
 }

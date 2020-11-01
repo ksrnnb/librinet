@@ -11,9 +11,8 @@ class EditUserTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $edit_path;
+    protected $path = '/api/user/edit';
     protected $user;
-    protected $has_setup = false;
 
     /*
     *   毎回Userの情報を配列にセットしてpostするので、メソッドにまとめた
@@ -22,7 +21,7 @@ class EditUserTest extends TestCase
     protected function postUser()
     {
         $user = ['user' => $this->user->toArray()];
-        $response = $this->post($this->edit_path, $user);
+        $response = $this->post($this->path, $user);
 
         return $response;
     }
@@ -31,16 +30,12 @@ class EditUserTest extends TestCase
     {
         parent::setUp();
 
-        if (! $this->has_setup) {
-            $this->has_setup = true;
-            $this->edit_path = '/api/user/edit';
-            $this->user = factory(User::class)->create();
-    
-            $this->credential = [
-                'strId' => $this->user->str_id,
-                'password' => config('app.guest_password')
-            ];
-        }
+        $this->user = factory(User::class)->create();
+
+        $this->credential = [
+            'strId' => $this->user->str_id,
+            'password' => config('app.guest_password')
+        ];
     }
 
     public function testCannotEditWhenIsNotAuthenticated()

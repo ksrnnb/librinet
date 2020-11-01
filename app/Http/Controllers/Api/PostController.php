@@ -50,14 +50,17 @@ class PostController extends Controller
     {
         // DELETE methodのため、uuidは$requestのプロパティに直で入ってる
         $post = Post::where('uuid', $request->uuid)->first();
-
-        // ここで認可の処理。異なる場合はuser idが異なる場合はここで処理が止まって403エラーを返す。
-        Gate::authorize('delete-post', $post);
-
-        $post->delete();
-
-        $posts = Post::getPostsOfFollowingUsers(Auth::user());
-
-        return response($posts);
+        if ($post) {
+            // ここで認可の処理。異なる場合はuser idが異なる場合はここで処理が止まって403エラーを返す。
+            Gate::authorize('delete-post', $post);
+    
+            $post->delete();
+    
+            $posts = Post::getPostsOfFollowingUsers(Auth::user());
+    
+            return response($posts);
+        } else {
+            return bad_request();
+        }
     }
 }

@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::post('/guest/login', function () {
-//     return response()->json(['hoge' => 'hoge']);
-// });
+
 Route::post('/login', 'Api\LoginController@login');
 Route::post('/signup', 'Auth\RegisterController@register');
 Route::post('/guest/login', 'Api\LoginController@guest');
@@ -25,7 +23,6 @@ Route::post('/user', 'Api\UserController@search');
 Route::get('/user/auth', 'Api\UserController@auth');
 Route::get('/user/profile/{str_id}', 'Api\UserController@show');
 Route::get('/followers/{str_id}/{target}', 'Api\FollowerController@followers');
-// Route::post('/user/profile/{str_id}', 'Api\UserController@search');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', 'Api\LoginController@logout');
@@ -39,7 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/book/add', 'Api\BookController@create');
     Route::delete('/book', 'Api\BookController@delete');
     
-    // Route::get('/book/post/{isbn}', 'Api\PostController@add');
     Route::get('/post/id/{id}', 'Api\PostController@get');
     Route::post('/book/post/{isbn}', 'Api\PostController@create');
     Route::delete('/post', 'Api\PostController@delete');

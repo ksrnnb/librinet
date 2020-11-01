@@ -13,8 +13,7 @@ class SearchUserTest extends TestCase
     use RefreshDatabase;
 
     protected $user;
-    protected $search_path;
-    protected $has_setup = false;
+    protected $path = '/api/user';
 
     protected function search($input)
     {
@@ -22,7 +21,7 @@ class SearchUserTest extends TestCase
             'user' => $input
         ];
 
-        $response = $this->post($this->search_path, $user);
+        $response = $this->post($this->path, $user);
 
         return $response;
     }
@@ -30,12 +29,7 @@ class SearchUserTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        if (! $this->has_setup) {
-            $this->has_setup = true;
-            $this->user = factory(User::class)->create();
-            $this->search_path = '/api/user';
-        }
+        $this->user = factory(User::class)->create();
     }
 
     public function testUserSearchByStrId()

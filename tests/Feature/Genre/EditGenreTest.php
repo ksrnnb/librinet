@@ -13,9 +13,9 @@ class GenreEditTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $path = '/api/genre/edit';
     protected $book;
     protected $genre;
-    protected $edit_path;
     protected $has_setup = false;
 
     protected function setUp(): void
@@ -24,7 +24,6 @@ class GenreEditTest extends TestCase
 
         if (! $this->has_setup) {
             $this->has_setup = true;
-            $this->edit_path = '/api/genre/edit';
             $this->user = factory(User::class)->create();
     
             $this->credential = [
@@ -52,8 +51,8 @@ class GenreEditTest extends TestCase
             'newGenres' => $this->genre,
         ];
 
-        $this->post($this->edit_path, $params)
-             ->assertStatus(302);
+        $this->json('POST', $this->path, $params)
+             ->assertStatus(401);
     }
 
     public function testEditGenre()
@@ -63,7 +62,7 @@ class GenreEditTest extends TestCase
             'newGenres' => $this->genre,
         ];
 
-        $this->post($this->edit_path, $params)
+        $this->json('POST', $this->path, $params)
              ->assertStatus(200)
              ->assertSee('updated');
     }
@@ -77,7 +76,7 @@ class GenreEditTest extends TestCase
             'newGenres' => '',
         ];
 
-        $this->post($this->edit_path, $params)
+        $this->json('POST', $this->path, $params)
              ->assertStatus(400);
 
         // emtpy array
@@ -85,7 +84,7 @@ class GenreEditTest extends TestCase
             'newGenres' => [],
         ];
 
-        $this->post($this->edit_path, $params)
+        $this->json('POST', $this->path, $params)
              ->assertStatus(400);
 
         // emtpy array
@@ -93,21 +92,7 @@ class GenreEditTest extends TestCase
             'newGenres' => [1 => ''],
         ];
 
-        $this->post($this->edit_path, $params)
+        $this->json('POST', $this->path, $params)
              ->assertStatus(400);
     }
-
-    // public function testDifferentUserCannotUpdate()
-    // {
-    //     $this->authenticate();
-
-    //     // different user
-    //     $params = [
-    //         'userId' => $this->user->id + 1,
-    //         'newGenres' => $this->genre,
-    //     ];
-
-    //     $this->post($this->edit_path, $params)
-    //          ->assertStatus(400);
-    // }
 }

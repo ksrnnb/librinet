@@ -30,8 +30,8 @@ class CommentTest extends DuskTestCase
         ];
 
         $this->user->books()
-                    ->save(factory(Book::class)->make())
-                    ->registerPost('TEST_MESSAGE');
+                   ->save(factory(Book::class)->make())
+                   ->registerPost('TEST_MESSAGE');
 
         $this->post = Post::find(1);
         $this->path = '/comment/' . $this->post->uuid;

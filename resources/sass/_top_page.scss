@@ -12,17 +12,17 @@
 
 .top-1 {
     @extend .top;
-    background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
+    background-image: url("/img/top-1.jpg");
 }
 
 .top-2 {
     @extend .top;
-    background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-2.jpg");
+    background-image: url("/img/top-2.jpg");
 }
 
 .top-3 {
     @extend .top;
-    background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-3.jpg");
+    background-image: url("/img/top-3.jpg");
 }
 
 .top-content {

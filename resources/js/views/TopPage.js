@@ -67,7 +67,7 @@ function MyCarousel(props) {
 
 MyCarousel.propTypes = {
   active: PropTypes.string,
-  height: PropTypes.string,
+  height: PropTypes.number,
   afterLogin: PropTypes.func,
 };
 

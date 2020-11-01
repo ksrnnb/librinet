@@ -11,28 +11,14 @@ class CreateUserTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $path;
-    protected $form;
-    protected $has_setup = false;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        if (! $this->has_setup) {
-            $this->has_setup = true;
-            $this->path = '/api/signup';
-    
-            // this form can create user
-            $this->form = [
-                'name' => 'test_user',
-                'str_id' => 'test_user_id',
-                'email' => 'test@test.com',
-                'password' => 'test_password',
-                'password_confirmation' => 'test_password',
-            ];
-        }
-    }
+    protected $path = '/api/signup';
+    protected $form = [
+        'name' => 'test_user',
+        'str_id' => 'test_user_id',
+        'email' => 'test@test.com',
+        'password' => 'test_password',
+        'password_confirmation' => 'test_password',
+     ];
 
     public function testCreateUser()
     {

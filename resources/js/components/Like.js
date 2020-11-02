@@ -84,8 +84,8 @@ export default function Like(props) {
       .post('/api/like', {
         uuid: item.uuid,
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        alert('いいねできませんでした');
       });
   }
 

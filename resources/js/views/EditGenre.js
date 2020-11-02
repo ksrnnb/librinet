@@ -34,8 +34,8 @@ export default function EditGenre() {
         setState.params(response.data);
         MyLink.userProfile(props, params.user.str_id);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        alert('エラーが発生し、ジャンルが編集できませんでした');
       });
   }
 

@@ -26,9 +26,8 @@ function App() {
         setParams(data);
         setHasLoaded(true);
       })
-      .catch((error) => {
-        console.log(error);
-        alert('error happened getting auth user');
+      .catch(() => {
+        alert('ユーザー情報取得時にエラーが発生しました');
       });
   }
 

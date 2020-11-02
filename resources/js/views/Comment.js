@@ -140,8 +140,8 @@ export default function Comment() {
           setState.params(response.data);
           MyLink.home(props);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('予期しないエラーが発生しました');
         });
     }
   }

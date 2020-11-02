@@ -45,16 +45,18 @@ export default function Signup() {
               MyLink.home(props);
             })
             .catch((error) => {
-              console.log(error);
+              window.scroll(0, 0);
               // validation errorの場合
               if (error.response.status === 422) {
                 const errors = Object.values(error.response.data.errors);
                 setErrors(errors);
+              } else {
+                MyLink.error(props);
               }
             });
         })
         .catch(() => {
-          alert('Error happened.');
+          alert('ユーザー登録時にエラーが発生しました');
         });
     }
   }
@@ -93,6 +95,7 @@ export default function Signup() {
     }
 
     if (newErrors.length) {
+      window.scroll(0, 0);
       setErrors(newErrors);
       return false;
     }
@@ -103,8 +106,8 @@ export default function Signup() {
   return (
     <>
       <Subtitle subtitle="ユーザーの登録" />
-      <Errors errors={errors} />
       <NoImageCard margin="mb-5">
+        <Errors errors={errors} />
         <form>
           <TextInput
             name="user-name"

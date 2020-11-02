@@ -64,7 +64,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Nunito", sans-serif;
+  --font-family-sans-serif: "M PLUS 1p", sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -96,7 +96,7 @@ section {
 
 body {
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "M PLUS 1p", sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.6;
@@ -6405,7 +6405,7 @@ a.close.disabled {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "M PLUS 1p", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -6530,7 +6530,7 @@ a.close.disabled {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Nunito", sans-serif;
+  font-family: "M PLUS 1p", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -10939,7 +10939,6 @@ html {
 }
 
 body {
-  font-family: "M PLUS 1p", sans-serif;
   background-color: #eef5eb;
   font-size: 1rem;
 }
@@ -11061,7 +11060,8 @@ textarea {
     margin-left: 300px;
   }
 
-  #humburger {
+  #hamburger,
+  .navbar .dropdown-menu.show {
     display: none;
   }
 }
@@ -11370,15 +11370,15 @@ textarea {
 }
 
 .top-1 {
-  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-1.jpg");
+  background-image: url("/img/top-1.jpg");
 }
 
 .top-2 {
-  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-2.jpg");
+  background-image: url("/img/top-2.jpg");
 }
 
 .top-3 {
-  background-image: url("https://librinet.s3-ap-northeast-1.amazonaws.com/background/top-3.jpg");
+  background-image: url("/img/top-3.jpg");
 }
 
 .top-content {

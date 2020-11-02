@@ -3,15 +3,6 @@ import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { DataContext } from '../views/App';
 
-function closeNav() {
-  const button = document.getElementsByClassName('navbar-toggler')[0];
-  const navbarDiv = document.getElementById('navbarSupportedContent');
-
-  button.classList.add('collapsed');
-  button.setAttribute('aria-expanded', 'false');
-  navbarDiv.classList.remove('show');
-}
-
 LinkGroup.propTypes = {
   user: PropTypes.object,
 };
@@ -21,80 +12,54 @@ function LinkGroup(props) {
   if (typeof user === 'undefined') {
     return (
       <>
-        <li className="nav-item">
-          <Link className="nav-link" to="/home" onClick={closeNav}>
-            ホーム
-          </Link>
-        </li>
+        <Link className="dropdown-item" to="/home">
+          ホーム
+        </Link>
 
-        <li className="nav-item">
-          <Link className="nav-link" to="/book" onClick={closeNav}>
-            本を検索する
-          </Link>
-        </li>
+        <Link className="dropdown-item" to="/book">
+          本を検索する
+        </Link>
 
-        <li className="nav-item">
-          <Link className="nav-link" to="/user" onClick={closeNav}>
-            ユーザーを検索する
-          </Link>
-        </li>
+        <Link className="dropdown-item" to="/user">
+          ユーザーを検索する
+        </Link>
 
-        <li className="nav-item">
-          <Link className="nav-link" to="signup" onClick={closeNav}>
-            ユーザー登録
-          </Link>
-        </li>
+        <Link className="dropdown-item" to="signup">
+          ユーザー登録
+        </Link>
 
-        <li className="nav-item">
-          <Link className="nav-link" to="login" onClick={closeNav}>
-            ログイン
-          </Link>
-        </li>
+        <Link className="dropdown-item" to="login">
+          ログイン
+        </Link>
       </>
     );
   }
 
   return (
     <>
-      <li className="nav-item">
-        <Link className="nav-link" to="/home" onClick={closeNav}>
-          ホーム
-        </Link>
-      </li>
+      <Link className="dropdown-item" to="/home">
+        ホーム
+      </Link>
 
-      <li className="nav-item">
-        <Link className="nav-link" to="/book" onClick={closeNav}>
-          本を検索する
-        </Link>
-      </li>
+      <Link className="dropdown-item" to="/book">
+        本を検索する
+      </Link>
 
-      <li className="nav-item">
-        <Link className="nav-link" to="/user" onClick={closeNav}>
-          ユーザーを検索する
-        </Link>
-      </li>
+      <Link className="dropdown-item" to="/user">
+        ユーザーを検索する
+      </Link>
 
-      <li className="nav-item">
-        <Link className="nav-link" to="/notification" onClick={closeNav}>
-          通知
-        </Link>
-      </li>
+      <Link className="dropdown-item" to="/notification">
+        通知
+      </Link>
 
-      <li className="nav-item">
-        <Link
-          className="nav-link"
-          to={'/user/profile/' + user.str_id}
-          onClick={closeNav}
-        >
-          プロフィール
-        </Link>
-      </li>
+      <Link className="dropdown-item" to={'/user/profile/' + user.str_id}>
+        プロフィール
+      </Link>
 
-      <li className="nav-item">
-        <Link className="nav-link" to="/logout" onClick={closeNav}>
-          ログアウト
-        </Link>
-      </li>
+      <Link className="dropdown-item" to="/logout">
+        ログアウト
+      </Link>
     </>
   );
 }
@@ -103,26 +68,25 @@ function Hamburger() {
   const data = useContext(DataContext);
 
   return (
-    <>
+    <div className="dropdown">
       <button
-        id="humburger"
+        id="hamburger"
         className="navbar-toggler"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
+        data-toggle="dropdown"
+        aria-haspopup="true"
         aria-expanded="false"
-        aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav mr-auto">
-          {data && <LinkGroup user={data.params.user} />}
-        </ul>
+      <div
+        className="dropdown-menu dropdown-menu-right"
+        aria-labelledby="dropdownMenuButton"
+      >
+        {data && <LinkGroup user={data.params.user} />}
       </div>
-    </>
+    </div>
   );
 }
 

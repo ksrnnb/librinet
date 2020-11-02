@@ -124,7 +124,8 @@ textarea {
     margin-left: 300px;
   }
 
-  #humburger {
+  // .dropdown-menu.showを上書き。
+  #hamburger, .navbar .dropdown-menu.show {
     display: none;
   }
 }

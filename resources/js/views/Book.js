@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Subtitle from '../components/Subtitle';
 import SearchedBook from '../components/SearchedBook';
 import { SearchForm, Caption } from '../components/Components';
+import { PropsContext } from '../components/MyRouter';
 
 const axios = window.axios;
 
@@ -48,6 +49,7 @@ export default function Book() {
   const [input, setInput] = useState(null);
   const [book, setBook] = useState(null);
   const [errors, setErrors] = useState(null);
+  const props = useContext(PropsContext);
 
   // TODO エンターを押しても送信できるようにしたい
   // pressEnter(e) {
@@ -69,9 +71,13 @@ export default function Book() {
           isbn: input,
         })
         .then((response) => {
-          const book = response.data;
-          setBook(book);
-          setErrors(null);
+          const canUpdate = props.history.location.pathname === '/book';
+          // 検索中にページ遷移していた場合はstate更新しない
+          if (canUpdate) {
+            const book = response.data;
+            setBook(book);
+            setErrors(null);
+          }
         })
         .catch((error) => {
           if (error.response.status == 404) {

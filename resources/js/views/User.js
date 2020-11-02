@@ -4,6 +4,7 @@ import UserCard from '../components/UserCard';
 import { DataContext } from './App';
 import { SearchForm, Caption } from '../components/Components';
 import { PropTypes } from 'prop-types';
+import { PropsContext } from '../components/MyRouter';
 
 const axios = window.axios;
 
@@ -65,6 +66,7 @@ export default function User() {
   const [users, setUsers] = useState([]);
   const data = useContext(DataContext);
   const examples = data.params.examples;
+  const props = useContext(PropsContext);
 
   function onClickSearch() {
     if (input === '') {
@@ -75,16 +77,20 @@ export default function User() {
           user: input,
         })
         .then((response) => {
-          const users = response.data;
+          const canUpdate = props.history.location.pathname === '/user';
+          // 検索中にページ遷移していた場合はstate更新しない
+          if (canUpdate) {
+            const users = response.data;
 
-          // ユーザーが存在していたら
-          if (users.length) {
-            setUsers(users);
-            setErrors([]);
-          } else {
-            const errors = ['ユーザーが存在していません'];
-            setUsers([]);
-            setErrors(errors);
+            // ユーザーが存在していたら
+            if (users.length) {
+              setUsers(users);
+              setErrors([]);
+            } else {
+              const errors = ['ユーザーが存在していません'];
+              setUsers([]);
+              setErrors(errors);
+            }
           }
         })
         .catch(() => {

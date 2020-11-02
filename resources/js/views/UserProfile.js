@@ -163,8 +163,13 @@ export default function UserProfile() {
       axios
         .get(path)
         .then((response) => {
-          const user = response.data;
-          setUserData(user);
+          const canUpdate =
+            props.history.location.pathname.indexOf('/user/profile/') === 0;
+          // 検索中にページ遷移していた場合はstate更新しない
+          if (canUpdate) {
+            const user = response.data;
+            setUserData(user);
+          }
         })
         .catch(() => {
           alert('ユーザーの情報を取得できませんでした');

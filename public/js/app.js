@@ -88099,6 +88099,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Subtitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Subtitle */ "./resources/js/components/Subtitle.js");
 /* harmony import */ var _components_SearchedBook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/SearchedBook */ "./resources/js/components/SearchedBook.js");
 /* harmony import */ var _components_Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Components */ "./resources/js/components/Components.js");
+/* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -88110,6 +88111,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -88158,7 +88160,9 @@ function Book() {
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState6 = _slicedToArray(_useState5, 2),
       errors = _useState6[0],
-      setErrors = _useState6[1]; // TODO エンターを押しても送信できるようにしたい
+      setErrors = _useState6[1];
+
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]); // TODO エンターを押しても送信できるようにしたい
   // pressEnter(e) {
   //     const keyCode = e.charCode;
   //     console.log(e);
@@ -88168,7 +88172,6 @@ function Book() {
   //     }
   // }
 
-
   function sendPost() {
     var isbn = validateInputAndReturnIsbn(input);
 
@@ -88176,9 +88179,13 @@ function Book() {
       axios.post('/api/book', {
         isbn: input
       }).then(function (response) {
-        var book = response.data;
-        setBook(book);
-        setErrors(null);
+        var canUpdate = props.history.location.pathname === '/book'; // 検索中にページ遷移していた場合はstate更新しない
+
+        if (canUpdate) {
+          var _book = response.data;
+          setBook(_book);
+          setErrors(null);
+        }
       })["catch"](function (error) {
         if (error.response.status == 404) {
           setErrors(['本が見つかりませんでした']);
@@ -90470,6 +90477,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Components */ "./resources/js/components/Components.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -90481,6 +90489,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -90556,6 +90565,7 @@ function User() {
 
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
   var examples = data.params.examples;
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
 
   function onClickSearch() {
     if (input === '') {
@@ -90564,15 +90574,19 @@ function User() {
       axios.post('/api/user', {
         user: input
       }).then(function (response) {
-        var users = response.data; // ユーザーが存在していたら
+        var canUpdate = props.history.location.pathname === '/user'; // 検索中にページ遷移していた場合はstate更新しない
 
-        if (users.length) {
-          setUsers(users);
-          setErrors([]);
-        } else {
-          var _errors = ['ユーザーが存在していません'];
-          setUsers([]);
-          setErrors(_errors);
+        if (canUpdate) {
+          var _users = response.data; // ユーザーが存在していたら
+
+          if (_users.length) {
+            setUsers(_users);
+            setErrors([]);
+          } else {
+            var _errors = ['ユーザーが存在していません'];
+            setUsers([]);
+            setErrors(_errors);
+          }
         }
       })["catch"](function () {
         alert('ユーザーの検索時にエラーが発生しました');
@@ -90784,8 +90798,12 @@ function UserProfile() {
     } else {
       var path = '/api/user/profile/' + queryStrId;
       axios.get(path).then(function (response) {
-        var user = response.data;
-        setUserData(user);
+        var canUpdate = props.history.location.pathname.indexOf('/user/profile/') === 0; // 検索中にページ遷移していた場合はstate更新しない
+
+        if (canUpdate) {
+          var _user = response.data;
+          setUserData(_user);
+        }
       })["catch"](function () {
         alert('ユーザーの情報を取得できませんでした');
       });

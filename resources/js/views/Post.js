@@ -170,8 +170,8 @@ export default function PostData() {
         .then((response) => {
           linkToHome(response);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('予期しないエラーが発生しました');
         });
     }
   }

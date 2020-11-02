@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import Subtitle from '../components/Subtitle';
-import Errors from '../components/Errors';
 import SearchedBook from '../components/SearchedBook';
 import { SearchForm, Caption } from '../components/Components';
 import { PropsContext } from '../components/MyRouter';
@@ -107,13 +106,13 @@ export default function Book() {
   return (
     <div>
       <Subtitle subtitle="本の検索" />
-      <Errors errors={errors} />
       <Caption isTop={true} content="検索フォーム" />
       <SearchForm
         name="isbn"
         content="13桁のISBNを入力してください（9784...）"
         subMessage="（※一部本が見つからない場合や、表紙がない場合があります）"
         // maxLength={13}
+        errors={errors}
         onChange={(e) => setInput(e.target.value)}
         onClick={sendPost}
       />

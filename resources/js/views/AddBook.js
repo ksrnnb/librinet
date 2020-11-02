@@ -118,8 +118,8 @@ export default function AddBook() {
         .then((response) => {
           linkToUserPage(response);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('予期しないエラーが発生しました');
         });
     }
   }

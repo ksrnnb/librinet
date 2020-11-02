@@ -21,8 +21,8 @@ export default function Followers() {
       .then((response) => {
         setUsers(response.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        alert('予期しないエラーが発生しました');
       });
   }
 

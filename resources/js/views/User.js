@@ -39,18 +39,6 @@ function UsersExample(props) {
   );
 }
 
-function Errors(props) {
-  const errors = props.errors.map((error, i) => {
-    return (
-      <p className="error text-danger" key={i}>
-        {error}
-      </p>
-    );
-  });
-
-  return errors;
-}
-
 function Results(props) {
   const users = props.users.map((user, i) => {
     if (i === 0) {
@@ -104,8 +92,8 @@ export default function User() {
             }
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('ユーザーの検索時にエラーが発生しました');
         });
     }
   }
@@ -113,7 +101,6 @@ export default function User() {
   return (
     <>
       <Subtitle subtitle="ユーザーの検索" />
-      <Errors errors={errors} />
       <Caption isTop={true} content="検索フォーム" />
       <SearchForm
         name="user"
@@ -121,6 +108,7 @@ export default function User() {
         onClick={onClickSearch}
         content="ユーザーID または ユーザー名を入力してください"
         maxLength={16}
+        errors={errors}
       />
       <Results users={users} />
       <UsersExample examples={examples} />
@@ -137,8 +125,4 @@ Results.propTypes = {
 
 UsersExample.propTypes = {
   examples: PropTypes.array,
-};
-
-Errors.propTypes = {
-  errors: PropTypes.array,
 };

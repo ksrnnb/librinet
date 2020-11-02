@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import Errors from './Errors';
 
 export function InputWithCheck(props) {
   const { name, type, value, checked, disabled, onChange, content } = props;
@@ -220,13 +221,22 @@ NoImageCard.propTypes = {
 };
 
 export function SearchForm(props) {
-  const { name, content, subMessage, maxLength, onChange, onClick } = props;
+  const {
+    name,
+    content,
+    subMessage,
+    maxLength,
+    onChange,
+    onClick,
+    errors,
+  } = props;
 
   return (
     <NoImageCard>
       <label htmlFor={name}>
         <h5>{content}</h5>
         <p>{subMessage}</p>
+        <Errors errors={errors} />
         <input
           className="mr-3 py-0 d-inline-block search-input"
           type="text"
@@ -253,6 +263,7 @@ SearchForm.propTypes = {
   content: PropTypes.string,
   subMessage: PropTypes.string,
   maxLength: PropTypes.number,
+  errors: PropTypes.array,
   onChange: PropTypes.func,
   onClick: PropTypes.func,
 };

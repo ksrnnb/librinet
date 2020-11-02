@@ -121,8 +121,8 @@ export default function EditUser() {
         setState.params(params);
         MyLink.top(props);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        alert('エラーが発生し、削除できませんでした');
       });
   }
 

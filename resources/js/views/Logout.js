@@ -24,14 +24,12 @@ export default function logout() {
   }
 
   function onClickLogout() {
-    axios
-      .post('/api/logout')
-      .then(() => {
-        linkToTop();
-      })
-      .catch((error) => {
-        console.log(error);
+    axios.post('/api/logout')
+      .catch(() => {
+        setErrors(['ログアウト動作でエラーが発生しました']);
       });
+
+    linkToTop();
   }
 
   return (

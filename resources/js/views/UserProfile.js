@@ -148,6 +148,8 @@ export default function UserProfile() {
       setIsFollowing(followCheck(user));
     }
 
+    // console.log(props.location);
+
     // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
     if (locationState) {
       const locationUser = locationState.user;
@@ -164,10 +166,14 @@ export default function UserProfile() {
         .get(path)
         .then((response) => {
           const user = response.data;
-          setUserData(user);
+          const canUpdate = props.history.location.pathname.indexOf('/user/profile/') === 0;
+          if (canUpdate) {
+            // 更新中に移動した場合はstate更新しない。
+            setUserData(user);
+          }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('予期しないエラーが発生しました');
         });
     }
   }

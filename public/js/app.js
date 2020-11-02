@@ -88095,6 +88095,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Errors */ "./resources/js/components/Errors.js");
 /* harmony import */ var _components_SearchedBook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/SearchedBook */ "./resources/js/components/SearchedBook.js");
 /* harmony import */ var _components_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Components */ "./resources/js/components/Components.js");
+/* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -88106,6 +88107,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -88155,7 +88157,9 @@ function Book() {
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState6 = _slicedToArray(_useState5, 2),
       errors = _useState6[0],
-      setErrors = _useState6[1]; // TODO エンターを押しても送信できるようにしたい
+      setErrors = _useState6[1];
+
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_5__["PropsContext"]); // TODO エンターを押しても送信できるようにしたい
   // pressEnter(e) {
   //     const keyCode = e.charCode;
   //     console.log(e);
@@ -88165,7 +88169,6 @@ function Book() {
   //     }
   // }
 
-
   function sendPost() {
     var isbn = validateInputAndReturnIsbn(input);
 
@@ -88174,8 +88177,13 @@ function Book() {
         isbn: input
       }).then(function (response) {
         var book = response.data;
-        setBook(book);
-        setErrors(null);
+        var canUpdate = props.history.location.pathname === '/book';
+
+        if (canUpdate) {
+          // ページ遷移していたらstateを更新しない
+          setBook(book);
+          setErrors(null);
+        }
       })["catch"](function (error) {
         if (error.response.status == 404) {
           setErrors(['本が見つかりませんでした']);
@@ -89558,11 +89566,10 @@ function logout() {
   }
 
   function onClickLogout() {
-    axios.post('/api/logout').then(function () {
-      linkToTop();
-    })["catch"](function (error) {
-      console.log(error);
+    axios.post('/api/logout')["catch"](function () {
+      setErrors(['ログアウト動作でエラーが発生しました']);
     });
+    linkToTop();
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Subtitle__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -90436,6 +90443,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Components */ "./resources/js/components/Components.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -90447,6 +90455,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -90530,6 +90539,7 @@ function User() {
       users = _useState6[0],
       setUsers = _useState6[1];
 
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_3__["DataContext"]);
   var examples = data.params.examples;
 
@@ -90540,15 +90550,19 @@ function User() {
       axios.post('/api/user', {
         user: input
       }).then(function (response) {
-        var users = response.data; // ユーザーが存在していたら
+        var users = response.data;
+        var canUpdate = props.history.location.pathname === '/user';
 
-        if (users.length) {
-          setUsers(users);
-          setErrors([]);
-        } else {
-          var _errors = ['ユーザーが存在していません'];
-          setUsers([]);
-          setErrors(_errors);
+        if (canUpdate) {
+          // ユーザーが存在していたら
+          if (users.length) {
+            setUsers(users);
+            setErrors([]);
+          } else {
+            var _errors = ['ユーザーが存在していません'];
+            setUsers([]);
+            setErrors(_errors);
+          }
         }
       })["catch"](function (error) {
         console.log(error);
@@ -90753,7 +90767,8 @@ function UserProfile() {
     function setUserData(user) {
       setShowingUser(user);
       setIsFollowing(followCheck(user));
-    } // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
+    } // console.log(props.location);
+    // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
 
 
     if (locationState) {
@@ -90765,9 +90780,14 @@ function UserProfile() {
       var path = '/api/user/profile/' + queryStrId;
       axios.get(path).then(function (response) {
         var user = response.data;
-        setUserData(user);
-      })["catch"](function (error) {
-        console.log(error);
+        var canUpdate = props.history.location.pathname.indexOf('/user/profile/') === 0;
+
+        if (canUpdate) {
+          // 更新中に移動した場合はstate更新しない。
+          setUserData(user);
+        }
+      })["catch"](function () {
+        alert('予期しないエラーが発生しました');
       });
     }
   }

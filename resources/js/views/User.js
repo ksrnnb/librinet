@@ -4,6 +4,7 @@ import UserCard from '../components/UserCard';
 import { DataContext } from './App';
 import { SearchForm, Caption } from '../components/Components';
 import { PropTypes } from 'prop-types';
+import { PropsContext } from '../components/MyRouter';
 
 const axios = window.axios;
 
@@ -75,6 +76,7 @@ export default function User() {
   const [input, setInput] = useState('');
   const [errors, setErrors] = useState([]);
   const [users, setUsers] = useState([]);
+  const props = useContext(PropsContext);
   const data = useContext(DataContext);
   const examples = data.params.examples;
 
@@ -89,14 +91,17 @@ export default function User() {
         .then((response) => {
           const users = response.data;
 
-          // ユーザーが存在していたら
-          if (users.length) {
-            setUsers(users);
-            setErrors([]);
-          } else {
-            const errors = ['ユーザーが存在していません'];
-            setUsers([]);
-            setErrors(errors);
+          const canUpdate = props.history.location.pathname === '/user';
+          if (canUpdate) {
+            // ユーザーが存在していたら
+            if (users.length) {
+              setUsers(users);
+              setErrors([]);
+            } else {
+              const errors = ['ユーザーが存在していません'];
+              setUsers([]);
+              setErrors(errors);
+            }
           }
         })
         .catch((error) => {

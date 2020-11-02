@@ -9,6 +9,7 @@ import {
 import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import { MyLink } from '../functions/MyLink';
+import Errors from '../components/Errors';
 const axios = window.axios;
 
 export function guestLogin(afterLogin) {
@@ -21,18 +22,19 @@ export function guestLogin(afterLogin) {
           const user = response.data;
           afterLogin(user);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('ログインに失敗しました');
         });
     })
     .catch(() => {
-      alert('Error happened.');
+      alert('ログイン動作時にエラーが発生しました');
     });
 }
 
 export default function Login() {
   const [strId, setStrId] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState([]);
   const props = useContext(PropsContext);
   const setState = useContext(SetStateContext);
 
@@ -54,12 +56,12 @@ export default function Login() {
             const user = response.data;
             afterLogin(user);
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            setErrors(['ログインに失敗しました']);
           });
       })
       .catch(() => {
-        alert('Error happened.');
+        alert('ログイン動作時にエラーが発生しました');
       });
   }
 
@@ -84,6 +86,7 @@ export default function Login() {
           isTop={true}
           content="ユーザー情報の入力（通常のユーザーでログイン）"
         />
+        <Errors errors={errors} />
         <form>
           <TextInput
             name="user-id"

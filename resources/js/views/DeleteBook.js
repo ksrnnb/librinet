@@ -146,8 +146,8 @@ export default function DeleteBook() {
           setState.params(response.data);
           redirectUserProfile();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('エラーが発生し、本が削除できませんでした');
         });
     } else {
       alert('本が選択されていません');

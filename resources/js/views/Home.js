@@ -102,9 +102,8 @@ function ModalWindow(props) {
 
         MyLink.home(main_props);
       })
-      .catch((error) => {
-        // TODO: ユーザーが異なる場合の処理（403, forbidden）
-        console.log(error);
+      .catch(() => {
+        alert('投稿を削除できませんでした');
       });
   };
 

@@ -166,8 +166,8 @@ export default function UserProfile() {
           const user = response.data;
           setUserData(user);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          alert('ユーザーの情報を取得できませんでした');
         });
     }
   }
@@ -231,8 +231,8 @@ export default function UserProfile() {
         isFollowing: isFollowing,
         viewerId: user.id,
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        alert('フォロー動作ができませんでした');
       });
   }
 

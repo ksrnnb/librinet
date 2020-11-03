@@ -1,0 +1,37 @@
+.notification-budge {
+    position: relative;
+  }
+  
+  .notification-budge:before {
+    content: attr(data-count);
+    position: absolute;
+    top: -10px;
+    left : -10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    background: $green;
+    font-size: 0.9rem;
+    border-radius: 50%;
+    color: white;
+  
+    :hover {
+      color: white;
+    }
+  }
+  
+  .dropdwon-item.notification-budge {
+    position: relative;
+  }
+  
+  .dropdown-item.notification-budge:before {
+    @extend .notification-budge;
+    top: 0px;
+    left: -5px;
+  }
+  
+  .notification-budge[data-count="0"]:before {
+    display: none;
+  }
+  

@@ -9,6 +9,17 @@ LinkGroup.propTypes = {
 
 function LinkGroup(props) {
   const user = props.user;
+  let notReadCount = 0;
+  if (user) {
+    notReadCount = user.notifications.reduce((accumlator, notification) => {
+      if (notification.is_read == false) {
+        return accumlator + 1;
+      }
+
+      return accumlator;
+    }, 0);
+  }
+
   if (typeof user === 'undefined') {
     return (
       <>
@@ -49,7 +60,11 @@ function LinkGroup(props) {
         ユーザーを検索する
       </Link>
 
-      <Link className="dropdown-item" to="/notification">
+      <Link
+        className="dropdown-item notification-budge"
+        to="/notification"
+        data-count={notReadCount}
+      >
         通知
       </Link>
 

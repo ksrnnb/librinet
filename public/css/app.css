@@ -10934,6 +10934,32 @@ a.text-dark:focus {
   }
 }
 
+.table {
+  background-color: white;
+}
+
+.table thead th {
+  background-color: #38c172;
+  color: white;
+}
+
+.table tbody tr:hover {
+  background-color: #eef5eb;
+}
+
+.delete-book-card:hover {
+  cursor: pointer;
+}
+
+.delete-book-card:hover .book-card {
+  background-color: #FEE2E0 !important;
+}
+
+.delete-book-card[data-willdelete=true] .book-card {
+  border: solid 3px var(--danger);
+  background-color: #FEE2E0 !important;
+}
+
 html {
   font-size: var(--base_font_size);
 }
@@ -11308,49 +11334,42 @@ textarea {
           user-select: none;
 }
 
-.table {
-  background-color: white;
+.notification-budge,
+.dropdown-item.notification-budge:before {
+  position: relative;
 }
 
-.table thead th {
-  background-color: #38c172;
+.notification-budge:before,
+.dropdown-item.notification-budge:before {
+  content: attr(data-count);
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  background: #38c172;
+  font-size: 0.9rem;
+  border-radius: 50%;
   color: white;
 }
 
-.table tbody tr:hover {
-  background-color: #eef5eb;
+.notification-budge:before :hover {
+  color: white;
 }
 
-.delete-book-card:hover {
-  cursor: pointer;
+.dropdwon-item.notification-budge,
+.dropdwon-item.dropdown-item.notification-budge:before {
+  position: relative;
 }
 
-.delete-book-card:hover .book-card {
-  background-color: #FEE2E0 !important;
+.dropdown-item.notification-budge:before {
+  top: 0px;
+  left: -5px;
 }
 
-.delete-book-card[data-willdelete=true] .book-card {
-  border: solid 3px var(--danger);
-  background-color: #FEE2E0 !important;
-}
-
-.user-card {
-  background-color: white;
-}
-
-.user-card .user-id {
-  color: #666666;
-}
-
-.card-body-wrapper {
-  margin-left: 20px;
-}
-
-#user-image-label {
-  width: 100%;
-}
-
-#user-image-label #user-image-input {
+.notification-budge[data-count="0"]:before {
   display: none;
 }
 
@@ -11426,5 +11445,25 @@ textarea {
   color: white;
   background-color: #6cb2eb;
   border-color: #6cb2eb;
+}
+
+.user-card {
+  background-color: white;
+}
+
+.user-card .user-id {
+  color: #666666;
+}
+
+.card-body-wrapper {
+  margin-left: 20px;
+}
+
+#user-image-label {
+  width: 100%;
+}
+
+#user-image-label #user-image-input {
+  display: none;
 }
 

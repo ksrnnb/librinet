@@ -40,6 +40,7 @@ https://librinet.jp/
 ### 通知機能
 - 自身の投稿やコメントにいいね、フォローされた場合に通知
 - 通知がある場合に、未読の件数を表示
+
 <img src="https://i.imgur.com/soFP217.png" width="300"> <img src="https://i.imgur.com/a7kcbhf.png" width="300"> 
 
 ### フォロー機能

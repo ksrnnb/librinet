@@ -99,7 +99,6 @@ export default function TopPage() {
     // .resize()は非推奨らしい
     $(window).on('resize', () => {
       const isTopPage = props.history.location.pathname === '/';
-      console.log(isTopPage);
 
       // top pageの場合はstateの更新、そうでない場合は、更新せずにresizeイベントを削除
       if (isTopPage) {

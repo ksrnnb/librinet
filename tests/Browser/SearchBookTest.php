@@ -69,15 +69,26 @@ class SearchBookTest extends DuskTestCase
     public function testCanFetchBookDataFromIsbnAndDontSeePostButton()
     {
         $this->browse(function (Browser $browser) {
-            $isbn = '9784297100339';
             $browser->visit($this->path)
                     ->waitFor('#isbn')
-                    ->type('#isbn', $isbn)
+                    ->type('#isbn', $this->isbn)
                     ->press('検索')
                     ->waitFor('.book-card')
                     ->assertSee('Docker/Kubernetes')
                     ->assertDontSee('投稿をする')      // 未認証のため見えない
                     ->assertDontSee('追加する');      // 未認証のため見えない
+        });
+    }
+
+    public function testCanFetchBookDataPressingEnterKey()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit($this->path)
+                    ->waitFor('#isbn')
+                    ->keys('#isbn', $this->isbn, '{enter}')
+                    ->press('検索')
+                    ->waitFor('.book-card')
+                    ->assertSee('Docker/Kubernetes');
         });
     }
 

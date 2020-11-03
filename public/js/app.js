@@ -86099,7 +86099,8 @@ function TextInput(props) {
       content = props.content,
       placeholder = props.placeholder,
       maxLength = props.maxLength,
-      attr = props.attr;
+      attr = props.attr,
+      onKeyDown = props.onKeyDown;
   var type = props.type || 'text';
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: name,
@@ -86112,13 +86113,15 @@ function TextInput(props) {
     maxLength: maxLength,
     autoComplete: autoComplete,
     className: "d-block w-adjust",
-    onChange: onChange
+    onChange: onChange,
+    onKeyDown: onKeyDown
   }, attr)));
 }
 TextInput.propTypes = {
   name: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
   autoComplete: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func,
+  onKeyDown: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func,
   content: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
   placeholder: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
   maxLength: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].number,
@@ -86143,9 +86146,11 @@ function SearchForm(props) {
       subMessage = props.subMessage,
       maxLength = props.maxLength,
       onChange = props.onChange,
-      onClick = props.onClick,
+      onSubmit = props.onSubmit,
       errors = props.errors;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NoImageCard, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NoImageCard, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: onSubmit
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: name
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, subMessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
     errors: errors
@@ -86160,8 +86165,8 @@ function SearchForm(props) {
     type: "button",
     id: "search",
     className: "btn btn-outline-success",
-    onClick: onClick
-  }, "\u691C\u7D22")));
+    onClick: onSubmit
+  }, "\u691C\u7D22"))));
 }
 SearchForm.propTypes = {
   name: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].string,
@@ -86170,7 +86175,7 @@ SearchForm.propTypes = {
   maxLength: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].number,
   errors: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].array,
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func,
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func
+  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_1__["PropTypes"].func
 };
 
 /***/ }),
@@ -88186,17 +88191,10 @@ function Book() {
       errors = _useState6[0],
       setErrors = _useState6[1];
 
-  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]); // TODO エンターを押しても送信できるようにしたい
-  // pressEnter(e) {
-  //     const keyCode = e.charCode;
-  //     console.log(e);
-  //     if (keyCode == 13) {
-  //         console.log('Enter!?');
-  //         this.sendPost();
-  //     }
-  // }
+  var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
 
-  function sendPost() {
+  function searchBook(e) {
+    e.preventDefault();
     var isbn = validateInputAndReturnIsbn(input);
 
     if (isbn) {
@@ -88246,7 +88244,7 @@ function Book() {
     onChange: function onChange(e) {
       return setInput(e.target.value);
     },
-    onClick: sendPost
+    onSubmit: searchBook
   }), book && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_3__["Caption"], {
     content: "\u691C\u7D22\u7D50\u679C"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_SearchedBook__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -89543,6 +89541,12 @@ function Login() {
     _functions_MyLink__WEBPACK_IMPORTED_MODULE_5__["MyLink"].home(props);
   }
 
+  function pressEnter(e) {
+    if (e.keyCode === 13) {
+      normalUserLogin();
+    }
+  }
+
   function normalUserLogin() {
     axios.get('/sanctum/csrf-cookie').then(function () {
       axios.post('/api/login', {
@@ -89583,7 +89587,8 @@ function Login() {
     content: "\u30E6\u30FC\u30B6\u30FCID",
     onChange: function onChange(e) {
       return setStrId(e.target.value);
-    }
+    },
+    onKeyDown: pressEnter
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["TextInput"], {
     type: "password",
     name: "password",
@@ -89591,7 +89596,8 @@ function Login() {
     autoComplete: "off",
     onChange: function onChange(e) {
       return setPassword(e.target.value);
-    }
+    },
+    onKeyDown: pressEnter
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["MyButton"], {
     id: "normal-login",
     onClick: normalUserLogin,
@@ -90258,7 +90264,14 @@ function Signup() {
     data.params.user && _functions_MyLink__WEBPACK_IMPORTED_MODULE_7__["MyLink"].home(props);
   }, []);
 
-  function onClickSignup() {
+  function pressEnter(e) {
+    // Enterキーを押した場合、送信する。
+    if (e.keyCode === 13) {
+      register();
+    }
+  }
+
+  function register() {
     var validated = validation();
 
     if (validated) {
@@ -90337,13 +90350,18 @@ function Signup() {
     margin: "mb-5"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Errors__WEBPACK_IMPORTED_MODULE_3__["default"], {
     errors: errors
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("form", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("form", {
+    onSubmit: register
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
     name: "user-name",
     content: "\u30E6\u30FC\u30B6\u30FC\u540D",
     placeholder: "~16\u6587\u5B57",
     maxLength: 16,
     onChange: function onChange(e) {
       return setUserName(e.target.value);
+    },
+    onKeyDown: function onKeyDown(e) {
+      return pressEnter(e);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
     name: "user-id",
@@ -90352,6 +90370,9 @@ function Signup() {
     maxLength: 16,
     onChange: function onChange(e) {
       return setStrId(e.target.value);
+    },
+    onKeyDown: function onKeyDown(e) {
+      return pressEnter(e);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
     name: "email",
@@ -90360,6 +90381,9 @@ function Signup() {
     autoComplete: "email",
     onChange: function onChange(e) {
       return setEmail(e.target.value);
+    },
+    onKeyDown: function onKeyDown(e) {
+      return pressEnter(e);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
     type: "password",
@@ -90369,6 +90393,9 @@ function Signup() {
     autoComplete: "new-password",
     onChange: function onChange(e) {
       return setPassword(e.target.value);
+    },
+    onKeyDown: function onKeyDown(e) {
+      return pressEnter(e);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
     type: "password",
@@ -90378,12 +90405,15 @@ function Signup() {
     autoComplete: "new-password",
     onChange: function onChange(e) {
       return setConfirmPassword(e.target.value);
+    },
+    onKeyDown: function onKeyDown(e) {
+      return pressEnter(e);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
     className: "mt-5"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["MyButton"], {
     id: "normal-login",
-    onClick: onClickSignup,
+    onClick: register,
     content: "\u30E6\u30FC\u30B6\u30FC\u767B\u9332"
   })))));
 }
@@ -90537,8 +90567,7 @@ function TopPage() {
     // .resize()は非推奨らしい
 
     $(window).on('resize', function () {
-      var isTopPage = props.history.location.pathname === '/';
-      console.log(isTopPage); // top pageの場合はstateの更新、そうでない場合は、更新せずにresizeイベントを削除
+      var isTopPage = props.history.location.pathname === '/'; // top pageの場合はstateの更新、そうでない場合は、更新せずにresizeイベントを削除
 
       if (isTopPage) {
         var _height = $('#top-content').height();
@@ -90670,7 +90699,9 @@ function User() {
   var examples = data.params.examples;
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_6__["PropsContext"]);
 
-  function onClickSearch() {
+  function searchUser(e) {
+    e.preventDefault();
+
     if (input === '') {
       setErrors(['フォームが入力されていません']);
     } else {
@@ -90707,7 +90738,7 @@ function User() {
     onChange: function onChange(e) {
       return setInput(e.target.value);
     },
-    onClick: onClickSearch,
+    onSubmit: searchUser,
     content: "\u30E6\u30FC\u30B6\u30FCID \u307E\u305F\u306F \u30E6\u30FC\u30B6\u30FC\u540D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044",
     maxLength: 16,
     errors: errors

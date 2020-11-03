@@ -68,7 +68,9 @@ export default function User() {
   const examples = data.params.examples;
   const props = useContext(PropsContext);
 
-  function onClickSearch() {
+  function searchUser(e) {
+    e.preventDefault();
+
     if (input === '') {
       setErrors(['フォームが入力されていません']);
     } else {
@@ -106,7 +108,7 @@ export default function User() {
       <SearchForm
         name="user"
         onChange={(e) => setInput(e.target.value)}
-        onClick={onClickSearch}
+        onSubmit={searchUser}
         content="ユーザーID または ユーザー名を入力してください"
         maxLength={16}
         errors={errors}

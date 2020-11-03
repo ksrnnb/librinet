@@ -43,6 +43,12 @@ export default function Login() {
     MyLink.home(props);
   }
 
+  function pressEnter(e) {
+    if (e.keyCode === 13) {
+      normalUserLogin();
+    }
+  }
+
   function normalUserLogin() {
     axios
       .get('/sanctum/csrf-cookie')
@@ -92,6 +98,7 @@ export default function Login() {
             name="user-id"
             content="ユーザーID"
             onChange={(e) => setStrId(e.target.value)}
+            onKeyDown={pressEnter}
           />
           <TextInput
             type="password"
@@ -99,6 +106,7 @@ export default function Login() {
             content="パスワード"
             autoComplete="off"
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={pressEnter}
           />
           <MyButton
             id="normal-login"

@@ -173,6 +173,7 @@ export function TextInput(props) {
     placeholder,
     maxLength,
     attr,
+    onKeyDown,
   } = props;
   const type = props.type || 'text';
   return (
@@ -187,6 +188,7 @@ export function TextInput(props) {
         autoComplete={autoComplete}
         className="d-block w-adjust"
         onChange={onChange}
+        onKeyDown={onKeyDown}
         {...attr}
       />
     </label>
@@ -197,6 +199,7 @@ TextInput.propTypes = {
   name: PropTypes.string,
   autoComplete: PropTypes.string,
   onChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
   content: PropTypes.string,
   placeholder: PropTypes.string,
   maxLength: PropTypes.number,
@@ -227,33 +230,35 @@ export function SearchForm(props) {
     subMessage,
     maxLength,
     onChange,
-    onClick,
+    onSubmit,
     errors,
   } = props;
 
   return (
     <NoImageCard>
-      <label htmlFor={name}>
-        <h5>{content}</h5>
-        <p>{subMessage}</p>
-        <Errors errors={errors} />
-        <input
-          className="mr-3 py-0 d-inline-block search-input"
-          type="text"
-          id={name}
-          name={name}
-          maxLength={maxLength}
-          onChange={onChange}
-        />
-        <button
-          type="button"
-          id="search"
-          className="btn btn-outline-success"
-          onClick={onClick}
-        >
-          検索
-        </button>
-      </label>
+      <form onSubmit={onSubmit}>
+        <label htmlFor={name}>
+          <h5>{content}</h5>
+          <p>{subMessage}</p>
+          <Errors errors={errors} />
+          <input
+            className="mr-3 py-0 d-inline-block search-input"
+            type="text"
+            id={name}
+            name={name}
+            maxLength={maxLength}
+            onChange={onChange}
+          />
+          <button
+            type="button"
+            id="search"
+            className="btn btn-outline-success"
+            onClick={onSubmit}
+          >
+            検索
+          </button>
+        </label>
+      </form>
     </NoImageCard>
   );
 }
@@ -265,5 +270,5 @@ SearchForm.propTypes = {
   maxLength: PropTypes.number,
   errors: PropTypes.array,
   onChange: PropTypes.func,
-  onClick: PropTypes.func,
+  onSubmit: PropTypes.func,
 };

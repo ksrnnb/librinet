@@ -62,6 +62,19 @@ class SearchUserTest extends DuskTestCase
         });
     }
 
+    public function testUserSearchPressingEnterKey()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/user')
+                    ->waitFor('#user')
+                    ->keys('.search-input', $this->user->str_id, '{enter}')
+                    ->waitFor('.results')
+                    ->assertSee('検索結果')
+                    ->click('.user-card')
+                    ->assertSee('本棚');
+        });
+    }
+
     public function assertUsersExist($browser, $column)
     {
         $item = $this->user->$column;

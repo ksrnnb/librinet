@@ -51,18 +51,8 @@ export default function Book() {
   const [errors, setErrors] = useState(null);
   const props = useContext(PropsContext);
 
-  // TODO エンターを押しても送信できるようにしたい
-  // pressEnter(e) {
-  //     const keyCode = e.charCode;
-  //     console.log(e);
-
-  //     if (keyCode == 13) {
-  //         console.log('Enter!?');
-  //         this.sendPost();
-  //     }
-  // }
-
-  function sendPost() {
+  function searchBook(e) {
+    e.preventDefault();
     const isbn = validateInputAndReturnIsbn(input);
 
     if (isbn) {
@@ -114,7 +104,7 @@ export default function Book() {
         // maxLength={13}
         errors={errors}
         onChange={(e) => setInput(e.target.value)}
-        onClick={sendPost}
+        onSubmit={searchBook}
       />
       {book && (
         <>

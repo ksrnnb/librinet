@@ -24,7 +24,14 @@ export default function Signup() {
     data.params.user && MyLink.home(props);
   }, []);
 
-  function onClickSignup() {
+  function pressEnter(e) {
+    // Enterキーを押した場合、送信する。
+    if (e.keyCode === 13) {
+      register();
+    }
+  }
+
+  function register() {
     const validated = validation();
 
     if (validated) {
@@ -108,13 +115,14 @@ export default function Signup() {
       <Subtitle subtitle="ユーザーの登録" />
       <NoImageCard margin="mb-5">
         <Errors errors={errors} />
-        <form>
+        <form onSubmit={register}>
           <TextInput
             name="user-name"
             content="ユーザー名"
             placeholder="~16文字"
             maxLength={16}
             onChange={(e) => setUserName(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
           />
           <TextInput
             name="user-id"
@@ -122,6 +130,7 @@ export default function Signup() {
             placeholder="英数字 4~16文字"
             maxLength={16}
             onChange={(e) => setStrId(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
           />
           <TextInput
             name="email"
@@ -129,6 +138,7 @@ export default function Signup() {
             placeholder="****@****"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
           />
           <TextInput
             type="password"
@@ -137,6 +147,7 @@ export default function Signup() {
             placeholder="英数字記号 6文字以上"
             autoComplete="new-password"
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
           />
           <TextInput
             type="password"
@@ -145,11 +156,12 @@ export default function Signup() {
             placeholder="英数字記号 6文字以上"
             autoComplete="new-password"
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
           />
           <div className="mt-5">
             <MyButton
               id="normal-login"
-              onClick={onClickSignup}
+              onClick={register}
               content="ユーザー登録"
             />
           </div>

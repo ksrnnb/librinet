@@ -30,10 +30,10 @@ function ModalWindow(props) {
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           キャンセル
-          </Button>
+        </Button>
         <Button variant="primary" onClick={onSubmitDelete}>
           はい
-          </Button>
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -244,4 +244,10 @@ UserStrIdInput.propTypes = {
   strId: PropTypes.string,
   onChange: PropTypes.func,
   isGuest: PropTypes.bool,
+};
+
+ModalWindow.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  onSubmitDelete: PropTypes.func,
 };

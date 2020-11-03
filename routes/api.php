@@ -42,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/genre/edit', 'Api\GenreController@edit');
     
+    Route::post('/notification', 'Api\NotificationController@update');
+    
     Route::get('/comment/id/{id}', 'Api\CommentController@get');
     Route::get('/comment/{uuid}', 'Api\CommentController@add');
     Route::post('/comment/{uuid}', 'Api\CommentController@create');

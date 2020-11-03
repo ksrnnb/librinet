@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { DataContext } from './App';
+import React, { useContext, useEffect } from 'react';
+import { DataContext, SetStateContext } from './App';
 import Subtitle from '../components/Subtitle';
 import PropTypes from 'prop-types';
 import { PropsContext } from '../components/MyRouter';
@@ -123,6 +123,7 @@ function Notice(props) {
 export default function Notification() {
   const data = useContext(DataContext);
   const props = useContext(PropsContext);
+  const setState = useContext(SetStateContext);
 
   const isNotLogin = typeof data.params.user === 'undefined';
 
@@ -132,6 +133,38 @@ export default function Notification() {
   }
 
   const notifications = data.params.user.notifications || [];
+
+  useEffect(() => {
+    const ids = [];
+    notifications.forEach((notice) => {
+      if (notice.is_read == false) {
+        ids.push(notice.id);
+      }
+    });
+
+    if (ids.length) {
+      makeNotificationIsRead(ids);
+    }
+  }, []);
+
+  function makeNotificationIsRead(ids) {
+    axios
+      .post('/api/notification', { ids: ids })
+      .then(() => {
+        notifications.forEach((notice) => {
+          notice.is_read = true;
+        });
+
+        const params = Object.assign({}, data.params);
+        params.user.notifications = notifications;
+
+        setState.params(params);
+      })
+      .catch(() => {
+        alert('予期しないエラーが発生しました');
+      });
+  }
+
   // 通知を日付の新しい順にソート
   notifications.sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at);

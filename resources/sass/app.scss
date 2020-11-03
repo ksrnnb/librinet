@@ -7,8 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@import 'book_search';
 @import 'common';
 @import 'custom';
-@import 'book_search';
-@import 'user_search';
+@import 'notification';
 @import 'top_page';
+@import 'user_search';

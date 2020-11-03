@@ -6,6 +6,17 @@ export default function SubColumn() {
   const data = useContext(DataContext);
   const user = data.params.user;
 
+  let notReadCount = 0;
+  if (user) {
+    notReadCount = user.notifications.reduce((accumlator, notification) => {
+      if (notification.is_read == false) {
+        return accumlator + 1;
+      }
+
+      return accumlator;
+    }, 0);
+  }
+
   if (typeof user === 'undefined') {
     return (
       <div id="sub-column">
@@ -46,7 +57,9 @@ export default function SubColumn() {
       </Link>
 
       <Link to="/notification">
-        <h4 className="mt-4">通知</h4>
+        <h4 className="mt-4 notification-budge" data-count={notReadCount}>
+          通知
+        </h4>
       </Link>
 
       <Link to={'/user/profile/' + user.str_id}>

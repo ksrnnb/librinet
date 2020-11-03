@@ -86527,6 +86527,17 @@ LinkGroup.propTypes = {
 
 function LinkGroup(props) {
   var user = props.user;
+  var notReadCount = 0;
+
+  if (user) {
+    notReadCount = user.notifications.reduce(function (accumlator, notification) {
+      if (notification.is_read == false) {
+        return accumlator + 1;
+      }
+
+      return accumlator;
+    }, 0);
+  }
 
   if (typeof user === 'undefined') {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
@@ -86557,8 +86568,9 @@ function LinkGroup(props) {
     className: "dropdown-item",
     to: "/user"
   }, "\u30E6\u30FC\u30B6\u30FC\u3092\u691C\u7D22\u3059\u308B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "dropdown-item",
-    to: "/notification"
+    className: "dropdown-item notification-budge",
+    to: "/notification",
+    "data-count": notReadCount
   }, "\u901A\u77E5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     className: "dropdown-item",
     to: '/user/profile/' + user.str_id
@@ -87216,6 +87228,17 @@ __webpack_require__.r(__webpack_exports__);
 function SubColumn() {
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_views_App__WEBPACK_IMPORTED_MODULE_2__["DataContext"]);
   var user = data.params.user;
+  var notReadCount = 0;
+
+  if (user) {
+    notReadCount = user.notifications.reduce(function (accumlator, notification) {
+      if (notification.is_read == false) {
+        return accumlator + 1;
+      }
+
+      return accumlator;
+    }, 0);
+  }
 
   if (typeof user === 'undefined') {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -87256,7 +87279,8 @@ function SubColumn() {
   }, "\u30E6\u30FC\u30B6\u30FC\u3092\u691C\u7D22\u3059\u308B")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/notification"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-    className: "mt-4"
+    className: "mt-4 notification-budge",
+    "data-count": notReadCount
   }, "\u901A\u77E5")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: '/user/profile/' + user.str_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
@@ -89104,6 +89128,11 @@ UserStrIdInput.propTypes = {
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
   isGuest: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].bool
 };
+ModalWindow.propTypes = {
+  show: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].bool,
+  handleClose: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func,
+  onSubmitDelete: prop_types__WEBPACK_IMPORTED_MODULE_5__["PropTypes"].func
+};
 
 /***/ }),
 
@@ -89784,6 +89813,7 @@ function Notice(props) {
 function Notification() {
   var data = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["DataContext"]);
   var props = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_components_MyRouter__WEBPACK_IMPORTED_MODULE_4__["PropsContext"]);
+  var setState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_App__WEBPACK_IMPORTED_MODULE_1__["SetStateContext"]);
   var isNotLogin = typeof data.params.user === 'undefined';
 
   if (isNotLogin) {
@@ -89791,7 +89821,35 @@ function Notification() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
 
-  var notifications = data.params.user.notifications || []; // 通知を日付の新しい順にソート
+  var notifications = data.params.user.notifications || [];
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var ids = [];
+    notifications.forEach(function (notice) {
+      if (notice.is_read == false) {
+        ids.push(notice.id);
+      }
+    });
+
+    if (ids.length) {
+      makeNotificationIsRead(ids);
+    }
+  }, []);
+
+  function makeNotificationIsRead(ids) {
+    axios.post('/api/notification', {
+      ids: ids
+    }).then(function () {
+      notifications.forEach(function (notice) {
+        notice.is_read = true;
+      });
+      var params = Object.assign({}, data.params);
+      params.user.notifications = notifications;
+      setState.params(params);
+    })["catch"](function () {
+      alert('予期しないエラーが発生しました');
+    });
+  } // 通知を日付の新しい順にソート
+
 
   notifications.sort(function (a, b) {
     return new Date(b.created_at) - new Date(a.created_at);

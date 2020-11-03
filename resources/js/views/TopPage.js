@@ -98,8 +98,16 @@ export default function TopPage() {
     // window幅が変わった時も高さを調整。
     // .resize()は非推奨らしい
     $(window).on('resize', () => {
-      const height = $('#top-content').height();
-      setHeight(height);
+      const isTopPage = props.history.location.pathname === '/';
+      console.log(isTopPage);
+
+      // top pageの場合はstateの更新、そうでない場合は、更新せずにresizeイベントを削除
+      if (isTopPage) {
+        const height = $('#top-content').height();
+        setHeight(height);
+      } else {
+        $(window).off('resize');
+      }
     });
 
     // はじめは2枚目以降もactiveにしておくことで、画像を読み込ませとく。

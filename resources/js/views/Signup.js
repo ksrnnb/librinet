@@ -126,7 +126,7 @@ export default function Signup() {
           <TextInput
             name="email"
             content="メールアドレス"
-            placeholder="有効なメールアドレス"
+            placeholder="****@****"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
           />

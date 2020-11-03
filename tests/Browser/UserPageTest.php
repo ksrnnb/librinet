@@ -39,7 +39,7 @@ class UserPageTest extends DuskTestCase
         });
     }
 
-    public function testCanSeeEditButton()
+    public function testCannotSeeEditButtonBecauseDontHaveBook()
     {
         $this->browse(function (Browser $browser) {
 
@@ -52,7 +52,7 @@ class UserPageTest extends DuskTestCase
         });
     }
 
-    public function testCanSeeDeleteButton()
+    public function testCanSeeDeleteBook()
     {
         $this->browse(function (Browser $browser) {
 

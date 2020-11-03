@@ -7,8 +7,37 @@ import { PropTypes } from 'prop-types';
 import { DataContext, SetStateContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
+import { Modal, Button } from 'react-bootstrap';
 
 const axios = window.axios;
+
+function ModalWindow(props) {
+  const { show, handleClose, onSubmitDelete } = props;
+
+  return (
+    <Modal
+      show={show}
+      onHide={handleClose}
+      backdrop="static"
+      keyboard={false}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>ユーザーの削除</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>アカウントを削除しますか？</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          キャンセル
+          </Button>
+        <Button variant="primary" onClick={onSubmitDelete}>
+          はい
+          </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
 function EditButton(props) {
   return (
@@ -86,6 +115,7 @@ export default function EditUser() {
   const [name, setName] = useState(user.name);
   const [strId, setStrId] = useState(user.str_id);
   const [image, setImage] = useState(user.image || null);
+  const [show, setShow] = useState(false);
 
   function onSubmitEdit() {
     const path = '/api/user/edit';
@@ -167,7 +197,7 @@ export default function EditUser() {
         </div>
         <div className="row justify-content-end mx-0">
           <div className="float-right">
-            <DeleteButton isGuest={isGuest} onClick={onSubmitDelete} />
+            <DeleteButton isGuest={isGuest} onClick={() => setShow(true)} />
           </div>
         </div>
         <div className="row justify-content-end mx-0">
@@ -179,6 +209,11 @@ export default function EditUser() {
             )}
           </div>
         </div>
+        <ModalWindow
+          show={show}
+          handleClose={() => setShow(false)}
+          onSubmitDelete={onSubmitDelete}
+        />
       </>
     );
   } else {

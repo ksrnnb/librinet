@@ -88844,6 +88844,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App */ "./resources/js/views/App.js");
 /* harmony import */ var _components_MyRouter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/MyRouter */ "./resources/js/components/MyRouter.js");
 /* harmony import */ var _functions_MyLink__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../functions/MyLink */ "./resources/js/functions/MyLink.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -88867,7 +88868,30 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
+
 var axios = window.axios;
+
+function ModalWindow(props) {
+  var show = props.show,
+      handleClose = props.handleClose,
+      onSubmitDelete = props.onSubmitDelete;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Modal"], {
+    show: show,
+    onHide: handleClose,
+    backdrop: "static",
+    keyboard: false,
+    "aria-labelledby": "contained-modal-title-vcenter",
+    centered: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Modal"].Header, {
+    closeButton: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Modal"].Title, null, "\u30E6\u30FC\u30B6\u30FC\u306E\u524A\u9664")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Modal"].Body, null, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Button"], {
+    variant: "secondary",
+    onClick: handleClose
+  }, "\u30AD\u30E3\u30F3\u30BB\u30EB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__["Button"], {
+    variant: "primary",
+    onClick: onSubmitDelete
+  }, "\u306F\u3044")));
+}
 
 function EditButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -88958,6 +88982,11 @@ function EditUser() {
       image = _useState8[0],
       setImage = _useState8[1];
 
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      show = _useState10[0],
+      setShow = _useState10[1];
+
   function onSubmitEdit() {
     var path = '/api/user/edit';
     user.name = name;
@@ -89035,14 +89064,22 @@ function EditUser() {
       className: "float-right"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DeleteButton, {
       isGuest: isGuest,
-      onClick: onSubmitDelete
+      onClick: function onClick() {
+        return setShow(true);
+      }
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "row justify-content-end mx-0"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "float-right"
     }, isGuest && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
       className: "text-danger mb-0"
-    }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u306F\u524A\u9664\u3067\u304D\u307E\u305B\u3093"))));
+    }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u306F\u524A\u9664\u3067\u304D\u307E\u305B\u3093"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalWindow, {
+      show: show,
+      handleClose: function handleClose() {
+        return setShow(false);
+      },
+      onSubmitDelete: onSubmitDelete
+    }));
   } else {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null);
   }
@@ -90261,7 +90298,7 @@ function Signup() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_4__["TextInput"], {
     name: "email",
     content: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9",
-    placeholder: "\u6709\u52B9\u306A\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9",
+    placeholder: "****@****",
     autoComplete: "email",
     onChange: function onChange(e) {
       return setEmail(e.target.value);
@@ -90442,8 +90479,16 @@ function TopPage() {
     // .resize()は非推奨らしい
 
     $(window).on('resize', function () {
-      var height = $('#top-content').height();
-      setHeight(height);
+      var isTopPage = props.history.location.pathname === '/';
+      console.log(isTopPage); // top pageの場合はstateの更新、そうでない場合は、更新せずにresizeイベントを削除
+
+      if (isTopPage) {
+        var _height = $('#top-content').height();
+
+        setHeight(_height);
+      } else {
+        $(window).off('resize');
+      }
     }); // はじめは2枚目以降もactiveにしておくことで、画像を読み込ませとく。
 
     setActive('');

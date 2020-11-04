@@ -50,6 +50,6 @@ class UniqueGenre implements Rule
      */
     public function message()
     {
-        return '既にジャンル名が存在しています。違う名前を入力してください。';
+        return '入力されたジャンルは既に存在しています。違う名前を入力してください。';
     }
 }

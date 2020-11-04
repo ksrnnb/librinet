@@ -54,7 +54,6 @@ class UserController extends Controller
 
     public function edit(EditUserRequest $request)
     {
-        // $validated = $request->validated();
         $params = $request->input('user');
         
         Gate::authorize('edit-user', $params['id']);

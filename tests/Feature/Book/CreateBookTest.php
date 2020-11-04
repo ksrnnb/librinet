@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\User;
 use App\Book;
+use App\Genre;
 
 class CreateBookTest extends TestCase
 {
@@ -15,17 +16,16 @@ class CreateBookTest extends TestCase
     protected $path = '/api/book/add';
 
     protected $form = [
-            'add_to_bookshelf'  => true,
-            'is_new_genre'      => true,
-            'new_genre'         => 'test_genre_name',
+            'user_id'           => 1,
+            'isInBookshelf'     => true,
+            'isbn'              => '9784774163666',
             'title'             => 'test_title',
             'author'            => 'test_author',
-            'cover'             => 'test_cover',
             'publisher'         => 'test_publisher',
             'pubdate'           => 'test_pubdate',
-            'isbn'              => '9784774163666',
-            'user_id'           => 1,
-            'genre_id'          => 1,
+            'cover'             => 'test_cover',
+            'is_new_genre'      => true,
+            'new_genre'         => 'test_genre_name',
         ];
 
     protected function setUp(): void
@@ -41,7 +41,6 @@ class CreateBookTest extends TestCase
     
     public function testCannotCreateWhenIsntAuthenticated()
     {
-        // Unauthorized jsonでpostすると302にならずに401で返ってくる
         $this->json('Post', $this->path, $this->form)
              ->assertStatus(401);
     }
@@ -54,5 +53,26 @@ class CreateBookTest extends TestCase
 
         $book = Book::find(1);
         $this->assertEquals($book->title, 'test_title');
+    }
+
+    public function testCannotCreateValidation()
+    {
+        $this->authenticate();
+
+        // null
+        $wrong_form = array_merge($this->form, [
+            'new_genre' => '',
+        ]);
+
+        $this->json('POST', $this->path, $wrong_form)
+             ->assertStatus(422);
+
+        // too long
+        $wrong_form = array_merge($this->form, [
+                'new_genre' => str_repeat('a', 17),
+            ]);
+
+        $this->json('POST', $this->path, $wrong_form)
+             ->assertStatus(422);
     }
 }

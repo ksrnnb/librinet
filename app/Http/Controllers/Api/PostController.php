@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePostRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 use App\Book;
@@ -16,6 +16,11 @@ class PostController extends Controller
 {
     public function get(Request $request, $id)
     {
+        // 数値でない場合はNG
+        if (preg_match('/\D/', $id)) {
+            return bad_request();
+        }
+
         $post = Post::find($id);
         if ($post) {
             $post->loadPostInfoAndComments();
@@ -25,23 +30,17 @@ class PostController extends Controller
         return response('投稿がみつかりません', 404);
     }
 
-    // TODO: PostRequestつかう？
-    public function create(Request $request)
+    public function create(CreatePostRequest $request)
     {
         Gate::authorize('create-book');
+        \Log::debug($request->input());
 
-        // $isIsbn = Book::isIsbn($isbn);
-        $user = Auth::user();
 
-        // TODO: validationしてから
-        // 扱いやすいようにcollectionにしている。
         $form = collect($request->input());
-
-        $form = $form->merge(['user_id'   =>  $user->id]);
 
         Post::createNewPost($form);
 
-        $user = User::getParamsForApp($user->str_id);
+        $user = User::getParamsForApp(Auth::user()->str_id);
 
         return response()->json($user);
     }

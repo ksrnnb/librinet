@@ -87,13 +87,14 @@ export default function AddBook() {
 
   function getParams() {
     const params = {
+      user_id: data.params.user.id,
+      isInBookshelf: true,
       isbn: book.isbn,
       title: book.title,
       author: book.author,
       publisher: book.publisher,
       pubdate: book.pubdate,
       cover: book.cover,
-      add_to_bookshelf: isChecked,
       is_new_genre: isNewGenre,
       new_genre: newGenre,
       genre_id: convGenre,
@@ -118,8 +119,14 @@ export default function AddBook() {
         .then((response) => {
           linkToUserPage(response);
         })
-        .catch(() => {
-          alert('予期しないエラーが発生しました');
+        .catch((error) => {
+          if (error.response.status == 422) {
+            const errors = Object.values(error.response.data.errors);
+            setErrors(errors);
+            window.scroll(0, 0);
+          } else {
+            alert('予期しないエラーが発生しました');
+          }
         });
     }
   }
@@ -163,9 +170,9 @@ export default function AddBook() {
     return (
       <>
         <Subtitle subtitle="本棚に追加" />
-        <Errors errors={errors} />
         <Genres
           book={book}
+          errors={errors}
           isChecked={isChecked}
           isNewGenre={isNewGenre}
           genres={genres}

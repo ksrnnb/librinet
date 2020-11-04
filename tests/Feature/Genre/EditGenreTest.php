@@ -77,7 +77,7 @@ class GenreEditTest extends TestCase
         ];
 
         $this->json('POST', $this->path, $params)
-             ->assertStatus(400);
+             ->assertStatus(422);
 
         // emtpy array
         $params = [
@@ -85,7 +85,7 @@ class GenreEditTest extends TestCase
         ];
 
         $this->json('POST', $this->path, $params)
-             ->assertStatus(400);
+             ->assertStatus(422);
 
         // emtpy array
         $params = [
@@ -93,6 +93,26 @@ class GenreEditTest extends TestCase
         ];
 
         $this->json('POST', $this->path, $params)
-             ->assertStatus(400);
+             ->assertStatus(422);
+    }
+
+    public function testCannotEditTooLong()
+    {
+        $this->authenticate();
+        // max 16 letters
+        $params = [
+            'newGenres' => [1 => str_repeat('a', 16)],
+        ];
+
+        $this->json('POST', $this->path, $params)
+                ->assertStatus(200);
+
+        // too long
+        $params = [
+            'newGenres' => [1 => str_repeat('a', 17)],
+        ];
+
+        $this->json('POST', $this->path, $params)
+                ->assertStatus(422);
     }
 }

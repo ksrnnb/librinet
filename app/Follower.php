@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Events\Followed;
 
 class Follower extends Model
 {
     protected $guarded = ['id'];
+
+    protected $dispatchesEvents = [
+        'created' => Followed::class,
+    ];
 
     public function followUser()
     {

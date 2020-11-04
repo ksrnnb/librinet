@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import Errors from './Errors';
 import {
   Caption,
   TextInput,
@@ -17,6 +18,7 @@ export default function Genres(props) {
     <div className={divClass}>
       <Caption isTop={true} content="ジャンルの選択" />
       <NoImageCard>
+        <Errors errors={props.errors} />
         <NewGenre
           canSelectGenre={canSelectGenre}
           isNewGenre={props.isNewGenre}

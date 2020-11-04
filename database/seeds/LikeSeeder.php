@@ -41,7 +41,6 @@ class LikeSeeder extends Seeder
 
             foreach ($user_ids as $user_id) {
                 $like = $post->likes()->create(['user_id' => $user_id]);
-                event(new Liked($like));
             }
         }
 
@@ -53,7 +52,6 @@ class LikeSeeder extends Seeder
 
             foreach ($user_ids as $user_id) {
                 $like = $comment->likes()->create(['user_id' => $user_id]);
-                event(new Liked($like));
             }
         }
     }

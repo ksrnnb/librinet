@@ -25,16 +25,25 @@ class BookCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'new_genre' => ['max:16', new UniqueGenre()],
-            'genre_id'  => 'numeric',
+            'user_id'       => ['required'],
+            'isInBookshelf' => ['required'],
+            'isbn'          => ['required', 'regex:/^9784[0-9]{9}$/'],
+            'title'         => ['required'],
+            'author'        => ['required'],
+            'publisher'     => ['required'],
+            'pubdate'       => ['required'],
+            'cover'         => ['nullable'],
+            'is_new_genre'  => ['required', 'bool'],
+            'new_genre'     => ['required_if:is_new_genre,true', 'max:16', new UniqueGenre()],
+            'genre_id'      => ['nullable', 'numeric']
         ];
     }
-
 
     public function messages()
     {
         return [
             'new_genre.max'    => 'ジャンル名が長すぎます。16文字以内で入力してください。',
+            'genre_id'    => 'ジャンルが正しく選択されていません',
         ];
     }
 }

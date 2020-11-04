@@ -85858,6 +85858,7 @@ function Books(props) {
       genre = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         className: "".concat(margin, " mb-3 genre"),
         name: "genre",
+        maxLength: 16,
         defaultValue: genres[genreId],
         "data-id": genreId
       });
@@ -86405,7 +86406,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Components */ "./resources/js/components/Components.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Errors */ "./resources/js/components/Errors.js");
+/* harmony import */ var _Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components */ "./resources/js/components/Components.js");
+
 
 
 
@@ -86415,10 +86418,12 @@ function Genres(props) {
   var divClass = canSelectGenre ? '' : 'invalid';
   var element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: divClass
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["Caption"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["Caption"], {
     isTop: true,
     content: "\u30B8\u30E3\u30F3\u30EB\u306E\u9078\u629E"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["NoImageCard"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewGenre, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["NoImageCard"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    errors: props.errors
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewGenre, {
     canSelectGenre: canSelectGenre,
     isNewGenre: props.isNewGenre,
     newGenre: newGenre,
@@ -86446,7 +86451,7 @@ function NewGenre(props) {
   var canSelectGenre = props.canSelectGenre;
   var disabled = !canSelectGenre;
   var isChecked = props.isNewGenre;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["InputWithCheck"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["InputWithCheck"], {
     type: "radio",
     name: "new",
     value: "new",
@@ -86454,7 +86459,7 @@ function NewGenre(props) {
     disabled: disabled,
     onChange: props.onChangeRadioButton,
     content: "\u65B0\u3057\u3044\u30B8\u30E3\u30F3\u30EB\u3092\u5165\u529B"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["TextInput"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["TextInput"], {
     name: "new-genre",
     attr: {
       maxLength: 16,
@@ -86474,7 +86479,7 @@ function ConventionalGenre(props) {
   var genresExist = Object.keys(genres).length;
 
   if (genresExist) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["InputWithCheck"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["InputWithCheck"], {
       type: "radio",
       name: "conventional",
       value: "conventional",
@@ -86482,7 +86487,7 @@ function ConventionalGenre(props) {
       disabled: disabled,
       onChange: props.onChangeRadioButton,
       content: "\u65E2\u5B58\u306E\u30B8\u30E3\u30F3\u30EB\u304B\u3089\u9078\u629E"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_2__["SelectBox"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components__WEBPACK_IMPORTED_MODULE_3__["SelectBox"], {
       name: "genre_id",
       disabled: disabled,
       value: props.convGenre,
@@ -87896,13 +87901,14 @@ function AddBook() {
 
   function getParams() {
     var params = {
+      user_id: data.params.user.id,
+      isInBookshelf: true,
       isbn: book.isbn,
       title: book.title,
       author: book.author,
       publisher: book.publisher,
       pubdate: book.pubdate,
       cover: book.cover,
-      add_to_bookshelf: isChecked,
       is_new_genre: isNewGenre,
       new_genre: newGenre,
       genre_id: convGenre
@@ -87922,8 +87928,15 @@ function AddBook() {
     } else {
       axios.post(path, params).then(function (response) {
         linkToUserPage(response);
-      })["catch"](function () {
-        alert('予期しないエラーが発生しました');
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          var _errors = Object.values(error.response.data.errors);
+
+          setErrors(_errors);
+          window.scroll(0, 0);
+        } else {
+          alert('予期しないエラーが発生しました');
+        }
       });
     }
   }
@@ -87965,10 +87978,9 @@ function AddBook() {
   if (book && genres) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
       subtitle: "\u672C\u68DA\u306B\u8FFD\u52A0"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      errors: errors
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Genres__WEBPACK_IMPORTED_MODULE_3__["default"], {
       book: book,
+      errors: errors,
       isChecked: isChecked,
       isNewGenre: isNewGenre,
       genres: genres,
@@ -89566,16 +89578,6 @@ function Login() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Subtitle__WEBPACK_IMPORTED_MODULE_4__["default"], {
     subtitle: "\u30ED\u30B0\u30A4\u30F3"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["NoImageCard"], {
-    bgColor: "light-orange"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["Caption"], {
-    isTop: true,
-    content: "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306F\u3001\u4EE5\u4E0B\u306E\u6A5F\u80FD\u3092\u9664\u304F\u5168\u3066\u306E\u6A5F\u80FD\u304C\u3054\u5229\u7528\u306B\u306A\u308C\u307E\u3059\u3002"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u30E6\u30FC\u30B6\u30FC\u540D\u3001\u30E6\u30FC\u30B6\u30FCID\u306E\u7DE8\u96C6"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u30E6\u30FC\u30B6\u30FC\u306E\u524A\u9664")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["MyButton"], {
-    onClick: function onClick() {
-      return guestLogin(afterLogin);
-    },
-    content: "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["NoImageCard"], {
     margin: "my-5"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["Caption"], {
     isTop: true,
@@ -89602,7 +89604,17 @@ function Login() {
     id: "normal-login",
     onClick: normalUserLogin,
     content: "\u901A\u5E38\u306E\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3"
-  }))));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["NoImageCard"], {
+    bgColor: "light-orange"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["Caption"], {
+    isTop: true,
+    content: "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306F\u3001\u4EE5\u4E0B\u306E\u6A5F\u80FD\u3092\u9664\u304F\u5168\u3066\u306E\u6A5F\u80FD\u304C\u3054\u5229\u7528\u306B\u306A\u308C\u307E\u3059\u3002"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u30E6\u30FC\u30B6\u30FC\u540D\u3001\u30E6\u30FC\u30B6\u30FCID\u306E\u7DE8\u96C6"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "\u30E6\u30FC\u30B6\u30FC\u306E\u524A\u9664")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Components__WEBPACK_IMPORTED_MODULE_2__["MyButton"], {
+    onClick: function onClick() {
+      return guestLogin(afterLogin);
+    },
+    content: "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3"
+  })));
 }
 
 /***/ }),
@@ -90057,6 +90069,7 @@ function PostData() {
 
   function getParams() {
     var params = {
+      user_id: data.params.user.id,
       isbn: book.isbn,
       title: book.title,
       author: book.author,
@@ -90084,8 +90097,15 @@ function PostData() {
     } else {
       axios.post(path, params).then(function (response) {
         linkToHome(response);
-      })["catch"](function () {
-        alert('予期しないエラーが発生しました');
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          var _errors = Object.values(error.response.data.errors);
+
+          setErrors(_errors);
+          window.scroll(0, 0);
+        } else {
+          alert('予期しないエラーが発生しました');
+        }
       });
     }
   }
@@ -90129,8 +90149,6 @@ function PostData() {
   if (book && genres) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Subtitle__WEBPACK_IMPORTED_MODULE_1__["default"], {
       subtitle: "\u6295\u7A3F\u753B\u9762"
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Errors__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      errors: errors
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddToBookshelf, {
       isChecked: isChecked,
       book: book,
@@ -90138,6 +90156,7 @@ function PostData() {
         return setIsChecked(!isChecked);
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Genres__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      errors: errors,
       book: book,
       isChecked: isChecked,
       isNewGenre: isNewGenre,

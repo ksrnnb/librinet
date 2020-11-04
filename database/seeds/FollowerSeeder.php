@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Events\Followed;
 
 class FollowerSeeder extends Seeder
 {
@@ -22,8 +21,6 @@ class FollowerSeeder extends Seeder
                         'follow_id' => $follow_id,
                         'follower_id' => $follower_id,
                     ]);
-
-                    event(new Followed($follower));
                 }
             }
         }

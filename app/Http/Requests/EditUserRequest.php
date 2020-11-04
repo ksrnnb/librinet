@@ -26,7 +26,6 @@ class EditUserRequest extends FormRequest
      */
     public function rules()
     {
-        // TODO: 要修正
         return [
             'user.id' => 'integer',
             'user.name' => ['min:1, max:32'],

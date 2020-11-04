@@ -48,10 +48,8 @@ class GetPostTest extends TestCase
         $this->json('GET', $this->path . '10')
              ->assertStatus(404);
 
-        // TODO: validation
-        $this->markTestIncomplete();
         $this->json('GET', $this->path . 'alphabet294')
-             ->assertStatus(422);
+             ->assertStatus(400);
     }
 
     public function testCanGet()

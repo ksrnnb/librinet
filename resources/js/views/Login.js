@@ -74,19 +74,6 @@ export default function Login() {
   return (
     <>
       <Subtitle subtitle="ログイン" />
-      <NoImageCard bgColor="light-orange">
-        <Caption isTop={true} content="ゲストユーザーでログイン" />
-        <p>ゲストユーザーは、以下の機能を除く全ての機能がご利用になれます。</p>
-        <ul>
-          <li>ユーザー名、ユーザーIDの編集</li>
-          <li>ユーザーの削除</li>
-        </ul>
-        <MyButton
-          onClick={() => guestLogin(afterLogin)}
-          content="ゲストユーザーでログイン"
-        />
-      </NoImageCard>
-
       <NoImageCard margin="my-5">
         <Caption
           isTop={true}
@@ -114,6 +101,19 @@ export default function Login() {
             content="通常のユーザーでログイン"
           />
         </form>
+      </NoImageCard>
+
+      <NoImageCard bgColor="light-orange">
+        <Caption isTop={true} content="ゲストユーザーでログイン" />
+        <p>ゲストユーザーは、以下の機能を除く全ての機能がご利用になれます。</p>
+        <ul>
+          <li>ユーザー名、ユーザーIDの編集</li>
+          <li>ユーザーの削除</li>
+        </ul>
+        <MyButton
+          onClick={() => guestLogin(afterLogin)}
+          content="ゲストユーザーでログイン"
+        />
       </NoImageCard>
     </>
   );

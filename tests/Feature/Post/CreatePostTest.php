@@ -54,9 +54,11 @@ class CreatePostTest extends TestCase
         $this->authenticate();
         $this->form['new_genre'] = '';
 
-        // TODO: validation実装
-        $this->markTestIncomplete();
+        $this->json('POST', $this->path, $this->form)
+             ->assertStatus(422);
 
+        $this->form['new_genre'] = 'test_genre';
+        $this->form['message'] = str_repeat('a', 101);
         $this->json('POST', $this->path, $this->form)
              ->assertStatus(422);
     }

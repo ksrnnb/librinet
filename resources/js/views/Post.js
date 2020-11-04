@@ -138,6 +138,7 @@ export default function PostData() {
 
   function getParams() {
     const params = {
+      user_id: data.params.user.id,
       isbn: book.isbn,
       title: book.title,
       author: book.author,
@@ -170,8 +171,14 @@ export default function PostData() {
         .then((response) => {
           linkToHome(response);
         })
-        .catch(() => {
-          alert('予期しないエラーが発生しました');
+        .catch((error) => {
+          if (error.response.status == 422) {
+            const errors = Object.values(error.response.data.errors);
+            setErrors(errors);
+            window.scroll(0, 0);
+          } else {
+            alert('予期しないエラーが発生しました');
+          }
         });
     }
   }
@@ -221,13 +228,13 @@ export default function PostData() {
     return (
       <>
         <Subtitle subtitle="投稿画面" />
-        <Errors errors={errors} />
         <AddToBookshelf
           isChecked={isChecked}
           book={book}
           onChange={() => setIsChecked(!isChecked)}
         />
         <Genres
+          errors={errors}
           book={book}
           isChecked={isChecked}
           isNewGenre={isNewGenre}

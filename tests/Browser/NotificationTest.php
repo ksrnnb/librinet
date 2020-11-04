@@ -8,8 +8,6 @@ use Tests\DuskTestCase;
 use App\User;
 use App\Book;
 use App\Follower;
-use App\Events\Followed;
-use App\Events\Liked;
 
 class NotificationTest extends DuskTestCase
 {
@@ -49,9 +47,6 @@ class NotificationTest extends DuskTestCase
             'follow_id' => $this->user->id,
             'follower_id' => $user->id,
         ]);
-
-        event(new Followed($follower));
-        event(new Liked($like));
     }
 
     public function testCannotAccessWithoutLogin()

@@ -74,8 +74,6 @@ class Post extends Model
                                 'message' => $message,
                                 'book_id' => $book_id,
                             ]);
-
-            event(new Commented($comment));
         } else {
             $comment = $this->comments()
                             ->create([
@@ -83,8 +81,6 @@ class Post extends Model
                                 'user_id' => $user_id,
                                 'message' => $message,
                             ]);
-
-            event(new Commented($comment));
         }
     }
 

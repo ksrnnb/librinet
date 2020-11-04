@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Events\Commented;
 
 class Comment extends Model
 {
     protected $guarded = ['id'];
+
+    protected $dispatchesEvents = [
+        'created' => Commented::class,
+    ];
 
     public function post()
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCommentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Gate;
 use App\Post;
 use App\User;
 use App\Comment;
-use App\Events\Commented;
 
 class CommentController extends Controller
 {
@@ -66,31 +66,21 @@ class CommentController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function create(CreateCommentRequest $request)
     {
         Gate::authorize('create-comment');
 
-        // TODO: validation
-        // return response()->json($request->input());
         $form = $request->input();
         $params = [
             'message' => $form['message'],
             'post_id' => $form['post_id'],
             'user_id' => $form['user_id'],
+            'book_id' => $form['book_id'] || null,
             'uuid'    => Str::uuid(),
         ];
 
-        if ($form['book_id']) {
-            $params = array_merge(
-                $params,
-                ['book_id' => $form['book_id']]
-            );
-        }
+        $comment = Comment::create($params);
 
-        if (isset($form['post_id'])) {
-            $comment = Comment::create($params);
-            event(new Commented($comment));
-        }
         $user = Auth::user();
         $params = User::getParamsForApp($user->str_id);
 

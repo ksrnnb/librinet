@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use App\Follower;
-use App\Events\Followed;
 
 class FollowerController extends Controller
 {
@@ -27,8 +26,6 @@ class FollowerController extends Controller
                 'follow_id' => $follow_id,
                 'follower_id' => $follower_id,
             ]);
-
-            event(new Followed($follower));
 
             $follower_users = Follower::getFollowers($follow_id);
 

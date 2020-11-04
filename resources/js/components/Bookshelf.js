@@ -62,6 +62,7 @@ function Books(props) {
         <input
           className={`${margin} mb-3 genre`}
           name="genre"
+          maxLength={16}
           defaultValue={genres[genreId]}
           data-id={genreId}
         />

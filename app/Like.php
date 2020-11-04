@@ -13,6 +13,10 @@ use App\Events\Liked;
 class Like extends Model
 {
     protected $guarded = ['id'];
+
+    protected $dispatchesEvents = [
+        'created' => Liked::class,
+    ];
     
     public function user()
     {
@@ -62,8 +66,6 @@ class Like extends Model
             'user_id' => $user_id,
             $item['key'] => $item['id'],
         ]);
-
-        event(new Liked($like));
     }
 
     public static function unlike($user_id, $post_or_comment)

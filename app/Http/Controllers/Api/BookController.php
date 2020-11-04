@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\BookCreateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -15,9 +16,6 @@ class BookController extends Controller
 {
     public function search(BookRequest $request)
     {
-        // $request->validated();
-        // TODO: Validate独自に？
-
         $isbn = $request->input('isbn');
         $book = Book::fetchBook($isbn);
 
@@ -49,40 +47,22 @@ class BookController extends Controller
     *       genre_id  => int (the case selecting conventional genre)
     *   @return array
     */
-    // TODO: validation Bookcreaterequest?
-    public function create(Request $request)
+    public function create(BookCreateRequest $request)
     {
         Gate::authorize('create-book');
 
         $form = collect($request->input());
-        $user = Auth::user();
-        $form = $form->merge([
-            'user_id'   =>  $user->id,
-        ]);
-
-        // TODO: このへんはNewBookCreateから
-        $book_data = $form->merge([
-            'isInBookshelf' => true,
-        ]);
 
         // 新しいジャンルを作る場合
-        if ($form->get('is_new_genre') == 'new') {
+        if ($form->get('is_new_genre') == true) {
+            \Log::debug('creating');
             $genre = Genre::create(['name' => $form->get('new_genre')]);
 
-            $book_data = $book_data->merge(['genre_id' => $genre->id]);
-        } else {
-            // 既存のジャンルの場合は、既にジャンルIDが入っている
+            $form = $form->merge(['genre_id' => $genre->id]);
         }
 
-        $book_data = $book_data->except(
-            'add_to_bookshelf',
-            'is_new_genre',
-            'message',
-            'new_genre',
-        );
-
-        $book = Book::create($book_data->toArray());
-        $params = Book::getBooksAndGenres($user->str_id);
+        $book = Book::create($form->toArray());
+        $params = Book::getBooksAndGenres(Auth::user()->str_id);
 
         return response($params);
     }

@@ -11325,8 +11325,6 @@ textarea {
   color: red;
 }
 
-/* TODO: あとでブラウザ依存確認しとく */
-
 .disable {
   -webkit-user-select: none;
      -moz-user-select: none;

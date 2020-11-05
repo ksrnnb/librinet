@@ -8,15 +8,23 @@
   },
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
+    "prettier/@typescript-eslint",
     "prettier/react"
   ],
+  // "plugins": [
+  //   "@typescript-eslint"
+  // ],
   "rules": {
     "indent": [
       "error",
       2
     ],
+    // require文 warning
+    "@typescript-eslint/no-var-requires": 1,
     // 変数の不使用はwarningに
     "no-unused-vars": 1,
     // 正規表現中のエスケープ。パスワードチェックの部分でerrorになってしまうのでwarningに設定。

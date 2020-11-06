@@ -13,6 +13,7 @@ import { DataContext, SetStateContext } from './App';
 import Genres from '../components/Genres';
 import { BookCard } from '../components/BookCard';
 import { MyLink } from '../functions/MyLink';
+import { Book } from '../types/Interfaces';
 
 const axios = window.axios;
 
@@ -128,7 +129,7 @@ export default function PostData() {
     }
   }
 
-  function setData(book: any) {
+  function setData(book: Book) {
     const isChecked = !book.isInBookshelf;
 
     if (book.isInBookshelf) {

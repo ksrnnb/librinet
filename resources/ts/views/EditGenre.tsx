@@ -32,7 +32,7 @@ export default function EditGenre() {
       })
       .then((response: any) => {
         setState.params(response.data);
-        MyLink.userProfile(props, params.user.str_id, null);
+        MyLink.userProfile(props, params.user.str_id);
       })
       .catch(() => {
         alert('エラーが発生し、ジャンルが編集できませんでした');

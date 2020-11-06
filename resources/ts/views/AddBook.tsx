@@ -7,10 +7,11 @@ import { BookCard } from '../components/BookCard';
 import { PropsContext } from '../components/MyRouter';
 import { DataContext, SetStateContext } from './App';
 import { MyLink } from '../functions/MyLink';
+import { Book, Response, Error, Data } from '../types/Interfaces';
 const axios = window.axios;
 
 export default function AddBook() {
-  const data: any = useContext(DataContext);
+  const data: Data = useContext(DataContext);
   const setState: any = useContext(SetStateContext);
   const props: any = useContext(PropsContext);
 
@@ -32,8 +33,8 @@ export default function AddBook() {
   useEffect(setup, []);
 
   function setup() {
-    const isbn = props.match.params.isbn;
-    const book = props.location.state;
+    const isbn: string = props.match.params.isbn;
+    const book: Book = props.location.state;
 
     setInitialConvGenre();
 
@@ -50,7 +51,7 @@ export default function AddBook() {
       }
     }
 
-    function setData(book: any) {
+    function setData(book: Book) {
       if (book.isInBookshelf) {
         setErrors(['既に本棚に追加済みです']);
         return;
@@ -66,7 +67,7 @@ export default function AddBook() {
         .post('/api/book', {
           isbn: isbn,
         })
-        .then((response: any) => {
+        .then((response: Response) => {
           const hasBook = response.data.isInBookshelf;
           if (hasBook) {
             setErrors(['既に本棚に追加済みです']);
@@ -75,7 +76,7 @@ export default function AddBook() {
             setData(book);
           }
         })
-        .catch((error: any) => {
+        .catch((error: Error) => {
           // ISBNが違う場合 404
           if (error.response.status === 404) {
             setErrors(['本がみつかりませんでした']);
@@ -110,8 +111,8 @@ export default function AddBook() {
   function submitBook() {
     const path = '/api/book/add';
 
-    const params = getParams();
-    const errors = validation(params);
+    const params: any = getParams();
+    const errors: string[] = validation(params);
 
     if (errors.length) {
       setErrors(errors);
@@ -120,10 +121,10 @@ export default function AddBook() {
     } else {
       axios
         .post(path, params)
-        .then((response: any) => {
+        .then((response: Response) => {
           linkToUserPage(response);
         })
-        .catch((error: any) => {
+        .catch((error: Error) => {
           if (error.response.status == 422) {
             const errors = Object.values(error.response.data.errors);
             setErrors(errors);
@@ -135,7 +136,7 @@ export default function AddBook() {
     }
   }
 
-  function linkToUserPage(response: any) {
+  function linkToUserPage(response: Response) {
     // stateを更新する
     const params = data.params;
     params.user.books = response.data.books;
@@ -143,7 +144,7 @@ export default function AddBook() {
     params.user.ordered_books = response.data.ordered_books;
 
     setState.params(params);
-    MyLink.userProfile(props, params.user.str_id, null);
+    MyLink.userProfile(props, params.user.str_id);
   }
 
   function validation(params: any) {

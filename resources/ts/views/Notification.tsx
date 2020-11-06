@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { PropsContext } from '../components/MyRouter';
 import { MyCard } from '../components/MyCard';
 import { MyLink } from '../functions/MyLink';
+import { getDeltaTimeMessage } from '../functions/TimeFunctions';
 const axios = window.axios;
 
 /**
@@ -43,27 +44,6 @@ function getMessageAndImage(notification: any) {
 }
 
 /**
- * @param {integer} deltaMiliSec
- * @return {string}
- */
-function getDeltaTimeMessage(deltaMiliSec: number) {
-  const deltaTimeSec = Math.floor(deltaMiliSec / 1000);
-  let timeMessage;
-
-  if (deltaTimeSec < 60) {
-    timeMessage = `${deltaTimeSec}秒前`;
-  } else if (deltaTimeSec < 60 * 60) {
-    timeMessage = `${Math.floor(deltaTimeSec / 60)}分前`;
-  } else if (deltaTimeSec < 60 * 60 * 24) {
-    timeMessage = `${Math.floor(deltaTimeSec / 60 / 60)}時間前`;
-  } else {
-    timeMessage = `${Math.floor(deltaTimeSec / 60 / 60 / 24)}日前`;
-  }
-
-  return timeMessage;
-}
-
-/**
  * notificationモデルを1個受け取って、通知のCardを返す。
  * @param {object} props
  * @return {JSX}
@@ -71,10 +51,8 @@ function getDeltaTimeMessage(deltaMiliSec: number) {
 function Notice(props: any) {
   const main_props = useContext(PropsContext);
   const notification = props.notification;
-  const deltaTimeMiliSec: number =
-    new Date().getTime() - new Date(notification.created_at).getTime();
 
-  const timeMessage = getDeltaTimeMessage(deltaTimeMiliSec);
+  const timeMessage = getDeltaTimeMessage(notification.created_at);
   const info = getMessageAndImage(notification);
 
   function onClickCard() {
@@ -93,7 +71,7 @@ function Notice(props: any) {
 
       // ユーザーへのリンクの場合はそのまま移動する。
     } else {
-      MyLink.userProfile(main_props, info.user.str_id, null);
+      MyLink.userProfile(main_props, info.user.str_id);
     }
   }
 

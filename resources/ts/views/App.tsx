@@ -2,16 +2,13 @@ import Header from '../components/Header';
 import React, { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { MyRouter } from '../components/MyRouter';
+import { Response, Params } from '../types/Interfaces';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
-interface Data {
-  hasLoaded: boolean;
-  params: any;
-}
-
-const defaultData: Data = { hasLoaded: false, params: {} };
+const defaultData: any = { hasLoaded: false, params: {} };
 const axios: any = window.axios;
+
 export const DataContext: any = createContext(defaultData);
 export const SetStateContext: any = createContext({
   params: function () {
@@ -21,17 +18,19 @@ export const SetStateContext: any = createContext({
 
 function App() {
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [params, setParams] = useState(null);
+  const [params, setParams]: [params: Params | null, setParams: any] = useState(
+    null
+  );
 
   useEffect(setUp, []);
 
   function setUp() {
     axios
       .get('/api/user/auth')
-      .then((response: any) => {
+      .then((response: Response) => {
         // response.data
         // {params: {user, following_posts, examples} }
-        const data = response.data;
+        const data: Params = response.data;
         setParams(data);
         setHasLoaded(true);
       })

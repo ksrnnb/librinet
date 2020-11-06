@@ -130,7 +130,7 @@ export default function EditUser() {
       .then(() => {
         params.user = user;
         setState.params(params);
-        MyLink.userProfile(props, user.str_id, null);
+        MyLink.userProfile(props, user.str_id);
       })
       .catch((error: any) => {
         const errors = Object.values(error.response.data.errors);
@@ -191,7 +191,7 @@ export default function EditUser() {
         <div className="row justify-content-end mx-0">
           <div className="float-right mt-5">
             <CancelButton
-              onClick={() => MyLink.userProfile(props, user.str_id, null)}
+              onClick={() => MyLink.userProfile(props, user.str_id)}
             />
             <EditButton onClick={onSubmitEdit} />
           </div>

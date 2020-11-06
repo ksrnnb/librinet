@@ -3,13 +3,14 @@ import { DataContext } from '../views/App';
 import { BookCard } from './BookCard';
 import React, { useContext } from 'react';
 import { MyLink } from '../functions/MyLink';
+import { Book } from '../types/Interfaces';
 
 export default function SearchedBook(props: any) {
   const main_props: any = useContext(PropsContext);
   const data: any = useContext(DataContext);
 
-  const book: any = props.book;
-  const isInBookshelf: boolean = book.isInBookshelf;
+  const book: Book = props.book;
+  const isInBookshelf: boolean | undefined = book.isInBookshelf;
 
   function PostButton() {
     const user: any = data.params.user;

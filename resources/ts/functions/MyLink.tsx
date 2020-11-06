@@ -1,3 +1,5 @@
+import { Book, Post } from '../types/Interfaces';
+
 export class MyLink {
   static top(props: any) {
     window.scroll(0, 0);
@@ -19,7 +21,7 @@ export class MyLink {
     props.history.push('/signup');
   }
 
-  static userProfile(props: any, strId: string, user: any) {
+  static userProfile(props: any, strId: string, user?: any) {
     const path = '/user/profile/' + strId;
     window.scroll(0, 0);
     if (user) {
@@ -46,7 +48,7 @@ export class MyLink {
     props.history.push(path);
   }
 
-  static bookProfile(props: any, book: any) {
+  static bookProfile(props: any, book: Book) {
     const path = '/book/profile/' + book.isbn;
     props.history.push({
       pathname: path,
@@ -54,7 +56,7 @@ export class MyLink {
     });
   }
 
-  static addBook(props: any, book: any) {
+  static addBook(props: any, book: Book) {
     const path = '/book/add/' + book.isbn;
     props.history.push({
       pathname: path,
@@ -68,7 +70,7 @@ export class MyLink {
     props.history.push(path);
   }
 
-  static post(props: any, book: any) {
+  static post(props: any, book: Book) {
     const path = '/book/post/' + book.isbn;
     window.scroll(0, 0);
     props.history.push({
@@ -77,7 +79,7 @@ export class MyLink {
     });
   }
 
-  static comment(props: any, post: any) {
+  static comment(props: any, post: Post) {
     const path = '/comment/' + post.uuid;
     window.scroll(0, 0);
     props.history.push({

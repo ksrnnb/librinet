@@ -6,6 +6,7 @@ import { PropsContext } from '../components/MyRouter';
 import { DataContext, SetStateContext } from './App';
 import { MyLink } from '../functions/MyLink';
 import { Modal, Button } from 'react-bootstrap';
+import { Book } from '../types/Interfaces';
 
 const axios = window.axios;
 
@@ -37,7 +38,7 @@ function Books(props: any) {
     props.setDeleteList(newList);
   }
 
-  const books = props.books.map((book: any) => {
+  const books = props.books.map((book: Book) => {
     const willDelete = deleteList.includes(book.id);
     return (
       <div
@@ -125,7 +126,7 @@ export default function DeleteBook() {
 
   function redirectUserProfile() {
     const strId: string = props.match.params.strId;
-    MyLink.userProfile(props, strId, null);
+    MyLink.userProfile(props, strId);
   }
 
   function onSubmitDelete() {

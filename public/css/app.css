@@ -11100,7 +11100,9 @@ textarea {
 
 .one-row,
 .feed-wrapper .feed .feed-body-wrapper .book-info-wrapper .book-info,
-.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id {
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-time,
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-id,
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-user-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11259,6 +11261,14 @@ textarea {
   margin-bottom: 0;
 }
 
+.feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .user-name-wrapper .feed-time {
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--gray);
+  margin-bottom: 0;
+  margin-left: auto;
+}
+
 .feed-wrapper .feed .feed-body-wrapper .feed-body .feed-message .feed-user-message {
   font-size: 0.9rem;
 }
@@ -11330,6 +11340,12 @@ textarea {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+@media (max-width: 500px) {
+  .feed-time {
+    display: none;
+  }
 }
 
 .notification-budge,

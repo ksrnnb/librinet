@@ -4,22 +4,25 @@ import { PropsContext } from './MyRouter';
 import { DataContext } from '../views/App';
 import { BookIcon, CommentIcon, Trash } from './Icon';
 import { MyLink } from '../functions/MyLink';
+import { Book } from '../types/Interfaces';
+import { getDeltaTimeMessage } from '../functions/TimeFunctions';
 
 function BookCover(props: any) {
-  const book: any = props.book;
+  const book: Book = props.book;
   const main_props: any = useContext(PropsContext);
   const data: any = useContext(DataContext);
 
   function linkToBookProfile() {
     const isbn: string = book.isbn;
     const user: any = data.params.user;
+
     // PostしたユーザーのisInBookshelfを、閲覧しているユーザーが持っているかどうかで上書きする。
-    const isbnMatchedBook: Array<any> = user.books.filter(
-      (book: any) => book.isbn === isbn
+    const isbnMatchedBooks: Book[] = user.books.filter(
+      (book: Book) => book.isbn === isbn
     );
-    const hasBook: number = isbnMatchedBook.filter(
-      (book: any) => book.isInBookshelf
-    ).length;
+
+    const hasBook: boolean =
+      isbnMatchedBooks.filter((book: Book) => book.isInBookshelf).length > 0;
 
     book.isInBookshelf = hasBook;
     MyLink.bookProfile(main_props, book);
@@ -60,19 +63,20 @@ function UserImage(props: any) {
       className="hover user-image"
       src={userImageUrl}
       alt="user-icon"
-      onClick={() => MyLink.userProfile(main_props, user.str_id, null)}
+      onClick={() => MyLink.userProfile(main_props, user.str_id)}
     />
   );
 }
-function UserAndMessage(props: any) {
-  const user = props.user;
-  const message = props.message;
 
+function UserAndMessage(props: any) {
+  const { user, message, created_at } = props.item;
+  const timeMessage: string = getDeltaTimeMessage(created_at);
   return (
     <>
       <div className="user-name-wrapper">
         <p className="feed-user-name">{user.name}</p>
         <p className="feed-user-id ml-2">{'@' + user.str_id}</p>
+        <p className="feed-time">{timeMessage}</p>
       </div>
       <p className="d-block feed-user-message">{message}</p>
       {props.children}
@@ -128,9 +132,7 @@ export default function Feed(props: any) {
               <UserImage user={item.user} />
             </div>
             <div className="feed-message">
-              <UserAndMessage user={item.user} message={item.message}>
-                {icons}
-              </UserAndMessage>
+              <UserAndMessage item={item}>{icons}</UserAndMessage>
             </div>
           </div>
           <div className="book-info-wrapper">

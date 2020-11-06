@@ -86054,6 +86054,7 @@ var MyRouter_1 = __webpack_require__(/*! ./MyRouter */ "./resources/ts/component
 var App_1 = __webpack_require__(/*! ../views/App */ "./resources/ts/views/App.tsx");
 var Icon_1 = __webpack_require__(/*! ./Icon */ "./resources/ts/components/Icon.tsx");
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
+var TimeFunctions_1 = __webpack_require__(/*! ../functions/TimeFunctions */ "./resources/ts/functions/TimeFunctions.tsx");
 function BookCover(props) {
     var book = props.book;
     var main_props = react_1.useContext(MyRouter_1.PropsContext);
@@ -86062,8 +86063,8 @@ function BookCover(props) {
         var isbn = book.isbn;
         var user = data.params.user;
         // PostしたユーザーのisInBookshelfを、閲覧しているユーザーが持っているかどうかで上書きする。
-        var isbnMatchedBook = user.books.filter(function (book) { return book.isbn === isbn; });
-        var hasBook = isbnMatchedBook.filter(function (book) { return book.isInBookshelf; }).length;
+        var isbnMatchedBooks = user.books.filter(function (book) { return book.isbn === isbn; });
+        var hasBook = isbnMatchedBooks.filter(function (book) { return book.isInBookshelf; }).length > 0;
         book.isInBookshelf = hasBook;
         MyLink_1.MyLink.bookProfile(main_props, book);
     }
@@ -86086,15 +86087,16 @@ function UserImage(props) {
     var user = props.user;
     var main_props = react_1.useContext(MyRouter_1.PropsContext);
     var userImageUrl = user.image || '/img/icon.svg';
-    return (react_1.default.createElement("img", { className: "hover user-image", src: userImageUrl, alt: "user-icon", onClick: function () { return MyLink_1.MyLink.userProfile(main_props, user.str_id, null); } }));
+    return (react_1.default.createElement("img", { className: "hover user-image", src: userImageUrl, alt: "user-icon", onClick: function () { return MyLink_1.MyLink.userProfile(main_props, user.str_id); } }));
 }
 function UserAndMessage(props) {
-    var user = props.user;
-    var message = props.message;
+    var _a = props.item, user = _a.user, message = _a.message, created_at = _a.created_at;
+    var timeMessage = TimeFunctions_1.getDeltaTimeMessage(created_at);
     return (react_1.default.createElement(react_1.default.Fragment, null,
         react_1.default.createElement("div", { className: "user-name-wrapper" },
             react_1.default.createElement("p", { className: "feed-user-name" }, user.name),
-            react_1.default.createElement("p", { className: "feed-user-id ml-2" }, '@' + user.str_id)),
+            react_1.default.createElement("p", { className: "feed-user-id ml-2" }, '@' + user.str_id),
+            react_1.default.createElement("p", { className: "feed-time" }, timeMessage)),
         react_1.default.createElement("p", { className: "d-block feed-user-message" }, message),
         props.children));
 }
@@ -86129,7 +86131,7 @@ function Feed(props) {
                     react_1.default.createElement("div", { className: "user-image-wrapper" },
                         react_1.default.createElement(UserImage, { user: item.user })),
                     react_1.default.createElement("div", { className: "feed-message" },
-                        react_1.default.createElement(UserAndMessage, { user: item.user, message: item.message }, icons))),
+                        react_1.default.createElement(UserAndMessage, { item: item }, icons))),
                 react_1.default.createElement("div", { className: "book-info-wrapper" },
                     react_1.default.createElement(BookInfo, { item: item }))))));
 }
@@ -87185,6 +87187,70 @@ exports.MyLink = MyLink;
 
 /***/ }),
 
+/***/ "./resources/ts/functions/TimeFunctions.tsx":
+/*!**************************************************!*\
+  !*** ./resources/ts/functions/TimeFunctions.tsx ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDeltaTimeMessage = void 0;
+/**
+ * @param {string} created_at Feedを作成した時間、文字列になっている
+ * @return {number} ミリ秒の時間を返す。
+ */
+function getDeltaTimeMiliSec(created_at) {
+    return new Date().getTime() - new Date(created_at).getTime();
+}
+/**
+ * @param {number} miliSec ミリ秒
+ * @return {number} 1000で割って秒に変換した値を返す
+ */
+function getSecFromMiliSec(miliSec) {
+    return Math.floor(miliSec / 1000);
+}
+/**
+ * @param {string} created_at Feedを作成した時間、文字列になっている
+ * @return {number} 時間の差を1000で割って秒に変換した値を返す
+ */
+function getDeltaSec(created_at) {
+    var deltaMiliSec = getDeltaTimeMiliSec(created_at);
+    return getSecFromMiliSec(deltaMiliSec);
+}
+/**
+ * @param {nubmer} deltaTimeSec 現在の時間から、フィードを作成した時間の差
+ * @return {string} フィードに表示するメッセージを返す
+ */
+function getTimeMessage(deltaTimeSec) {
+    if (deltaTimeSec < 60) {
+        return deltaTimeSec + "\u79D2\u524D";
+    }
+    else if (deltaTimeSec < 60 * 60) {
+        return Math.floor(deltaTimeSec / 60) + "\u5206\u524D";
+    }
+    else if (deltaTimeSec < 60 * 60 * 24) {
+        return Math.floor(deltaTimeSec / 60 / 60) + "\u6642\u9593\u524D";
+    }
+    else {
+        return Math.floor(deltaTimeSec / 60 / 60 / 24) + "\u65E5\u524D";
+    }
+}
+/**
+ * @param {string} created_at Feedを作成した時間、文字列になっている
+ * @return {string} フィードに表示される文字を表示
+ */
+function getDeltaTimeMessage(created_at) {
+    var deltaTimeSec = getDeltaSec(created_at);
+    return getTimeMessage(deltaTimeSec);
+}
+exports.getDeltaTimeMessage = getDeltaTimeMessage;
+
+
+/***/ }),
+
 /***/ "./resources/ts/views/AddBook.tsx":
 /*!****************************************!*\
   !*** ./resources/ts/views/AddBook.tsx ***!
@@ -87346,7 +87412,7 @@ function AddBook() {
         params.user.genres = response.data.genres;
         params.user.ordered_books = response.data.ordered_books;
         setState.params(params);
-        MyLink_1.MyLink.userProfile(props, params.user.str_id, null);
+        MyLink_1.MyLink.userProfile(props, params.user.str_id);
     }
     function validation(params) {
         var errors = [];
@@ -87932,7 +87998,7 @@ function DeleteBook() {
     var _b = react_1.useState(false), show = _b[0], setShow = _b[1];
     function redirectUserProfile() {
         var strId = props.match.params.strId;
-        MyLink_1.MyLink.userProfile(props, strId, null);
+        MyLink_1.MyLink.userProfile(props, strId);
     }
     function onSubmitDelete() {
         var path = '/api/book';
@@ -88030,7 +88096,7 @@ function EditGenre() {
         })
             .then(function (response) {
             setState.params(response.data);
-            MyLink_1.MyLink.userProfile(props, params.user.str_id, null);
+            MyLink_1.MyLink.userProfile(props, params.user.str_id);
         })
             .catch(function () {
             alert('エラーが発生し、ジャンルが編集できませんでした');
@@ -88166,7 +88232,7 @@ function EditUser() {
             .then(function () {
             params.user = user;
             setState.params(params);
-            MyLink_1.MyLink.userProfile(props, user.str_id, null);
+            MyLink_1.MyLink.userProfile(props, user.str_id);
         })
             .catch(function (error) {
             var errors = Object.values(error.response.data.errors);
@@ -88203,7 +88269,7 @@ function EditUser() {
                         isGuest && (react_1.default.createElement("p", { className: "text-danger mb-0" }, "\u6CE8\u610F\uFF1A\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u306E\u540D\u524D\u3068ID\u306F\u7DE8\u96C6\u3067\u304D\u307E\u305B\u3093"))) })),
             react_1.default.createElement("div", { className: "row justify-content-end mx-0" },
                 react_1.default.createElement("div", { className: "float-right mt-5" },
-                    react_1.default.createElement(CancelButton, { onClick: function () { return MyLink_1.MyLink.userProfile(props, user.str_id, null); } }),
+                    react_1.default.createElement(CancelButton, { onClick: function () { return MyLink_1.MyLink.userProfile(props, user.str_id); } }),
                     react_1.default.createElement(EditButton, { onClick: onSubmitEdit }))),
             react_1.default.createElement("div", { className: "row justify-content-end mx-0" },
                 react_1.default.createElement("div", { className: "float-right" },
@@ -88692,6 +88758,7 @@ var prop_types_1 = __importDefault(__webpack_require__(/*! prop-types */ "./node
 var MyRouter_1 = __webpack_require__(/*! ../components/MyRouter */ "./resources/ts/components/MyRouter.tsx");
 var MyCard_1 = __webpack_require__(/*! ../components/MyCard */ "./resources/ts/components/MyCard.tsx");
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
+var TimeFunctions_1 = __webpack_require__(/*! ../functions/TimeFunctions */ "./resources/ts/functions/TimeFunctions.tsx");
 var axios = window.axios;
 /**
  * @param {object} notification
@@ -88730,27 +88797,6 @@ function getMessageAndImage(notification) {
     return info;
 }
 /**
- * @param {integer} deltaMiliSec
- * @return {string}
- */
-function getDeltaTimeMessage(deltaMiliSec) {
-    var deltaTimeSec = Math.floor(deltaMiliSec / 1000);
-    var timeMessage;
-    if (deltaTimeSec < 60) {
-        timeMessage = deltaTimeSec + "\u79D2\u524D";
-    }
-    else if (deltaTimeSec < 60 * 60) {
-        timeMessage = Math.floor(deltaTimeSec / 60) + "\u5206\u524D";
-    }
-    else if (deltaTimeSec < 60 * 60 * 24) {
-        timeMessage = Math.floor(deltaTimeSec / 60 / 60) + "\u6642\u9593\u524D";
-    }
-    else {
-        timeMessage = Math.floor(deltaTimeSec / 60 / 60 / 24) + "\u65E5\u524D";
-    }
-    return timeMessage;
-}
-/**
  * notificationモデルを1個受け取って、通知のCardを返す。
  * @param {object} props
  * @return {JSX}
@@ -88758,8 +88804,7 @@ function getDeltaTimeMessage(deltaMiliSec) {
 function Notice(props) {
     var main_props = react_1.useContext(MyRouter_1.PropsContext);
     var notification = props.notification;
-    var deltaTimeMiliSec = new Date().getTime() - new Date(notification.created_at).getTime();
-    var timeMessage = getDeltaTimeMessage(deltaTimeMiliSec);
+    var timeMessage = TimeFunctions_1.getDeltaTimeMessage(notification.created_at);
     var info = getMessageAndImage(notification);
     function onClickCard() {
         // comment or postへのリンク
@@ -88777,7 +88822,7 @@ function Notice(props) {
             // ユーザーへのリンクの場合はそのまま移動する。
         }
         else {
-            MyLink_1.MyLink.userProfile(main_props, info.user.str_id, null);
+            MyLink_1.MyLink.userProfile(main_props, info.user.str_id);
         }
     }
     // 通知内容の項目が既に削除されていた場合はnull

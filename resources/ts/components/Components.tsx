@@ -1,5 +1,6 @@
 import React from 'react';
 import Errors from './Errors';
+import { Book } from '../types/Interfaces';
 
 export function InputWithCheck(props: any) {
   const { name, type, value, checked, disabled, onChange, content } = props;
@@ -76,7 +77,7 @@ export function GroupedSelectBox(props: any) {
   const options = Object.keys(orderedBooks).map((genreId) => {
     return (
       <optgroup label={genres[genreId]} key={genreId}>
-        {orderedBooks[genreId].map((book: any) => {
+        {orderedBooks[genreId].map((book: Book) => {
           return (
             <option value={book.id} key={book.id}>
               {book.title}

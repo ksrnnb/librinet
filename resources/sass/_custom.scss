@@ -154,17 +154,27 @@
             overflow: hidden;
 
             .feed-user-name {
+              @extend .one-row;
               font-weight: bold;
               margin-bottom: 0;
             }
             
             .feed-user-id {
               @extend .one-row;
-
               font-weight: normal;
               color: var(--gray);
               margin-bottom: 0;
             }
+
+            .feed-time {
+              @extend .one-row;
+              font-size: 0.8rem;
+              font-weight: normal;
+              color: var(--gray);
+              margin-bottom: 0;
+              margin-left: auto;
+            }
+              
           }
           
           .feed-user-message {
@@ -258,4 +268,10 @@
 
 .disable {
   user-select: none;
+}
+
+@media (max-width: 500px) {
+  .feed-time {
+    display: none;
+  }
 }

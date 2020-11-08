@@ -2,18 +2,19 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import SearchedBook from '../components/SearchedBook';
+import { Book, Response, RouterProps } from '../types/Interfaces';
 
 const axios = window.axios;
 
 export default function BookProfile() {
-  const props: any = useContext(PropsContext);
+  const props: RouterProps = useContext(PropsContext);
   const isbn: string = props.match.params.isbn;
-  const [book, setBook]: any = useState(null);
+  const [book, setBook] = useState<Book | null>(null);
 
   useEffect(loadBooks, []);
 
   function loadBooks() {
-    const book = props.location.state;
+    const book: Book = props.location.state;
 
     book ? setBook(book) : getBookData();
 
@@ -22,7 +23,7 @@ export default function BookProfile() {
         .post('/api/book', {
           isbn: isbn,
         })
-        .then((response: any) => {
+        .then((response: Response) => {
           setBook(response.data);
         });
     }

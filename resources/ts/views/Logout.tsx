@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { NoImageCard } from '../components/Components';
 import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
@@ -10,7 +10,7 @@ const axios = window.axios;
 
 export default function logout() {
   const props: any = useContext(PropsContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
   const data: any = useContext(DataContext);
   const [errors, setErrors]: any = useState([]);
 
@@ -21,7 +21,7 @@ export default function logout() {
       examples: data.params.examples,
     };
 
-    setState.params(params);
+    setParams(params);
     MyLink.top(props);
   }
 

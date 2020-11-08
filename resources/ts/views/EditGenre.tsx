@@ -2,9 +2,16 @@ import React, { useContext } from 'react';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
+import {
+  Response,
+  Data,
+  RouterProps,
+  Params,
+  SetParams,
+} from '../types/Interfaces';
 
 const axios = window.axios;
 
@@ -17,10 +24,10 @@ function EditButton(props: any) {
 }
 
 export default function EditGenre() {
-  const data: any = useContext(DataContext);
-  const params: any = data.params;
-  const props: any = useContext(PropsContext);
-  const setState: any = useContext(SetStateContext);
+  const data: Data = useContext(DataContext);
+  const params: Params = data.params;
+  const props: RouterProps = useContext(PropsContext);
+  const setParams: SetParams = useContext(SetParamsContext);
 
   function onSubmitNewGenres() {
     const newGenres = getNewGenresFromInputs();
@@ -30,8 +37,8 @@ export default function EditGenre() {
       .post(path, {
         newGenres: newGenres,
       })
-      .then((response: any) => {
-        setState.params(response.data);
+      .then((response: Response) => {
+        setParams(response.data);
         MyLink.userProfile(props, params.user.str_id);
       })
       .catch(() => {

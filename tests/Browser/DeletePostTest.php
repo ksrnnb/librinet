@@ -39,47 +39,43 @@ class DeletePostTest extends DuskTestCase
         $this->path = '/comment/' . $this->post->uuid;
     }
 
-    public function testPostDelete()
+    public function testDeletePostInHomePage()
     {
         $this->browse(function (Browser $browser) {
             $browser = $this->login($browser);
 
-            // 削除前はコメントできる
-            $browser->visit($this->path)
-                    ->waitFor('#message')
-                    ->assertSee('コメントする');
-
-            // 投稿の削除。コメントも見えない状態。
-            $browser->visit('/home')
-                    ->waitFor('.feed')
-                    ->press('.trash-btn')
-                    ->waitForText('削除しますか')
-                    ->press('はい')
-                    ->waitUntilMissing('.feed')
-                    ->refresh()
-                    ->waitFor('#subtitle')
-                    ->assertMissing('.feed');
-
-            // 削除後に投稿がみつからないのを確認
-            $browser->visit($this->path)
-                    ->waitFor('.error')
-                    ->assertSee('投稿がみつかりませんでした');
+            $this->assertDeletePost($browser, '/home');
         });
     }
 
-    // public function testCommentDelete()
-    // {
-    //         $this->browse(function (Browser $browser) {
+    public function testDeletePostInCommentPage()
+    {
+        $this->browse(function (Browser $browser) {
+            $this->assertDeletePost($browser, $this->path);
+        });
+    }
 
-    //             $comment = \App\Comment::where('user_id', self::$user->id)->first();
-    //             $selector = '#del-' . $comment->uuid;
+    public function assertDeletePost(Browser $browser, string $path)
+    {
+        // 削除前はコメントできる
+        $browser->visit($this->path)
+                ->waitFor('#message')
+                ->assertSee('コメントする');
 
-    //             $browser->loginAs(self::$user)
-    //                 ->visit('/home')
-    //                 ->press($selector)
-    //                 ->assertMissing($selector);
- 
-    //         // TODO: 消した後につくるか、作ってから消す！！
-    //         });
-    // }
+        // 投稿の削除。コメントも見えない状態。
+        $browser->visit($path)
+                ->waitFor('.feed')
+                ->press('.trash-btn')
+                ->waitForText('削除しますか')
+                ->press('はい')
+                ->waitUntilMissing('.feed')
+                ->refresh()
+                ->waitFor('#subtitle')
+                ->assertMissing('.feed');
+
+        // 削除後に投稿がみつからないのを確認
+        $browser->visit($this->path)
+                ->waitFor('.error')
+                ->assertSee('投稿がみつかりませんでした');
+    }
 }

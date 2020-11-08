@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 
@@ -133,7 +133,7 @@ export default function UserProfile() {
   const user: any = params.user;
   const queryStrId: any = props.match.params.strId;
   const locationState: any = props.location.state;
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
 
   useEffect(() => {
     setup();
@@ -227,7 +227,7 @@ export default function UserProfile() {
     setShowingUser(newShowingUser);
 
     params.user.followings = followings;
-    setState.params(params);
+    setParams(params);
 
     const path = '/api/follow';
     axios

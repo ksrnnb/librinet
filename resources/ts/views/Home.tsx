@@ -1,56 +1,91 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from '../components/Subtitle';
 import Feed from '../components/Feed';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 import { Modal, Button } from 'react-bootstrap';
+import {
+  Response,
+  Book,
+  ErrorResponse,
+  User,
+  Data,
+  RouterProps,
+  Params,
+  SetParams,
+  Post as PostInterface,
+  Comment as CommentInterface,
+  Post,
+} from '../types/Interfaces';
 
 const axios = window.axios;
 
-function Post(props: any): any {
-  const post = props.post;
+interface PostProps {
+  post: PostInterface;
+  viewerId: number;
+  onClickDelete: (e: any) => void;
+  linkToComment: (props: RouterProps) => void;
+}
+
+function Post(props: PostProps): any {
+  const { post, viewerId, onClickDelete, linkToComment } = props;
+
   return (
     <Feed
       item={post}
-      viewerId={props.viewerId}
-      onClickDelete={props.onClickDelete}
-      linkToComment={props.linkToComment}
+      viewerId={viewerId}
+      onClickDelete={onClickDelete}
+      linkToComment={linkToComment}
     />
   );
 }
 
-function Comments(props: any): any {
-  const comments = props.comments.map((comment: any) => {
+interface CommentsProps {
+  comments: CommentInterface[];
+  viewerId: number;
+  onClickDelete: (e: any) => void;
+}
+
+function Comments(props: CommentsProps) {
+  const { comments, viewerId, onClickDelete } = props;
+
+  const commentsJsx = comments.map((comment: CommentInterface) => {
     return (
       <Feed
         item={comment}
-        viewerId={props.viewerId}
+        viewerId={viewerId}
         key={comment.id}
-        onClickDelete={props.onClickDelete}
+        onClickDelete={onClickDelete}
       />
     );
   });
 
-  return comments;
+  return <>{commentsJsx}</>;
 }
 
-export function PostWithComments(props: any): any {
-  const main_props = useContext(PropsContext);
-  const { post, handleShow } = props;
+interface PostWithCommentsProps {
+  post: PostInterface;
+  viewerId: number;
+  handleShow: (e: any) => void;
+}
+
+export function PostWithComments(props: PostWithCommentsProps) {
+  const routerProps = useContext(PropsContext);
+  const { post, handleShow, viewerId } = props;
 
   return (
     <div className="feed-chunk shadow mb-5">
       <Post
         post={post}
-        viewerId={props.viewerId}
+        viewerId={viewerId}
         onClickDelete={handleShow}
-        linkToComment={() => MyLink.comment(main_props, post)}
+        linkToComment={() => MyLink.comment(routerProps, post)}
       />
       {post.comments.length > 0 && (
         <Comments
           comments={post.comments}
-          viewerId={props.viewerId}
+          viewerId={viewerId}
           onClickDelete={handleShow}
         />
       )}
@@ -58,31 +93,46 @@ export function PostWithComments(props: any): any {
   );
 }
 
-function Posts(props: any): any {
-  if (props.posts) {
-    const postsIterator = Object.values(props.posts);
-    const posts = postsIterator.map((post: any) => {
-      return (
-        <PostWithComments
-          post={post}
-          viewerId={props.viewerId}
-          handleShow={props.handleShow}
-          key={post.id}
-        />
-      );
-    });
-
-    return posts;
-  } else {
-    return null;
-  }
+interface PostsProps {
+  posts: PostInterface[];
+  viewerId: number;
+  handleShow: (e: any) => void;
 }
 
-function ModalWindow(props: any) {
+function Posts(props: PostsProps) {
+  const { posts, viewerId, handleShow } = props;
+  if (posts == null) {
+    return <></>;
+  }
+
+  const postsIterator = Object.values(posts);
+
+  const postsJsx = postsIterator.map((post: PostInterface) => {
+    return (
+      <PostWithComments
+        post={post}
+        viewerId={viewerId}
+        handleShow={handleShow}
+        key={post.id}
+      />
+    );
+  });
+
+  return <>{postsJsx}</>;
+}
+
+interface ModalProps {
+  show: boolean;
+  handleClose: () => void;
+  uuid: string | null;
+  isPost: string | boolean;
+}
+
+export function ModalWindow(props: ModalProps) {
   const { show, handleClose, uuid, isPost } = props;
-  const data: any = useContext(DataContext);
-  const setState: any = useContext(SetStateContext);
-  const main_props: any = useContext(PropsContext);
+  const data: Data = useContext(DataContext);
+  const setParams: SetParams = useContext(SetParamsContext);
+  const routerProps: RouterProps = useContext(PropsContext);
 
   const deleteFeed = () => {
     // isPostは文字列できているので注意。
@@ -94,12 +144,12 @@ function ModalWindow(props: any) {
       })
       .then((response: any) => {
         const following_posts = response.data;
-        const params = data.params;
+        const params = Object.assign({}, data.params);
         params.following_posts = following_posts;
-        setState.params(params);
+        setParams(params);
         handleClose();
 
-        MyLink.home(main_props);
+        MyLink.home(routerProps);
       })
       .catch(() => {
         alert('投稿を削除できませんでした');
@@ -134,20 +184,19 @@ function ModalWindow(props: any) {
 }
 
 export default function Home() {
-  const data: any = useContext(DataContext);
-  const props: any = useContext(PropsContext);
-  const user: any = data.params.user;
-  const [show, setShow]: any = useState(false);
-  const [isPost, setIsPost]: any = useState(null);
-  const [uuid, setUuid]: any = useState(null);
+  const data: Data = useContext(DataContext);
+  const props: RouterProps = useContext(PropsContext);
+  const user: User = data.params.user;
+  const [show, setShow] = useState<boolean>(false);
+  const [isPost, setIsPost] = useState<boolean>(false);
+  const [uuid, setUuid] = useState<string | null>(null);
 
   const handleClose = () => {
     setShow(false);
-    setIsPost(null);
     setUuid(null);
   };
 
-  const handleShow: any = (e: any) => {
+  const handleShow: (e: any) => void = (e: any) => {
     setShow(true);
     setIsPost(e.target.dataset.ispost);
     setUuid(e.target.dataset.uuid);
@@ -168,7 +217,6 @@ export default function Home() {
         <div className="col-12">
           <Subtitle subtitle="ホーム" />
           <Posts posts={posts} viewerId={user.id} handleShow={handleShow} />
-
           <ModalWindow
             show={show}
             handleClose={handleClose}

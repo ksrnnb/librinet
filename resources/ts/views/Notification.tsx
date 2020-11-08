@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import Subtitle from '../components/Subtitle';
 import PropTypes from 'prop-types';
 import { PropsContext } from '../components/MyRouter';
@@ -102,7 +102,7 @@ function Notice(props: any) {
 export default function Notification() {
   const data: any = useContext(DataContext);
   const props: any = useContext(PropsContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
 
   const isNotLogin = typeof data.params.user === 'undefined';
 
@@ -137,7 +137,7 @@ export default function Notification() {
         const params = Object.assign({}, data.params);
         params.user.notifications = notifications;
 
-        setState.params(params);
+        setParams(params);
       })
       .catch(() => {
         alert('予期しないエラーが発生しました');

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Subtitle from '../components/Subtitle';
-import { PostWithComments } from './Home';
+import { PostWithComments, ModalWindow } from './Home';
 import { PropsContext } from '../components/MyRouter';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import Errors from '../components/Errors';
 import {
   MyButton,
@@ -13,14 +13,37 @@ import {
   Caption,
 } from '../components/Components';
 import { MyLink } from '../functions/MyLink';
+import {
+  Response,
+  Book,
+  ErrorResponse,
+  Data,
+  RouterProps,
+  Params,
+  SetParams,
+  Post as PostInterface,
+  Comment as CommentInterface,
+} from '../types/Interfaces';
 
 const axios = window.axios;
 
-function RecommendBook(props: any) {
-  const orderedBooks = props.orderedBooks;
-  const genres = props.genres;
-  const isRecommended = props.isRecommended;
-  const onChange = props.onChange;
+interface RecommendProps {
+  genres: {
+    [id: string]: string;
+  };
+
+  orderedBooks: {
+    [id: string]: Book[];
+  };
+
+  isRecommended: boolean;
+  onChange: () => void;
+  setBookId: (id: number) => void;
+}
+
+function RecommendBook(props: RecommendProps) {
+  const { genres, isRecommended, onChange, orderedBooks, setBookId } = props;
+
   const hasBook = !Array.isArray(orderedBooks);
 
   if (hasBook) {
@@ -40,7 +63,7 @@ function RecommendBook(props: any) {
             orderedBooks={orderedBooks}
             disabled={!isRecommended}
             onChange={(e: any) => {
-              props.setBookId(e.target.value);
+              setBookId(e.target.value);
             }}
           />
         </NoImageCard>
@@ -50,7 +73,12 @@ function RecommendBook(props: any) {
   return <></>;
 }
 
-function CommentForm(props: any) {
+interface FormProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
+}
+
+function CommentForm(props: FormProps) {
   return (
     <>
       <MyTextarea
@@ -68,21 +96,46 @@ function CommentForm(props: any) {
 }
 
 export default function Comment() {
-  const props: any = useContext(PropsContext);
-  const data: any = useContext(DataContext);
-  const params: any = data.params;
-  const setState: any = useContext(SetStateContext);
+  const props: RouterProps = useContext(PropsContext);
+  const data: Data = useContext(DataContext);
+  const params: Params = data.params;
+  const setParams: SetParams = useContext(SetParamsContext);
 
-  const [bookId, setBookId]: any = useState(null);
-  const [item, setItem]: any = useState(null);
-  const [isRecommended, setIsRecommended]: any = useState(false);
-  const [message, setMessage]: any = useState('');
-  const [errors, setErrors]: any = useState([]);
+  const [bookId, setBookId] = useState<number | null>(null);
+  const [item, setItem] = useState<PostInterface | CommentInterface | null>(
+    null
+  );
+  const [isRecommended, setIsRecommended] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const [show, setShow] = useState<boolean>(false);
+  const [isPost, setIsPost] = useState<boolean>(false);
+  const [uuid, setUuid] = useState<string | null>(null);
+
+  const handleClose = () => {
+    setShow(false);
+    setIsPost(false);
+    setUuid(null);
+  };
+
+  const handleShow: (e: any) => void = (e: any) => {
+    setShow(true);
+    setIsPost(e.target.dataset.ispost);
+    setUuid(e.target.dataset.uuid);
+  };
 
   useEffect(setup, []);
 
   function setup() {
-    const item = props.location.state;
+    const followingPosts = data.params.following_posts;
+
+    let item = null;
+    if (followingPosts) {
+      item = followingPosts.filter(
+        (post: any) => post.uuid === props.match.params.uuid
+      )[0];
+    }
 
     item ? setItem(item) : getComment();
 
@@ -90,11 +143,11 @@ export default function Comment() {
       const path = '/api/comment/' + props.match.params.uuid;
       axios
         .get(path)
-        .then((response: any) => {
+        .then((response: Response) => {
           const post = response.data;
           setItem(post);
         })
-        .catch((error: any) => {
+        .catch((error: ErrorResponse) => {
           if (error.response.status === 401) {
             // Unauthorized
             MyLink.home(props);
@@ -113,15 +166,20 @@ export default function Comment() {
     setIsRecommended(newIsRecommended);
 
     if (newIsRecommended) {
-      const node: any = document.getElementById('select-book');
+      const node = document.getElementById('select-book') as HTMLInputElement;
 
-      if (node !== null) {
-        setBookId(node.value);
+      if (node != null) {
+        setBookId(Number(node.value));
       }
     }
   }
 
   function onSubmit() {
+    if (item == null) {
+      alert('予期しないエラーが発生しました');
+      return;
+    }
+
     const userId = params.user.id;
 
     const paramsForPost = {
@@ -139,8 +197,8 @@ export default function Comment() {
     } else {
       axios
         .post(path, paramsForPost)
-        .then((response: any) => {
-          setState.params(response.data);
+        .then((response: Response) => {
+          setParams(response.data);
           MyLink.home(props);
         })
         .catch(() => {
@@ -155,7 +213,11 @@ export default function Comment() {
     return (
       <>
         <Subtitle subtitle="コメント" />
-        <PostWithComments post={item} viewerId={viewerId} />
+        <PostWithComments
+          post={item as PostInterface}
+          viewerId={viewerId}
+          handleShow={handleShow}
+        />
         <RecommendBook
           orderedBooks={user.ordered_books}
           genres={user.genres}
@@ -166,7 +228,15 @@ export default function Comment() {
         <Errors errors={errors} />
         <CommentForm
           onClick={onSubmit}
-          onChange={(e: any) => setMessage(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setMessage(e.target.value)
+          }
+        />
+        <ModalWindow
+          show={show}
+          handleClose={handleClose}
+          uuid={uuid}
+          isPost={isPost}
         />
       </>
     );

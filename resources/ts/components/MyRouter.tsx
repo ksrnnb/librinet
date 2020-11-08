@@ -2,8 +2,9 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { routingList } from './RoutingList';
 import SubColumn from './SubColumn';
+import { RouterProps } from '../types/Interfaces';
 
-export const PropsContext = React.createContext({});
+export const PropsContext = React.createContext({} as RouterProps);
 
 export function MyRouter() {
   return (

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { LikeIcon } from './Icon';
-import { DataContext, SetStateContext } from '../views/App';
+import { DataContext, SetParamsContext } from '../views/App';
 
 const axios = window.axios;
 
@@ -9,14 +9,14 @@ export default function Like(props: any) {
   const likes: any = props.item.likes;
   const viewerId: any = props.viewerId;
   const data: any = useContext(DataContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
 
   const isAlreadyLiked = likes.some((like: any) => {
     return like.user_id == viewerId;
   });
 
-  const [count, setCount] = useState(likes.length);
-  const [isLiked, setIsLiked] = useState(isAlreadyLiked);
+  const [count, setCount] = useState<number>(likes.length);
+  const [isLiked, setIsLiked] = useState<boolean>(isAlreadyLiked);
 
   // params.following_postのlikeを更新する
   function updateLike() {
@@ -68,7 +68,7 @@ export default function Like(props: any) {
     // paramsを取得してstateを更新
     const params = data.params;
     params.following_posts = posts;
-    setState.params(params);
+    setParams(params);
   }
 
   function sendLikeRequest() {

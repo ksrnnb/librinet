@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { SetStateContext } from './App';
+import { SetParamsContext } from './App';
 import {
   MyButton,
   Caption,
@@ -36,10 +36,10 @@ export default function Login() {
   const [password, setPassword]: any = useState('');
   const [errors, setErrors]: any = useState([]);
   const props: any = useContext(PropsContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
 
   function afterLogin(user: any) {
-    setState.params(user);
+    setParams(user);
     MyLink.home(props);
   }
 

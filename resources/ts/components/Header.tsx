@@ -108,7 +108,7 @@ export default function Header() {
     <header>
       <nav className="navbar fixed-top bg-success">
         <span className="navbar-brand">
-          <Link to="/">{document.title}</Link>
+          <Link to="/home">{document.title}</Link>
         </span>
         <Hamburger />
       </nav>

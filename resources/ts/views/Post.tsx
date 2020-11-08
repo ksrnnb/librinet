@@ -9,7 +9,7 @@ import {
   NoImageCard,
 } from '../components/Components';
 import { PropsContext } from '../components/MyRouter';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import Genres from '../components/Genres';
 import { BookCard } from '../components/BookCard';
 import { MyLink } from '../functions/MyLink';
@@ -67,7 +67,7 @@ function Post(props: any) {
 
 export default function PostData() {
   const data: any = useContext(DataContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
   const props: any = useContext(PropsContext);
 
   // ログインしていない場合はページ遷移
@@ -191,7 +191,7 @@ export default function PostData() {
     // stateを更新する
     const params = response.data;
 
-    setState.params(params);
+    setParams(params);
     MyLink.home(props);
     window.scrollTo(0, 0);
   }

@@ -86277,7 +86277,7 @@ function Header() {
     return (react_1.default.createElement("header", null,
         react_1.default.createElement("nav", { className: "navbar fixed-top bg-success" },
             react_1.default.createElement("span", { className: "navbar-brand" },
-                react_1.default.createElement(react_router_dom_1.Link, { to: "/" }, document.title)),
+                react_1.default.createElement(react_router_dom_1.Link, { to: "/home" }, document.title)),
             react_1.default.createElement(Hamburger, null))));
 }
 exports.default = Header;
@@ -86419,7 +86419,7 @@ function Like(props) {
     var likes = props.item.likes;
     var viewerId = props.viewerId;
     var data = react_1.useContext(App_1.DataContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var isAlreadyLiked = likes.some(function (like) {
         return like.user_id == viewerId;
     });
@@ -86469,7 +86469,7 @@ function Like(props) {
         // paramsを取得してstateを更新
         var params = data.params;
         params.following_posts = posts;
-        setState.params(params);
+        setParams(params);
     }
     function sendLikeRequest() {
         // さきに値を変える
@@ -87295,7 +87295,7 @@ var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/fu
 var axios = window.axios;
 function AddBook() {
     var data = react_1.useContext(App_1.DataContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var props = react_1.useContext(MyRouter_1.PropsContext);
     // ログインしていない場合はページ遷移
     if (!data.params.user) {
@@ -87313,8 +87313,9 @@ function AddBook() {
     function setup() {
         var isbn = props.match.params.isbn;
         var book = props.location.state;
+        var isSet = book ? Object.keys(book).length > 0 : false;
         setInitialConvGenre();
-        book ? setData(book) : getBookData();
+        isSet ? setData(book) : getBookData();
         function setInitialConvGenre() {
             var keys = Object.keys(genres);
             var hasGenres = keys.length;
@@ -87363,6 +87364,9 @@ function AddBook() {
         }
     }
     function getParams() {
+        if (book == null) {
+            return null;
+        }
         var params = {
             user_id: data.params.user.id,
             isInBookshelf: true,
@@ -87411,7 +87415,7 @@ function AddBook() {
         params.user.books = response.data.books;
         params.user.genres = response.data.genres;
         params.user.ordered_books = response.data.ordered_books;
-        setState.params(params);
+        setParams(params);
         MyLink_1.MyLink.userProfile(props, params.user.str_id);
     }
     function validation(params) {
@@ -87432,7 +87436,7 @@ function AddBook() {
         }
         setIsNewGenre(!isNewGenre);
     }
-    if (book && genres) {
+    if (book) {
         return (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement(Subtitle_1.default, { subtitle: "\u672C\u68DA\u306B\u8FFD\u52A0" }),
             react_1.default.createElement(Genres_1.default, { book: book, errors: errors, isChecked: isChecked, isNewGenre: isNewGenre, genres: genres, newGenre: newGenre, convGenre: convGenre, onChangeNewGenre: function (e) { return setNewGenre(e.target.value); }, onClickNewGenre: function () { return setIsNewGenre(true); }, onClickConvGenre: onClickConvGenre, onChangeConvGenre: function (e) { return setConvGenre(e.target.value); }, onChangeRadioButton: onChangeRadioButton }),
@@ -87483,7 +87487,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SetStateContext = exports.DataContext = void 0;
+exports.SetParamsContext = exports.DataContext = void 0;
 var Header_1 = __importDefault(__webpack_require__(/*! ../components/Header */ "./resources/ts/components/Header.tsx"));
 var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
@@ -87492,14 +87496,12 @@ var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_mod
 var defaultData = { hasLoaded: false, params: {} };
 var axios = window.axios;
 exports.DataContext = react_1.createContext(defaultData);
-exports.SetStateContext = react_1.createContext({
-    params: function () {
-        return;
-    },
+exports.SetParamsContext = react_1.createContext(function () {
+    return;
 });
-function App() {
+var App = function () {
     var _a = react_1.useState(false), hasLoaded = _a[0], setHasLoaded = _a[1];
-    var _b = react_1.useState(null), params = _b[0], setParams = _b[1];
+    var _b = react_1.useState({}), params = _b[0], setParams = _b[1];
     react_1.useEffect(setUp, []);
     function setUp() {
         axios
@@ -87519,12 +87521,9 @@ function App() {
         hasLoaded: hasLoaded,
         params: params,
     };
-    var setState = {
-        params: setParams,
-    };
     if (hasLoaded) {
         return (react_1.default.createElement(exports.DataContext.Provider, { value: data },
-            react_1.default.createElement(exports.SetStateContext.Provider, { value: setState },
+            react_1.default.createElement(exports.SetParamsContext.Provider, { value: setParams },
                 react_1.default.createElement(react_router_dom_1.BrowserRouter, null,
                     react_1.default.createElement(Header_1.default, null),
                     react_1.default.createElement(MyRouter_1.MyRouter, null)))));
@@ -87537,7 +87536,7 @@ function App() {
                 react_1.default.createElement("div", { className: "spinner-border text-success", role: "status" },
                     react_1.default.createElement("span", { className: "sr-only" }, "Loading...")))));
     }
-}
+};
 if (document.getElementById('app')) {
     react_dom_1.default.render(react_1.default.createElement(App, null), document.getElementById('app'));
 }
@@ -87609,9 +87608,9 @@ function Example() {
                 react_1.default.createElement(ShowExamples, null)))));
 }
 function Book() {
-    var _a = react_1.useState(null), input = _a[0], setInput = _a[1];
+    var _a = react_1.useState(''), input = _a[0], setInput = _a[1];
     var _b = react_1.useState(null), book = _b[0], setBook = _b[1];
-    var _c = react_1.useState(null), errors = _c[0], setErrors = _c[1];
+    var _c = react_1.useState([]), errors = _c[0], setErrors = _c[1];
     var props = react_1.useContext(MyRouter_1.PropsContext);
     function searchBook(e) {
         e.preventDefault();
@@ -87627,7 +87626,7 @@ function Book() {
                 if (canUpdate) {
                     var book_1 = response.data;
                     setBook(book_1);
-                    setErrors(null);
+                    setErrors([]);
                 }
             })
                 .catch(function (error) {
@@ -87645,20 +87644,19 @@ function Book() {
         }
     }
     function validateInputAndReturnIsbn(input) {
-        if (input == null)
+        if (input == 'null')
             return false;
         // -の削除とスペースの削除
         var isbn = input.replace(/-/g, '');
         isbn = isbn.trim();
-        isbn = isbn.match(/^9784[0-9]{9}$/);
-        return isbn || false;
+        return isbn.match(/^9784[0-9]{9}$/);
     }
     return (react_1.default.createElement("div", null,
         react_1.default.createElement(Subtitle_1.default, { subtitle: "\u672C\u306E\u691C\u7D22" }),
         react_1.default.createElement(Components_1.Caption, { isTop: true, content: "\u691C\u7D22\u30D5\u30A9\u30FC\u30E0" }),
-        react_1.default.createElement(Components_1.SearchForm, { name: "isbn", content: "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF089784...\uFF09", subMessage: "\uFF08\u203B\u4E00\u90E8\u672C\u304C\u898B\u3064\u304B\u3089\u306A\u3044\u5834\u5408\u3084\u3001\u8868\u7D19\u304C\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\uFF09", 
-            // maxLength={13}
-            errors: errors, onChange: function (e) { return setInput(e.target.value); }, onSubmit: searchBook }),
+        react_1.default.createElement(Components_1.SearchForm, { name: "isbn", content: "13\u6841\u306EISBN\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF089784...\uFF09", subMessage: "\uFF08\u203B\u4E00\u90E8\u672C\u304C\u898B\u3064\u304B\u3089\u306A\u3044\u5834\u5408\u3084\u3001\u8868\u7D19\u304C\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\uFF09", errors: errors, onChange: function (e) {
+                return setInput(e.target.value);
+            }, onSubmit: searchBook }),
         book && (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement(Components_1.Caption, { content: "\u691C\u7D22\u7D50\u679C" }),
             react_1.default.createElement(SearchedBook_1.default, { book: book }))),
@@ -87780,10 +87778,7 @@ var Components_1 = __webpack_require__(/*! ../components/Components */ "./resour
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
 var axios = window.axios;
 function RecommendBook(props) {
-    var orderedBooks = props.orderedBooks;
-    var genres = props.genres;
-    var isRecommended = props.isRecommended;
-    var onChange = props.onChange;
+    var genres = props.genres, isRecommended = props.isRecommended, onChange = props.onChange, orderedBooks = props.orderedBooks, setBookId = props.setBookId;
     var hasBook = !Array.isArray(orderedBooks);
     if (hasBook) {
         return (react_1.default.createElement(react_1.default.Fragment, null,
@@ -87791,7 +87786,7 @@ function RecommendBook(props) {
             react_1.default.createElement(Components_1.NoImageCard, null,
                 react_1.default.createElement(Components_1.InputWithCheck, { name: "recommend", type: "checkbox", checked: isRecommended, onChange: onChange, content: "\u672C\u3082\u304A\u3059\u3059\u3081\u3059\u308B" }),
                 react_1.default.createElement(Components_1.GroupedSelectBox, { genres: genres, orderedBooks: orderedBooks, disabled: !isRecommended, onChange: function (e) {
-                        props.setBookId(e.target.value);
+                        setBookId(e.target.value);
                     } }))));
     }
     return react_1.default.createElement(react_1.default.Fragment, null);
@@ -87805,15 +87800,32 @@ function Comment() {
     var props = react_1.useContext(MyRouter_1.PropsContext);
     var data = react_1.useContext(App_1.DataContext);
     var params = data.params;
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var _a = react_1.useState(null), bookId = _a[0], setBookId = _a[1];
     var _b = react_1.useState(null), item = _b[0], setItem = _b[1];
     var _c = react_1.useState(false), isRecommended = _c[0], setIsRecommended = _c[1];
     var _d = react_1.useState(''), message = _d[0], setMessage = _d[1];
     var _e = react_1.useState([]), errors = _e[0], setErrors = _e[1];
+    var _f = react_1.useState(false), show = _f[0], setShow = _f[1];
+    var _g = react_1.useState(false), isPost = _g[0], setIsPost = _g[1];
+    var _h = react_1.useState(null), uuid = _h[0], setUuid = _h[1];
+    var handleClose = function () {
+        setShow(false);
+        setIsPost(false);
+        setUuid(null);
+    };
+    var handleShow = function (e) {
+        setShow(true);
+        setIsPost(e.target.dataset.ispost);
+        setUuid(e.target.dataset.uuid);
+    };
     react_1.useEffect(setup, []);
     function setup() {
-        var item = props.location.state;
+        var followingPosts = data.params.following_posts;
+        var item = null;
+        if (followingPosts) {
+            item = followingPosts.filter(function (post) { return post.uuid === props.match.params.uuid; })[0];
+        }
         item ? setItem(item) : getComment();
         function getComment() {
             var path = '/api/comment/' + props.match.params.uuid;
@@ -87843,12 +87855,16 @@ function Comment() {
         setIsRecommended(newIsRecommended);
         if (newIsRecommended) {
             var node = document.getElementById('select-book');
-            if (node !== null) {
-                setBookId(node.value);
+            if (node != null) {
+                setBookId(Number(node.value));
             }
         }
     }
     function onSubmit() {
+        if (item == null) {
+            alert('予期しないエラーが発生しました');
+            return;
+        }
         var userId = params.user.id;
         var paramsForPost = {
             book_id: bookId,
@@ -87865,7 +87881,7 @@ function Comment() {
             axios
                 .post(path, paramsForPost)
                 .then(function (response) {
-                setState.params(response.data);
+                setParams(response.data);
                 MyLink_1.MyLink.home(props);
             })
                 .catch(function () {
@@ -87878,10 +87894,13 @@ function Comment() {
         var viewerId = user.id;
         return (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement(Subtitle_1.default, { subtitle: "\u30B3\u30E1\u30F3\u30C8" }),
-            react_1.default.createElement(Home_1.PostWithComments, { post: item, viewerId: viewerId }),
+            react_1.default.createElement(Home_1.PostWithComments, { post: item, viewerId: viewerId, handleShow: handleShow }),
             react_1.default.createElement(RecommendBook, { orderedBooks: user.ordered_books, genres: user.genres, isRecommended: isRecommended, setBookId: setBookId, onChange: onChangeRecommend }),
             react_1.default.createElement(Errors_1.default, { errors: errors }),
-            react_1.default.createElement(CommentForm, { onClick: onSubmit, onChange: function (e) { return setMessage(e.target.value); } })));
+            react_1.default.createElement(CommentForm, { onClick: onSubmit, onChange: function (e) {
+                    return setMessage(e.target.value);
+                } }),
+            react_1.default.createElement(Home_1.ModalWindow, { show: show, handleClose: handleClose, uuid: uuid, isPost: isPost })));
     }
     else {
         return react_1.default.createElement(Errors_1.default, { errors: errors });
@@ -87934,7 +87953,7 @@ var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/fu
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 var axios = window.axios;
 function Books(props) {
-    var deleteList = props.deleteList;
+    var books = props.books, deleteList = props.deleteList, setDeleteList = props.setDeleteList;
     function onClick(e) {
         // クリックすると、子要素、孫要素がevent.targetに入っているので、目的のdivまで上に遡る
         function getCard(node) {
@@ -87956,27 +87975,27 @@ function Books(props) {
             newList = deleteList.slice();
             newList.push(id);
         }
-        props.setDeleteList(newList);
+        setDeleteList(newList);
     }
-    var books = props.books.map(function (book) {
+    var booksJsx = books.map(function (book) {
         var willDelete = deleteList.includes(book.id);
         return (react_1.default.createElement("div", { className: "delete-book-card mb-3", "data-id": book.id, "data-willdelete": willDelete, key: book.id, onClick: onClick },
             react_1.default.createElement(BookCard_1.BookCard, { book: book })));
     });
-    return books;
+    return react_1.default.createElement(react_1.default.Fragment, null, booksJsx);
 }
 function DeleteBooks(props) {
-    var orderedBooks = props.orderedBooks;
-    var genres = props.genres;
+    var orderedBooks = props.orderedBooks, genres = props.genres, deleteList = props.deleteList, setDeleteList = props.setDeleteList;
     var Bookshelf = Object.keys(orderedBooks).map(function (genre_id) {
         return (react_1.default.createElement("div", { key: genre_id },
             react_1.default.createElement("h4", { className: "mt-5" }, genres[genre_id]),
-            react_1.default.createElement(Books, { books: orderedBooks[genre_id], deleteList: props.deleteList, setDeleteList: props.setDeleteList })));
+            react_1.default.createElement(Books, { books: orderedBooks[genre_id], deleteList: deleteList, setDeleteList: setDeleteList })));
     });
-    return Bookshelf;
+    return react_1.default.createElement(react_1.default.Fragment, null, Bookshelf);
 }
 function DeleteButton(props) {
-    return (react_1.default.createElement("button", { className: "btn btn-outline-danger d-block my-5", onClick: props.onClick }, "\u524A\u9664\u3059\u308B"));
+    var onClick = props.onClick;
+    return (react_1.default.createElement("button", { className: "btn btn-outline-danger d-block my-5", onClick: onClick }, "\u524A\u9664\u3059\u308B"));
 }
 function ModalWindow(props) {
     var show = props.show, handleClose = props.handleClose, onSubmitDelete = props.onSubmitDelete;
@@ -87993,7 +88012,7 @@ function DeleteBook() {
     var props = react_1.useContext(MyRouter_1.PropsContext);
     var data = react_1.useContext(App_1.DataContext);
     var params = data.params;
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var _a = react_1.useState([]), deleteList = _a[0], setDeleteList = _a[1];
     var _b = react_1.useState(false), show = _b[0], setShow = _b[1];
     function redirectUserProfile() {
@@ -88008,7 +88027,7 @@ function DeleteBook() {
                 data: { ids: deleteList },
             })
                 .then(function (response) {
-                setState.params(response.data);
+                setParams(response.data);
                 redirectUserProfile();
             })
                 .catch(function () {
@@ -88086,7 +88105,7 @@ function EditGenre() {
     var data = react_1.useContext(App_1.DataContext);
     var params = data.params;
     var props = react_1.useContext(MyRouter_1.PropsContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     function onSubmitNewGenres() {
         var newGenres = getNewGenresFromInputs();
         var path = '/api/genre/edit';
@@ -88095,7 +88114,7 @@ function EditGenre() {
             newGenres: newGenres,
         })
             .then(function (response) {
-            setState.params(response.data);
+            setParams(response.data);
             MyLink_1.MyLink.userProfile(props, params.user.str_id);
         })
             .catch(function () {
@@ -88187,32 +88206,37 @@ function ModalWindow(props) {
             react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: onSubmitDelete }, "\u306F\u3044"))));
 }
 function EditButton(props) {
-    return (react_1.default.createElement("button", { className: "btn btn-outline-success", onClick: props.onClick }, "\u7DE8\u96C6\u3059\u308B"));
+    var onClick = props.onClick;
+    return (react_1.default.createElement("button", { className: "btn btn-outline-success", onClick: onClick }, "\u7DE8\u96C6\u3059\u308B"));
 }
 function CancelButton(props) {
-    return (react_1.default.createElement("button", { className: "btn btn-outline-secondary mr-2", onClick: props.onClick }, "\u30AD\u30E3\u30F3\u30BB\u30EB\u3059\u308B"));
+    var onClick = props.onClick;
+    return (react_1.default.createElement("button", { className: "btn btn-outline-secondary mr-2", onClick: onClick }, "\u30AD\u30E3\u30F3\u30BB\u30EB\u3059\u308B"));
 }
 function DeleteButton(props) {
-    var attr = props.isGuest ? { disabled: true } : {};
+    var isGuest = props.isGuest, onClick = props.onClick;
+    var attr = isGuest ? { disabled: true } : {};
     return (react_1.default.createElement("div", { className: "mt-5" },
-        react_1.default.createElement("button", __assign({ className: "btn btn-outline-danger", onClick: props.onClick }, attr), "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B")));
+        react_1.default.createElement("button", __assign({ className: "btn btn-outline-danger", onClick: onClick }, attr), "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B")));
 }
 function UserNameInput(props) {
-    var attr = props.isGuest ? { disabled: true } : {};
+    var isGuest = props.isGuest, name = props.name, onChange = props.onChange;
+    var attr = isGuest ? { disabled: true } : {};
     return (react_1.default.createElement("label", { htmlFor: "user-name", className: "d-block" },
         react_1.default.createElement("p", { className: "my-0" }, "\u30E6\u30FC\u30B6\u30FC\u540D"),
-        react_1.default.createElement("input", __assign({ id: "user-name", className: "mw-100", name: "user-name", value: props.name, onChange: props.onChange }, attr))));
+        react_1.default.createElement("input", __assign({ id: "user-name", className: "mw-100", name: "user-name", value: name, onChange: onChange }, attr))));
 }
 function UserStrIdInput(props) {
-    var attr = props.isGuest ? { disabled: true } : {};
+    var isGuest = props.isGuest, strId = props.strId, onChange = props.onChange;
+    var attr = isGuest ? { disabled: true } : {};
     return (react_1.default.createElement("label", { htmlFor: "user-id", className: "d-block" },
         react_1.default.createElement("p", { className: "my-0" }, "\u30E6\u30FC\u30B6\u30FCID"),
-        react_1.default.createElement("input", __assign({ id: "user-id", className: "mw-100", name: "user-id", value: props.strId, onChange: props.onChange }, attr))));
+        react_1.default.createElement("input", __assign({ id: "user-id", className: "mw-100", name: "user-id", value: strId, onChange: onChange }, attr))));
 }
 function EditUser() {
     var data = react_1.useContext(App_1.DataContext);
     var props = react_1.useContext(MyRouter_1.PropsContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var user = data.params.user;
     var params = data.params;
     var _a = react_1.useState([]), errors = _a[0], setErrors = _a[1];
@@ -88231,7 +88255,7 @@ function EditUser() {
         })
             .then(function () {
             params.user = user;
-            setState.params(params);
+            setParams(params);
             MyLink_1.MyLink.userProfile(props, user.str_id);
         })
             .catch(function (error) {
@@ -88246,8 +88270,9 @@ function EditUser() {
             data: user,
         })
             .then(function () {
-            params.user = undefined;
-            setState.params(params);
+            var newParams = params;
+            newParams.user = undefined;
+            setParams(newParams);
             MyLink_1.MyLink.top(props);
         })
             .catch(function () {
@@ -88413,7 +88438,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostWithComments = void 0;
+exports.ModalWindow = exports.PostWithComments = void 0;
 var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var Subtitle_1 = __importDefault(__webpack_require__(/*! ../components/Subtitle */ "./resources/ts/components/Subtitle.tsx"));
 var Feed_1 = __importDefault(__webpack_require__(/*! ../components/Feed */ "./resources/ts/components/Feed.tsx"));
@@ -88423,40 +88448,40 @@ var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/fu
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 var axios = window.axios;
 function Post(props) {
-    var post = props.post;
-    return (react_1.default.createElement(Feed_1.default, { item: post, viewerId: props.viewerId, onClickDelete: props.onClickDelete, linkToComment: props.linkToComment }));
+    var post = props.post, viewerId = props.viewerId, onClickDelete = props.onClickDelete, linkToComment = props.linkToComment;
+    return (react_1.default.createElement(Feed_1.default, { item: post, viewerId: viewerId, onClickDelete: onClickDelete, linkToComment: linkToComment }));
 }
 function Comments(props) {
-    var comments = props.comments.map(function (comment) {
-        return (react_1.default.createElement(Feed_1.default, { item: comment, viewerId: props.viewerId, key: comment.id, onClickDelete: props.onClickDelete }));
+    var comments = props.comments, viewerId = props.viewerId, onClickDelete = props.onClickDelete;
+    var commentsJsx = comments.map(function (comment) {
+        return (react_1.default.createElement(Feed_1.default, { item: comment, viewerId: viewerId, key: comment.id, onClickDelete: onClickDelete }));
     });
-    return comments;
+    return react_1.default.createElement(react_1.default.Fragment, null, commentsJsx);
 }
 function PostWithComments(props) {
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
-    var post = props.post, handleShow = props.handleShow;
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
+    var post = props.post, handleShow = props.handleShow, viewerId = props.viewerId;
     return (react_1.default.createElement("div", { className: "feed-chunk shadow mb-5" },
-        react_1.default.createElement(Post, { post: post, viewerId: props.viewerId, onClickDelete: handleShow, linkToComment: function () { return MyLink_1.MyLink.comment(main_props, post); } }),
-        post.comments.length > 0 && (react_1.default.createElement(Comments, { comments: post.comments, viewerId: props.viewerId, onClickDelete: handleShow }))));
+        react_1.default.createElement(Post, { post: post, viewerId: viewerId, onClickDelete: handleShow, linkToComment: function () { return MyLink_1.MyLink.comment(routerProps, post); } }),
+        post.comments.length > 0 && (react_1.default.createElement(Comments, { comments: post.comments, viewerId: viewerId, onClickDelete: handleShow }))));
 }
 exports.PostWithComments = PostWithComments;
 function Posts(props) {
-    if (props.posts) {
-        var postsIterator = Object.values(props.posts);
-        var posts = postsIterator.map(function (post) {
-            return (react_1.default.createElement(PostWithComments, { post: post, viewerId: props.viewerId, handleShow: props.handleShow, key: post.id }));
-        });
-        return posts;
+    var posts = props.posts, viewerId = props.viewerId, handleShow = props.handleShow;
+    if (posts == null) {
+        return react_1.default.createElement(react_1.default.Fragment, null);
     }
-    else {
-        return null;
-    }
+    var postsIterator = Object.values(posts);
+    var postsJsx = postsIterator.map(function (post) {
+        return (react_1.default.createElement(PostWithComments, { post: post, viewerId: viewerId, handleShow: handleShow, key: post.id }));
+    });
+    return react_1.default.createElement(react_1.default.Fragment, null, postsJsx);
 }
 function ModalWindow(props) {
     var show = props.show, handleClose = props.handleClose, uuid = props.uuid, isPost = props.isPost;
     var data = react_1.useContext(App_1.DataContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
     var deleteFeed = function () {
         // isPostは文字列できているので注意。
         var path = isPost === 'true' ? '/api/post' : '/api/comment';
@@ -88466,11 +88491,11 @@ function ModalWindow(props) {
         })
             .then(function (response) {
             var following_posts = response.data;
-            var params = data.params;
+            var params = Object.assign({}, data.params);
             params.following_posts = following_posts;
-            setState.params(params);
+            setParams(params);
             handleClose();
-            MyLink_1.MyLink.home(main_props);
+            MyLink_1.MyLink.home(routerProps);
         })
             .catch(function () {
             alert('投稿を削除できませんでした');
@@ -88485,16 +88510,16 @@ function ModalWindow(props) {
                 react_1.default.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: handleClose }, "\u30AD\u30E3\u30F3\u30BB\u30EB"),
                 react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: deleteFeed }, "\u306F\u3044")))));
 }
+exports.ModalWindow = ModalWindow;
 function Home() {
     var data = react_1.useContext(App_1.DataContext);
     var props = react_1.useContext(MyRouter_1.PropsContext);
     var user = data.params.user;
     var _a = react_1.useState(false), show = _a[0], setShow = _a[1];
-    var _b = react_1.useState(null), isPost = _b[0], setIsPost = _b[1];
+    var _b = react_1.useState(false), isPost = _b[0], setIsPost = _b[1];
     var _c = react_1.useState(null), uuid = _c[0], setUuid = _c[1];
     var handleClose = function () {
         setShow(false);
-        setIsPost(null);
         setUuid(null);
     };
     var handleShow = function (e) {
@@ -88590,9 +88615,9 @@ function Login() {
     var _b = react_1.useState(''), password = _b[0], setPassword = _b[1];
     var _c = react_1.useState([]), errors = _c[0], setErrors = _c[1];
     var props = react_1.useContext(MyRouter_1.PropsContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     function afterLogin(user) {
-        setState.params(user);
+        setParams(user);
         MyLink_1.MyLink.home(props);
     }
     function pressEnter(e) {
@@ -88685,7 +88710,7 @@ var Errors_1 = __importDefault(__webpack_require__(/*! ../components/Errors */ "
 var axios = window.axios;
 function logout() {
     var props = react_1.useContext(MyRouter_1.PropsContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var data = react_1.useContext(App_1.DataContext);
     var _a = react_1.useState([]), errors = _a[0], setErrors = _a[1];
     function linkToTop() {
@@ -88694,7 +88719,7 @@ function logout() {
             following_posts: [],
             examples: data.params.examples,
         };
-        setState.params(params);
+        setParams(params);
         MyLink_1.MyLink.top(props);
     }
     function onClickLogout() {
@@ -88839,7 +88864,7 @@ function Notice(props) {
 function Notification() {
     var data = react_1.useContext(App_1.DataContext);
     var props = react_1.useContext(MyRouter_1.PropsContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var isNotLogin = typeof data.params.user === 'undefined';
     if (isNotLogin) {
         MyLink_1.MyLink.home(props);
@@ -88866,7 +88891,7 @@ function Notification() {
             });
             var params = Object.assign({}, data.params);
             params.user.notifications = notifications;
-            setState.params(params);
+            setParams(params);
         })
             .catch(function () {
             alert('予期しないエラーが発生しました');
@@ -88957,7 +88982,7 @@ function Post(props) {
 }
 function PostData() {
     var data = react_1.useContext(App_1.DataContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var props = react_1.useContext(MyRouter_1.PropsContext);
     // ログインしていない場合はページ遷移
     if (!data.params.user) {
@@ -89065,7 +89090,7 @@ function PostData() {
     function linkToHome(response) {
         // stateを更新する
         var params = response.data;
-        setState.params(params);
+        setParams(params);
         MyLink_1.MyLink.home(props);
         window.scrollTo(0, 0);
     }
@@ -89159,7 +89184,7 @@ function Signup() {
     var _f = react_1.useState([]), errors = _f[0], setErrors = _f[1];
     var props = react_1.useContext(MyRouter_1.PropsContext);
     var data = react_1.useContext(App_1.DataContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     react_1.useEffect(function () {
         data.params.user && MyLink_1.MyLink.home(props);
     }, []);
@@ -89185,7 +89210,7 @@ function Signup() {
                 })
                     .then(function (response) {
                     var params = response.data;
-                    setState.params(params);
+                    setParams(params);
                     MyLink_1.MyLink.home(props);
                 })
                     .catch(function (error) {
@@ -89327,12 +89352,12 @@ function MyCarousel(props) {
 }
 function TopPage() {
     var props = react_1.useContext(MyRouter_1.PropsContext);
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     var data = react_1.useContext(App_1.DataContext);
     var _a = react_1.useState(0), height = _a[0], setHeight = _a[1];
     var _b = react_1.useState('active'), active = _b[0], setActive = _b[1];
     function afterLogin(user) {
-        setState.params(user);
+        setParams(user);
         MyLink_1.MyLink.home(props);
     }
     react_1.useEffect(function () {
@@ -89601,7 +89626,7 @@ function UserProfile() {
     var user = params.user;
     var queryStrId = props.match.params.strId;
     var locationState = props.location.state;
-    var setState = react_1.useContext(App_1.SetStateContext);
+    var setParams = react_1.useContext(App_1.SetParamsContext);
     react_1.useEffect(function () {
         setup();
     }, [queryStrId]);
@@ -89680,7 +89705,7 @@ function UserProfile() {
         newShowingUser.followers = followers;
         setShowingUser(newShowingUser);
         params.user.followings = followings;
-        setState.params(params);
+        setParams(params);
         var path = '/api/follow';
         axios
             .post(path, {

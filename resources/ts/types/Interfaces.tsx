@@ -1,3 +1,42 @@
+export interface RouterProps {
+  history: History;
+  location: RouterLocation;
+  match: Match;
+}
+
+export interface History {
+  action: string;
+  location: {
+    pathname: string;
+    state: any;
+  };
+  push: (path: string, state?: any) => void;
+}
+
+export interface RouterLocation {
+  pathname: string;
+  state?: any;
+}
+
+export interface Match {
+  params: any;
+  path: string;
+  url: string;
+}
+
+export interface Data {
+  hasLoaded: boolean;
+  params: Params;
+}
+
+export interface Params {
+  examples: User[];
+  following_posts: Post[];
+  user: UserParams;
+}
+
+export type SetParams = (params: Params) => void;
+
 export interface Book {
   user_id: number;
   genre_id: number;
@@ -9,17 +48,6 @@ export interface Book {
   publisher: string;
   pubdate: string;
   cover: string;
-}
-
-export interface Data {
-  hasLoaded: boolean;
-  params: Params;
-}
-
-export interface Params {
-  user: UserParams;
-  following_posts: Post[];
-  examples: User[];
 }
 
 export interface UserParams {
@@ -84,11 +112,9 @@ export interface Response {
   data: any;
 }
 
-export interface Error {
+export interface ErrorResponse {
   response: {
     status: number;
-    data: {
-      errors: string[];
-    };
+    data: any;
   };
 }

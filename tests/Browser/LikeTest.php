@@ -19,6 +19,7 @@ class LikeTest extends DuskTestCase
 
     protected $user1;
     protected $user2;
+    protected $post;
     protected $credential;
 
     protected function setUp(): void
@@ -28,9 +29,9 @@ class LikeTest extends DuskTestCase
         $this->user1 = Factory(User::class)->create();
         $this->user2 = Factory(User::class)->create();
 
-        $this->user2->books()
-                    ->save(factory(Book::class)->make())
-                    ->registerPost('test-message');
+        $this->post = $this->user2->books()
+                           ->save(factory(Book::class)->make())
+                           ->registerPost('test-message');
 
         $this->credential = [
             'str_id' => $this->user1->str_id,
@@ -49,16 +50,38 @@ class LikeTest extends DuskTestCase
 
             $browser = $this->login($browser);
 
-            $browser->waitFor('.feed')
-                    ->assertDataAttribute('.like-btn', 'isliked', 'false')
-                    ->press('.like-btn')
-                    ->assertDataAttribute('.like-btn', 'isliked', 'true');
-
-            $browser->refresh()
-                    ->waitFor('.feed')
-                    ->assertDataAttribute('.like-btn', 'isliked', 'true')
-                    ->press('.like-btn')
-                    ->assertDataAttribute('.like-btn', 'isliked', 'false');
+            $this->assertLike($browser);
         });
+    }
+
+    public function testLikeInCommentPage()
+    {
+        $this->browse(function (Browser $browser) {
+
+            $url = '/comment/' . $this->post->uuid;
+
+            $browser->visit($url)
+                    ->waitForText('コメント');
+
+            $this->assertLike($browser);
+        });
+    }
+
+    public function assertLike(Browser $browser)
+    {
+        $browser->assertDataAttribute('.like-btn', 'isliked', 'false')
+                ->press('.like-btn')
+                ->waitFor("[data-isliked='true']")
+                ->assertDataAttribute('.like-btn', 'isliked', 'true');
+
+        $browser->refresh()
+                ->waitFor('.feed')
+                ->assertDataAttribute('.like-btn', 'isliked', 'true')
+                ->press('.like-btn')
+                ->waitFor("[data-isliked='false']")
+                ->assertDataAttribute('.like-btn', 'isliked', 'false')
+                ->pause(1000);
+                // pauseを入れないとalertが発生する。手動だと問題ないがDuskだとNG？
+                // TODO: queueを使えば問題ない？
     }
 }

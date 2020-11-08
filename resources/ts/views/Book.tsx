@@ -3,6 +3,12 @@ import Subtitle from '../components/Subtitle';
 import SearchedBook from '../components/SearchedBook';
 import { SearchForm, Caption } from '../components/Components';
 import { PropsContext } from '../components/MyRouter';
+import {
+  Book as BookInterface,
+  Response,
+  ErrorResponse,
+  RouterProps,
+} from '../types/Interfaces';
 
 const axios = window.axios;
 
@@ -13,7 +19,7 @@ function ShowExamples(): any {
     [9784839955557, 'ノンデザイナーズ・デザインブック'],
   ]);
 
-  const tableRows: Array<ReactElement> = [];
+  const tableRows: ReactElement[] = [];
   exampleBooks.forEach((title, isbn) => {
     tableRows.push(
       <tr key={isbn}>
@@ -46,10 +52,10 @@ function Example() {
 }
 
 export default function Book() {
-  const [input, setInput]: any = useState(null);
-  const [book, setBook]: any = useState(null);
-  const [errors, setErrors]: any = useState(null);
-  const props: any = useContext(PropsContext);
+  const [input, setInput] = useState<string>('');
+  const [book, setBook] = useState<BookInterface | null>(null);
+  const [errors, setErrors] = useState<string[]>([]);
+  const props: RouterProps = useContext(PropsContext);
 
   function searchBook(e: any) {
     e.preventDefault();
@@ -60,16 +66,16 @@ export default function Book() {
         .post('/api/book', {
           isbn: input,
         })
-        .then((response: any) => {
+        .then((response: Response) => {
           const canUpdate = props.history.location.pathname === '/book';
           // 検索中にページ遷移していた場合はstate更新しない
           if (canUpdate) {
             const book = response.data;
             setBook(book);
-            setErrors(null);
+            setErrors([]);
           }
         })
-        .catch((error: any) => {
+        .catch((error: ErrorResponse) => {
           if (error.response.status == 404) {
             setErrors(['本が見つかりませんでした']);
           } else {
@@ -82,15 +88,13 @@ export default function Book() {
     }
   }
 
-  function validateInputAndReturnIsbn(input: any) {
-    if (input == null) return false;
+  function validateInputAndReturnIsbn(input: string) {
+    if (input == 'null') return false;
 
     // -の削除とスペースの削除
     let isbn = input.replace(/-/g, '');
     isbn = isbn.trim();
-    isbn = isbn.match(/^9784[0-9]{9}$/);
-
-    return isbn || false;
+    return isbn.match(/^9784[0-9]{9}$/);
   }
 
   return (
@@ -101,9 +105,10 @@ export default function Book() {
         name="isbn"
         content="13桁のISBNを入力してください（9784...）"
         subMessage="（※一部本が見つからない場合や、表紙がない場合があります）"
-        // maxLength={13}
         errors={errors}
-        onChange={(e: any) => setInput(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setInput(e.target.value)
+        }
         onSubmit={searchBook}
       />
       {book && (

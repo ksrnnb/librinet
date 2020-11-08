@@ -5,15 +5,22 @@ import Genres from '../components/Genres';
 import { MyButton, Caption } from '../components/Components';
 import { BookCard } from '../components/BookCard';
 import { PropsContext } from '../components/MyRouter';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { MyLink } from '../functions/MyLink';
-import { Book, Response, Error, Data } from '../types/Interfaces';
+import {
+  Book,
+  Response,
+  ErrorResponse,
+  Data,
+  RouterProps,
+  SetParams,
+} from '../types/Interfaces';
 const axios = window.axios;
 
 export default function AddBook() {
   const data: Data = useContext(DataContext);
-  const setState: any = useContext(SetStateContext);
-  const props: any = useContext(PropsContext);
+  const setParams: SetParams = useContext(SetParamsContext);
+  const props: RouterProps = useContext(PropsContext);
 
   // ログインしていない場合はページ遷移
   if (!data.params.user) {
@@ -21,12 +28,12 @@ export default function AddBook() {
     return <></>;
   }
 
-  const [errors, setErrors]: any = useState([]);
-  const [book, setBook]: any = useState(null);
-  const [isChecked, setIsChecked]: any = useState(true);
-  const [isNewGenre, setIsNewGenre]: any = useState(true);
-  const [newGenre, setNewGenre]: any = useState('');
-  const [convGenre, setConvGenre]: any = useState('');
+  const [errors, setErrors] = useState<string[]>([]);
+  const [book, setBook] = useState<Book | null>(null);
+  const [isChecked, setIsChecked] = useState<boolean>(true);
+  const [isNewGenre, setIsNewGenre] = useState<boolean>(true);
+  const [newGenre, setNewGenre] = useState<string>('');
+  const [convGenre, setConvGenre] = useState<string>('');
 
   const genres = data.params.user.genres;
 
@@ -35,10 +42,11 @@ export default function AddBook() {
   function setup() {
     const isbn: string = props.match.params.isbn;
     const book: Book = props.location.state;
+    const isSet = book ? Object.keys(book).length > 0 : false;
 
     setInitialConvGenre();
 
-    book ? setData(book) : getBookData();
+    isSet ? setData(book) : getBookData();
 
     function setInitialConvGenre() {
       const keys = Object.keys(genres);
@@ -76,7 +84,7 @@ export default function AddBook() {
             setData(book);
           }
         })
-        .catch((error: Error) => {
+        .catch((error: ErrorResponse) => {
           // ISBNが違う場合 404
           if (error.response.status === 404) {
             setErrors(['本がみつかりませんでした']);
@@ -91,6 +99,10 @@ export default function AddBook() {
   }
 
   function getParams() {
+    if (book == null) {
+      return null;
+    }
+
     const params = {
       user_id: data.params.user.id,
       isInBookshelf: true,
@@ -124,9 +136,9 @@ export default function AddBook() {
         .then((response: Response) => {
           linkToUserPage(response);
         })
-        .catch((error: Error) => {
+        .catch((error: ErrorResponse) => {
           if (error.response.status == 422) {
-            const errors = Object.values(error.response.data.errors);
+            const errors: string[] = Object.values(error.response.data.errors);
             setErrors(errors);
             window.scroll(0, 0);
           } else {
@@ -143,7 +155,7 @@ export default function AddBook() {
     params.user.genres = response.data.genres;
     params.user.ordered_books = response.data.ordered_books;
 
-    setState.params(params);
+    setParams(params);
     MyLink.userProfile(props, params.user.str_id);
   }
 
@@ -171,7 +183,7 @@ export default function AddBook() {
     setIsNewGenre(!isNewGenre);
   }
 
-  if (book && genres) {
+  if (book) {
     return (
       <>
         <Subtitle subtitle="本棚に追加" />

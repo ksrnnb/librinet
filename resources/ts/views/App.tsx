@@ -2,29 +2,25 @@ import Header from '../components/Header';
 import React, { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { MyRouter } from '../components/MyRouter';
-import { Response, Params } from '../types/Interfaces';
+import { Data, Response, Params } from '../types/Interfaces';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const defaultData: any = { hasLoaded: false, params: {} };
+const defaultData: Data = { hasLoaded: false, params: {} as Params };
 const axios: any = window.axios;
 
 export const DataContext: any = createContext(defaultData);
-export const SetStateContext: any = createContext({
-  params: function () {
-    return;
-  },
+export const SetParamsContext: any = createContext(() => {
+  return;
 });
 
-function App() {
+const App: React.FC = () => {
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [params, setParams]: [params: Params | null, setParams: any] = useState(
-    null
-  );
+  const [params, setParams] = useState<Params>({} as Params);
 
   useEffect(setUp, []);
 
-  function setUp() {
+  function setUp(): void {
     axios
       .get('/api/user/auth')
       .then((response: Response) => {
@@ -44,19 +40,15 @@ function App() {
     params: params,
   };
 
-  const setState = {
-    params: setParams,
-  };
-
   if (hasLoaded) {
     return (
       <DataContext.Provider value={data}>
-        <SetStateContext.Provider value={setState}>
+        <SetParamsContext.Provider value={setParams}>
           <Router>
             <Header />
             <MyRouter />
           </Router>
-        </SetStateContext.Provider>
+        </SetParamsContext.Provider>
       </DataContext.Provider>
     );
   } else {
@@ -72,7 +64,7 @@ function App() {
       </Router>
     );
   }
-}
+};
 
 if (document.getElementById('app')) {
   ReactDOM.render(<App />, document.getElementById('app'));

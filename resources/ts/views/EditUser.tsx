@@ -3,14 +3,28 @@ import Subtitle from '../components/Subtitle';
 import UserImageInput from '../components/UserImageInput';
 import Errors from '../components/Errors';
 import { MyCard } from '../components/MyCard';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 import { Modal, Button } from 'react-bootstrap';
+import {
+  ErrorResponse,
+  Data,
+  RouterProps,
+  Params,
+  SetParams,
+  UserParams,
+} from '../types/Interfaces';
 
 const axios = window.axios;
 
-function ModalWindow(props: any) {
+interface ModalProps {
+  show: boolean;
+  handleClose: () => void;
+  onSubmitDelete: () => void;
+}
+
+function ModalWindow(props: ModalProps) {
   const { show, handleClose, onSubmitDelete } = props;
 
   return (
@@ -38,39 +52,56 @@ function ModalWindow(props: any) {
   );
 }
 
-function EditButton(props: any) {
+interface OnClickProps {
+  onClick: () => void;
+}
+
+function EditButton(props: OnClickProps) {
+  const onClick = props.onClick;
   return (
-    <button className="btn btn-outline-success" onClick={props.onClick}>
+    <button className="btn btn-outline-success" onClick={onClick}>
       編集する
     </button>
   );
 }
 
-function CancelButton(props: any) {
+function CancelButton(props: OnClickProps) {
+  const onClick = props.onClick;
   return (
-    <button className="btn btn-outline-secondary mr-2" onClick={props.onClick}>
+    <button className="btn btn-outline-secondary mr-2" onClick={onClick}>
       キャンセルする
     </button>
   );
 }
 
-function DeleteButton(props: any) {
-  const attr = props.isGuest ? { disabled: true } : {};
+interface DeleteProps {
+  isGuest: boolean;
+  onClick: () => void;
+}
+
+function DeleteButton(props: DeleteProps) {
+  const { isGuest, onClick } = props;
+  const attr = isGuest ? { disabled: true } : {};
+
   return (
     <div className="mt-5">
-      <button
-        className="btn btn-outline-danger"
-        onClick={props.onClick}
-        {...attr}
-      >
+      <button className="btn btn-outline-danger" onClick={onClick} {...attr}>
         アカウントを削除する
       </button>
     </div>
   );
 }
 
-function UserNameInput(props: any) {
-  const attr = props.isGuest ? { disabled: true } : {};
+interface NameProps {
+  isGuest: boolean;
+  name: string;
+  onChange: (e: any) => void;
+}
+
+function UserNameInput(props: NameProps) {
+  const { isGuest, name, onChange } = props;
+  const attr = isGuest ? { disabled: true } : {};
+
   return (
     <label htmlFor="user-name" className="d-block">
       <p className="my-0">ユーザー名</p>
@@ -78,16 +109,23 @@ function UserNameInput(props: any) {
         id="user-name"
         className="mw-100"
         name="user-name"
-        value={props.name}
-        onChange={props.onChange}
+        value={name}
+        onChange={onChange}
         {...attr}
       />
     </label>
   );
 }
 
-function UserStrIdInput(props: any) {
-  const attr = props.isGuest ? { disabled: true } : {};
+interface StrIdProps {
+  isGuest: boolean;
+  strId: string;
+  onChange: (e: any) => void;
+}
+
+function UserStrIdInput(props: StrIdProps) {
+  const { isGuest, strId, onChange } = props;
+  const attr = isGuest ? { disabled: true } : {};
   return (
     <label htmlFor="user-id" className="d-block">
       <p className="my-0">ユーザーID</p>
@@ -95,8 +133,8 @@ function UserStrIdInput(props: any) {
         id="user-id"
         className="mw-100"
         name="user-id"
-        value={props.strId}
-        onChange={props.onChange}
+        value={strId}
+        onChange={onChange}
         {...attr}
       />
     </label>
@@ -104,17 +142,17 @@ function UserStrIdInput(props: any) {
 }
 
 export default function EditUser() {
-  const data: any = useContext(DataContext);
-  const props: any = useContext(PropsContext);
-  const setState: any = useContext(SetStateContext);
+  const data: Data = useContext(DataContext);
+  const props: RouterProps = useContext(PropsContext);
+  const setParams: SetParams = useContext(SetParamsContext);
   const user: any = data.params.user;
-  const params: any = data.params;
+  const params: Params = data.params;
 
-  const [errors, setErrors]: any = useState([]);
-  const [name, setName]: any = useState(user.name);
-  const [strId, setStrId]: any = useState(user.str_id);
-  const [image, setImage]: any = useState(user.image || null);
-  const [show, setShow]: any = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
+  const [name, setName] = useState<string>(user.name);
+  const [strId, setStrId] = useState<string>(user.str_id);
+  const [image, setImage] = useState<string | null>(user.image || null);
+  const [show, setShow] = useState<boolean>(false);
 
   function onSubmitEdit() {
     const path = '/api/user/edit';
@@ -129,11 +167,11 @@ export default function EditUser() {
       })
       .then(() => {
         params.user = user;
-        setState.params(params);
+        setParams(params);
         MyLink.userProfile(props, user.str_id);
       })
-      .catch((error: any) => {
-        const errors = Object.values(error.response.data.errors);
+      .catch((error: ErrorResponse) => {
+        const errors = Object.values(error.response.data.errors) as string[];
         setErrors(errors);
       });
   }
@@ -146,8 +184,9 @@ export default function EditUser() {
         data: user,
       })
       .then(() => {
-        params.user = undefined;
-        setState.params(params);
+        const newParams = params as any;
+        newParams.user = undefined;
+        setParams(newParams);
         MyLink.top(props);
       })
       .catch(() => {

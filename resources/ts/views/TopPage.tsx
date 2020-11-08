@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { guestLogin } from './Login';
 
 function Content(props: any) {
@@ -62,13 +62,13 @@ function MyCarousel(props: any) {
 
 export default function TopPage() {
   const props: any = useContext(PropsContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
   const data: any = useContext(DataContext);
   const [height, setHeight]: any = useState(0);
   const [active, setActive]: any = useState('active');
 
   function afterLogin(user: any) {
-    setState.params(user);
+    setParams(user);
     MyLink.home(props);
   }
 

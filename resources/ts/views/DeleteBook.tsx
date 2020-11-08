@@ -3,15 +3,28 @@ import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import { BookCard } from '../components/BookCard';
 import { PropsContext } from '../components/MyRouter';
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { MyLink } from '../functions/MyLink';
 import { Modal, Button } from 'react-bootstrap';
 import { Book } from '../types/Interfaces';
+import {
+  Response,
+  Data,
+  RouterProps,
+  Params,
+  SetParams,
+} from '../types/Interfaces';
 
 const axios = window.axios;
 
-function Books(props: any) {
-  const deleteList = props.deleteList;
+interface BooksProps {
+  books: Book[];
+  deleteList: number[];
+  setDeleteList: (ids: number[]) => void;
+}
+
+function Books(props: BooksProps) {
+  const { books, deleteList, setDeleteList } = props;
 
   function onClick(e: any) {
     // クリックすると、子要素、孫要素がevent.targetに入っているので、目的のdivまで上に遡る
@@ -29,16 +42,16 @@ function Books(props: any) {
     let newList;
 
     if (hasId) {
-      newList = deleteList.filter((value: any) => value !== id);
+      newList = deleteList.filter((value: number) => value !== id);
     } else {
       newList = deleteList.slice();
       newList.push(id);
     }
 
-    props.setDeleteList(newList);
+    setDeleteList(newList);
   }
 
-  const books = props.books.map((book: Book) => {
+  const booksJsx = books.map((book: Book) => {
     const willDelete = deleteList.includes(book.id);
     return (
       <div
@@ -53,40 +66,58 @@ function Books(props: any) {
     );
   });
 
-  return books;
+  return <>{booksJsx}</>;
 }
 
-function DeleteBooks(props: any): any {
-  const orderedBooks = props.orderedBooks;
-  const genres = props.genres;
+interface DeleteBooksProps {
+  orderedBooks: {
+    [x: string]: Book[];
+  };
+  genres: {
+    [x: string]: string;
+  };
+  deleteList: number[];
+  setDeleteList: (ids: number[]) => void;
+}
+
+function DeleteBooks(props: DeleteBooksProps) {
+  const { orderedBooks, genres, deleteList, setDeleteList } = props;
   const Bookshelf = Object.keys(orderedBooks).map((genre_id) => {
     return (
       <div key={genre_id}>
         <h4 className="mt-5">{genres[genre_id]}</h4>
         <Books
           books={orderedBooks[genre_id]}
-          deleteList={props.deleteList}
-          setDeleteList={props.setDeleteList}
+          deleteList={deleteList}
+          setDeleteList={setDeleteList}
         />
       </div>
     );
   });
 
-  return Bookshelf;
+  return <>{Bookshelf}</>;
 }
 
-function DeleteButton(props: any) {
+interface DeleteButtonProps {
+  onClick: () => void;
+}
+
+function DeleteButton(props: DeleteButtonProps) {
+  const onClick = props.onClick;
   return (
-    <button
-      className="btn btn-outline-danger d-block my-5"
-      onClick={props.onClick}
-    >
+    <button className="btn btn-outline-danger d-block my-5" onClick={onClick}>
       削除する
     </button>
   );
 }
 
-function ModalWindow(props: any) {
+interface ModalProps {
+  show: boolean;
+  handleClose: () => void;
+  onSubmitDelete: () => void;
+}
+
+function ModalWindow(props: ModalProps) {
   const { show, handleClose, onSubmitDelete } = props;
 
   return (
@@ -117,12 +148,12 @@ function ModalWindow(props: any) {
 }
 
 export default function DeleteBook() {
-  const props: any = useContext(PropsContext);
-  const data: any = useContext(DataContext);
-  const params: any = data.params;
-  const setState: any = useContext(SetStateContext);
-  const [deleteList, setDeleteList]: any = useState([]);
-  const [show, setShow]: any = useState(false);
+  const props: RouterProps = useContext(PropsContext);
+  const data: Data = useContext(DataContext);
+  const params: Params = data.params;
+  const setParams: SetParams = useContext(SetParamsContext);
+  const [deleteList, setDeleteList] = useState<number[]>([]);
+  const [show, setShow] = useState<boolean>(false);
 
   function redirectUserProfile() {
     const strId: string = props.match.params.strId;
@@ -137,8 +168,8 @@ export default function DeleteBook() {
         .delete(path, {
           data: { ids: deleteList },
         })
-        .then((response: any) => {
-          setState.params(response.data);
+        .then((response: Response) => {
+          setParams(response.data);
           redirectUserProfile();
         })
         .catch(() => {

@@ -1,4 +1,4 @@
-import { DataContext, SetStateContext } from './App';
+import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import Errors from '../components/Errors';
@@ -17,7 +17,7 @@ export default function Signup() {
   const [errors, setErrors]: any = useState([]);
   const props: any = useContext(PropsContext);
   const data: any = useContext(DataContext);
-  const setState: any = useContext(SetStateContext);
+  const setParams: any = useContext(SetParamsContext);
 
   useEffect(() => {
     data.params.user && MyLink.home(props);
@@ -47,7 +47,7 @@ export default function Signup() {
             })
             .then((response: any) => {
               const params = response.data;
-              setState.params(params);
+              setParams(params);
               MyLink.home(props);
             })
             .catch((error: any) => {

@@ -6,10 +6,9 @@ import { Data, Response, Params } from '../types/Interfaces';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const defaultData: Data = { hasLoaded: false, params: {} as Params };
 const axios: any = window.axios;
 
-export const DataContext: any = createContext(defaultData);
+export const DataContext = createContext({} as Data);
 export const SetParamsContext: any = createContext(() => {
   return;
 });

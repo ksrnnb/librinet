@@ -78,7 +78,10 @@ function LinkGroup(props: any) {
 }
 
 function Hamburger() {
-  const data: any = useContext(DataContext);
+  const data = useContext(DataContext);
+  if (data.params == null) {
+    return <></>;
+  }
 
   return (
     <div className="dropdown">

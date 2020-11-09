@@ -5,8 +5,8 @@ import { PropsContext } from './MyRouter';
 import { NoImageCard, Caption } from './Components';
 
 function Message(props: any) {
-  const main_props: any = useContext(PropsContext);
-  const isSelf: boolean = props.user.str_id === main_props.match.params.strId;
+  const routerProps = useContext(PropsContext);
+  const isSelf = props.user.str_id === routerProps.match.params.strId;
 
   if (isSelf) {
     return (
@@ -15,7 +15,7 @@ function Message(props: any) {
         <button
           type="button"
           className="btn btn-outline-success"
-          onClick={() => main_props.history.push('/book')}
+          onClick={() => routerProps.history.push('/book')}
         >
           本を探す
         </button>

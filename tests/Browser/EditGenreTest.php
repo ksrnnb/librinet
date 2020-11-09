@@ -61,6 +61,19 @@ class EditGenreTest extends DuskTestCase
         });
     }
 
+    public function testCannotAccessDirectlyWhenDoesntHaveAnyBooks()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser = $this->login($browser);
+
+            $edit_path = '/genre/edit/' . $this->user->str_id;
+
+            $browser->visit($edit_path)
+                    ->waitForLocation($this->path)
+                    ->assertSee('本がありません');
+        });
+    }
+
     public function testCannotEditGenreOfOtherUser()
     {
         $this->browse(function (Browser $browser) {

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
@@ -35,10 +35,19 @@ export default function EditGenre() {
     return <></>;
   }
 
-  // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
-  if (params.user.str_id !== props.match.params.strId) {
-    MyLink.userProfile(props, props.match.params.strId);
-  }
+  useEffect(() => {
+    // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+    if (params.user.str_id !== props.match.params.strId) {
+      MyLink.userProfile(props, props.match.params.strId);
+      return;
+    }
+
+    // 本を持ってない場合は、自身のページに戻る
+    if (params.user.books.length === 0) {
+      MyLink.userProfile(props, params.user.str_id);
+      return;
+    }
+  }, []);
 
   function onSubmitNewGenres() {
     const newGenres = getNewGenresFromInputs();

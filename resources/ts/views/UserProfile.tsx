@@ -9,9 +9,9 @@ import { MyLink } from '../functions/MyLink';
 const axios = window.axios;
 
 function EditUserButton(props: any) {
-  const user: any = props.user;
-  const viewerStrId: any = props.viewerStrId;
-  const main_props: any = useContext(PropsContext);
+  const user = props.user;
+  const viewerStrId = props.viewerStrId;
+  const routerProps = useContext(PropsContext);
 
   // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
   if (user.str_id !== viewerStrId) {
@@ -23,7 +23,7 @@ function EditUserButton(props: any) {
       <button
         type="button"
         className="btn btn-outline-success d-block"
-        onClick={() => MyLink.editUser(main_props, user.str_id)}
+        onClick={() => MyLink.editUser(routerProps, user.str_id)}
       >
         ユーザー情報を編集する
       </button>
@@ -32,8 +32,8 @@ function EditUserButton(props: any) {
 }
 
 function FollowButton(props: any) {
-  const user: any = props.user;
-  const viewerUser: any = props.viewerUser;
+  const user = props.user;
+  const viewerUser = props.viewerUser;
 
   if (user.id == viewerUser.id) {
     return <></>;
@@ -58,8 +58,8 @@ function FollowButton(props: any) {
   return FollowButton;
 }
 function FollowNumber(props: any) {
-  const follows: number = props.follows.length;
-  const followers: number = props.followers.length;
+  const follows = props.follows.length;
+  const followers = props.followers.length;
   return (
     <>
       <p
@@ -86,7 +86,7 @@ function FollowNumber(props: any) {
 
 function EditBookshelfButton(props: any) {
   const hasLoaded: boolean = 'books' in props;
-  const main_props: any = useContext(PropsContext);
+  const routerProps = useContext(PropsContext);
 
   // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
   if (hasLoaded && props.viewerUser) {
@@ -105,14 +105,14 @@ function EditBookshelfButton(props: any) {
           <button
             className="dropdown-item"
             type="button"
-            onClick={() => MyLink.editGenre(main_props, strId)}
+            onClick={() => MyLink.editGenre(routerProps, strId)}
           >
             ジャンルを編集する
           </button>
           <button
             className="dropdown-item"
             type="button"
-            onClick={() => MyLink.deleteBook(main_props, strId)}
+            onClick={() => MyLink.deleteBook(routerProps, strId)}
           >
             本を削除する
           </button>
@@ -125,14 +125,14 @@ function EditBookshelfButton(props: any) {
 }
 
 export default function UserProfile() {
-  const [isFollowing, setIsFollowing]: any = useState(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [showingUser, setShowingUser]: any = useState(null);
-  const props: any = useContext(PropsContext);
-  const data: any = useContext(DataContext);
-  const params: any = data.params;
-  const user: any = params.user;
-  const queryStrId: any = props.match.params.strId;
-  const locationState: any = props.location.state;
+  const props = useContext(PropsContext);
+  const data = useContext(DataContext);
+  const params = data.params;
+  const user = params.user;
+  const queryStrId = props.match.params.strId;
+  const locationState = props.location.state;
   const setParams: any = useContext(SetParamsContext);
 
   useEffect(() => {
@@ -212,7 +212,7 @@ export default function UserProfile() {
 
       // フォローしてない場合はpushでダミーを追加
     } else {
-      const newFollower = {
+      const newFollower: any = {
         id: 0,
         follow_id: showingUser.id,
         follower_id: user.id,

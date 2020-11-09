@@ -85763,17 +85763,26 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 var MyRouter_1 = __webpack_require__(/*! ./MyRouter */ "./resources/ts/components/MyRouter.tsx");
 var Icon_1 = __webpack_require__(/*! ./Icon */ "./resources/ts/components/Icon.tsx");
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
+var App_1 = __webpack_require__(/*! ../views/App */ "./resources/ts/views/App.tsx");
 function BooksElement(props) {
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
+    var data = react_1.useContext(App_1.DataContext);
     var books = props.books;
+    // 本を持っているかどうか、確認してから本のページへ。
+    var bookLink = function (book) {
+        var userBooks = data.params.user.books;
+        // someメソッドで確認。
+        book.isInBookshelf = userBooks.some(function (b) { return b.id === book.id; });
+        MyLink_1.MyLink.bookProfile(routerProps, book);
+    };
     var booksElement = books.map(function (book) {
         var src = book.cover;
         return (react_1.default.createElement("div", { className: "col-3", key: book.isbn },
-            react_1.default.createElement("div", { className: "hover", onClick: function () { return MyLink_1.MyLink.bookProfile(main_props, book); } },
+            react_1.default.createElement("div", { className: "hover book", onClick: function () { return bookLink(book); } },
                 src ? (react_1.default.createElement("img", { className: "img-fluid", src: src, alt: "book-cover" })) : (react_1.default.createElement(Icon_1.BookIcon, null)),
                 react_1.default.createElement("p", { className: "one-row" }, book.title))));
     });
-    return booksElement;
+    return react_1.default.createElement(react_1.default.Fragment, null, booksElement);
 }
 exports.default = BooksElement;
 
@@ -85818,12 +85827,12 @@ var Icon_1 = __webpack_require__(/*! ./Icon */ "./resources/ts/components/Icon.t
 var MyRouter_1 = __webpack_require__(/*! ./MyRouter */ "./resources/ts/components/MyRouter.tsx");
 var Components_1 = __webpack_require__(/*! ./Components */ "./resources/ts/components/Components.tsx");
 function Message(props) {
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
-    var isSelf = props.user.str_id === main_props.match.params.strId;
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
+    var isSelf = props.user.str_id === routerProps.match.params.strId;
     if (isSelf) {
         return (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement("p", null, "\u672C\u68DA\u306B\u672C\u3092\u8FFD\u52A0\u3057\u307E\u3057\u3087\u3046\uFF01"),
-            react_1.default.createElement("button", { type: "button", className: "btn btn-outline-success", onClick: function () { return main_props.history.push('/book'); } }, "\u672C\u3092\u63A2\u3059")));
+            react_1.default.createElement("button", { type: "button", className: "btn btn-outline-success", onClick: function () { return routerProps.history.push('/book'); } }, "\u672C\u3092\u63A2\u3059")));
     }
     else {
         return react_1.default.createElement(react_1.default.Fragment, null);
@@ -86268,6 +86277,9 @@ function LinkGroup(props) {
 }
 function Hamburger() {
     var data = react_1.useContext(App_1.DataContext);
+    if (data.params == null) {
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    }
     return (react_1.default.createElement("div", { className: "dropdown" },
         react_1.default.createElement("button", { id: "hamburger", className: "navbar-toggler", type: "button", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
             react_1.default.createElement("span", { className: "navbar-toggler-icon" })),
@@ -87493,9 +87505,8 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
 var MyRouter_1 = __webpack_require__(/*! ../components/MyRouter */ "./resources/ts/components/MyRouter.tsx");
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-var defaultData = { hasLoaded: false, params: {} };
 var axios = window.axios;
-exports.DataContext = react_1.createContext(defaultData);
+exports.DataContext = react_1.createContext({});
 exports.SetParamsContext = react_1.createContext(function () {
     return;
 });
@@ -88020,10 +88031,18 @@ function DeleteBook() {
         MyLink_1.MyLink.top(props);
         return react_1.default.createElement(react_1.default.Fragment, null);
     }
-    // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
-    if (params.user.str_id !== props.match.params.strId) {
-        MyLink_1.MyLink.userProfile(props, props.match.params.strId);
-    }
+    react_1.useEffect(function () {
+        // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+        if (params.user.str_id !== props.match.params.strId) {
+            MyLink_1.MyLink.userProfile(props, props.match.params.strId);
+            return;
+        }
+        // 本を持ってない場合は、自身のページに戻る
+        if (params.user.books.length === 0) {
+            MyLink_1.MyLink.userProfile(props, params.user.str_id);
+            return;
+        }
+    }, []);
     function redirectUserProfile() {
         var strId = props.match.params.strId;
         MyLink_1.MyLink.userProfile(props, strId);
@@ -88120,10 +88139,18 @@ function EditGenre() {
         MyLink_1.MyLink.top(props);
         return react_1.default.createElement(react_1.default.Fragment, null);
     }
-    // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
-    if (params.user.str_id !== props.match.params.strId) {
-        MyLink_1.MyLink.userProfile(props, props.match.params.strId);
-    }
+    react_1.useEffect(function () {
+        // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+        if (params.user.str_id !== props.match.params.strId) {
+            MyLink_1.MyLink.userProfile(props, props.match.params.strId);
+            return;
+        }
+        // 本を持ってない場合は、自身のページに戻る
+        if (params.user.books.length === 0) {
+            MyLink_1.MyLink.userProfile(props, params.user.str_id);
+            return;
+        }
+    }, []);
     function onSubmitNewGenres() {
         var newGenres = getNewGenresFromInputs();
         var path = '/api/genre/edit';
@@ -89586,14 +89613,14 @@ var axios = window.axios;
 function EditUserButton(props) {
     var user = props.user;
     var viewerStrId = props.viewerStrId;
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
     // 表示しているユーザーと、閲覧者が異なる場合は編集ボタン非表示
     if (user.str_id !== viewerStrId) {
         return react_1.default.createElement(react_1.default.Fragment, null);
     }
     // 表示しているユーザーが、閲覧者自身の場合
     return (react_1.default.createElement("div", null,
-        react_1.default.createElement("button", { type: "button", className: "btn btn-outline-success d-block", onClick: function () { return MyLink_1.MyLink.editUser(main_props, user.str_id); } }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B")));
+        react_1.default.createElement("button", { type: "button", className: "btn btn-outline-success d-block", onClick: function () { return MyLink_1.MyLink.editUser(routerProps, user.str_id); } }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B")));
 }
 function FollowButton(props) {
     var user = props.user;
@@ -89626,7 +89653,7 @@ function FollowNumber(props) {
 }
 function EditBookshelfButton(props) {
     var hasLoaded = 'books' in props;
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
     // showing userの読み込みと、そもそもviewerUserが代入されている（ログインしている）の確認
     if (hasLoaded && props.viewerUser) {
         var canEdit = props.user.id == props.viewerUser.id;
@@ -89638,8 +89665,8 @@ function EditBookshelfButton(props) {
             : Object.keys(books).length;
         if (canEdit && isNotEmpty) {
             return (react_1.default.createElement(react_1.default.Fragment, null,
-                react_1.default.createElement("button", { className: "dropdown-item", type: "button", onClick: function () { return MyLink_1.MyLink.editGenre(main_props, strId_1); } }, "\u30B8\u30E3\u30F3\u30EB\u3092\u7DE8\u96C6\u3059\u308B"),
-                react_1.default.createElement("button", { className: "dropdown-item", type: "button", onClick: function () { return MyLink_1.MyLink.deleteBook(main_props, strId_1); } }, "\u672C\u3092\u524A\u9664\u3059\u308B")));
+                react_1.default.createElement("button", { className: "dropdown-item", type: "button", onClick: function () { return MyLink_1.MyLink.editGenre(routerProps, strId_1); } }, "\u30B8\u30E3\u30F3\u30EB\u3092\u7DE8\u96C6\u3059\u308B"),
+                react_1.default.createElement("button", { className: "dropdown-item", type: "button", onClick: function () { return MyLink_1.MyLink.deleteBook(routerProps, strId_1); } }, "\u672C\u3092\u524A\u9664\u3059\u308B")));
         }
     }
     return react_1.default.createElement(react_1.default.Fragment, null);

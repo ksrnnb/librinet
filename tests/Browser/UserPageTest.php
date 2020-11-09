@@ -16,6 +16,7 @@ class UserPageTest extends DuskTestCase
     protected $user;
     protected $credential;
     protected $path;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -26,6 +27,19 @@ class UserPageTest extends DuskTestCase
             'password' => config('app.guest_password')
         ];
         $this->path = '/user/profile/' . $this->user->str_id;
+    }
+
+    public function createUser()
+    {
+        $user = Factory(User::class)->create();
+        $genre = Genre::create(
+            ['name' => 'TEST_GENRE']
+        );
+
+        $user->books()
+             ->save(factory(Book::class)->make());
+
+        return $user;
     }
 
     public function testCannotSeeEditButtonWithoutLogin()
@@ -67,6 +81,20 @@ class UserPageTest extends DuskTestCase
                     ->waitFor('.user-card')
                     ->press('.dropdown-toggle')
                     ->assertSee('本を削除する');
+        });
+    }
+
+    public function testCanAddBookFromOtherUserBookshelf()
+    {
+        $this->browse(function (Browser $browser) {
+            $other_user = $this->createUser();
+            $path = '/user/profile/' . $other_user->str_id;
+            $browser->visit($path)
+                    ->waitFor('.book')
+                    ->click('.book')
+                    ->waitFor('.book-card')
+                    ->assertSee('投稿する')
+                    ->assertSee('本棚に追加する');
         });
     }
 

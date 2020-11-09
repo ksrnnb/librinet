@@ -46,12 +46,24 @@ class DeleteBookTest extends DuskTestCase
                     ->assertSee('ゲストユーザーでログイン');
         });
     }
-    
-    public function testDoesntDeleteBookWithoutCheck()
+
+    public function testCannotAccessDeletePageDirectlyWhenDoesntHaveAnyBooks()
     {
         $this->browse(function (Browser $browser) {
             $browser = $this->login($browser);
 
+            $delete_path = '/book/delete/' . $this->user->str_id;
+            $user_path = '/user/profile/' . $this->user->str_id;
+
+            $browser->visit($delete_path)
+                    ->waitForLocation($user_path)
+                    ->assertSee('本がありません');
+        });
+    }
+    
+    public function testDoesntDeleteBookWithoutCheck()
+    {
+        $this->browse(function (Browser $browser) {
             $this->createBook();
 
             $browser->visit($this->path)

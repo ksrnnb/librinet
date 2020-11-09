@@ -24,6 +24,7 @@ Route::get('/user/auth', 'Api\UserController@auth');
 Route::get('/user/profile/{str_id}', 'Api\UserController@show');
 Route::get('/followers/{str_id}/{target}', 'Api\FollowerController@followers');
 
+// 認証が必要なページ
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', 'Api\LoginController@logout');
 
@@ -51,9 +52,3 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/follow', 'Api\FollowerController@follow');
 });
-
-// Route::middleware('auth:sanctum')->get('guest/login', 'Auth\LoginController@guest');
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

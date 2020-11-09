@@ -71,8 +71,8 @@ export default function Signup() {
     const newErrors = [];
 
     // \x20: 半角スペース, \u3000: 全角スペース
-    const isUserName = /^[^\x20\u3000]{1,32}$/;
-    const isUserId = /^\w{4,32}$/;
+    const isUserName = /^[^\x20\u3000]{1,16}$/;
+    const isUserId = /^\w{4,16}$/;
     const isEmail = /\w+@[a-zA-z_\.]+/;
     const isPasswordCharacter = /^[\w\|\^\$\*\+\?\.\(\)\[\]\/\\!@#$%&-_+={}:;"'?>.,<`~]{6,255}$/;
 

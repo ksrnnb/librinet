@@ -148,6 +148,17 @@ export default function EditUser() {
   const user: any = data.params.user;
   const params: Params = data.params;
 
+  // 非ログイン時はトップへ。
+  if (user == null) {
+    MyLink.top(props);
+    return <></>;
+  }
+
+  // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+  if (user.str_id !== props.match.params.strId) {
+    MyLink.userProfile(props, props.match.params.strId);
+  }
+
   const [errors, setErrors] = useState<string[]>([]);
   const [name, setName] = useState<string>(user.name);
   const [strId, setStrId] = useState<string>(user.str_id);

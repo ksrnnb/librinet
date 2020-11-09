@@ -155,6 +155,17 @@ export default function DeleteBook() {
   const [deleteList, setDeleteList] = useState<number[]>([]);
   const [show, setShow] = useState<boolean>(false);
 
+  // 非ログイン時はトップへ。
+  if (params.user == null) {
+    MyLink.top(props);
+    return <></>;
+  }
+
+  // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+  if (params.user.str_id !== props.match.params.strId) {
+    MyLink.userProfile(props, props.match.params.strId);
+  }
+
   function redirectUserProfile() {
     const strId: string = props.match.params.strId;
     MyLink.userProfile(props, strId);

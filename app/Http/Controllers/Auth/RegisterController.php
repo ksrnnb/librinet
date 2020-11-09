@@ -61,7 +61,7 @@ class RegisterController extends Controller
                 'required',
                 'string',
                 // PHPは\u3000が使えないので注意。Unicode propertyを参照。
-                'regex:/.{1,16}$/',
+                'regex:/^.{1,16}$/',
             ],
             'email'     => [
                 'required',

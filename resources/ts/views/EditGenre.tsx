@@ -29,6 +29,17 @@ export default function EditGenre() {
   const props: RouterProps = useContext(PropsContext);
   const setParams: SetParams = useContext(SetParamsContext);
 
+  // 非ログイン時はトップへ。
+  if (params.user == null) {
+    MyLink.top(props);
+    return <></>;
+  }
+
+  // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+  if (params.user.str_id !== props.match.params.strId) {
+    MyLink.userProfile(props, props.match.params.strId);
+  }
+
   function onSubmitNewGenres() {
     const newGenres = getNewGenresFromInputs();
     const path = '/api/genre/edit';

@@ -88015,6 +88015,15 @@ function DeleteBook() {
     var setParams = react_1.useContext(App_1.SetParamsContext);
     var _a = react_1.useState([]), deleteList = _a[0], setDeleteList = _a[1];
     var _b = react_1.useState(false), show = _b[0], setShow = _b[1];
+    // 非ログイン時はトップへ。
+    if (params.user == null) {
+        MyLink_1.MyLink.top(props);
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    }
+    // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+    if (params.user.str_id !== props.match.params.strId) {
+        MyLink_1.MyLink.userProfile(props, props.match.params.strId);
+    }
     function redirectUserProfile() {
         var strId = props.match.params.strId;
         MyLink_1.MyLink.userProfile(props, strId);
@@ -88106,6 +88115,15 @@ function EditGenre() {
     var params = data.params;
     var props = react_1.useContext(MyRouter_1.PropsContext);
     var setParams = react_1.useContext(App_1.SetParamsContext);
+    // 非ログイン時はトップへ。
+    if (params.user == null) {
+        MyLink_1.MyLink.top(props);
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    }
+    // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+    if (params.user.str_id !== props.match.params.strId) {
+        MyLink_1.MyLink.userProfile(props, props.match.params.strId);
+    }
     function onSubmitNewGenres() {
         var newGenres = getNewGenresFromInputs();
         var path = '/api/genre/edit';
@@ -88239,6 +88257,15 @@ function EditUser() {
     var setParams = react_1.useContext(App_1.SetParamsContext);
     var user = data.params.user;
     var params = data.params;
+    // 非ログイン時はトップへ。
+    if (user == null) {
+        MyLink_1.MyLink.top(props);
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    }
+    // 違うユーザーの編集ページにきた場合は、ユーザーページに遷移
+    if (user.str_id !== props.match.params.strId) {
+        MyLink_1.MyLink.userProfile(props, props.match.params.strId);
+    }
     var _a = react_1.useState([]), errors = _a[0], setErrors = _a[1];
     var _b = react_1.useState(user.name), name = _b[0], setName = _b[1];
     var _c = react_1.useState(user.str_id), strId = _c[0], setStrId = _c[1];
@@ -89233,8 +89260,8 @@ function Signup() {
     function validation() {
         var newErrors = [];
         // \x20: 半角スペース, \u3000: 全角スペース
-        var isUserName = /^[^\x20\u3000]{1,32}$/;
-        var isUserId = /^\w{4,32}$/;
+        var isUserName = /^[^\x20\u3000]{1,16}$/;
+        var isUserId = /^\w{4,16}$/;
         var isEmail = /\w+@[a-zA-z_\.]+/;
         var isPasswordCharacter = /^[\w\|\^\$\*\+\?\.\(\)\[\]\/\\!@#$%&-_+={}:;"'?>.,<`~]{6,255}$/;
         if (!isUserName.test(userName)) {

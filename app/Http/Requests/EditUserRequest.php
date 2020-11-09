@@ -28,9 +28,9 @@ class EditUserRequest extends FormRequest
     {
         return [
             'user.id' => 'integer',
-            'user.name' => ['min:1, max:32'],
+            'user.name' => ['min:1, max:16'],
             // userでデータを受け取ってるからuniqueは使えない
-            'user.str_id' => ['min:4', 'max:32', new UniqueStrId()],
+            'user.str_id' => ['min:4', 'max:16', new UniqueStrId()],
             // 'user.email' => 'email address',
             'user.image' => ['nullable', new IsBase64Image()],
         ];

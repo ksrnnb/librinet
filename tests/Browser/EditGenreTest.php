@@ -52,13 +52,34 @@ class EditGenreTest extends DuskTestCase
                     ->press('本を探す')
                     ->waitFor('#isbn')
                     ->assertSee('本の検索');
+
+            // 直接URLを入力してもトップページに戻す。
+            $edit_path = '/genre/edit/' . $this->user->str_id;
+            $browser->visit($edit_path)
+                    ->waitForLocation('/')
+                    ->assertSee('ゲストユーザーでログイン');
+        });
+    }
+
+    public function testCannotEditGenreOfOtherUser()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser = $this->login($browser);
+
+            $other_user = Factory(User::class)->create();
+            $edit_path = '/genre/edit/' . $other_user->str_id;
+            $profile_path = '/user/profile/' . $other_user->str_id;
+
+            $browser->visit($edit_path)
+                    ->waitForLocation($profile_path)
+                    ->waitFor('.my-card')
+                    ->assertSee('本棚');
         });
     }
 
     public function testEditGenre()
     {
         $this->browse(function (Browser $browser) {
-            $browser = $this->login($browser);
             $this->createBook();
 
             $browser->visit($this->path)
@@ -74,45 +95,6 @@ class EditGenreTest extends DuskTestCase
                     ->press('編集する')
                     ->waitForText('フォロー')
                     ->assertSee($new_genre);
-        });
-    }
-
-    public function testDoesntDeleteBookWithoutCheck()
-    {
-        $this->browse(function (Browser $browser) {
-            $this->createBook();
-
-            $browser->visit($this->path)
-                    ->waitForText('フォロー')
-                    ->press('.dropdown-toggle')
-                    ->press('本を削除する')
-                    ->waitFor('.delete-book-card')
-                    ->press('削除する')
-                    ->waitForText('削除しますか')
-                    ->press('はい')
-                    ->waitForDialog()
-                    ->assertDialogOpened('本が選択されていません')
-                    ->acceptDialog()
-                    ->assertDontSee('フォロー');
-        });
-    }
-
-    public function testDeleteFromBookshelf()
-    {
-        $this->browse(function (Browser $browser) {
-            $this->createBook();
-
-            $browser->visit($this->path)
-                    ->waitForText('フォロー')
-                    ->press('.dropdown-toggle')
-                    ->press('本を削除する')
-                    ->waitFor('.delete-book-card')
-                    ->click('.delete-book-card')
-                    ->press('削除する')
-                    ->waitForText('削除しますか')
-                    ->press('はい')
-                    ->waitForText('フォロー')
-                    ->assertSee('本がありません');
         });
     }
 }

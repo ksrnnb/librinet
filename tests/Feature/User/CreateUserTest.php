@@ -51,7 +51,7 @@ class CreateUserTest extends TestCase
              ->assertStatus(302);
 
         // too short name validation
-        $this->form['name'] = 'too_long_name' . str_repeat('a', 32);
+        $this->form['name'] = 'too_long_name' . str_repeat('a', 16);
         $this->post($this->path, $this->form)
              ->assertStatus(302);
 
@@ -79,7 +79,7 @@ class CreateUserTest extends TestCase
              ->assertStatus(302);
 
         // too long str_id validation
-        $this->form['str_id'] = 'too_long_str_id' . str_repeat('a', 32);
+        $this->form['str_id'] = 'too_long_str_id' . str_repeat('a', 16);
         $this->post($this->path, $this->form)
              ->assertStatus(302);
 

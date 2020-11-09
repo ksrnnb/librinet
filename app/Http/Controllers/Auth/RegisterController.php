@@ -54,14 +54,14 @@ class RegisterController extends Controller
             'str_id'    => [
                 'required',
                 'string',
-                'regex:/^\w{4,32}$/',
+                'regex:/^\w{4,16}$/',
                 'unique:users',
             ],
             'name'      => [
                 'required',
                 'string',
                 // PHPは\u3000が使えないので注意。Unicode propertyを参照。
-                'regex:/^[^\s\p{C}]{1,32}$/',
+                'regex:/^.{1,16}$/',
             ],
             'email'     => [
                 'required',

@@ -6,13 +6,16 @@ import { PropsContext } from '../components/MyRouter';
 import { MyCard } from '../components/MyCard';
 import { MyLink } from '../functions/MyLink';
 import { getDeltaTimeMessage } from '../functions/TimeFunctions';
+import { Response, Notification } from '../types/Interfaces';
+
 const axios = window.axios;
 
 /**
  * @param {object} notification
  * @return {string}
  */
-function getMessageAndImage(notification: any) {
+function getMessageAndImage(notification: Notification) {
+  console.log(notification);
   const info: any = new Object();
 
   // 投稿などが削除済みの場合はエラーになるので、何も返さない。
@@ -48,8 +51,8 @@ function getMessageAndImage(notification: any) {
  * @param {object} props
  * @return {JSX}
  */
-function Notice(props: any) {
-  const main_props = useContext(PropsContext);
+function Notice(props: { notification: Notification }) {
+  const routerProps = useContext(PropsContext);
   const notification = props.notification;
 
   const timeMessage = getDeltaTimeMessage(notification.created_at);
@@ -60,18 +63,18 @@ function Notice(props: any) {
     if (info.path.includes('api')) {
       axios
         .get(info.path)
-        .then((response: any) => {
+        .then((response: Response) => {
           const post = response.data;
-          MyLink.comment(main_props, post);
+          MyLink.comment(routerProps, post);
         })
         .catch(() => {
           // 投稿がみつからない場合（既に削除済みなど）
-          alert('投稿がみつかりません。既に削除された可能性があります');
+          alert('エラーが発生しました。既に削除された可能性があります');
         });
 
       // ユーザーへのリンクの場合はそのまま移動する。
     } else {
-      MyLink.userProfile(main_props, info.user.str_id);
+      MyLink.userProfile(routerProps, info.user.str_id);
     }
   }
 
@@ -100,8 +103,8 @@ function Notice(props: any) {
 }
 
 export default function Notification() {
-  const data: any = useContext(DataContext);
-  const props: any = useContext(PropsContext);
+  const data = useContext(DataContext);
+  const props = useContext(PropsContext);
   const setParams: any = useContext(SetParamsContext);
 
   const isNotLogin = typeof data.params.user === 'undefined';
@@ -115,7 +118,7 @@ export default function Notification() {
 
   useEffect(() => {
     const ids: Array<number> = [];
-    notifications.forEach((notice: any) => {
+    notifications.forEach((notice: Notification) => {
       if (notice.is_read == false) {
         ids.push(notice.id);
       }
@@ -130,7 +133,7 @@ export default function Notification() {
     axios
       .post('/api/notification', { ids: ids })
       .then(() => {
-        notifications.forEach((notice: any) => {
+        notifications.forEach((notice: Notification) => {
           notice.is_read = true;
         });
 
@@ -145,14 +148,14 @@ export default function Notification() {
   }
 
   // 通知を日付の新しい順にソート
-  notifications.sort((a: any, b: any) => {
+  notifications.sort((a: Notification, b: Notification) => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
   return (
     <>
       <Subtitle subtitle="通知" />
-      {notifications.map((notification: any) => (
+      {notifications.map((notification: Notification) => (
         <Notice notification={notification} key={notification.id} />
       ))}
     </>

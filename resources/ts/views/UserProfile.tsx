@@ -5,10 +5,16 @@ import Bookshelf from '../components/Bookshelf';
 import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
+import { User, Follower, Book } from '../types/Interfaces';
 
 const axios = window.axios;
 
-function EditUserButton(props: any) {
+interface EditButtonProps {
+  user: User;
+  viewerStrId: string;
+}
+
+function EditUserButton(props: EditButtonProps) {
   const user = props.user;
   const viewerStrId = props.viewerStrId;
   const routerProps = useContext(PropsContext);
@@ -31,9 +37,15 @@ function EditUserButton(props: any) {
   );
 }
 
-function FollowButton(props: any) {
-  const user = props.user;
-  const viewerUser = props.viewerUser;
+interface FollowProps {
+  user: User;
+  viewerUser: User;
+  isFollowing: boolean;
+  handleFollow: () => void;
+}
+
+function FollowButton(props: FollowProps) {
+  const { user, viewerUser, isFollowing, handleFollow } = props;
 
   if (user.id == viewerUser.id) {
     return <></>;
@@ -41,7 +53,7 @@ function FollowButton(props: any) {
 
   let className, content;
 
-  if (props.isFollowing) {
+  if (isFollowing) {
     className = 'btn btn-success d-block';
     content = 'フォロー中';
   } else {
@@ -50,14 +62,21 @@ function FollowButton(props: any) {
   }
 
   const FollowButton = (
-    <button className={className} onClick={props.handleFollow}>
+    <button className={className} onClick={handleFollow}>
       {content}
     </button>
   );
 
   return FollowButton;
 }
-function FollowNumber(props: any) {
+
+interface FollowNumberProps {
+  follows: Follower[];
+  followers: Follower[];
+  onClick: (e: any) => void;
+}
+
+function FollowNumber(props: FollowNumberProps) {
   const follows = props.follows.length;
   const followers = props.followers.length;
   return (
@@ -149,7 +168,7 @@ export default function UserProfile() {
     }
 
     // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
-    if (locationState) {
+    if (locationState && props.history.action === 'PUSH') {
       const locationUser = locationState.user;
       setUserData(locationUser);
 

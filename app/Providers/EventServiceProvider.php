@@ -26,8 +26,16 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\CreateLikeNotification',
         ],
 
+        'App\Events\Unliked' => [
+            'App\Listeners\DeleteLikeNotification',
+        ],
+
         'App\Events\Followed' => [
             'App\Listeners\CreateFollowNotification',
+        ],
+
+        'App\Events\Unfollowed' => [
+            'App\Listeners\DeleteFollowNotification',
         ],
     ];
 

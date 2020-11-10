@@ -9,10 +9,10 @@ import Errors from '../components/Errors';
 const axios = window.axios;
 
 export default function logout() {
-  const props: any = useContext(PropsContext);
+  const props = useContext(PropsContext);
   const setParams: any = useContext(SetParamsContext);
-  const data: any = useContext(DataContext);
-  const [errors, setErrors]: any = useState([]);
+  const data = useContext(DataContext);
+  const [errors, setErrors] = useState<string[]>([]);
 
   function linkToTop() {
     const params = {

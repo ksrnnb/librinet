@@ -20,8 +20,17 @@ class FollowerController extends Controller
         $follower_id = $form['viewerId'];
         
         if ($will_follow) {
-            // TODO: もし既に存在していた場合、、、
+            $is_already_created = Follower::where('follow_id', $follow_id)
+                                          ->where('follower_id', $follower_id)
+                                          ->first();
+            
+            // もし既に存在していた場合
+            if ($is_already_created) {
+                return response('エラーが発生しました', 422);
+            }
+
             Gate::authorize('create-follower');
+            
             $follower = Follower::create([
                 'follow_id' => $follow_id,
                 'follower_id' => $follower_id,
@@ -31,10 +40,14 @@ class FollowerController extends Controller
 
             return response()->json($follower_users);
         } else {
-            // TODO: 存在しない場合、、、
             $follower = Follower::where('follower_id', $follower_id)
                                 ->where('follow_id', $follow_id)
                                 ->first();
+            
+            // 存在しない場合
+            if (!$follower) {
+                return response('エラーが発生しました', 422);
+            }
             
             Gate::authorize('delete-follower', $follower);
 

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { MyCard } from './MyCard';
 import { BookIcon } from './Icon';
+import { Book as BookInterface } from '../types/Interfaces';
 
-export function BookImage(props: any) {
+export function BookImage(props: { book: BookInterface }) {
   const book = props.book;
   let image;
 
@@ -16,12 +17,7 @@ export function BookImage(props: any) {
   return image;
 }
 
-BookImage.propTypes = {
-  book: PropTypes.object,
-  col: PropTypes.string,
-};
-
-export function BookInfo(props: any) {
+export function BookInfo(props: BookCard) {
   const book = props.book;
   const pub_year = book.pubdate.slice(0, 4) + '年';
 
@@ -40,13 +36,12 @@ export function BookInfo(props: any) {
   );
 }
 
-BookInfo.propTypes = {
-  book: PropTypes.object,
-  col: PropTypes.string,
-  children: PropTypes.array,
-};
+interface BookCard {
+  book: BookInterface;
+  children?: ReactNode;
+}
 
-export function BookCard(props: any) {
+export function BookCard(props: BookCard) {
   const book = props.book;
 
   return (
@@ -57,8 +52,3 @@ export function BookCard(props: any) {
     />
   );
 }
-
-BookCard.propTypes = {
-  book: PropTypes.object,
-  children: PropTypes.array,
-};

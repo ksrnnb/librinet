@@ -48,8 +48,8 @@ class Comment extends Model
 
         $likes = Like::where('comment_id', $comment->id)->get();
         
-        foreach ($likes as $likes) {
-            $likes->delete();
+        foreach ($likes as $like) {
+            $like->delete();
         }
     }
 }

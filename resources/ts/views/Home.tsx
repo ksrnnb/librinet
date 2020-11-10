@@ -6,13 +6,9 @@ import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
 import { Modal, Button } from 'react-bootstrap';
 import {
-  Response,
-  Book,
-  ErrorResponse,
   User,
   Data,
   RouterProps,
-  Params,
   SetParams,
   Post as PostInterface,
   Comment as CommentInterface,

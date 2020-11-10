@@ -3,27 +3,34 @@ import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import Errors from '../components/Errors';
 import { TextInput, MyButton, NoImageCard } from '../components/Components';
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  ChangeEvent,
+  KeyboardEvent,
+} from 'react';
 import { MyLink } from '../functions/MyLink';
+import { Response, ErrorResponse } from '../types/Interfaces';
 
 const axios = window.axios;
 
 export default function Signup() {
-  const [userName, setUserName]: any = useState('');
-  const [strId, setStrId]: any = useState('');
-  const [email, setEmail]: any = useState('');
-  const [password, setPassword]: any = useState('');
-  const [confirmPassword, setConfirmPassword]: any = useState('');
-  const [errors, setErrors]: any = useState([]);
-  const props: any = useContext(PropsContext);
-  const data: any = useContext(DataContext);
+  const [userName, setUserName] = useState<string>('');
+  const [strId, setStrId] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
+  const props = useContext(PropsContext);
+  const data = useContext(DataContext);
   const setParams: any = useContext(SetParamsContext);
 
   useEffect(() => {
     data.params.user && MyLink.home(props);
   }, []);
 
-  function pressEnter(e: any) {
+  function pressEnter(e: KeyboardEvent<HTMLInputElement>) {
     // Enterキーを押した場合、送信する。
     if (e.keyCode === 13) {
       register();
@@ -45,16 +52,18 @@ export default function Signup() {
               password: password,
               password_confirmation: confirmPassword,
             })
-            .then((response: any) => {
+            .then((response: Response) => {
               const params = response.data;
               setParams(params);
               MyLink.home(props);
             })
-            .catch((error: any) => {
+            .catch((error: ErrorResponse) => {
               window.scroll(0, 0);
               // validation errorの場合
               if (error.response.status === 422) {
-                const errors = Object.values(error.response.data.errors);
+                const errors: string[] = Object.values(
+                  error.response.data.errors
+                );
                 setErrors(errors);
               } else {
                 MyLink.error(props);
@@ -120,24 +129,30 @@ export default function Signup() {
             content="ユーザー名"
             placeholder="~16文字"
             maxLength={16}
-            onChange={(e: any) => setUserName(e.target.value)}
-            onKeyDown={(e: any) => pressEnter(e)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setUserName(e.target.value)
+            }
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => pressEnter(e)}
           />
           <TextInput
             name="user-id"
             content="ユーザーID"
             placeholder="英数字 4~16文字"
             maxLength={16}
-            onChange={(e: any) => setStrId(e.target.value)}
-            onKeyDown={(e: any) => pressEnter(e)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setStrId(e.target.value)
+            }
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => pressEnter(e)}
           />
           <TextInput
             name="email"
             content="メールアドレス"
             placeholder="****@****"
             autoComplete="email"
-            onChange={(e: any) => setEmail(e.target.value)}
-            onKeyDown={(e: any) => pressEnter(e)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => pressEnter(e)}
           />
           <TextInput
             type="password"
@@ -145,8 +160,10 @@ export default function Signup() {
             content="パスワード"
             placeholder="英数字記号 6文字以上"
             autoComplete="new-password"
-            onChange={(e: any) => setPassword(e.target.value)}
-            onKeyDown={(e: any) => pressEnter(e)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => pressEnter(e)}
           />
           <TextInput
             type="password"
@@ -154,8 +171,10 @@ export default function Signup() {
             content="パスワード（再確認）"
             placeholder="英数字記号 6文字以上"
             autoComplete="new-password"
-            onChange={(e: any) => setConfirmPassword(e.target.value)}
-            onKeyDown={(e: any) => pressEnter(e)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setConfirmPassword(e.target.value)
+            }
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => pressEnter(e)}
           />
           <div className="mt-5">
             <MyButton

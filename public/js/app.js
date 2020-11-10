@@ -85678,7 +85678,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookCard = exports.BookInfo = exports.BookImage = void 0;
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-var prop_types_1 = __importDefault(__webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"));
 var MyCard_1 = __webpack_require__(/*! ./MyCard */ "./resources/ts/components/MyCard.tsx");
 var Icon_1 = __webpack_require__(/*! ./Icon */ "./resources/ts/components/Icon.tsx");
 function BookImage(props) {
@@ -85693,10 +85692,6 @@ function BookImage(props) {
     return image;
 }
 exports.BookImage = BookImage;
-BookImage.propTypes = {
-    book: prop_types_1.default.object,
-    col: prop_types_1.default.string,
-};
 function BookInfo(props) {
     var book = props.book;
     var pub_year = book.pubdate.slice(0, 4) + '年';
@@ -85712,20 +85707,11 @@ function BookInfo(props) {
         props.children));
 }
 exports.BookInfo = BookInfo;
-BookInfo.propTypes = {
-    book: prop_types_1.default.object,
-    col: prop_types_1.default.string,
-    children: prop_types_1.default.array,
-};
 function BookCard(props) {
     var book = props.book;
     return (react_1.default.createElement(MyCard_1.MyCard, { image: react_1.default.createElement(BookImage, { book: book }), body: react_1.default.createElement(BookInfo, { book: book }, props.children), addingClass: "book-card" }));
 }
 exports.BookCard = BookCard;
-BookCard.propTypes = {
-    book: prop_types_1.default.object,
-    children: prop_types_1.default.array,
-};
 
 
 /***/ }),
@@ -85966,7 +85952,7 @@ function MyButton(props) {
 }
 exports.MyButton = MyButton;
 function TextInput(props) {
-    var name = props.name, autoComplete = props.autoComplete, onChange = props.onChange, content = props.content, placeholder = props.placeholder, maxLength = props.maxLength, attr = props.attr, onKeyDown = props.onKeyDown;
+    var name = props.name, autoComplete = props.autoComplete, content = props.content, placeholder = props.placeholder, maxLength = props.maxLength, attr = props.attr, onChange = props.onChange, onKeyDown = props.onKeyDown;
     var type = props.type || 'text';
     return (react_1.default.createElement("label", { htmlFor: name, className: "d-block" },
         react_1.default.createElement("h5", null, content),
@@ -86014,7 +86000,7 @@ function Errors(props) {
         var errorElement = errors.map(function (error) {
             return (react_1.default.createElement("h5", { className: "error text-danger mb-3", key: error }, error));
         });
-        return errorElement;
+        return react_1.default.createElement(react_1.default.Fragment, null, errorElement);
     }
     else {
         return react_1.default.createElement(react_1.default.Fragment, null);
@@ -88706,8 +88692,12 @@ function Login() {
             react_1.default.createElement(Components_1.Caption, { isTop: true, content: "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u306E\u5165\u529B\uFF08\u901A\u5E38\u306E\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3\uFF09" }),
             react_1.default.createElement(Errors_1.default, { errors: errors }),
             react_1.default.createElement("form", null,
-                react_1.default.createElement(Components_1.TextInput, { name: "user-id", content: "\u30E6\u30FC\u30B6\u30FCID", onChange: function (e) { return setStrId(e.target.value); }, onKeyDown: pressEnter }),
-                react_1.default.createElement(Components_1.TextInput, { type: "password", name: "password", content: "\u30D1\u30B9\u30EF\u30FC\u30C9", autoComplete: "off", onChange: function (e) { return setPassword(e.target.value); }, onKeyDown: pressEnter }),
+                react_1.default.createElement(Components_1.TextInput, { name: "user-id", content: "\u30E6\u30FC\u30B6\u30FCID", onChange: function (e) {
+                        return setStrId(e.target.value);
+                    }, onKeyDown: pressEnter }),
+                react_1.default.createElement(Components_1.TextInput, { type: "password", name: "password", content: "\u30D1\u30B9\u30EF\u30FC\u30C9", autoComplete: "off", onChange: function (e) {
+                        return setPassword(e.target.value);
+                    }, onKeyDown: pressEnter }),
                 react_1.default.createElement(Components_1.MyButton, { id: "normal-login", onClick: normalUserLogin, content: "\u901A\u5E38\u306E\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3" }))),
         react_1.default.createElement(Components_1.NoImageCard, { bgColor: "light-orange", margin: "my-5" },
             react_1.default.createElement(Components_1.Caption, { isTop: true, content: "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3" }),
@@ -88844,6 +88834,7 @@ var axios = window.axios;
  * @return {string}
  */
 function getMessageAndImage(notification) {
+    console.log(notification);
     var info = new Object();
     // 投稿などが削除済みの場合はエラーになるので、何も返さない。
     // TODO: Notificationもデータベースから消す必要がある。
@@ -88881,7 +88872,7 @@ function getMessageAndImage(notification) {
  * @return {JSX}
  */
 function Notice(props) {
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
     var notification = props.notification;
     var timeMessage = TimeFunctions_1.getDeltaTimeMessage(notification.created_at);
     var info = getMessageAndImage(notification);
@@ -88892,16 +88883,16 @@ function Notice(props) {
                 .get(info.path)
                 .then(function (response) {
                 var post = response.data;
-                MyLink_1.MyLink.comment(main_props, post);
+                MyLink_1.MyLink.comment(routerProps, post);
             })
                 .catch(function () {
                 // 投稿がみつからない場合（既に削除済みなど）
-                alert('投稿がみつかりません。既に削除された可能性があります');
+                alert('エラーが発生しました。既に削除された可能性があります');
             });
             // ユーザーへのリンクの場合はそのまま移動する。
         }
         else {
-            MyLink_1.MyLink.userProfile(main_props, info.user.str_id);
+            MyLink_1.MyLink.userProfile(routerProps, info.user.str_id);
         }
     }
     // 通知内容の項目が既に削除されていた場合はnull
@@ -89010,8 +89001,7 @@ var BookCard_1 = __webpack_require__(/*! ../components/BookCard */ "./resources/
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
 var axios = window.axios;
 function AddToBookshelf(props) {
-    var book = props.book;
-    var isChecked = props.isChecked;
+    var book = props.book, isChecked = props.isChecked, onChange = props.onChange;
     var isDisabled, message, value;
     if (book.isInBookshelf) {
         isDisabled = true;
@@ -89026,13 +89016,14 @@ function AddToBookshelf(props) {
     return (react_1.default.createElement("div", { className: "mb-5" },
         react_1.default.createElement(Components_1.Caption, { isTop: true, content: "\u672C\u68DA\u3078\u306E\u8FFD\u52A0" }),
         react_1.default.createElement(Components_1.NoImageCard, null,
-            react_1.default.createElement(Components_1.InputWithCheck, { type: "checkbox", name: "add-book", value: value, checked: isChecked, disabled: isDisabled, onChange: props.onChange, content: "\u672C\u68DA\u306B\u8FFD\u52A0\u3057\u3066\u6295\u7A3F\u3059\u308B" }),
+            react_1.default.createElement(Components_1.InputWithCheck, { type: "checkbox", name: "add-book", value: value, checked: isChecked, disabled: isDisabled, onChange: onChange, content: "\u672C\u68DA\u306B\u8FFD\u52A0\u3057\u3066\u6295\u7A3F\u3059\u308B" }),
             message)));
 }
 function Post(props) {
+    var onChange = props.onChange, onSubmit = props.onSubmit;
     return (react_1.default.createElement(react_1.default.Fragment, null,
-        react_1.default.createElement(Components_1.MyTextarea, { name: "message", content: "\u6295\u7A3F\u30E1\u30C3\u30BB\u30FC\u30B8", onChange: props.onChange }),
-        react_1.default.createElement(Components_1.MyButton, { onClick: props.onSubmit, content: "\u6295\u7A3F\u3059\u308B", withMargin: true })));
+        react_1.default.createElement(Components_1.MyTextarea, { name: "message", content: "\u6295\u7A3F\u30E1\u30C3\u30BB\u30FC\u30B8", onChange: onChange }),
+        react_1.default.createElement(Components_1.MyButton, { onClick: onSubmit, content: "\u6295\u7A3F\u3059\u308B", withMargin: true })));
 }
 function PostData() {
     var data = react_1.useContext(App_1.DataContext);
@@ -89098,6 +89089,9 @@ function PostData() {
         setIsChecked(isChecked);
     }
     function getParams() {
+        if (book == null) {
+            return {};
+        }
         var params = {
             user_id: data.params.user.id,
             isbn: book.isbn,
@@ -89115,6 +89109,9 @@ function PostData() {
         return params;
     }
     function onSubmit() {
+        if (book == null) {
+            return;
+        }
         var path = '/api/book/post/' + book.isbn;
         var params = getParams();
         var errors = validation(params);
@@ -89175,10 +89172,16 @@ function PostData() {
         return (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement(Subtitle_1.default, { subtitle: "\u6295\u7A3F\u753B\u9762" }),
             react_1.default.createElement(AddToBookshelf, { isChecked: isChecked, book: book, onChange: function () { return setIsChecked(!isChecked); } }),
-            react_1.default.createElement(Genres_1.default, { errors: errors, book: book, isChecked: isChecked, isNewGenre: isNewGenre, genres: genres, newGenre: newGenre, convGenre: convGenre, onChangeNewGenre: function (e) { return setNewGenre(e.target.value); }, onClickNewGenre: function () { return setIsNewGenre(true); }, onClickConvGenre: onClickConvGenre, onChangeConvGenre: function (e) { return setConvGenre(e.target.value); }, onChangeRadioButton: onChangeRadioButton }),
+            react_1.default.createElement(Genres_1.default, { errors: errors, book: book, isChecked: isChecked, isNewGenre: isNewGenre, genres: genres, newGenre: newGenre, convGenre: convGenre, onChangeNewGenre: function (e) {
+                    return setNewGenre(e.target.value);
+                }, onClickNewGenre: function () { return setIsNewGenre(true); }, onClickConvGenre: onClickConvGenre, onChangeConvGenre: function (e) {
+                    return setConvGenre(e.target.value);
+                }, onChangeRadioButton: onChangeRadioButton }),
             react_1.default.createElement(Components_1.Caption, { content: "\u672C\u306E\u60C5\u5831" }),
             react_1.default.createElement(BookCard_1.BookCard, { book: book }),
-            react_1.default.createElement(Post, { message: message, onChange: function (e) { return setMessage(e.target.value); }, onSubmit: onSubmit })));
+            react_1.default.createElement(Post, { onChange: function (e) {
+                    return setMessage(e.target.value);
+                }, onSubmit: onSubmit })));
     }
     else {
         return react_1.default.createElement(Errors_1.default, { errors: errors });
@@ -89321,11 +89324,21 @@ function Signup() {
         react_1.default.createElement(Components_1.NoImageCard, { margin: "mb-5" },
             react_1.default.createElement(Errors_1.default, { errors: errors }),
             react_1.default.createElement("form", { onSubmit: register },
-                react_1.default.createElement(Components_1.TextInput, { name: "user-name", content: "\u30E6\u30FC\u30B6\u30FC\u540D", placeholder: "~16\u6587\u5B57", maxLength: 16, onChange: function (e) { return setUserName(e.target.value); }, onKeyDown: function (e) { return pressEnter(e); } }),
-                react_1.default.createElement(Components_1.TextInput, { name: "user-id", content: "\u30E6\u30FC\u30B6\u30FCID", placeholder: "\u82F1\u6570\u5B57 4~16\u6587\u5B57", maxLength: 16, onChange: function (e) { return setStrId(e.target.value); }, onKeyDown: function (e) { return pressEnter(e); } }),
-                react_1.default.createElement(Components_1.TextInput, { name: "email", content: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", placeholder: "****@****", autoComplete: "email", onChange: function (e) { return setEmail(e.target.value); }, onKeyDown: function (e) { return pressEnter(e); } }),
-                react_1.default.createElement(Components_1.TextInput, { type: "password", name: "password", content: "\u30D1\u30B9\u30EF\u30FC\u30C9", placeholder: "\u82F1\u6570\u5B57\u8A18\u53F7 6\u6587\u5B57\u4EE5\u4E0A", autoComplete: "new-password", onChange: function (e) { return setPassword(e.target.value); }, onKeyDown: function (e) { return pressEnter(e); } }),
-                react_1.default.createElement(Components_1.TextInput, { type: "password", name: "confirm-password", content: "\u30D1\u30B9\u30EF\u30FC\u30C9\uFF08\u518D\u78BA\u8A8D\uFF09", placeholder: "\u82F1\u6570\u5B57\u8A18\u53F7 6\u6587\u5B57\u4EE5\u4E0A", autoComplete: "new-password", onChange: function (e) { return setConfirmPassword(e.target.value); }, onKeyDown: function (e) { return pressEnter(e); } }),
+                react_1.default.createElement(Components_1.TextInput, { name: "user-name", content: "\u30E6\u30FC\u30B6\u30FC\u540D", placeholder: "~16\u6587\u5B57", maxLength: 16, onChange: function (e) {
+                        return setUserName(e.target.value);
+                    }, onKeyDown: function (e) { return pressEnter(e); } }),
+                react_1.default.createElement(Components_1.TextInput, { name: "user-id", content: "\u30E6\u30FC\u30B6\u30FCID", placeholder: "\u82F1\u6570\u5B57 4~16\u6587\u5B57", maxLength: 16, onChange: function (e) {
+                        return setStrId(e.target.value);
+                    }, onKeyDown: function (e) { return pressEnter(e); } }),
+                react_1.default.createElement(Components_1.TextInput, { name: "email", content: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", placeholder: "****@****", autoComplete: "email", onChange: function (e) {
+                        return setEmail(e.target.value);
+                    }, onKeyDown: function (e) { return pressEnter(e); } }),
+                react_1.default.createElement(Components_1.TextInput, { type: "password", name: "password", content: "\u30D1\u30B9\u30EF\u30FC\u30C9", placeholder: "\u82F1\u6570\u5B57\u8A18\u53F7 6\u6587\u5B57\u4EE5\u4E0A", autoComplete: "new-password", onChange: function (e) {
+                        return setPassword(e.target.value);
+                    }, onKeyDown: function (e) { return pressEnter(e); } }),
+                react_1.default.createElement(Components_1.TextInput, { type: "password", name: "confirm-password", content: "\u30D1\u30B9\u30EF\u30FC\u30C9\uFF08\u518D\u78BA\u8A8D\uFF09", placeholder: "\u82F1\u6570\u5B57\u8A18\u53F7 6\u6587\u5B57\u4EE5\u4E0A", autoComplete: "new-password", onChange: function (e) {
+                        return setConfirmPassword(e.target.value);
+                    }, onKeyDown: function (e) { return pressEnter(e); } }),
                 react_1.default.createElement("div", { className: "mt-5" },
                     react_1.default.createElement(Components_1.MyButton, { id: "normal-login", onClick: register, content: "\u30E6\u30FC\u30B6\u30FC\u767B\u9332" }))))));
 }
@@ -89380,16 +89393,16 @@ var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/fu
 var App_1 = __webpack_require__(/*! ./App */ "./resources/ts/views/App.tsx");
 var Login_1 = __webpack_require__(/*! ./Login */ "./resources/ts/views/Login.tsx");
 function Content(props) {
-    var main_props = react_1.useContext(MyRouter_1.PropsContext);
+    var routerProps = react_1.useContext(MyRouter_1.PropsContext);
     var afterLogin = props.afterLogin;
     return (react_1.default.createElement("div", { id: "top-content", className: "top-content" },
         react_1.default.createElement("div", { className: "container top-wrapper" },
             react_1.default.createElement("p", { className: "title" }, "\u30EA\u30D6\u30EA\u30FC\u30CD\u30C3\u30C8"),
             react_1.default.createElement("p", { className: "title-message" }, "\u3042\u306A\u305F\u306E\u8AAD\u3093\u3060\u672C\u3092\u30B7\u30A7\u30A2\u3057\u307E\u3057\u3087\u3046\uFF01"),
             react_1.default.createElement("button", { className: "btn btn-success d-block", onClick: function () { return Login_1.guestLogin(afterLogin); } }, "\u30B2\u30B9\u30C8\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3"),
-            react_1.default.createElement("button", { className: "btn btn-outline-info d-block", onClick: function () { return MyLink_1.MyLink.signup(main_props); } }, "\u30E6\u30FC\u30B6\u30FC\u767B\u9332"),
+            react_1.default.createElement("button", { className: "btn btn-outline-info d-block", onClick: function () { return MyLink_1.MyLink.signup(routerProps); } }, "\u30E6\u30FC\u30B6\u30FC\u767B\u9332"),
             react_1.default.createElement("div", { className: "pb-5" },
-                react_1.default.createElement("button", { className: "btn btn-outline-info d-block", onClick: function () { return MyLink_1.MyLink.login(main_props); } }, "\u901A\u5E38\u306E\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3")))));
+                react_1.default.createElement("button", { className: "btn btn-outline-info d-block", onClick: function () { return MyLink_1.MyLink.login(routerProps); } }, "\u901A\u5E38\u306E\u30E6\u30FC\u30B6\u30FC\u3067\u30ED\u30B0\u30A4\u30F3")))));
 }
 function MyCarousel(props) {
     var active = props.active, height = props.height, afterLogin = props.afterLogin;
@@ -89517,7 +89530,7 @@ function Results(props) {
                 react_1.default.createElement(UserCard_1.default, { user: user, useLink: true })));
         }
     });
-    return users;
+    return react_1.default.createElement(react_1.default.Fragment, null, users);
 }
 function User() {
     var _a = react_1.useState(''), input = _a[0], setInput = _a[1];
@@ -89561,7 +89574,9 @@ function User() {
     return (react_1.default.createElement(react_1.default.Fragment, null,
         react_1.default.createElement(Subtitle_1.default, { subtitle: "\u30E6\u30FC\u30B6\u30FC\u306E\u691C\u7D22" }),
         react_1.default.createElement(Components_1.Caption, { isTop: true, content: "\u691C\u7D22\u30D5\u30A9\u30FC\u30E0" }),
-        react_1.default.createElement(Components_1.SearchForm, { name: "user", onChange: function (e) { return setInput(e.target.value); }, onSubmit: searchUser, content: "\u30E6\u30FC\u30B6\u30FCID \u307E\u305F\u306F \u30E6\u30FC\u30B6\u30FC\u540D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044", maxLength: 16, errors: errors }),
+        react_1.default.createElement(Components_1.SearchForm, { name: "user", onChange: function (e) {
+                return setInput(e.target.value);
+            }, onSubmit: searchUser, content: "\u30E6\u30FC\u30B6\u30FCID \u307E\u305F\u306F \u30E6\u30FC\u30B6\u30FC\u540D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044", maxLength: 16, errors: errors }),
         react_1.default.createElement(Results, { users: users }),
         react_1.default.createElement(UsersExample, { examples: examples })));
 }
@@ -89623,13 +89638,12 @@ function EditUserButton(props) {
         react_1.default.createElement("button", { type: "button", className: "btn btn-outline-success d-block", onClick: function () { return MyLink_1.MyLink.editUser(routerProps, user.str_id); } }, "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u3092\u7DE8\u96C6\u3059\u308B")));
 }
 function FollowButton(props) {
-    var user = props.user;
-    var viewerUser = props.viewerUser;
+    var user = props.user, viewerUser = props.viewerUser, isFollowing = props.isFollowing, handleFollow = props.handleFollow;
     if (user.id == viewerUser.id) {
         return react_1.default.createElement(react_1.default.Fragment, null);
     }
     var className, content;
-    if (props.isFollowing) {
+    if (isFollowing) {
         className = 'btn btn-success d-block';
         content = 'フォロー中';
     }
@@ -89637,7 +89651,7 @@ function FollowButton(props) {
         className = 'btn btn-outline-success d-block';
         content = 'フォローする';
     }
-    var FollowButton = (react_1.default.createElement("button", { className: className, onClick: props.handleFollow }, content));
+    var FollowButton = (react_1.default.createElement("button", { className: className, onClick: handleFollow }, content));
     return FollowButton;
 }
 function FollowNumber(props) {
@@ -89692,7 +89706,7 @@ function UserProfile() {
             setIsFollowing(followCheck(user));
         }
         // ユーザー画像やプロフィールなどをクリックしてきた場合 (そうでない場合はundefined)
-        if (locationState) {
+        if (locationState && props.history.action === 'PUSH') {
             var locationUser = locationState.user;
             setUserData(locationUser);
             // 自分自身の場合

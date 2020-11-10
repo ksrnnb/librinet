@@ -1,27 +1,28 @@
 import { Book, Post } from '../types/Interfaces';
+import { RouterProps, User } from '../types/Interfaces';
 
 export class MyLink {
-  static top(props: any) {
+  static top(props: RouterProps) {
     window.scroll(0, 0);
     props.history.push('/');
   }
 
-  static home(props: any) {
+  static home(props: RouterProps) {
     window.scroll(0, 0);
     props.history.push('/home');
   }
 
-  static login(props: any) {
+  static login(props: RouterProps) {
     window.scroll(0, 0);
     props.history.push('/login');
   }
 
-  static signup(props: any) {
+  static signup(props: RouterProps) {
     window.scroll(0, 0);
     props.history.push('/signup');
   }
 
-  static userProfile(props: any, strId: string, user?: any) {
+  static userProfile(props: RouterProps, strId: string, user?: User) {
     const path = '/user/profile/' + strId;
     window.scroll(0, 0);
     if (user) {
@@ -36,19 +37,19 @@ export class MyLink {
     }
   }
 
-  static editUser(props: any, strId: string) {
+  static editUser(props: RouterProps, strId: string) {
     const path = '/user/edit/' + strId;
     window.scroll(0, 0);
     props.history.push(path);
   }
 
-  static editGenre(props: any, strId: string) {
+  static editGenre(props: RouterProps, strId: string) {
     const path = '/genre/edit/' + strId;
     window.scroll(0, 0);
     props.history.push(path);
   }
 
-  static bookProfile(props: any, book: Book) {
+  static bookProfile(props: RouterProps, book: Book) {
     const path = '/book/profile/' + book.isbn;
     props.history.push({
       pathname: path,
@@ -56,7 +57,7 @@ export class MyLink {
     });
   }
 
-  static addBook(props: any, book: Book) {
+  static addBook(props: RouterProps, book: Book) {
     const path = '/book/add/' + book.isbn;
     props.history.push({
       pathname: path,
@@ -64,13 +65,13 @@ export class MyLink {
     });
   }
 
-  static deleteBook(props: any, strId: string) {
+  static deleteBook(props: RouterProps, strId: string) {
     const path = '/book/delete/' + strId;
     window.scroll(0, 0);
     props.history.push(path);
   }
 
-  static post(props: any, book: Book) {
+  static post(props: RouterProps, book: Book) {
     const path = '/book/post/' + book.isbn;
     window.scroll(0, 0);
     props.history.push({
@@ -79,7 +80,7 @@ export class MyLink {
     });
   }
 
-  static comment(props: any, post: Post) {
+  static comment(props: RouterProps, post: Post) {
     const path = '/comment/' + post.uuid;
     window.scroll(0, 0);
     props.history.push({
@@ -93,13 +94,13 @@ export class MyLink {
    * @param {object} user
    * @param {string} link (follows or followers)
    */
-  static followers(props: any, user: any, link: string) {
+  static followers(props: RouterProps, user: User, link: string) {
     const path = '/user/profile/' + user.str_id + link;
     window.scroll(0, 0);
     props.history.push(path);
   }
 
-  static error(props: any) {
+  static error(props: RouterProps) {
     window.scroll(0, 0);
     props.history.push('/error');
   }

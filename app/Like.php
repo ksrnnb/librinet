@@ -9,6 +9,7 @@ use App\Post;
 use App\Comment;
 use App\Like;
 use App\Events\Liked;
+use App\Events\Unliked;
 
 class Like extends Model
 {
@@ -16,6 +17,7 @@ class Like extends Model
 
     protected $dispatchesEvents = [
         'created' => Liked::class,
+        'deleted' => Unliked::class,
     ];
     
     public function user()

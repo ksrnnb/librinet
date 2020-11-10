@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Events\Followed;
+use App\Events\Unfollowed;
 
 class Follower extends Model
 {
@@ -11,6 +12,7 @@ class Follower extends Model
 
     protected $dispatchesEvents = [
         'created' => Followed::class,
+        'deleted' => Unfollowed::class,
     ];
 
     public function followUser()

@@ -51,12 +51,10 @@ class DeleteBookTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser = $this->login($browser);
-
             $delete_path = '/book/delete/' . $this->user->str_id;
-            $user_path = '/user/profile/' . $this->user->str_id;
 
             $browser->visit($delete_path)
-                    ->waitForLocation($user_path)
+                    ->waitForLocation($this->path)
                     ->assertSee('本がありません');
         });
     }

@@ -4,9 +4,9 @@ import { MyLink } from '../functions/MyLink';
 import { DataContext, SetParamsContext } from './App';
 import { guestLogin } from './Login';
 
-function Content(props: any) {
-  const main_props: any = useContext(PropsContext);
-  const afterLogin: any = props.afterLogin;
+function Content(props: { afterLogin: (user: any) => void }) {
+  const routerProps = useContext(PropsContext);
+  const afterLogin = props.afterLogin;
   return (
     <div id="top-content" className="top-content">
       <div className="container top-wrapper">
@@ -22,14 +22,14 @@ function Content(props: any) {
 
         <button
           className="btn btn-outline-info d-block"
-          onClick={() => MyLink.signup(main_props)}
+          onClick={() => MyLink.signup(routerProps)}
         >
           ユーザー登録
         </button>
         <div className="pb-5">
           <button
             className="btn btn-outline-info d-block"
-            onClick={() => MyLink.login(main_props)}
+            onClick={() => MyLink.login(routerProps)}
           >
             通常のユーザーでログイン
           </button>
@@ -39,7 +39,13 @@ function Content(props: any) {
   );
 }
 
-function MyCarousel(props: any) {
+interface MyCarouselProps {
+  active: string;
+  height: number;
+  afterLogin: (user: any) => void;
+}
+
+function MyCarousel(props: MyCarouselProps) {
   const { active, height, afterLogin } = props;
   const attr = height > 0 ? { style: { minHeight: height } } : {};
   return (
@@ -61,11 +67,11 @@ function MyCarousel(props: any) {
 }
 
 export default function TopPage() {
-  const props: any = useContext(PropsContext);
+  const props = useContext(PropsContext);
   const setParams: any = useContext(SetParamsContext);
-  const data: any = useContext(DataContext);
-  const [height, setHeight]: any = useState(0);
-  const [active, setActive]: any = useState('active');
+  const data = useContext(DataContext);
+  const [height, setHeight] = useState<number>(0);
+  const [active, setActive] = useState<string>('active');
 
   function afterLogin(user: any) {
     setParams(user);

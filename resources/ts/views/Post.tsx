@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  ChangeEvent,
+  MouseEvent,
+} from 'react';
 import Subtitle from '../components/Subtitle';
 import Errors from '../components/Errors';
 import {
@@ -13,13 +19,18 @@ import { DataContext, SetParamsContext } from './App';
 import Genres from '../components/Genres';
 import { BookCard } from '../components/BookCard';
 import { MyLink } from '../functions/MyLink';
-import { Book } from '../types/Interfaces';
+import { Book, Response, ErrorResponse } from '../types/Interfaces';
 
 const axios = window.axios;
 
-function AddToBookshelf(props: any) {
-  const book = props.book;
-  const isChecked = props.isChecked;
+interface BookshelfProps {
+  book: Book;
+  isChecked: boolean;
+  onChange: () => void;
+}
+
+function AddToBookshelf(props: BookshelfProps) {
+  const { book, isChecked, onChange } = props;
 
   let isDisabled, message, value;
 
@@ -43,7 +54,7 @@ function AddToBookshelf(props: any) {
           value={value}
           checked={isChecked}
           disabled={isDisabled}
-          onChange={props.onChange}
+          onChange={onChange}
           content="本棚に追加して投稿する"
         />
         {message}
@@ -52,23 +63,25 @@ function AddToBookshelf(props: any) {
   );
 }
 
-function Post(props: any) {
+interface PostProps {
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
+}
+
+function Post(props: PostProps) {
+  const { onChange, onSubmit } = props;
   return (
     <>
-      <MyTextarea
-        name="message"
-        content="投稿メッセージ"
-        onChange={props.onChange}
-      />
-      <MyButton onClick={props.onSubmit} content="投稿する" withMargin={true} />
+      <MyTextarea name="message" content="投稿メッセージ" onChange={onChange} />
+      <MyButton onClick={onSubmit} content="投稿する" withMargin={true} />
     </>
   );
 }
 
 export default function PostData() {
-  const data: any = useContext(DataContext);
+  const data = useContext(DataContext);
   const setParams: any = useContext(SetParamsContext);
-  const props: any = useContext(PropsContext);
+  const props = useContext(PropsContext);
 
   // ログインしていない場合はページ遷移
   if (!data.params.user) {
@@ -76,13 +89,13 @@ export default function PostData() {
     return <></>;
   }
 
-  const [book, setBook]: any = useState(null);
-  const [isChecked, setIsChecked]: any = useState(true);
-  const [isNewGenre, setIsNewGenre]: any = useState(true);
-  const [newGenre, setNewGenre]: any = useState('');
-  const [errors, setErrors]: any = useState([]);
-  const [convGenre, setConvGenre]: any = useState('');
-  const [message, setMessage]: any = useState('');
+  const [book, setBook] = useState<Book | null>(null);
+  const [isChecked, setIsChecked] = useState<boolean>(true);
+  const [isNewGenre, setIsNewGenre] = useState<boolean>(true);
+  const [newGenre, setNewGenre] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
+  const [convGenre, setConvGenre] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
 
   const genres = data.params.user.genres;
 
@@ -100,11 +113,11 @@ export default function PostData() {
         .post('/api/book', {
           isbn: isbn,
         })
-        .then((response: any) => {
+        .then((response: Response) => {
           const book = response.data;
           setData(book);
         })
-        .catch((error: any) => {
+        .catch((error: ErrorResponse) => {
           // ISBNが違う場合 404
           if (error.response.status === 404) {
             setErrors(['本がみつかりませんでした']);
@@ -141,6 +154,10 @@ export default function PostData() {
   }
 
   function getParams() {
+    if (book == null) {
+      return {};
+    }
+
     const params = {
       user_id: data.params.user.id,
       isbn: book.isbn,
@@ -160,8 +177,11 @@ export default function PostData() {
   }
 
   function onSubmit() {
-    const path = '/api/book/post/' + book.isbn;
+    if (book == null) {
+      return;
+    }
 
+    const path = '/api/book/post/' + book.isbn;
     const params = getParams();
     const errors = validation(params);
 
@@ -172,12 +192,12 @@ export default function PostData() {
     } else {
       axios
         .post(path, params)
-        .then((response: any) => {
+        .then((response: Response) => {
           linkToHome(response);
         })
-        .catch((error: any) => {
+        .catch((error: ErrorResponse) => {
           if (error.response.status == 422) {
-            const errors = Object.values(error.response.data.errors);
+            const errors: string[] = Object.values(error.response.data.errors);
             setErrors(errors);
             window.scroll(0, 0);
           } else {
@@ -187,7 +207,7 @@ export default function PostData() {
     }
   }
 
-  function linkToHome(response: any) {
+  function linkToHome(response: Response) {
     // stateを更新する
     const params = response.data;
 
@@ -245,17 +265,22 @@ export default function PostData() {
           genres={genres}
           newGenre={newGenre}
           convGenre={convGenre}
-          onChangeNewGenre={(e: any) => setNewGenre(e.target.value)}
+          onChangeNewGenre={(e: ChangeEvent<HTMLInputElement>) =>
+            setNewGenre(e.target.value)
+          }
           onClickNewGenre={() => setIsNewGenre(true)}
           onClickConvGenre={onClickConvGenre}
-          onChangeConvGenre={(e: any) => setConvGenre(e.target.value)}
+          onChangeConvGenre={(e: ChangeEvent<HTMLInputElement>) =>
+            setConvGenre(e.target.value)
+          }
           onChangeRadioButton={onChangeRadioButton}
         />
         <Caption content="本の情報" />
         <BookCard book={book} />
         <Post
-          message={message}
-          onChange={(e: any) => setMessage(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+            setMessage(e.target.value)
+          }
           onSubmit={onSubmit}
         />
       </>

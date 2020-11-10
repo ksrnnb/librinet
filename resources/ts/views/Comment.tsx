@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, ChangeEvent } from 'react';
 import Subtitle from '../components/Subtitle';
 import { PostWithComments, ModalWindow } from './Home';
 import { PropsContext } from '../components/MyRouter';
@@ -74,7 +74,7 @@ function RecommendBook(props: RecommendProps) {
 }
 
 interface FormProps {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onClick: () => void;
 }
 
@@ -228,7 +228,7 @@ export default function Comment() {
         <Errors errors={errors} />
         <CommentForm
           onClick={onSubmit}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setMessage(e.target.value)
           }
         />

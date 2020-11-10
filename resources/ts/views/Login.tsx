@@ -10,6 +10,8 @@ import { PropsContext } from '../components/MyRouter';
 import Subtitle from '../components/Subtitle';
 import { MyLink } from '../functions/MyLink';
 import Errors from '../components/Errors';
+import { User, Response } from '../types/Interfaces';
+
 const axios = window.axios;
 
 export function guestLogin(afterLogin: any) {
@@ -18,7 +20,7 @@ export function guestLogin(afterLogin: any) {
     .then(() => {
       axios
         .post('/api/guest/login')
-        .then((response: any) => {
+        .then((response: Response) => {
           const user = response.data;
           afterLogin(user);
         })
@@ -32,13 +34,13 @@ export function guestLogin(afterLogin: any) {
 }
 
 export default function Login() {
-  const [strId, setStrId]: any = useState('');
-  const [password, setPassword]: any = useState('');
-  const [errors, setErrors]: any = useState([]);
-  const props: any = useContext(PropsContext);
+  const [strId, setStrId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
+  const props = useContext(PropsContext);
   const setParams: any = useContext(SetParamsContext);
 
-  function afterLogin(user: any) {
+  function afterLogin(user: User) {
     setParams(user);
     MyLink.home(props);
   }
@@ -58,7 +60,7 @@ export default function Login() {
             strId: strId,
             password: password,
           })
-          .then((response: any) => {
+          .then((response: Response) => {
             const user = response.data;
             afterLogin(user);
           })
@@ -84,7 +86,9 @@ export default function Login() {
           <TextInput
             name="user-id"
             content="ユーザーID"
-            onChange={(e: any) => setStrId(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setStrId(e.target.value)
+            }
             onKeyDown={pressEnter}
           />
           <TextInput
@@ -92,7 +96,9 @@ export default function Login() {
             name="password"
             content="パスワード"
             autoComplete="off"
-            onChange={(e: any) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
             onKeyDown={pressEnter}
           />
           <MyButton

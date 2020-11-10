@@ -10,7 +10,7 @@ export interface History {
     pathname: string;
     state: any;
   };
-  push: (path: string, state?: any) => void;
+  push: any;
 }
 
 export interface RouterLocation {
@@ -60,7 +60,7 @@ export interface UserParams {
   id: number;
   image?: string;
   name: string;
-  notifications: Notification;
+  notifications: Notification[];
   ordered_books: any; // any
   posts: Post[];
   str_id: string;
@@ -83,6 +83,7 @@ export interface Like {
   id: number;
   post_id: number;
   user_id: number;
+  user?: User;
 }
 
 export interface Post {
@@ -106,6 +107,26 @@ export interface User {
   id: number;
   image?: string;
   name: string;
+}
+
+export interface Notification {
+  comment: Comment;
+  comment_id: number;
+  follower: Follower;
+  follower_id: number;
+  id: number;
+  is_read: boolean;
+  like: Like;
+  like_id: number;
+  user_id: number;
+  created_at: string;
+}
+
+export interface Follower {
+  follow_id: number;
+  follower_id: number;
+  follower_user?: User;
+  id: number;
 }
 
 export interface Response {

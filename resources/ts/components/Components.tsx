@@ -1,8 +1,24 @@
-import React from 'react';
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  MouseEvent,
+  FormEvent,
+  ReactNode,
+} from 'react';
 import Errors from './Errors';
 import { Book } from '../types/Interfaces';
 
-export function InputWithCheck(props: any) {
+interface InputWithCheckProps {
+  name: string;
+  type: string;
+  value?: string;
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  content: string;
+}
+
+export function InputWithCheck(props: InputWithCheckProps) {
   const { name, type, value, checked, disabled, onChange, content } = props;
   const invalid = disabled ? 'invalid' : '';
   return (
@@ -21,12 +37,23 @@ export function InputWithCheck(props: any) {
   );
 }
 
-export function Caption(props: any) {
+interface CaptionProps {
+  isTop?: boolean;
+  content: string;
+}
+
+export function Caption(props: CaptionProps) {
   const margin = props.isTop ? '' : 'mt-5';
   return <h4 className={margin}>{props.content}</h4>;
 }
 
-export function MyTextarea(props: any) {
+interface MyTextAreaProps {
+  name: string;
+  content: string;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+export function MyTextarea(props: MyTextAreaProps) {
   const { name, content, onChange } = props;
   return (
     <label htmlFor={name} className="d-block">
@@ -44,7 +71,16 @@ export function MyTextarea(props: any) {
   );
 }
 
-export function SelectBox(props: any) {
+interface SelectBoxInterface {
+  object: any;
+  name: string;
+  disabled: boolean;
+  value: string;
+  onClick: (e: MouseEvent<HTMLSelectElement>) => void;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+}
+
+export function SelectBox(props: SelectBoxInterface) {
   const myObject = props.object;
   const { name, disabled, value, onClick, onChange } = props;
 
@@ -71,7 +107,14 @@ export function SelectBox(props: any) {
   );
 }
 
-export function GroupedSelectBox(props: any) {
+interface GroupedSelectBoxProps {
+  orderedBooks: any;
+  genres: any;
+  disabled: boolean;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+}
+
+export function GroupedSelectBox(props: GroupedSelectBoxProps) {
   const { orderedBooks, genres, disabled, onChange } = props;
 
   const options = Object.keys(orderedBooks).map((genreId) => {
@@ -100,7 +143,15 @@ export function GroupedSelectBox(props: any) {
   );
 }
 
-export function MyButton(props: any) {
+interface MyButtonProps {
+  id?: string;
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
+  content: string;
+  type?: string;
+  withMargin?: boolean;
+}
+
+export function MyButton(props: MyButtonProps) {
   const { id, onClick, content } = props;
   const type = props.type || 'success'; // デフォルトはsuccess
   const margin = props.withMargin ? 'my-5' : '';
@@ -117,15 +168,27 @@ export function MyButton(props: any) {
   );
 }
 
-export function TextInput(props: any) {
+interface TextInputProps {
+  type?: string;
+  name: string;
+  autoComplete?: string;
+  content?: string;
+  placeholder?: string;
+  maxLength?: number;
+  attr?: any;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+}
+
+export function TextInput(props: TextInputProps) {
   const {
     name,
     autoComplete,
-    onChange,
     content,
     placeholder,
     maxLength,
     attr,
+    onChange,
     onKeyDown,
   } = props;
   const type = props.type || 'text';
@@ -148,7 +211,13 @@ export function TextInput(props: any) {
   );
 }
 
-export function NoImageCard(props: any) {
+interface NoImageCardProps {
+  bgColor?: string;
+  margin?: string;
+  children: ReactNode;
+}
+
+export function NoImageCard(props: NoImageCardProps) {
   const { bgColor, margin } = props;
 
   return (
@@ -158,7 +227,19 @@ export function NoImageCard(props: any) {
   );
 }
 
-export function SearchForm(props: any) {
+interface SearchFormProps {
+  name: string;
+  content: string;
+  subMessage?: string;
+  maxLength?: number;
+  errors: string[];
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (
+    e: MouseEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>
+  ) => void;
+}
+
+export function SearchForm(props: SearchFormProps) {
   const {
     name,
     content,

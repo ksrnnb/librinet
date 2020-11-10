@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { PropsContext } from './MyRouter';
 import { BookIcon } from './Icon';
 import { MyLink } from '../functions/MyLink';
-import { Book, Data } from '../types/Interfaces';
+import { Book } from '../types/Interfaces';
 import { DataContext } from '../views/App';
 
 export default function BooksElement(props: { books: Book[] }) {

@@ -1,17 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useState,
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+} from 'react';
 import Subtitle from '../components/Subtitle';
 import UserCard from '../components/UserCard';
 import { DataContext } from './App';
 import { SearchForm, Caption } from '../components/Components';
 import { PropsContext } from '../components/MyRouter';
+import { User, Response } from '../types/Interfaces';
 
 const axios = window.axios;
 
-function UsersExample(props: any) {
+function UsersExample(props: { examples: User[] }) {
   let trElements = null;
 
   if (props.examples) {
-    trElements = props.examples.map((user: any) => {
+    trElements = props.examples.map((user: User) => {
       return (
         <tr key={user.id}>
           <td>{user.str_id}</td>
@@ -38,8 +45,8 @@ function UsersExample(props: any) {
   );
 }
 
-function Results(props: any) {
-  const users = props.users.map((user: any, i: number) => {
+function Results(props: { users: User[] }) {
+  const users = props.users.map((user: User, i: number) => {
     if (i === 0) {
       return (
         <div className="results mt-3" key={user.id}>
@@ -56,18 +63,20 @@ function Results(props: any) {
     }
   });
 
-  return users;
+  return <>{users}</>;
 }
 
 export default function User() {
-  const [input, setInput]: any = useState('');
-  const [errors, setErrors]: any = useState([]);
-  const [users, setUsers]: any = useState([]);
-  const data: any = useContext(DataContext);
-  const examples: any = data.params.examples;
-  const props: any = useContext(PropsContext);
+  const [input, setInput] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const data = useContext(DataContext);
+  const examples = data.params.examples;
+  const props = useContext(PropsContext);
 
-  function searchUser(e: any) {
+  function searchUser(
+    e: MouseEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>
+  ) {
     e.preventDefault();
 
     if (input === '') {
@@ -77,7 +86,7 @@ export default function User() {
         .post('/api/user', {
           user: input,
         })
-        .then((response: any) => {
+        .then((response: Response) => {
           const canUpdate = props.history.location.pathname === '/user';
           // 検索中にページ遷移していた場合はstate更新しない
           if (canUpdate) {
@@ -106,7 +115,9 @@ export default function User() {
       <Caption isTop={true} content="検索フォーム" />
       <SearchForm
         name="user"
-        onChange={(e: any) => setInput(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setInput(e.target.value)
+        }
         onSubmit={searchUser}
         content="ユーザーID または ユーザー名を入力してください"
         maxLength={16}

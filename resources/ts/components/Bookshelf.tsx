@@ -3,8 +3,9 @@ import BooksElement from './BooksElement';
 import { GearIcon } from './Icon';
 import { PropsContext } from './MyRouter';
 import { NoImageCard, Caption } from './Components';
+import { Book as BookInterface, User } from '../types/Interfaces';
 
-function Message(props: any) {
+function Message(props: { user: User }) {
   const routerProps = useContext(PropsContext);
   const isSelf = props.user.str_id === routerProps.match.params.strId;
 

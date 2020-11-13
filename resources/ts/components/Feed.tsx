@@ -118,10 +118,8 @@ export default function Feed(props: any) {
     </div>
   );
 
-  const isPost = 'comments' in item;
-
   return (
-    <div className="feed-wrapper" data-ispost={isPost}>
+    <div className="feed-wrapper">
       <div className="feed shadow">
         <div className="book-cover-wrapper">
           <BookCover book={item.book} />

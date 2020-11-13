@@ -4,6 +4,8 @@ import UserCard from '../components/UserCard';
 import Bookshelf from '../components/Bookshelf';
 import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
+import { MyNav } from '../components/Components';
+import { PostOfUser } from '../components/PostOfUser';
 import { MyLink } from '../functions/MyLink';
 import { User, Follower, Book } from '../types/Interfaces';
 
@@ -146,6 +148,13 @@ function EditBookshelfButton(props: any) {
 export default function UserProfile() {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [showingUser, setShowingUser]: any = useState(null);
+  const componentsList = {
+    book: 'book',
+    post: 'post',
+    like: 'like',
+  };
+
+  const [component, setComponent] = useState<string>(componentsList.book);
   const props = useContext(PropsContext);
   const data = useContext(DataContext);
   const params = data.params;
@@ -291,6 +300,24 @@ export default function UserProfile() {
       }
     }
 
+    const componentsObject = {} as any;
+
+    componentsObject[componentsList.book] = (
+      <Bookshelf
+        user={showingUser}
+        genres={showingUser.genres}
+        orderedBooks={showingUser.ordered_books}
+        dropdownMenu={dropdownMenu}
+      />
+    );
+
+    componentsObject[componentsList.post] = (
+      <PostOfUser posts={showingUser.posts} viewerId={user && user.id} />
+    );
+
+    // TODO: 実装
+    componentsObject[componentsList.like] = <></>;
+
     return (
       <>
         <Subtitle subtitle="プロフィール" />
@@ -304,14 +331,27 @@ export default function UserProfile() {
           />
           {buttons}
         </UserCard>
-        <div className="mb-5">
-          <Bookshelf
-            user={showingUser}
-            genres={showingUser.genres}
-            orderedBooks={showingUser.ordered_books}
-            dropdownMenu={dropdownMenu}
+        <div className="row justify-content-around mx-0">
+          <MyNav
+            content="本棚"
+            onClick={() => setComponent(componentsList.book)}
+            isActive={component === componentsList.book}
+            dusk={componentsList.book}
+          />
+          <MyNav
+            content="投稿"
+            onClick={() => setComponent(componentsList.post)}
+            isActive={component === componentsList.post}
+            dusk={componentsList.post}
+          />
+          <MyNav
+            content="いいね"
+            onClick={() => setComponent(componentsList.like)}
+            isActive={component === componentsList.like}
+            dusk={componentsList.like}
           />
         </div>
+        <div className="mb-5">{componentsObject[component]}</div>
       </>
     );
   } else {

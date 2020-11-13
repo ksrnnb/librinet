@@ -15,7 +15,6 @@ const axios = window.axios;
  * @return {string}
  */
 function getMessageAndImage(notification: Notification) {
-  console.log(notification);
   const info: any = new Object();
 
   // 投稿などが削除済みの場合はエラーになるので、何も返さない。

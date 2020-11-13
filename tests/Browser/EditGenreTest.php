@@ -47,7 +47,7 @@ class EditGenreTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit($this->path)
-                    ->waitForText('プロフィール')
+                    ->waitForText('プロフィール', 4)
                     ->assertSee('本がありません')
                     ->press('本を探す')
                     ->waitFor('#isbn')
@@ -56,7 +56,7 @@ class EditGenreTest extends DuskTestCase
             // 直接URLを入力してもトップページに戻す。
             $edit_path = '/genre/edit/' . $this->user->str_id;
             $browser->visit($edit_path)
-                    ->waitForLocation('/')
+                    ->waitForLocation('/', 4)
                     ->assertSee('ゲストユーザーでログイン');
         });
     }

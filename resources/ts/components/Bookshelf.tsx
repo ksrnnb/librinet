@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import BooksElement from './BooksElement';
 import { GearIcon } from './Icon';
 import { PropsContext } from './MyRouter';
-import { NoImageCard, Caption } from './Components';
+import { NoImageCard } from './Components';
 import { Book as BookInterface, User } from '../types/Interfaces';
 
 function Message(props: { user: User }) {
@@ -104,7 +104,6 @@ export default function Bookshelf(props: any) {
 
   return (
     <>
-      <Caption content="本棚" />
       <NoImageCard>
         <NoBook user={props.user} orderedBooks={orderedBooks} />
         <Books

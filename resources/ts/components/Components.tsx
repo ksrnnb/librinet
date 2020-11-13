@@ -47,6 +47,24 @@ export function Caption(props: CaptionProps) {
   return <h4 className={margin}>{props.content}</h4>;
 }
 
+interface MyNavProps {
+  content: string;
+  dusk: string;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+export function MyNav(props: MyNavProps) {
+  const { content, dusk, isActive, onClick } = props;
+  const className = isActive ? 'mt-5 hover text-success' : 'mt-5 hover';
+
+  return (
+    <h4 className={className} onClick={onClick} data-dusk={dusk}>
+      {content}
+    </h4>
+  );
+}
+
 interface MyTextAreaProps {
   name: string;
   content: string;

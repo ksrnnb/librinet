@@ -188,6 +188,7 @@ class User extends Authenticatable
                                 'notifications.like.user',
                                 'posts.book',
                                 'posts.likes',
+                                'posts.user',
                                 'comments.book',
                                 'comments.likes',
                                 'likes',
@@ -210,20 +211,6 @@ class User extends Authenticatable
         $params = compact('user', 'following_posts', 'examples');
         return $params;
     }
-
-    // public static function getParamsForApp($str_id): array
-    // {
-    //     $user = User::getIdentifiedUserProfileData($str_id);
-        
-    //     $following_posts = Post::getPostsOfFollowingUsers($user);
-
-    //     // ユーザーの検索ページ用
-    //     $examples = User::getExampleUsers()['examples'];
-
-    //     $params = compact('user', 'following_posts', 'examples');
-
-    //     return $params;
-    // }
 
     public static function getExampleUsers()
     {

@@ -85867,7 +85867,6 @@ function Bookshelf(props) {
     var dropdownMenu = props.dropdownMenu;
     var willEdit = props.willEdit ? props.willEdit : false;
     return (react_1.default.createElement(react_1.default.Fragment, null,
-        react_1.default.createElement(Components_1.Caption, { content: "\u672C\u68DA" }),
         react_1.default.createElement(Components_1.NoImageCard, null,
             react_1.default.createElement(NoBook, { user: props.user, orderedBooks: orderedBooks }),
             react_1.default.createElement(Books, { genres: genres, orderedBooks: orderedBooks, willEdit: willEdit, dropdownMenu: dropdownMenu }))));
@@ -85901,7 +85900,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SearchForm = exports.NoImageCard = exports.TextInput = exports.MyButton = exports.GroupedSelectBox = exports.SelectBox = exports.MyTextarea = exports.Caption = exports.InputWithCheck = void 0;
+exports.SearchForm = exports.NoImageCard = exports.TextInput = exports.MyButton = exports.GroupedSelectBox = exports.SelectBox = exports.MyTextarea = exports.MyNav = exports.Caption = exports.InputWithCheck = void 0;
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var Errors_1 = __importDefault(__webpack_require__(/*! ./Errors */ "./resources/ts/components/Errors.tsx"));
 function InputWithCheck(props) {
@@ -85917,6 +85916,12 @@ function Caption(props) {
     return react_1.default.createElement("h4", { className: margin }, props.content);
 }
 exports.Caption = Caption;
+function MyNav(props) {
+    var content = props.content, dusk = props.dusk, isActive = props.isActive, onClick = props.onClick;
+    var className = isActive ? 'mt-5 hover text-success' : 'mt-5 hover';
+    return (react_1.default.createElement("h4", { className: className, onClick: onClick, "data-dusk": dusk }, content));
+}
+exports.MyNav = MyNav;
 function MyTextarea(props) {
     var name = props.name, content = props.content, onChange = props.onChange;
     return (react_1.default.createElement("label", { htmlFor: name, className: "d-block" },
@@ -86116,8 +86121,7 @@ function Feed(props) {
         react_1.default.createElement(Icon_1.CommentIcon, { item: item, linkToComment: props.linkToComment }),
         react_1.default.createElement(Like_1.default, { item: item, viewerId: props.viewerId }),
         react_1.default.createElement(Icon_1.Trash, { item: item, viewerId: props.viewerId, onClick: props.onClickDelete })));
-    var isPost = 'comments' in item;
-    return (react_1.default.createElement("div", { className: "feed-wrapper", "data-ispost": isPost },
+    return (react_1.default.createElement("div", { className: "feed-wrapper" },
         react_1.default.createElement("div", { className: "feed shadow" },
             react_1.default.createElement("div", { className: "book-cover-wrapper" },
                 react_1.default.createElement(BookCover, { book: item.book })),
@@ -86346,7 +86350,7 @@ exports.LikeIcon = LikeIcon;
 function Trash(props) {
     var item = props.item;
     var viewerId = props.viewerId;
-    var isPost = 'comments' in props.item;
+    var isPost = !('post_id' in props.item);
     var renderTooltip = function (props) { return react_1.default.createElement(react_bootstrap_1.Tooltip, __assign({}, props), "\u524A\u9664\u3059\u308B"); };
     function Icon() {
         return (react_1.default.createElement("svg", { className: "icon trash-icon", name: "delete", version: "1.1", x: "0px", y: "0px", viewBox: "0 0 100 100", enableBackground: "new 0 0 100 100" },
@@ -86580,6 +86584,71 @@ function MyRouter() {
     })));
 }
 exports.MyRouter = MyRouter;
+
+
+/***/ }),
+
+/***/ "./resources/ts/components/PostOfUser.tsx":
+/*!************************************************!*\
+  !*** ./resources/ts/components/PostOfUser.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PostOfUser = void 0;
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var Home_1 = __webpack_require__(/*! ../views/Home */ "./resources/ts/views/Home.tsx");
+var Feed_1 = __importDefault(__webpack_require__(/*! ./Feed */ "./resources/ts/components/Feed.tsx"));
+function Posts(props) {
+    var posts = props.posts, viewerId = props.viewerId, onClickDelete = props.onClickDelete;
+    var postsElement = posts.map(function (post) {
+        return (react_1.default.createElement(Feed_1.default, { item: post, viewerId: viewerId, onClickDelete: onClickDelete, key: post.id }));
+    });
+    return react_1.default.createElement(react_1.default.Fragment, null, postsElement);
+}
+function PostOfUser(props) {
+    var posts = props.posts, viewerId = props.viewerId;
+    var _a = react_1.useState(false), show = _a[0], setShow = _a[1];
+    var _b = react_1.useState(null), uuid = _b[0], setUuid = _b[1];
+    var handleClose = function () {
+        setShow(false);
+        setUuid(null);
+    };
+    var handleShow = function (e) {
+        setShow(true);
+        setUuid(e.target.dataset.uuid);
+    };
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement(Posts, { posts: posts, viewerId: viewerId, onClickDelete: handleShow }),
+        react_1.default.createElement(Home_1.ModalWindow, { show: show, handleClose: handleClose, uuid: uuid, isPost: "true" // 文字列で判定しているので注意
+         })));
+}
+exports.PostOfUser = PostOfUser;
 
 
 /***/ }),
@@ -88111,6 +88180,7 @@ var Bookshelf_1 = __importDefault(__webpack_require__(/*! ../components/Bookshel
 var App_1 = __webpack_require__(/*! ./App */ "./resources/ts/views/App.tsx");
 var MyRouter_1 = __webpack_require__(/*! ../components/MyRouter */ "./resources/ts/components/MyRouter.tsx");
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
+var Components_1 = __webpack_require__(/*! ../components/Components */ "./resources/ts/components/Components.tsx");
 var axios = window.axios;
 function EditButton(props) {
     return (react_1.default.createElement("button", { className: "btn btn-outline-success my-5", onClick: props.onClick }, "\u7DE8\u96C6\u3059\u308B"));
@@ -88165,6 +88235,7 @@ function EditGenre() {
     return (react_1.default.createElement(react_1.default.Fragment, null,
         react_1.default.createElement(Subtitle_1.default, { subtitle: "\u30B8\u30E3\u30F3\u30EB\u306E\u7DE8\u96C6" }),
         react_1.default.createElement(UserCard_1.default, { user: params.user }),
+        react_1.default.createElement(Components_1.Caption, { content: "\u672C\u68DA" }),
         react_1.default.createElement(Bookshelf_1.default, { user: params.user, orderedBooks: params.user.ordered_books, genres: params.user.genres, willEdit: true }),
         react_1.default.createElement(EditButton, { onClick: onSubmitNewGenres })));
 }
@@ -88478,7 +88549,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModalWindow = exports.PostWithComments = void 0;
+exports.ModalWindow = exports.Posts = exports.PostWithComments = void 0;
 var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var Subtitle_1 = __importDefault(__webpack_require__(/*! ../components/Subtitle */ "./resources/ts/components/Subtitle.tsx"));
 var Feed_1 = __importDefault(__webpack_require__(/*! ../components/Feed */ "./resources/ts/components/Feed.tsx"));
@@ -88517,6 +88588,7 @@ function Posts(props) {
     });
     return react_1.default.createElement(react_1.default.Fragment, null, postsJsx);
 }
+exports.Posts = Posts;
 function ModalWindow(props) {
     var show = props.show, handleClose = props.handleClose, uuid = props.uuid, isPost = props.isPost;
     var data = react_1.useContext(App_1.DataContext);
@@ -88834,7 +88906,6 @@ var axios = window.axios;
  * @return {string}
  */
 function getMessageAndImage(notification) {
-    console.log(notification);
     var info = new Object();
     // 投稿などが削除済みの場合はエラーになるので、何も返さない。
     // TODO: Notificationもデータベースから消す必要がある。
@@ -89623,6 +89694,8 @@ var UserCard_1 = __importDefault(__webpack_require__(/*! ../components/UserCard 
 var Bookshelf_1 = __importDefault(__webpack_require__(/*! ../components/Bookshelf */ "./resources/ts/components/Bookshelf.tsx"));
 var App_1 = __webpack_require__(/*! ./App */ "./resources/ts/views/App.tsx");
 var MyRouter_1 = __webpack_require__(/*! ../components/MyRouter */ "./resources/ts/components/MyRouter.tsx");
+var Components_1 = __webpack_require__(/*! ../components/Components */ "./resources/ts/components/Components.tsx");
+var PostOfUser_1 = __webpack_require__(/*! ../components/PostOfUser */ "./resources/ts/components/PostOfUser.tsx");
 var MyLink_1 = __webpack_require__(/*! ../functions/MyLink */ "./resources/ts/functions/MyLink.tsx");
 var axios = window.axios;
 function EditUserButton(props) {
@@ -89688,6 +89761,12 @@ function EditBookshelfButton(props) {
 function UserProfile() {
     var _a = react_1.useState(false), isFollowing = _a[0], setIsFollowing = _a[1];
     var _b = react_1.useState(null), showingUser = _b[0], setShowingUser = _b[1];
+    var componentsList = {
+        book: 'book',
+        post: 'post',
+        like: 'like',
+    };
+    var _c = react_1.useState(componentsList.book), component = _c[0], setComponent = _c[1];
     var props = react_1.useContext(MyRouter_1.PropsContext);
     var data = react_1.useContext(App_1.DataContext);
     var params = data.params;
@@ -89799,6 +89878,11 @@ function UserProfile() {
                 dropdownMenu = (react_1.default.createElement(EditBookshelfButton, { user: showingUser, books: showingUser.books, viewerUser: user }));
             }
         }
+        var componentsObject = {};
+        componentsObject[componentsList.book] = (react_1.default.createElement(Bookshelf_1.default, { user: showingUser, genres: showingUser.genres, orderedBooks: showingUser.ordered_books, dropdownMenu: dropdownMenu }));
+        componentsObject[componentsList.post] = (react_1.default.createElement(PostOfUser_1.PostOfUser, { posts: showingUser.posts, viewerId: user && user.id }));
+        // TODO: 実装
+        componentsObject[componentsList.like] = react_1.default.createElement(react_1.default.Fragment, null);
         return (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement(Subtitle_1.default, { subtitle: "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB" }),
             react_1.default.createElement(UserCard_1.default, { user: showingUser },
@@ -89806,8 +89890,11 @@ function UserProfile() {
                         return MyLink_1.MyLink.followers(props, showingUser, e.target.dataset.link);
                     } }),
                 buttons),
-            react_1.default.createElement("div", { className: "mb-5" },
-                react_1.default.createElement(Bookshelf_1.default, { user: showingUser, genres: showingUser.genres, orderedBooks: showingUser.ordered_books, dropdownMenu: dropdownMenu }))));
+            react_1.default.createElement("div", { className: "row justify-content-around mx-0" },
+                react_1.default.createElement(Components_1.MyNav, { content: "\u672C\u68DA", onClick: function () { return setComponent(componentsList.book); }, isActive: component === componentsList.book, dusk: componentsList.book }),
+                react_1.default.createElement(Components_1.MyNav, { content: "\u6295\u7A3F", onClick: function () { return setComponent(componentsList.post); }, isActive: component === componentsList.post, dusk: componentsList.post }),
+                react_1.default.createElement(Components_1.MyNav, { content: "\u3044\u3044\u306D", onClick: function () { return setComponent(componentsList.like); }, isActive: component === componentsList.like, dusk: componentsList.like })),
+            react_1.default.createElement("div", { className: "mb-5" }, componentsObject[component])));
     }
     else {
         return react_1.default.createElement(react_1.default.Fragment, null);

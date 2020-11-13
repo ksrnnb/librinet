@@ -98,6 +98,23 @@ class UserPageTest extends DuskTestCase
         });
     }
 
+    public function testCanSeeUsersPost()
+    {
+        $this->browse(function (Browser $browser) {
+            $message = 'test_message';
+            
+            $this->user->books()
+                        ->save(factory(Book::class)->make())
+                        ->registerPost($message);
+
+            $browser->visit($this->path)
+                    ->waitFor('.book')
+                    ->click("[data-dusk='post']")
+                    ->waitFor('.feed')
+                    ->assertSee($message);
+        });
+    }
+
     public function testCannotEditGuestUser()
     {
         $this->browse(function (Browser $browser) {

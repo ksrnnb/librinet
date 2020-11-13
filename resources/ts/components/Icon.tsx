@@ -94,7 +94,7 @@ export function LikeIcon(props: any) {
 export function Trash(props: any) {
   const item = props.item;
   const viewerId = props.viewerId;
-  const isPost = 'comments' in props.item;
+  const isPost = !('post_id' in props.item);
 
   const renderTooltip = (props: any) => <Tooltip {...props}>削除する</Tooltip>;
 

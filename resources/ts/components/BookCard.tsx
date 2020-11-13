@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import { MyCard } from './MyCard';
 import { BookIcon } from './Icon';
 import { Book as BookInterface } from '../types/Interfaces';

@@ -5,6 +5,7 @@ import Bookshelf from '../components/Bookshelf';
 import { DataContext, SetParamsContext } from './App';
 import { PropsContext } from '../components/MyRouter';
 import { MyLink } from '../functions/MyLink';
+import { Caption } from '../components/Components';
 import {
   Response,
   Data,
@@ -82,6 +83,7 @@ export default function EditGenre() {
     <>
       <Subtitle subtitle="ジャンルの編集" />
       <UserCard user={params.user} />
+      <Caption content="本棚" />
       <Bookshelf
         user={params.user}
         orderedBooks={params.user.ordered_books}

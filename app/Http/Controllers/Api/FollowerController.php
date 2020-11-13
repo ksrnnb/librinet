@@ -14,7 +14,6 @@ class FollowerController extends Controller
     {
         $form = $request->input();
 
-        // targetId2, isfollowing true, viewerID 6,
         $will_follow = ! $form['isFollowing'];
         $follow_id = $form['targetId'];
         $follower_id = $form['viewerId'];

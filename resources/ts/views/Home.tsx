@@ -95,7 +95,7 @@ interface PostsProps {
   handleShow: (e: any) => void;
 }
 
-function Posts(props: PostsProps) {
+export function Posts(props: PostsProps) {
   const { posts, viewerId, handleShow } = props;
   if (posts == null) {
     return <></>;
